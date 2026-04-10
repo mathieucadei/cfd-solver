@@ -12,4 +12,15 @@ class Advection1DConfig:
     hat_end: float = 1.0
     u_min: float = 1.0
     u_max: float = 2.0
-    # viscosity: float = 0.01
+
+
+@dataclass
+class Convection1DConfig:
+    domain_length: float = 2.0
+    num_grid_points: int = 101
+    max_iterations: int = 100
+    time_step: float = 0.0025
+    hat_start: float = 0.5
+    hat_end: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0
