@@ -2,5 +2,4 @@ __pycache__/
 *.pyc
 .venv/
 .vscode/
-animations/*.mp4
-figures/*.png
+post_processing/*/
