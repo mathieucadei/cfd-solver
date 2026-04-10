@@ -28,7 +28,7 @@ u_max = 2.0
 ## Visualization parameters
 
 step_stride = 5
-save_fig = True
+save_fig = False
 
 
 # Create the configuration object
