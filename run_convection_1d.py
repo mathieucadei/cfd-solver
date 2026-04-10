@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 
-from mini_ns import (
+from core import (
     Convection1DConfig,
     make_1d_grid,
     hat_initial_condition,
@@ -54,7 +54,6 @@ script_name = Path(__file__).name
 equation = script_name.split('.')[0].split('_')[1:]
 equation[0], equation[1] = equation[1], equation[0]
 equation_name = ' '.join(equation).title()
-print(equation_name)
 
 
 # Plot the results
