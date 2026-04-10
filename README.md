@@ -1,6 +1,6 @@
 # CFD Solver
 
-Small Python CFD learning project evolving toward a Navier-Stokes solver.
+Small Python CFD learning project evolving toward a Navier-Stokes solver, currently focused on 1D finite-difference models.
 
 ## Current status
 
