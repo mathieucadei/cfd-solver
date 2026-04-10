@@ -27,7 +27,7 @@ u_max = 2.0
 ## Visualization parameters
 
 step_stride = 20
-save_fig = False
+save_fig = True
 
 
 # Create the configuration object
@@ -53,7 +53,7 @@ history = solve_convection_1d(u0, convection_1d_config)
 script_name = Path(__file__).name
 equation = script_name.split('.')[0].split('_')[1:]
 equation[0], equation[1] = equation[1], equation[0]
-equation_name = ' '.join(equation).title()
+equation_name = ' '.join(equation)
 
 
 # Plot the results

@@ -26,8 +26,8 @@ def plot_snapshots(
     ax.set_title(f"{equation.title()} Solution Snapshots")
 
     if save_fig:
-        os.makedirs('figures', exist_ok=True)
-        plt.savefig(f'figures/{equation.replace(" ", "_")}_solution_snapshots.png')
+        os.makedirs('post_processing/figures', exist_ok=True)
+        plt.savefig(f'post_processing/figures/{equation.replace(" ", "_")}_solution_snapshots.png')
 
     plt.show()
 
@@ -57,7 +57,7 @@ def plot_animation(
     ani = FuncAnimation(fig, update, frames=history.shape[0], interval=100, blit=False)
 
     if save_fig:
-        os.makedirs('animations', exist_ok=True)
-        ani.save(f'animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
+        os.makedirs('post_processing/animations', exist_ok=True)
+        ani.save(f'post_processing/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
 
     plt.show()
