@@ -24,3 +24,15 @@ class Convection1DConfig:
     hat_end: float = 1.0
     u_min: float = 1.0
     u_max: float = 2.0
+
+@dataclass
+class Diffusion1DConfig:
+    domain_length: float = 2.0
+    num_grid_points: int = 41
+    max_iterations: int = 41
+    sigma: float = 0.2
+    viscosity: float = 0.3
+    hat_start: float = 0.5
+    hat_end: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0

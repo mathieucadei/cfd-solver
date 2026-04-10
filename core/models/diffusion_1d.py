@@ -1,15 +1,17 @@
 import numpy as np
-from ..config import Convection1DConfig
+from ..config import Diffusion1DConfig
 from ..grids import compute_1d_grid_points_spacing
+from ..time_step import compute_time_step
 
 
-def solve_convection_1d(
+def solve_diffusion_1d(
     u0: np.ndarray,
-    config: Convection1DConfig,
+    config: Diffusion1DConfig,
 ) -> np.ndarray:
-    """Solves the 1D convection equation using the provided initial condition and configuration."""
+    """Solves the 1D diffusion equation using the provided initial condition and configuration."""
 
     dx = compute_1d_grid_points_spacing(config)
+    dt = compute_time_step(dx, config)
 
     u = u0.copy()
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
@@ -19,7 +21,7 @@ def solve_convection_1d(
     for n in range(1, config.max_iterations + 1):
 
         un = u.copy()
-        u[1:] = un[1:] - un[1:] * config.time_step / dx * (un[1:] - un[:-1])
+        u[1:-1] = un[1:-1] + config.viscosity * dt / dx**2 * (un[2:]- 2 * un[1:-1] + un[:-2])
         history[n] = u
     
     return history
