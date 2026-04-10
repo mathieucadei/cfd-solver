@@ -27,7 +27,7 @@ def plot_snapshots(
 
     if save_fig:
         os.makedirs('figures', exist_ok=True)
-        plt.savefig(f'figures/{equation}_solution_snapshots.png')
+        plt.savefig(f'figures/{equation.replace(" ", "_")}_solution_snapshots.png')
 
     plt.show()
 
@@ -58,6 +58,6 @@ def plot_animation(
 
     if save_fig:
         os.makedirs('animations', exist_ok=True)
-        ani.save(f'animations/{equation}_solution_animation.mp4', writer="ffmpeg")
+        ani.save(f'animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
 
     plt.show()

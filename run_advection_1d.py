@@ -28,7 +28,7 @@ u_max = 2.0
 ## Visualization parameters
 
 step_stride = 5
-save_fig = True
+save_fig = False
 
 
 # Create the configuration object
@@ -55,7 +55,7 @@ history = solve_advection_1d(u0, advection_1d_config)
 script_name = Path(__file__).name
 equation = script_name.split('.')[0].split('_')[1:]
 equation[0], equation[1] = equation[1], equation[0]
-equation_name = ' '.join(equation).title()
+equation_name = ' '.join(equation)
 print(equation_name)
 
 
