@@ -46,7 +46,7 @@ diffusion_1d_config = Diffusion1DConfig(
 )
 
 
-# Generate the grid, initial condition, and solve the convection equation
+# Generate the grid, initial condition, and solve the diffusion equation
 
 x = make_1d_grid(diffusion_1d_config)
 u0 = hat_initial_condition(x, diffusion_1d_config)
