@@ -4,11 +4,11 @@ from ..grids import compute_1d_grid_points_spacing
 from ..time_step import compute_time_step
 
 
-def solve_diffusion_1d(
+def solve_diffusion_1d_num(
     u0: np.ndarray,
     config: Diffusion1DConfig,
 ) -> np.ndarray:
-    """Solves the 1D diffusion equation using the provided initial condition and configuration."""
+    """Solves the numerical 1D diffusion equation using the provided initial condition and configuration."""
 
     dx = compute_1d_grid_points_spacing(config)
     dt = compute_time_step(dx, config)

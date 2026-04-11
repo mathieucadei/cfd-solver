@@ -1,0 +1,1 @@
+from .diffusion_1d import solve_diffusion_1d_ana

@@ -6,7 +6,8 @@ from matplotlib.animation import FuncAnimation
 
 def plot_snapshots(
     x: np.ndarray, 
-    history: np.ndarray, 
+    history_num: np.ndarray,
+    history_ana: np.ndarray=None, 
     equation: str="equation", 
     step_stride: int=5, 
     save_fig: bool=False
@@ -15,9 +16,15 @@ def plot_snapshots(
     
     fig, ax = plt.subplots()
 
-    for n in range(0, history.shape[0], step_stride):
+    for n in range(0, history_num.shape[0], step_stride):
 
-        ax.plot(x, history[n], label=f'Time step: {n}')
+        ax.plot(x, history_num[n], label=f'Time step: {n}')
+
+    if history_ana is not None:
+
+        for n in range(0, history_ana.shape[0], step_stride):
+
+            ax.plot(x, history_ana[n], '--', label=f'Analytical (Time step: {n})')
     
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
@@ -33,14 +40,16 @@ def plot_snapshots(
 
 def plot_animation(
     x: np.ndarray, 
-    history: np.ndarray, 
+    history_num: np.ndarray,
+    history_ana: np.ndarray=None,
     equation: str="equation", 
     save_fig: bool=False
 ) -> None:
     """Creates an animation of the solution evolving over time."""
     
     fig, ax = plt.subplots()
-    line, = ax.plot(x, history[0], lw=2)
+    num_line, = ax.plot(x, history_num[0], lw=2)
+    ana_line, = ax.plot(x, history_ana[0], '--', lw=2, label='Analytical')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
@@ -48,13 +57,14 @@ def plot_animation(
 
     def update(frame):
 
-        line.set_ydata(history[frame])
+        num_line.set_ydata(history_num[frame])
+        ana_line.set_ydata(history_ana[frame])
 
         ax.set_title(f"{equation.title()} Solution Animation (Time step: {frame})")
 
-        return line,
+        return num_line, ana_line
 
-    ani = FuncAnimation(fig, update, frames=history.shape[0], interval=100, blit=False)
+    ani = FuncAnimation(fig, update, frames=history_ana.shape[0], interval=100, blit=False)
 
     if save_fig:
         os.makedirs('post_processing/animations', exist_ok=True)
