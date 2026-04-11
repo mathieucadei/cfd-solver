@@ -1,26 +1,18 @@
 import numpy as np
 
 
-def generate_mode_indices(num_modes: int, basis: str="periodic") -> np.ndarray:
+def generate_mode_indices(num_modes: int) -> np.ndarray:
     """Generate mode indices for the selected basis."""
 
-    if basis == "periodic":
-
-        mode_indices = np.empty(2 * num_modes + 1, dtype=int)
-        mode_indices[0] = 0
-        
-        positive_indices = np.arange(1, num_modes + 1)
-
-        mode_indices[1::2] = positive_indices
-        mode_indices[2::2] = -positive_indices
+    mode_indices = np.empty(2 * num_modes + 1, dtype=int)
+    mode_indices[0] = 0
     
-        return mode_indices
+    positive_indices = np.arange(1, num_modes + 1)
 
-    elif basis == "cosine":
-        return np.arange(0, num_modes + 1, dtype=int)
-    
-    else:
-        raise ValueError("basis must be 'periodic' or 'cosine'")
+    mode_indices[1::2] = positive_indices
+    mode_indices[2::2] = -positive_indices
+
+    return mode_indices
 
 
 def compute_coefficients(
@@ -47,7 +39,7 @@ def compute_coefficients(
     elif basis == "cosine":
         basis_matrix = np.cos(np.pi / domain_length * mode_column * x_row)
         coefficients = (signal_values * basis_matrix).sum(axis=1) * dx
-        coefficients = 2 * coefficients / domain_length
+        coefficients = coefficients / domain_length
         return coefficients
 
     else:

@@ -80,10 +80,10 @@ mode_coefficients = compute_coefficients(
     u0, 
     x, 
     mode_indices, 
-    basis="periodic"
+    basis="cosine"
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, x, basis="periodic")
+series_terms = compute_series_terms(mode_indices, mode_coefficients, x, basis="cosine")
 
 history_ana = solve_diffusion_1d_ana(
     series_terms, 
@@ -91,7 +91,7 @@ history_ana = solve_diffusion_1d_ana(
     x,
     time_array, 
     diffusion_1d_config.viscosity,
-    basis="periodic")
+    basis="cosine")
 
 
 
