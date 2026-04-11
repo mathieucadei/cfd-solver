@@ -23,11 +23,11 @@ from core import (
 ## Configuration parameters for the 1D diffusion simulation
 
 domain_length = 2.0
-num_grid_points = 41
-max_iterations = 41
+num_grid_points = 1001
+max_iterations = 101
 sigma = 0.2
 viscosity = 0.3
-hat_start = 0.5
+hat_start = 0.0
 hat_end = 1.0
 
 u_min = 1.0
@@ -37,6 +37,7 @@ u_max = 2.0
 ## Configuration parameters for the analytical solution
 
 num_modes = 1000
+basis = "periodic"  # "periodic" or "cosine"
 
 ## Visualization parameters
 
@@ -80,10 +81,10 @@ mode_coefficients = compute_coefficients(
     u0, 
     x, 
     mode_indices, 
-    basis="cosine"
+    basis=basis,
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, x, basis="cosine")
+series_terms = compute_series_terms(mode_indices, mode_coefficients, x, basis=basis)
 
 history_ana = solve_diffusion_1d_ana(
     series_terms, 
@@ -91,7 +92,7 @@ history_ana = solve_diffusion_1d_ana(
     x,
     time_array, 
     diffusion_1d_config.viscosity,
-    basis="cosine")
+    basis=basis)
 
 
 
