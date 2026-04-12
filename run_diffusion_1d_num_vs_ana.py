@@ -22,13 +22,13 @@ from core import (
 
 ## Configuration parameters for the 1D diffusion simulation
 
-domain_length = 2.0
+domain_length = 1.0
 num_grid_points = 1001
-max_iterations = 101
+max_iterations = 100
 sigma = 0.2
 viscosity = 0.3
-hat_start = 0.0
-hat_end = 1.0
+hat_start = 0.25
+hat_end = 0.5
 
 u_min = 1.0
 u_max = 2.0
@@ -109,4 +109,4 @@ equation_name = ' '.join(equation)
 ## Plot the results
 
 plot_snapshots(x, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
+# plot_animation(x, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)

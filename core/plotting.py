@@ -22,14 +22,15 @@ def plot_snapshots(
 
     if history_ana is not None:
 
-        n_cols = history_ana.shape[1]
-        exclude_frac = int(0.015 * n_cols)
+        # n_cols = history_ana.shape[1]
+        # left_exclude_frac = int(0.15 * n_cols)
+        # right_exclude_frac = int(0.2 * n_cols)
 
-        # left side: copy from right neighbor
-        history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
+        # # left side: copy from right neighbor
+        # history_ana[:, :left_exclude_frac] = history_ana[:, -right_exclude_frac-1:-right_exclude_frac]
 
-        # right side: copy from left neighbor
-        history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
+        # # right side: copy from left neighbor
+        # history_ana[:, -right_exclude_frac:] = history_ana[:, -right_exclude_frac-1:-right_exclude_frac]
 
         for n in range(0, history_ana.shape[0], step_stride):
 
@@ -55,19 +56,20 @@ def plot_animation(
     save_fig: bool=False
 ) -> None:
     """Creates an animation of the solution evolving over time."""
-
-    n_cols = history_ana.shape[1]
-    exclude_frac = int(0.1 * n_cols)
-
-    # left side: copy from right neighbor
-    history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
-
-    # right side: copy from left neighbor
-    history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
     
     fig, ax = plt.subplots()
     num_line, = ax.plot(x, history_num[0], lw=2)
-    ana_line, = ax.plot(x, history_ana[0], '--', lw=2, label='Analytical')
+
+    if history_ana is not None:
+
+        n_cols = history_ana.shape[1]
+        exclude_frac = int(0.025 * n_cols)
+
+        history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
+
+        history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
+
+        ana_line, = ax.plot(x, history_ana[0], '--', lw=2, label='Analytical')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
@@ -76,13 +78,21 @@ def plot_animation(
     def update(frame):
 
         num_line.set_ydata(history_num[frame])
-        ana_line.set_ydata(history_ana[frame])
+
+        if history_ana is not None:
+
+            ana_line.set_ydata(history_ana[frame])
 
         ax.set_title(f"{equation.title()} Solution Animation (Time step: {frame})")
 
-        return num_line, ana_line
+        return num_line, ana_line if history_ana is not None else num_line,
 
-    ani = FuncAnimation(fig, update, frames=history_ana.shape[0], interval=100, blit=False)
+    if history_ana is not None:
+        frames = history_ana.shape[0]
+    else:
+        frames = history_num.shape[0]
+
+    ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 
     if save_fig:
         os.makedirs('post_processing/animations', exist_ok=True)
