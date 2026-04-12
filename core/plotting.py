@@ -22,6 +22,15 @@ def plot_snapshots(
 
     if history_ana is not None:
 
+        n_cols = history_ana.shape[1]
+        exclude_frac = int(0.015 * n_cols)
+
+        # left side: copy from right neighbor
+        history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
+
+        # right side: copy from left neighbor
+        history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
+
         for n in range(0, history_ana.shape[0], step_stride):
 
             ax.plot(x, history_ana[n], '--', label=f'Analytical (Time step: {n})')
@@ -46,6 +55,15 @@ def plot_animation(
     save_fig: bool=False
 ) -> None:
     """Creates an animation of the solution evolving over time."""
+
+    n_cols = history_ana.shape[1]
+    exclude_frac = int(0.1 * n_cols)
+
+    # left side: copy from right neighbor
+    history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
+
+    # right side: copy from left neighbor
+    history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
     
     fig, ax = plt.subplots()
     num_line, = ax.plot(x, history_num[0], lw=2)
