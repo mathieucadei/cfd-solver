@@ -17,7 +17,7 @@ from core import (
 
 domain_length = 2.0
 num_grid_points = 101
-max_iterations = 1000
+max_iterations = 200
 time_step = 0.0025
 sigma = 0.2
 viscosity = 0.07
@@ -28,7 +28,7 @@ u_max = 2.0
 
 ## Visualization parameters
 
-step_stride = 200
+step_stride = 50
 save_fig = False
 
 
@@ -50,11 +50,11 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 # Generate the grid, initial condition, and solve the Burgers' equation
 
-x = make_1d_grid(burgers_1d_config)
+x_array = make_1d_grid(burgers_1d_config)
 
-u0 = hat_initial_condition(x, burgers_1d_config)
+initial_condition = hat_initial_condition(x_array, burgers_1d_config)
 
-history = solve_burgers_equation_1d(u0, burgers_1d_config)
+history = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 
 # Vistualize the results
@@ -68,5 +68,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x, history, equation=equation_name, save_fig=save_fig)
+plot_snapshots(x_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)

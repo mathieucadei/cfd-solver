@@ -1,22 +1,22 @@
 import numpy as np
 from ..config import Diffusion1DConfig
-from ..grids import compute_1d_grid_points_spacing
-from ..time_step import compute_time_step
+from ..grids import compute_dx
+from ..time_stepping import compute_dt
 
 
 def solve_diffusion_1d(
-    u0: np.ndarray,
+    initial_condition: np.ndarray,
     config: Diffusion1DConfig,
 ) -> np.ndarray:
     """Solves the numerical 1D diffusion equation using the provided initial condition and configuration."""
 
-    dx = compute_1d_grid_points_spacing(config)
-    dt = compute_time_step(dx, config)
+    dx = compute_dx(config)
+    dt = compute_dt(config)
 
-    u = u0.copy()
+    u = initial_condition.copy()
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
-    history[0] = u0
+    history[0] = initial_condition
 
     for n in range(1, config.max_iterations + 1):
 

@@ -1,6 +1,10 @@
 import numpy as np
 
-def compute_time_step(dx: float, config: object) -> float:
+from .grids import compute_dx
+
+def compute_dt(config: object) -> float:
     """Computes the time step based on the provided configuration."""
 
+    dx = compute_dx(config)
+    
     return config.sigma * dx**2 / config.viscosity

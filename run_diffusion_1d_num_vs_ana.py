@@ -4,9 +4,9 @@ from pathlib import Path
 from core import (
     Diffusion1DConfig,
     make_1d_grid,
-    compute_1d_grid_points_spacing,
+    compute_dx,
     hat_initial_condition,
-    compute_time_step,
+    compute_dt,
     solve_diffusion_1d,
     solve_heat_equation_1d,
     generate_mode_indices,
@@ -62,35 +62,35 @@ diffusion_1d_config = Diffusion1DConfig(
 
 ## Numerical solution
 
-x = make_1d_grid(diffusion_1d_config)
+x_array = make_1d_grid(diffusion_1d_config)
 
-u0 = hat_initial_condition(x, diffusion_1d_config)
+initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
 
-history = solve_diffusion_1d(u0, diffusion_1d_config)
+history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 ## Analytical solution
 
-dx = compute_1d_grid_points_spacing(diffusion_1d_config)
+dx = compute_dx(diffusion_1d_config)
 
-dt = compute_time_step(dx, diffusion_1d_config)
+dt = compute_dt(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
 
 mode_indices = generate_mode_indices(num_modes)
 
 mode_coefficients = compute_coefficients(
-    u0, 
-    x, 
+    initial_condition, 
+    x_array, 
     mode_indices, 
     basis=basis,
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, x, basis=basis)
+series_terms = compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
 
 history_ana = solve_heat_equation_1d(
     series_terms, 
     mode_indices,
-    x,
+    x_array,
     time_array, 
     diffusion_1d_config.viscosity,
     basis=basis)
@@ -107,5 +107,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
+plot_snapshots(x_array, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_animation(x_array, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)

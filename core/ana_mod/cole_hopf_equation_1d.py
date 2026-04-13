@@ -2,8 +2,8 @@ import numpy as np
 
 from ..config import BurgersEquation1DConfig
 
-from ..grids import compute_1d_grid_points_spacing
-from ..time_step import compute_time_step
+from ..grids import compute_dx
+from ..time_stepping import compute_dt
 
 
 def cole_hopf_1d_ufunc() -> callable:
@@ -28,8 +28,8 @@ def solve_cole_hopf_1d(
 ) -> np.ndarray:
     """Solves the 1D Cole-Hopf equation using the provided initial condition and configuration."""
 
-    dx = compute_1d_grid_points_spacing(config)
-    dt = compute_time_step(dx, config)
+    dx = compute_dx(config)
+    dt = compute_dt(config)
 
     u = u0.copy()
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))

@@ -4,13 +4,13 @@ from core.config import BurgersEquation1DConfig
 from .ana_mod.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
-def hat_initial_condition(x: np.ndarray, config: object) -> np.ndarray:
+def hat_initial_condition(x_array: np.ndarray, config: object) -> np.ndarray:
     """Generates a hat function initial condition based on the provided configuration."""
 
-    u0 = np.full_like(x, config.u_min, dtype=float)
-    u0[(x >= config.hat_start) & (x <= config.hat_end)] = config.u_max
+    initial_condition = np.full_like(x_array, config.u_min, dtype=float)
+    initial_condition[(x_array >= config.hat_start) & (x_array <= config.hat_end)] = config.u_max
 
-    return u0
+    return initial_condition
 
 
 def cole_hopf_initial_condition(time_step: float, x_array: np.ndarray, config: object) -> np.ndarray:

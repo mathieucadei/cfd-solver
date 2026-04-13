@@ -5,7 +5,7 @@ def make_1d_grid(config: object) -> np.ndarray:
 
     return np.linspace(0.0, config.domain_length, config.num_grid_points)
 
-def compute_1d_grid_points_spacing(config: object) -> float:
+def compute_dx(config: object) -> float:
     """Computes the spacing between grid points."""
 
     return config.domain_length / (config.num_grid_points - 1)

@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+from .grids import make_1d_grid
+
 
 def plot_snapshots(
-    x: np.ndarray, 
+    x_array: np.ndarray, 
     history_num: np.ndarray,
     history_ana: np.ndarray=None, 
     equation: str="equation", 
@@ -18,13 +20,13 @@ def plot_snapshots(
 
     for n in range(0, history_num.shape[0], step_stride):
 
-        ax.plot(x, history_num[n], label=f'Time step: {n}')
+        ax.plot(x_array, history_num[n], label=f'Time step: {n}')
 
     if history_ana is not None:
 
         for n in range(0, history_ana.shape[0], step_stride):
 
-            ax.plot(x, history_ana[n], '--', label=f'Analytical (Time step: {n})')
+            ax.plot(x_array, history_ana[n], '--', label=f'Analytical (Time step: {n})')
     
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
@@ -40,7 +42,7 @@ def plot_snapshots(
 
 
 def plot_animation(
-    x: np.ndarray, 
+    x_array: np.ndarray,
     history_num: np.ndarray,
     history_ana: np.ndarray=None,
     equation: str="equation", 
@@ -49,11 +51,11 @@ def plot_animation(
     """Creates an animation of the solution evolving over time."""
     
     fig, ax = plt.subplots()
-    num_line, = ax.plot(x, history_num[0], lw=2)
+    num_line, = ax.plot(x_array, history_num[0], lw=2)
 
     if history_ana is not None:
 
-        ana_line, = ax.plot(x, history_ana[0], '--', lw=2, label='Analytical')
+        ana_line, = ax.plot(x_array, history_ana[0], '--', lw=2, label='Analytical')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)

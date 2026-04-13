@@ -48,11 +48,11 @@ advection_1d_config = Advection1DConfig(
 
 # Generate the grid, initial condition, and solve the advection equation
 
-x = make_1d_grid(advection_1d_config)
+x_array = make_1d_grid(advection_1d_config)
 
-u0 = hat_initial_condition(x, advection_1d_config)
+initial_condition = hat_initial_condition(x_array, advection_1d_config)
 
-history = solve_advection_1d(u0, advection_1d_config)
+history = solve_advection_1d(initial_condition, advection_1d_config)
 
 
 # Visualize the results
@@ -66,5 +66,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x, history, equation=equation_name, save_fig=save_fig)
+plot_snapshots(x_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
