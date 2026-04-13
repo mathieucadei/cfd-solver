@@ -42,10 +42,15 @@ The current solvers advance:
 
   using a simple explicit central finite-difference scheme.
 
+## Validation
+
+This project includes a comparison between a numerical finite-difference diffusion solver and a Fourier-based analytical solution for the 1D heat equation on a periodic domain. The validation workflow reconstructs the analytical heat equation solution from Fourier modes and visualizes its agreement with the numerical result.
+
 ## Run
 
 ```bash
 python run_advection_1d.py
 python run_convection_1d.py
 python run_diffusion_1d.py
+python run_diffusion_1d_num_vs_ana.py
 ```
