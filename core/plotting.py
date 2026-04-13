@@ -14,7 +14,7 @@ def plot_snapshots(
 ) -> None:
     """Plots snapshots of the solution at specified time steps."""
     
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
 
     for n in range(0, history_num.shape[0], step_stride):
 
@@ -37,6 +37,7 @@ def plot_snapshots(
         plt.savefig(f'post_processing/figures/{equation.replace(" ", "_")}_solution_snapshots.png')
 
     plt.show()
+
 
 def plot_animation(
     x: np.ndarray, 

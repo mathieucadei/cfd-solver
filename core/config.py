@@ -25,6 +25,7 @@ class Convection1DConfig:
     u_min: float = 1.0
     u_max: float = 2.0
 
+
 @dataclass
 class Diffusion1DConfig:
     domain_length: float = 2.0
@@ -32,6 +33,20 @@ class Diffusion1DConfig:
     max_iterations: int = 41
     sigma: float = 0.2
     viscosity: float = 0.3
+    hat_start: float = 0.5
+    hat_end: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0
+
+
+@dataclass
+class BurgersEquation1DConfig:
+    domain_length: float = 2.0
+    num_grid_points: int = 101
+    max_iterations: int = 100
+    time_step: float = 0.0025
+    sigma: float = 0.2
+    viscosity: float = 0.07
     hat_start: float = 0.5
     hat_end: float = 1.0
     u_min: float = 1.0

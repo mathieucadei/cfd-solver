@@ -1,1 +1,2 @@
 from .heat_equation_1d import solve_heat_equation_1d
+from .cole_hopf_equation_1d import cole_hopf_1d_ufunc
