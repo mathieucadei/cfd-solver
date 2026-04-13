@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from .grids import make_1d_grid
-
 
 def plot_snapshots(
     x_array: np.ndarray, 

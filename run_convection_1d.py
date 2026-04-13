@@ -6,9 +6,9 @@ from core import (
     make_1d_grid,
     hat_initial_condition,
     solve_convection_1d,
-    plot_snapshots,
-    plot_animation,
 )
+
+from post_processing import (plot_snapshots, plot_animation)
 
 
 # Inputs

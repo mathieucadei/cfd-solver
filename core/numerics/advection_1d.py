@@ -1,6 +1,6 @@
 import numpy as np
 from ..config import Advection1DConfig
-from ..grids import compute_dx
+from ..setup.grids import compute_dx
 
 
 def solve_advection_1d(

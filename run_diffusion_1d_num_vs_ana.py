@@ -12,9 +12,9 @@ from core import (
     generate_mode_indices,
     compute_coefficients,
     compute_series_terms,
-    plot_snapshots,
-    plot_animation,
 )
+
+from post_processing import (plot_snapshots, plot_animation)
 
 
 # Inputs

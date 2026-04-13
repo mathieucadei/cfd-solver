@@ -1,7 +1,7 @@
 import numpy as np
 from ..config import Diffusion1DConfig
-from ..grids import compute_dx
-from ..time_stepping import compute_dt
+from ..setup.grids import compute_dx
+from ..setup.time_stepping import compute_dt
 
 
 def solve_diffusion_1d(

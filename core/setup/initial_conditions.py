@@ -1,7 +1,7 @@
 import numpy as np
 
 from core.config import BurgersEquation1DConfig
-from .ana_mod.cole_hopf_equation_1d import cole_hopf_1d_ufunc
+from ..analytical.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
 def hat_initial_condition(x_array: np.ndarray, config: object) -> np.ndarray:
