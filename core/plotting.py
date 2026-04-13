@@ -22,16 +22,6 @@ def plot_snapshots(
 
     if history_ana is not None:
 
-        # n_cols = history_ana.shape[1]
-        # left_exclude_frac = int(0.15 * n_cols)
-        # right_exclude_frac = int(0.2 * n_cols)
-
-        # # left side: copy from right neighbor
-        # history_ana[:, :left_exclude_frac] = history_ana[:, -right_exclude_frac-1:-right_exclude_frac]
-
-        # # right side: copy from left neighbor
-        # history_ana[:, -right_exclude_frac:] = history_ana[:, -right_exclude_frac-1:-right_exclude_frac]
-
         for n in range(0, history_ana.shape[0], step_stride):
 
             ax.plot(x, history_ana[n], '--', label=f'Analytical (Time step: {n})')
@@ -61,13 +51,6 @@ def plot_animation(
     num_line, = ax.plot(x, history_num[0], lw=2)
 
     if history_ana is not None:
-
-        n_cols = history_ana.shape[1]
-        exclude_frac = int(0.025 * n_cols)
-
-        history_ana[:, :exclude_frac] = history_ana[:, exclude_frac:exclude_frac+1]
-
-        history_ana[:, -exclude_frac:] = history_ana[:, -exclude_frac-1:-exclude_frac]
 
         ana_line, = ax.plot(x, history_ana[0], '--', lw=2, label='Analytical')
 

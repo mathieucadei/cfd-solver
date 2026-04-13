@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def solve_diffusion_1d_ana(
+def solve_heat_equation_1d(
     series_terms: np.ndarray, 
     mode_indices: np.ndarray,
     x_array: np.ndarray, 
@@ -9,7 +9,7 @@ def solve_diffusion_1d_ana(
     viscosity: float, 
     basis: str="periodic",
 ) -> np.ndarray:
-    """Compute the analytical solution to the 1D diffusion equation from Fourier modes."""
+    """Compute the analytical solution to the 1D heat equation from Fourier modes."""
 
     domain_length = np.round(np.max(x_array))
     
@@ -24,5 +24,7 @@ def solve_diffusion_1d_ana(
     
     else:
         raise ValueError("basis must be 'periodic' or 'cosine'")
+    
+    heat_equation_solution = np.sum(series_terms[None, :, :] * decay, axis=2).real
 
-    return np.sum(series_terms[None, :, :] * decay, axis=2).real
+    return heat_equation_solution

@@ -1,1 +1,1 @@
-from .diffusion_1d import solve_diffusion_1d_ana
+from .heat_equation_1d import solve_heat_equation_1d

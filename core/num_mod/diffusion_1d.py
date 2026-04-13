@@ -4,7 +4,7 @@ from ..grids import compute_1d_grid_points_spacing
 from ..time_step import compute_time_step
 
 
-def solve_diffusion_1d_num(
+def solve_diffusion_1d(
     u0: np.ndarray,
     config: Diffusion1DConfig,
 ) -> np.ndarray:
@@ -22,6 +22,10 @@ def solve_diffusion_1d_num(
 
         un = u.copy()
         u[1:-1] = un[1:-1] + config.viscosity * dt / dx**2 * (un[2:]- 2 * un[1:-1] + un[:-2])
+
+        u[0] = un[0] + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-1])
+        u[-1] = un[-1] + config.viscosity * dt / dx**2 * (un[0] - 2 * un[-1] + un[-2])
+
         history[n] = u
     
     return history
