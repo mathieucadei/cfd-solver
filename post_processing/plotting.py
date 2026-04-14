@@ -51,7 +51,7 @@ def plot_snapshots(
     )
 
     ax2.set_xlabel("x")
-    ax2.set_ylabel("t", rotation=0)
+    ax2.set_ylabel("time step", rotation=0)
     fig.colorbar(ctr, ax=ax2, label="u", fraction=0.046, pad=0.04)
 
     for n in range(0, history_num.shape[0], step_stride):
@@ -80,7 +80,7 @@ def plot_snapshots(
 
             ax4.plot(time_array, history_ana[:, x], color=cm.plasma(x/(history_num.shape[1] - 1)), linestyle='--', label=f'Analytical (x: {x})')
     
-    ax4.set_xlabel("t")
+    ax4.set_xlabel("time step")
     ax4.set_ylabel("u", rotation=0)
     ax4.legend()
 
