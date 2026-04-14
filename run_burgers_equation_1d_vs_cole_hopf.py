@@ -5,7 +5,6 @@ from core import (
     BurgersEquation1DConfig,
     make_cole_hopf_1d_grid,
     cole_hopf_initial_condition,
-    compute_cole_hopf_dt,
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
@@ -66,7 +65,7 @@ history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 ## Analytical solution
 
-history_ana = solve_cole_hopf_1d(x_array, initial_condition, burgers_1d_config)
+history_ana = solve_cole_hopf_1d(x_array, burgers_1d_config)
 
 
 # Vistualize the results

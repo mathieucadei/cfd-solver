@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors
+from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 
 
@@ -35,7 +35,7 @@ def plot_snapshots(
     )
 
     ax1.set_xlabel("x")
-    ax1.set_ylabel("t")
+    ax1.set_ylabel("time step")
     ax1.set_zlabel("u")
     ax1.set_box_aspect((2.0, 2.0, 1.2))
 
