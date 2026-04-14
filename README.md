@@ -9,6 +9,7 @@ Currently implemented:
 * 1D linear advection
 * 1D nonlinear convection
 * 1D diffusion
+* 1D Burgers equation
 * uniform 1D grid generation
 * hat function initial condition
 * explicit finite-difference solvers
@@ -16,7 +17,6 @@ Currently implemented:
 
 Planned next steps:
 
-* 1D Burgers equation
 * 2D equations
 * incompressible Navier-Stokes components
 
@@ -42,9 +42,21 @@ The current solvers advance:
 
   using a simple explicit central finite-difference scheme.
 
+* the 1D Burgers equation:
+
+  du/dt + u du/dx = nu d²u/dx²
+
+  using an explicit upwind scheme for the convective term and a central scheme for the diffusive term.
+
 ## Validation
 
-This project includes a comparison between a numerical finite-difference diffusion solver and a Fourier-based analytical solution for the 1D heat equation on a periodic domain. The validation workflow reconstructs the analytical heat equation solution from Fourier modes and visualizes its agreement with the numerical result.
+This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
+
+For the 1D diffusion equation, the numerical solver is validated against a Fourier-based analytical solution of the heat equation.
+
+For the 1D Burgers equation, the numerical solver is validated against the analytical Cole-Hopf solution.
+
+These comparisons are used to assess solver correctness and visualize agreement between numerical and analytical results.
 
 ## Run
 
@@ -52,5 +64,7 @@ This project includes a comparison between a numerical finite-difference diffusi
 python run_advection_1d.py
 python run_convection_1d.py
 python run_diffusion_1d.py
-python run_diffusion_1d_num_vs_ana.py
+python run_diffusion_1d_vs_heat.py
+python run_burgers_equation_1d.py
+python run_burgers_equation_1d_vs_cole_hopf.py
 ```
