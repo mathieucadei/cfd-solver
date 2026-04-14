@@ -47,6 +47,7 @@ class BurgersEquation1DConfig:
     time_step: float = 0.0025
     sigma: float = 0.2
     viscosity: float = 0.07
+    grid_type: str = "hat"
     hat_start: float = 0.5
     hat_end: float = 1.0
     u_min: float = 1.0

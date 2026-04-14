@@ -18,7 +18,8 @@ def plot_snapshots(
 
     for n in range(0, history_num.shape[0], step_stride):
 
-        ax.plot(x_array, history_num[n], label=f'Time step: {n}')
+        label_num = f'Numerical (Time step: {n})' if history_ana is not None else f'Time step: {n}'
+        ax.plot(x_array, history_num[n], label=label_num)
 
     if history_ana is not None:
 
@@ -33,8 +34,8 @@ def plot_snapshots(
     ax.set_title(f"{equation.title()} Solution Snapshots")
 
     if save_fig:
-        os.makedirs('post_processing/figures', exist_ok=True)
-        plt.savefig(f'post_processing/figures/{equation.replace(" ", "_")}_solution_snapshots.png')
+        os.makedirs('results/figures', exist_ok=True)
+        plt.savefig(f'results/figures/{equation.replace(" ", "_")}_solution_snapshots.png')
 
     plt.show()
 
@@ -49,7 +50,7 @@ def plot_animation(
     """Creates an animation of the solution evolving over time."""
     
     fig, ax = plt.subplots()
-    num_line, = ax.plot(x_array, history_num[0], lw=2)
+    num_line, = ax.plot(x_array, history_num[0], lw=2,  label='Numerical')
 
     if history_ana is not None:
 
@@ -57,6 +58,10 @@ def plot_animation(
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
+
+    if history_ana is not None:
+        ax.legend()
+    
     ax.set_title(f"{equation.title()} Solution Animation")
 
     def update(frame):
@@ -79,7 +84,7 @@ def plot_animation(
     ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 
     if save_fig:
-        os.makedirs('post_processing/animations', exist_ok=True)
-        ani.save(f'post_processing/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
+        os.makedirs('results/animations', exist_ok=True)
+        ani.save(f'results/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
 
     plt.show()

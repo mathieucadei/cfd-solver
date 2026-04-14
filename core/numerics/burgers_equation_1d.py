@@ -1,7 +1,7 @@
 import numpy as np
 from ..config import BurgersEquation1DConfig
-from ..setup.grids import compute_cole_hopf_dx
-from ..setup.time_stepping import compute_cole_hopf_dt, compute_dt
+from ..setup.grids import compute_dx, compute_cole_hopf_dx
+from ..setup.time_stepping import compute_dt, compute_cole_hopf_dt
 
 
 def solve_burgers_equation_1d(
@@ -10,8 +10,17 @@ def solve_burgers_equation_1d(
 ) -> np.ndarray:
     """Solves the numerical 1D Burgers' equation using the provided initial condition and configuration."""
 
-    dx = compute_cole_hopf_dx(config)
-    dt = compute_cole_hopf_dt(config)
+    if config.grid_type == "hat":
+        dx = compute_dx(config)
+        dt = compute_dt(config)
+    
+    elif config.grid_type == "cole_hopf":
+
+        dx = compute_cole_hopf_dx(config)
+        dt = compute_cole_hopf_dt(config)
+    
+    else:
+        raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
 
     u = initial_condition.copy()
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))

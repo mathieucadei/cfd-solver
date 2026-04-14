@@ -22,20 +22,22 @@ def cole_hopf_1d_ufunc() -> callable:
 
 def solve_cole_hopf_1d(
     x_array: np.ndarray,
-    time_array: np.ndarray,
     initial_condition: np.ndarray, 
     config: BurgersEquation1DConfig,
 ) -> np.ndarray:
     """Solves the 1D Cole-Hopf equation using the provided initial condition and configuration."""
 
+    dt = compute_cole_hopf_dt(config)
+
     u = initial_condition.copy()
+
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
     f = cole_hopf_1d_ufunc()
 
-    for n in range(1, config.max_iterations + 1):
+    for n in range(0, config.max_iterations + 1):
 
-        u = f(time_array, x_array, config.viscosity)
+        u = f(n*dt, x_array, config.viscosity)
 
         history[n] = u
 

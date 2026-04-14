@@ -5,6 +5,7 @@ from core import (
     BurgersEquation1DConfig,
     make_cole_hopf_1d_grid,
     cole_hopf_initial_condition,
+    compute_cole_hopf_dt,
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
@@ -20,7 +21,8 @@ domain_length = 6.0
 num_grid_points = 101
 max_iterations = 100
 time_step = 0.0025
-sigma = 0.2
+grid_type: str = "cole_hopf"
+sigma = 0.02
 viscosity = 0.07
 hat_start = 0.5
 hat_end = 1.0
@@ -40,6 +42,7 @@ burgers_1d_config = BurgersEquation1DConfig(
     num_grid_points=num_grid_points,
     max_iterations=max_iterations,
     time_step=time_step,
+    grid_type = grid_type,
     sigma=sigma,
     viscosity=viscosity,
     hat_start=hat_start,
@@ -61,9 +64,8 @@ history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 ## Analytical solution
 
-# time_array = np.linspace(0, burgers_1d_config.max_iterations * burgers_1d_config.time_step, burgers_1d_config.max_iterations + 1)
+history_ana = solve_cole_hopf_1d(x_array, initial_condition, burgers_1d_config)
 
-# history_ana = solve_cole_hopf_1d(x_array, time_array, initial_condition, burgers_1d_config)
 
 # Vistualize the results
 
@@ -76,5 +78,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x_array, history_num=history_num, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x_array, history_num=history_num, equation=equation_name, save_fig=save_fig)
+plot_snapshots(x_array, history_num=history_num, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_animation(x_array, history_num=history_num, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
