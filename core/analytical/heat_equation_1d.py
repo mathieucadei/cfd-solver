@@ -13,14 +13,14 @@ def solve_heat_equation_1d(
 
     domain_length = np.round(np.max(x_array))
     
-    t = time_array[:, None, None]
-    n = mode_indices[None, None, :]
+    time_values = time_array[:, None, None]
+    modes = mode_indices[None, None, :]
 
     if basis == "periodic":
-        decay = np.exp(-viscosity * ((2 * np.pi / domain_length * n)**2 * t))
+        decay = np.exp(-viscosity * ((2 * np.pi / domain_length * modes)**2 * time_values))
     
     elif basis == "cosine":
-        decay = np.exp(-viscosity * ((np.pi / domain_length * n)**2 * t))
+        decay = np.exp(-viscosity * ((np.pi / domain_length * modes)**2 * time_values))
     
     else:
         raise ValueError("basis must be 'periodic' or 'cosine'")

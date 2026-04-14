@@ -33,11 +33,11 @@ def solve_cole_hopf_1d(
 
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
-    f = cole_hopf_1d_ufunc()
+    cole_hopf_func = cole_hopf_1d_ufunc()
 
     for n in range(0, config.max_iterations + 1):
 
-        u = f(n*dt, x_array, config.viscosity)
+        u = cole_hopf_func(n*dt, x_array, config.viscosity)
 
         history[n] = u
 

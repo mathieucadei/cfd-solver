@@ -23,6 +23,7 @@ def solve_burgers_equation_1d(
         raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
 
     u = initial_condition.copy()
+
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
     history[0] = initial_condition
@@ -36,7 +37,6 @@ def solve_burgers_equation_1d(
         
         u[0] = un[0] - un[0] * dt / dx * (un[0] - un[-2]) \
             + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-2])
-
         u[-1] = un[0]
         
         history[n] = u

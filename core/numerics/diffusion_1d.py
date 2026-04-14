@@ -14,6 +14,7 @@ def solve_diffusion_1d(
     dt = compute_dt(config)
 
     u = initial_condition.copy()
+
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
     history[0] = initial_condition
@@ -21,6 +22,7 @@ def solve_diffusion_1d(
     for n in range(1, config.max_iterations + 1):
 
         un = u.copy()
+        
         u[1:-1] = un[1:-1] + config.viscosity * dt / dx**2 * (un[2:]- 2 * un[1:-1] + un[:-2])
 
         u[0] = un[0] + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-1])

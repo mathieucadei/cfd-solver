@@ -12,6 +12,7 @@ def solve_advection_1d(
     dx = compute_dx(config)
 
     u = initial_condition.copy()
+    
     history = np.zeros((config.max_iterations + 1, config.num_grid_points))
 
     history[0] = initial_condition

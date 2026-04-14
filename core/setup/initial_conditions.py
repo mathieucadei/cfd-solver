@@ -17,10 +17,8 @@ def hat_initial_condition(x_array: np.ndarray, config: object) -> np.ndarray:
 def cole_hopf_initial_condition(x_array: np.ndarray, config: object) -> np.ndarray:
     """Generates an initial condition for the Cole-Hopf transformation based on the provided configuration."""
 
-    time_step = 0
-
     initial_condition_func = cole_hopf_1d_ufunc()
 
-    initial_condition = initial_condition_func(time_step, x_array, config.viscosity)
+    initial_condition = initial_condition_func(0.0, x_array, config.viscosity)
 
     return initial_condition
