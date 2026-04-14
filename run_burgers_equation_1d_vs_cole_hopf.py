@@ -58,6 +58,8 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 x_array = make_cole_hopf_1d_grid(burgers_1d_config)
 
+time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
+
 initial_condition = cole_hopf_initial_condition(x_array, burgers_1d_config)
 
 history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
@@ -78,5 +80,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x_array, history_num=history_num, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_snapshots(x_array, time_array, history_num=history_num, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
 plot_animation(x_array, history_num=history_num, history_ana=history_ana, equation=equation_name, save_fig=save_fig)

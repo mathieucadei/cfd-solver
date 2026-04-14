@@ -64,6 +64,8 @@ diffusion_1d_config = Diffusion1DConfig(
 
 x_array = make_1d_grid(diffusion_1d_config)
 
+time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
+
 initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
 
 history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
@@ -107,5 +109,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x_array, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_snapshots(x_array, time_array, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
 plot_animation(x_array, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
