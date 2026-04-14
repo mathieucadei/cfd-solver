@@ -17,7 +17,7 @@ from post_processing import (plot_snapshots, plot_animation)
 
 domain_length = 2.0
 num_grid_points = 81
-max_iterations = 25
+max_iterations = 80
 time_step = 0.025
 wavespeed = 1.0
 hat_start = 0.5
@@ -27,7 +27,7 @@ u_max = 2.0
 
 ## Visualization parameters
 
-step_stride = 5
+step_stride = 20
 save_fig = False
 
 
@@ -50,6 +50,8 @@ advection_1d_config = Advection1DConfig(
 
 x_array = make_1d_grid(advection_1d_config)
 
+time_array = np.arange(0, advection_1d_config.max_iterations + 1)
+
 initial_condition = hat_initial_condition(x_array, advection_1d_config)
 
 history = solve_advection_1d(initial_condition, advection_1d_config)
@@ -66,5 +68,5 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
 plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
