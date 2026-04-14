@@ -8,7 +8,7 @@ from core import (
     solve_advection_1d,
 )
 
-from post_processing import (plot_snapshots, plot_animation)
+from post_processing import (plot_line, plot_line_cuts, plot_snapshots, plot_animation)
 
 
 # Inputs
@@ -68,5 +68,6 @@ equation_name = ' '.join(equation)
 
 ## Plot the results
 
-plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
+plot_line(x_array, history, x_label='x', y_label='u', equation=equation_name, title=True, step_stride=step_stride, save_fig=save_fig)
+# plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+# plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
