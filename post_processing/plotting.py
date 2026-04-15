@@ -5,6 +5,73 @@ from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 
 
+def plot_line(
+    ax: plt.Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    color = None,
+    label: str = None,
+    linestyle: str = '-',
+) -> None:
+
+    ax.plot(x_values, y_values, color=color, linestyle=linestyle, label=label)
+
+
+def plot_line_cuts(
+    x_values: np.ndarray,
+    y_matrix_num: np.ndarray,
+    y_matrix_ana: np.ndarray = None,
+    axis: int = 0,
+    cut_label: str = 'Time Step',
+    x_label: str = 'x',
+    y_label: str = 'u',
+    equation_name: str = None,
+    title: bool = False,
+    step_stride: int = 5,
+    save: bool = False
+) -> None:
+    
+    fig, ax = plt.subplots()
+
+    n_cuts = y_matrix_num.shape[axis]
+
+    for n in range(0, n_cuts, step_stride):
+        if axis == 0:
+            y_cut = y_matrix_num[n, :]
+        elif axis == 1:
+            y_cut = y_matrix_num[:, n]
+        else:
+            raise ValueError("axis must be 0 or 1")
+        
+        num_label = f'Numerical ({cut_label}: {n})' if y_matrix_ana else f'{cut_label}: {n}'
+        
+        plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=num_label)
+    
+    if y_matrix_ana:
+        for n in range(0, n_cuts, step_stride):
+            if axis == 0:
+                y_cut = y_matrix_ana[n, :]
+            elif axis == 1:
+                y_cut = y_matrix_ana[:, n]
+            else:
+                raise ValueError("axis must be 0 or 1")
+        
+        ana_label = f'Analytical ({cut_label}: {n})' if y_matrix_ana else f'{cut_label}: {n}'
+    
+        plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=ana_label)
+    
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+    ax.legend()
+
+    if title:
+
+        ax.set_title(f'{equation_name} Solution')
+
+    if save:
+        _save_fig(fig=fig, equation_name=equation_name)
+
+
 def plot_snapshots(
     x_array: np.ndarray,
     time_array: np.ndarray, 
@@ -141,3 +208,9 @@ def plot_animation(
         ani.save(f'results/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
 
     plt.show()
+
+
+def _save_fig(fig: plt.Figure, equation_name: str):
+
+    os.makedirs('results/figures', exist_ok=True)
+    fig.savefig(f'results/figures/{equation_name.lower().replace(' ', '_')}_solution.png')

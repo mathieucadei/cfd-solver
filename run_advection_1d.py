@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 from core import (
@@ -8,7 +9,12 @@ from core import (
     solve_advection_1d,
 )
 
-from post_processing import (plot_snapshots, plot_animation)
+from post_processing import (
+    plot_line,
+    plot_line_cuts, 
+    plot_snapshots, 
+    plot_animation
+)
 
 
 # Inputs
@@ -17,7 +23,7 @@ from post_processing import (plot_snapshots, plot_animation)
 
 domain_length = 2.0
 num_grid_points = 81
-max_iterations = 80
+max_iterations = 25
 time_step = 0.025
 wavespeed = 1.0
 hat_start = 0.5
@@ -49,24 +55,22 @@ advection_1d_config = Advection1DConfig(
 # Generate the grid, initial condition, and solve the advection equation
 
 x_array = make_1d_grid(advection_1d_config)
-
 time_array = np.arange(0, advection_1d_config.max_iterations + 1)
-
 initial_condition = hat_initial_condition(x_array, advection_1d_config)
-
 history = solve_advection_1d(initial_condition, advection_1d_config)
 
 
-# Visualize the results
+# Plot the results
 
-## Extract the script name and equation name for plotting
+plot_line_cuts(
+    x_values = x_array, 
+    y_matrix_num = history,
+    equation_name = '1D Advection',
+    title = True,
+    save = True,
+)
 
-script_name = Path(__file__).name
-equation = script_name.split('.')[0].split('_')[1:]
-equation[0], equation[1] = equation[1], equation[0]
-equation_name = ' '.join(equation)
+plt.show()
 
-## Plot the results
-
-plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
+# plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+# plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
