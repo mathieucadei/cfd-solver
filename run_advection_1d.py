@@ -67,7 +67,7 @@ plot_line_cuts(
     y_matrix_num = history,
     equation_name = '1D Advection',
     title = True,
-    save = True,
+    save = False,
 )
 
 plt.show()
