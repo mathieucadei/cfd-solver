@@ -2,7 +2,9 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.colors import Colormap
 from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 
 def plot_line(
@@ -70,6 +72,64 @@ def plot_line_cuts(
 
     if save:
         _save_fig(fig=fig, equation_name=equation_name)
+
+
+def plot_solution_surface(
+    ax: plt.Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.plasma,
+    x_label="x",
+    y_label="time step",
+    z_label="u",
+    equation_name: str = None,
+    title: bool = False,
+) -> Poly3DCollection:
+    
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    surf = ax.plot_surface(x_grid, y_grid, solution_matrix, cmap=cmap)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.set_zlabel(z_label)
+
+    if title:
+        ax.set_title(f'{equation_name} Solution')
+    
+    return surf
+
+
+def show_solution_surface(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.plasma,
+    x_label="x",
+    y_label="time step",
+    z_label="u",
+    equation_name: str = None,
+    title: bool = False,     
+) -> None:
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    plot_solution_surface(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label,
+        equation_name=equation_name,
+        title=title,   
+    )
+
+    plt.show()
 
 
 def plot_snapshots(

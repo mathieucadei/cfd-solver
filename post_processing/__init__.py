@@ -1,1 +1,1 @@
-from .plotting import plot_line, plot_line_cuts, plot_snapshots, plot_animation
+from .plotting import plot_line, plot_line_cuts, plot_solution_surface, show_solution_surface, plot_snapshots, plot_animation

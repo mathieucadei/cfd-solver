@@ -11,7 +11,9 @@ from core import (
 
 from post_processing import (
     plot_line,
-    plot_line_cuts, 
+    plot_line_cuts,
+    plot_solution_surface,
+    show_solution_surface, 
     plot_snapshots, 
     plot_animation
 )
@@ -62,15 +64,22 @@ history = solve_advection_1d(initial_condition, advection_1d_config)
 
 # Plot the results
 
-plot_line_cuts(
-    x_values = x_array, 
-    y_matrix_num = history,
-    equation_name = '1D Advection',
-    title = True,
-    save = False,
-)
+# plot_line_cuts(
+#     x_values = x_array, 
+#     num_solution_matrix = history,
+#     equation_name = '1D Advection',
+#     title = True,
+#     save = False,
+# )
 
-plt.show()
+# plt.show()
+
+
+show_solution_surface(
+    x_values = x_array,
+    y_values = time_array,
+    solution_matrix=history,
+)
 
 # plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
 # plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
