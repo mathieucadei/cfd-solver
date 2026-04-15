@@ -19,8 +19,8 @@ def plot_line(
 
 def plot_line_cuts(
     x_values: np.ndarray,
-    y_matrix_num: np.ndarray,
-    y_matrix_ana: np.ndarray = None,
+    num_solution_matrix: np.ndarray,
+    ana_solution_matrix: np.ndarray = None,
     axis: int = 0,
     cut_label: str = 'Time Step',
     x_label: str = 'x',
@@ -33,30 +33,30 @@ def plot_line_cuts(
     
     fig, ax = plt.subplots()
 
-    n_cuts = y_matrix_num.shape[axis]
+    n_cuts = num_solution_matrix.shape[axis]
 
     for n in range(0, n_cuts, step_stride):
         if axis == 0:
-            y_cut = y_matrix_num[n, :]
+            y_cut = num_solution_matrix[n, :]
         elif axis == 1:
-            y_cut = y_matrix_num[:, n]
+            y_cut = num_solution_matrix[:, n]
         else:
             raise ValueError("axis must be 0 or 1")
         
-        num_label = f'Numerical ({cut_label}: {n})' if y_matrix_ana else f'{cut_label}: {n}'
+        num_label = f'Numerical ({cut_label}: {n})' if ana_solution_matrix else f'{cut_label}: {n}'
         
         plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=num_label)
     
-    if y_matrix_ana:
+    if ana_solution_matrix:
         for n in range(0, n_cuts, step_stride):
             if axis == 0:
-                y_cut = y_matrix_ana[n, :]
+                y_cut = ana_solution_matrix[n, :]
             elif axis == 1:
-                y_cut = y_matrix_ana[:, n]
+                y_cut = ana_solution_matrix[:, n]
             else:
                 raise ValueError("axis must be 0 or 1")
         
-        ana_label = f'Analytical ({cut_label}: {n})' if y_matrix_ana else f'{cut_label}: {n}'
+        ana_label = f'Analytical ({cut_label}: {n})' if ana_solution_matrix else f'{cut_label}: {n}'
     
         plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=ana_label)
     
