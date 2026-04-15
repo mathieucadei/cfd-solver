@@ -10,8 +10,8 @@ from core import (
 )
 
 from post_processing import (
-    plot_line,
-    plot_line_cuts,
+    plot_solution_traces,
+    show_solution_traces,
     plot_solution_surface,
     show_solution_surface, 
     plot_snapshots, 
@@ -74,6 +74,10 @@ history = solve_advection_1d(initial_condition, advection_1d_config)
 
 # plt.show()
 
+show_solution_traces(
+    x_values = x_array,
+    num_solution_matrix=history, 
+)
 
 show_solution_surface(
     x_values = x_array,

@@ -2,24 +2,15 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
 from matplotlib.colors import Colormap
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 
-def plot_line(
-    ax: plt.Axes,
-    x_values: np.ndarray,
-    y_values: np.ndarray,
-    color = None,
-    label: str = None,
-    linestyle: str = '-',
-) -> None:
-
-    ax.plot(x_values, y_values, color=color, linestyle=linestyle, label=label)
-
-
-def plot_line_cuts(
+def plot_solution_traces(
+    ax: Axes,
     x_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     ana_solution_matrix: np.ndarray = None,
@@ -30,66 +21,61 @@ def plot_line_cuts(
     equation_name: str = None,
     title: bool = False,
     step_stride: int = 5,
-    save: bool = False
 ) -> None:
-    
-    fig, ax = plt.subplots()
 
     n_cuts = num_solution_matrix.shape[axis]
 
     for n in range(0, n_cuts, step_stride):
+
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
         elif axis == 1:
             y_cut = num_solution_matrix[:, n]
         else:
-            raise ValueError("axis must be 0 or 1")
+            raise ValueError('axis must be 0 or 1')
         
-        num_label = f'Numerical ({cut_label}: {n})' if ana_solution_matrix else f'{cut_label}: {n}'
+        num_label = f'Numerical ({cut_label}: {n})' if ana_solution_matrix is not None else f'{cut_label}: {n}'
         
-        plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=num_label)
+        ax.plot(x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=num_label)
     
-    if ana_solution_matrix:
+    if ana_solution_matrix is not None:
         for n in range(0, n_cuts, step_stride):
+
             if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
             elif axis == 1:
                 y_cut = ana_solution_matrix[:, n]
             else:
-                raise ValueError("axis must be 0 or 1")
+                raise ValueError('axis must be 0 or 1')
         
-        ana_label = f'Analytical ({cut_label}: {n})' if ana_solution_matrix else f'{cut_label}: {n}'
-    
-        plot_line(ax, x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=ana_label)
+            ana_label = f'Analytical ({cut_label}: {n})'
+        
+            ax.plot(x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), linestyle='--', label=ana_label)
     
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
 
     if title:
-
         ax.set_title(f'{equation_name} Solution')
-
-    if save:
-        _save_fig(fig=fig, equation_name=equation_name)
 
 
 def plot_solution_surface(
-    ax: plt.Axes,
+    ax: Axes,
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
     cmap: Colormap = cm.plasma,
-    x_label="x",
-    y_label="time step",
-    z_label="u",
+    x_label: str = 'x',
+    y_label: str = 'time step',
+    z_label: str = 'u',
     equation_name: str = None,
     title: bool = False,
-) -> Poly3DCollection:
+) -> None:
     
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    surf = ax.plot_surface(x_grid, y_grid, solution_matrix, cmap=cmap)
+    ax.plot_surface(x_grid, y_grid, solution_matrix, cmap=cmap)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
@@ -97,8 +83,42 @@ def plot_solution_surface(
 
     if title:
         ax.set_title(f'{equation_name} Solution')
+
+
+def show_solution_traces(
+    x_values: np.ndarray,
+    num_solution_matrix: np.ndarray,
+    ana_solution_matrix: np.ndarray = None,
+    axis: int = 0,
+    cut_label: str = 'Time Step',
+    x_label: str = 'x',
+    y_label: str = 'u',
+    equation_name: str = None,
+    title: bool = False,
+    step_stride: int = 5,
+    save: bool = False,       
+) -> None:
     
-    return surf
+    fig, ax = plt.subplots()
+
+    plot_solution_traces(
+        ax=ax,
+        x_values=x_values,
+        num_solution_matrix=num_solution_matrix,
+        ana_solution_matrix=ana_solution_matrix,
+        axis=axis,
+        cut_label=cut_label,
+        x_label=x_label,
+        y_label=y_label,
+        equation_name=equation_name,
+        title=title,
+        step_stride=step_stride,
+    )
+
+    if save:
+        _save_fig(fig=fig, equation_name=equation_name)
+
+    plt.show()
 
 
 def show_solution_surface(
@@ -106,9 +126,9 @@ def show_solution_surface(
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
     cmap: Colormap = cm.plasma,
-    x_label="x",
-    y_label="time step",
-    z_label="u",
+    x_label: str = 'x',
+    y_label: str = 'time step',
+    z_label: str = 'u',
     equation_name: str = None,
     title: bool = False,     
 ) -> None:
@@ -130,6 +150,12 @@ def show_solution_surface(
     )
 
     plt.show()
+
+
+def _save_fig(fig: Figure, equation_name: str) -> None:
+
+    os.makedirs('results/figures', exist_ok=True)
+    fig.savefig(f'results/figures/{equation_name.lower().replace(" ", "_")}_solution.png')
 
 
 def plot_snapshots(
@@ -268,9 +294,3 @@ def plot_animation(
         ani.save(f'results/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
 
     plt.show()
-
-
-def _save_fig(fig: plt.Figure, equation_name: str):
-
-    os.makedirs('results/figures', exist_ok=True)
-    fig.savefig(f'results/figures/{equation_name.lower().replace(' ', '_')}_solution.png')
