@@ -10,11 +10,10 @@ from core import (
 )
 
 from post_processing import (
-    plot_solution_traces,
     show_solution_traces,
-    plot_solution_surface,
+    show_solution_contour,
     show_solution_surface, 
-    plot_snapshots, 
+    show_solution_overview, 
     plot_animation
 )
 
@@ -25,7 +24,7 @@ from post_processing import (
 
 domain_length = 2.0
 num_grid_points = 81
-max_iterations = 25
+max_iterations = 80
 time_step = 0.025
 wavespeed = 1.0
 hat_start = 0.5
@@ -74,16 +73,27 @@ history = solve_advection_1d(initial_condition, advection_1d_config)
 
 # plt.show()
 
-show_solution_traces(
-    x_values = x_array,
-    num_solution_matrix=history, 
-)
+# show_solution_traces(
+#     x_values = x_array,
+#     num_solution_matrix=history, 
+# )
 
-show_solution_surface(
-    x_values = x_array,
-    y_values = time_array,
-    solution_matrix=history,
-)
+# show_solution_contour(
+#     x_values = x_array,
+#     y_values = time_array,
+#     solution_matrix=history,
+# )
 
-# plot_snapshots(x_array, time_array, history, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
+# show_solution_surface(
+#     x_values = x_array,
+#     y_values = time_array,
+#     solution_matrix=history,
+# )
+
+show_solution_overview(
+    x_array, 
+    time_array, 
+    history, 
+    step_stride=step_stride
+    )
 # plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)

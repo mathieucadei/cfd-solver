@@ -60,6 +60,32 @@ def plot_solution_traces(
         ax.set_title(f'{equation_name} Solution')
 
 
+def plot_solution_contour(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.plasma,
+    x_label: str = 'x',
+    y_label: str = 'time step',
+    z_label: str = 'u',
+    equation_name: str = None,
+    title: bool = False,
+):
+    
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    contour = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{equation_name} Solution')
+    
+    return contour
+
+
 def plot_solution_surface(
     ax: Axes,
     x_values: np.ndarray,
@@ -121,6 +147,39 @@ def show_solution_traces(
     plt.show()
 
 
+def show_solution_contour(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.plasma,
+    x_label: str = 'x',
+    y_label: str = 'time step',
+    z_label: str = 'u',
+    equation_name: str = None,
+    title: bool = False,     
+) -> None:
+    
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    contour = plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label,
+        equation_name=equation_name,
+        title=title,   
+    )
+
+    fig.colorbar(contour, ax=ax)
+
+    plt.show()
+
+
 def show_solution_surface(
     x_values: np.ndarray,
     y_values: np.ndarray,
@@ -158,14 +217,21 @@ def _save_fig(fig: Figure, equation_name: str) -> None:
     fig.savefig(f'results/figures/{equation_name.lower().replace(" ", "_")}_solution.png')
 
 
-def plot_snapshots(
-    x_array: np.ndarray,
-    time_array: np.ndarray, 
-    history_num: np.ndarray,
-    history_ana: np.ndarray=None, 
-    equation: str="equation", 
-    step_stride: int=5, 
-    save_fig: bool=False
+def show_solution_overview(
+    x_values: np.ndarray,
+    y_values: np.ndarray, 
+    num_solution_matrix: np.ndarray,
+    ana_solution_matrix: np.ndarray = None,
+    cmap: Colormap = cm.plasma,
+    ax3_cut_label: str = 'Time Step',
+    ax4_cut_label: str = 'x',
+    x_label: str = 'x',
+    y_label: str = 'time step',
+    z_label: str = 'u',
+    equation_name: str = None,
+    step_stride: int=5,
+    title: bool = False, 
+    save_fig: bool=False,
 ) -> None:
     """Plots snapshots of the solution at specified time steps."""
 
@@ -178,70 +244,71 @@ def plot_snapshots(
     ax4 = fig.add_subplot(gs[1, 1])
 
 
-    x_grid, t_grid = np.meshgrid(x_array, time_array)
+    plot_solution_surface(
+            ax=ax1,
+            x_values=x_values,
+            y_values=y_values,
+            solution_matrix=num_solution_matrix,
+            cmap=cmap,
+            x_label=x_label,
+            y_label=y_label,
+            z_label=z_label,
+            equation_name=equation_name,
+            title=title,   
+        )
 
-    surf = ax1.plot_surface(
-        x_grid,
-        t_grid,
-        history_num,
-        cmap=cm.plasma,
-    )
-
-    ax1.set_xlabel("x")
-    ax1.set_ylabel("time step")
-    ax1.set_zlabel("u")
     ax1.set_box_aspect((2.0, 2.0, 1.2))
 
 
-    # fig.colorbar(surf, ax=ax1)
-
-
-    ctr = ax2.contourf(
-        x_grid,
-        t_grid,
-        history_num,
-        cmap=cm.plasma,
+    contour = plot_solution_contour(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=num_solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label,
+        equation_name=equation_name,
+        title=title,   
     )
 
-    ax2.set_xlabel("x")
-    ax2.set_ylabel("time step", rotation=0)
-    fig.colorbar(ctr, ax=ax2, label="u", fraction=0.046, pad=0.04)
+    fig.colorbar(contour, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
 
-    for n in range(0, history_num.shape[0], step_stride):
+    plot_solution_traces(
+        ax=ax3,
+        x_values=x_values,
+        num_solution_matrix=num_solution_matrix,
+        ana_solution_matrix=ana_solution_matrix,
+        axis=0,
+        cut_label=ax3_cut_label,
+        x_label=x_label,
+        y_label=y_label,
+        equation_name=equation_name,
+        title=title,
+        step_stride=step_stride,
+    )
 
-        label_num = f'Numerical (Time step: {n})' if history_ana is not None else f'Time step: {n}'
-        ax3.plot(x_array, history_num[n], color=cm.plasma(n/(history_num.shape[0] - 1)), label=label_num)
+    plot_solution_traces(
+        ax=ax4,
+        x_values=x_values,
+        num_solution_matrix=num_solution_matrix,
+        ana_solution_matrix=ana_solution_matrix,
+        axis=1,
+        cut_label=ax4_cut_label,
+        x_label=x_label,
+        y_label=y_label,
+        equation_name=equation_name,
+        title=title,
+        step_stride=step_stride,
+    )
 
-    if history_ana is not None:
+    if title:
+        fig.suptitle(f"{equation_name.title()} Solution Overview")
 
-        for n in range(0, history_ana.shape[0], step_stride):
-
-            ax3.plot(x_array, history_ana[n], color=cm.plasma(n/(history_num.shape[0] - 1)), linestyle='--', label=f'Analytical (Time step: {n})')
-    
-    ax3.set_xlabel("x")
-    ax3.set_ylabel("u", rotation=0)
-    ax3.legend()
-
-    for x in range(0, history_num.shape[1], step_stride):
-
-        label_num = f'Numerical (x: {x})' if history_ana is not None else f'x: {x}'
-        ax4.plot(time_array, history_num[:, x], color=cm.plasma(x/(history_num.shape[1] - 1)), label=label_num)
-
-    if history_ana is not None:
-
-        for x in range(0, history_ana.shape[1], step_stride):
-
-            ax4.plot(time_array, history_ana[:, x], color=cm.plasma(x/(history_num.shape[1] - 1)), linestyle='--', label=f'Analytical (x: {x})')
-    
-    ax4.set_xlabel("time step")
-    ax4.set_ylabel("u", rotation=0)
-    ax4.legend()
-
-    fig.suptitle(f"{equation.title()} Solution Snapshots")
-
-    if save_fig:
-        os.makedirs('results/figures', exist_ok=True)
-        plt.savefig(f'results/figures/{equation.replace(" ", "_")}_solution_snapshots.png')
+    # if save_fig:
+    #     os.makedirs('results/figures', exist_ok=True)
+    #     plt.savefig(f'results/figures/{equation_name.replace(" ", "_")}_solution_snapshots.png')
 
     plt.show()
 
