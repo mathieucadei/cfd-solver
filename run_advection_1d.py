@@ -35,7 +35,7 @@ u_max = 2.0
 ## Visualization parameters
 
 step_stride = 20
-save_fig = False
+save = False
 
 
 # Create the configuration object
@@ -63,32 +63,44 @@ history = solve_advection_1d(initial_condition, advection_1d_config)
 
 # Plot the results
 
-# plot_line_cuts(
-#     x_values = x_array, 
-#     num_solution_matrix = history,
-#     equation_name = '1D Advection',
-#     title = True,
-#     save = False,
-# )
+show_solution_traces(
+    x_values = x_array,
+    num_solution_matrix=history,
+    cut_values=time_array,
+    step_stride=step_stride,
+    equation_name='1d Advection',
+    title=True,
+    save=save,
+)
 
-# plt.show()
+show_solution_traces(
+    x_values = time_array,
+    num_solution_matrix=history,
+    cut_values=x_array,
+    step_stride=step_stride,
+    cut_label='x',
+    equation_name='1d Advection',
+    title=True,
+    save=save,
+)
 
-# show_solution_traces(
-#     x_values = x_array,
-#     num_solution_matrix=history, 
-# )
+show_solution_contour(
+    x_values = x_array,
+    y_values = time_array,
+    solution_matrix=history,
+    equation_name='1d Advection',
+    title=True,
+    save=save,
+)
 
-# show_solution_contour(
-#     x_values = x_array,
-#     y_values = time_array,
-#     solution_matrix=history,
-# )
-
-# show_solution_surface(
-#     x_values = x_array,
-#     y_values = time_array,
-#     solution_matrix=history,
-# )
+show_solution_surface(
+    x_values = x_array,
+    y_values = time_array,
+    solution_matrix=history,
+    equation_name='1d Advection',
+    title=True,
+    save=save,
+)
 
 show_solution_overview(
     x_array, 
