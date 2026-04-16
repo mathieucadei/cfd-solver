@@ -94,6 +94,10 @@ show_solution_overview(
     x_array, 
     time_array, 
     history, 
-    step_stride=step_stride
+    step_stride=step_stride,
+    equation_name='1d Advection',
+    title=True,
+    save=False,
     )
+
 # plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
