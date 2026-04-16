@@ -1,6 +1,8 @@
+"""Run the 1D advection solver and generate solution plots."""
+
+
+
 import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
 
 from core import (
     Advection1DConfig,
@@ -14,13 +16,13 @@ from post_processing import (
     show_solution_contour,
     show_solution_surface, 
     show_solution_overview, 
-    plot_animation
+    show_solution_1d_animation,
 )
 
 
-# Inputs
 
-## Configuration parameters for the 1D advection simulation
+# Pre-processing
+# Simulation parameters
 
 domain_length = 2.0
 num_grid_points = 81
@@ -32,9 +34,11 @@ hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
 
-## Visualization parameters
+# Visualization parameters
 
 step_stride = 20
+equation_name = '1d advection'
+title = True
 save = False
 
 
@@ -53,52 +57,63 @@ advection_1d_config = Advection1DConfig(
 )
 
 
-# Generate the grid, initial condition, and solve the advection equation
+# Generate the grid and time array
 
 x_array = make_1d_grid(advection_1d_config)
 time_array = np.arange(0, advection_1d_config.max_iterations + 1)
+
+
+# Initialize the initial condition
+
 initial_condition = hat_initial_condition(x_array, advection_1d_config)
+
+
+
+# Run
+# Solve the advection equation
+
 history = solve_advection_1d(initial_condition, advection_1d_config)
 
 
-# Plot the results
+
+# Post-processing
 
 show_solution_traces(
-    x_values = x_array,
+    x_values=x_array,
     num_solution_matrix=history,
     cut_values=time_array,
     step_stride=step_stride,
-    equation_name='1d Advection',
-    title=True,
+    equation_name=equation_name,
+    title=title,
     save=save,
 )
 
 show_solution_traces(
-    x_values = time_array,
+    x_values=time_array,
     num_solution_matrix=history,
     cut_values=x_array,
     step_stride=step_stride,
     cut_label='x',
-    equation_name='1d Advection',
-    title=True,
+    equation_name=equation_name,
+    title=title,
     save=save,
 )
 
 show_solution_contour(
-    x_values = x_array,
-    y_values = time_array,
+    x_values=x_array,
+    y_values=time_array,
     solution_matrix=history,
-    equation_name='1d Advection',
-    title=True,
+    equation_name=equation_name,
+    title=title,
     save=save,
 )
 
 show_solution_surface(
-    x_values = x_array,
-    y_values = time_array,
+    x_values=x_array,
+    y_values=time_array,
     solution_matrix=history,
-    equation_name='1d Advection',
-    title=True,
+    equation_name=equation_name,
+    title=title,
     save=save,
 )
 
@@ -107,9 +122,14 @@ show_solution_overview(
     time_array, 
     history, 
     step_stride=step_stride,
-    equation_name='1d Advection',
-    title=True,
-    save=False,
-    )
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
 
-# plot_animation(x_array, history, equation=equation_name, save_fig=save_fig)
+show_solution_1d_animation(
+    x_array, 
+    history, 
+    equation_name=equation_name,
+    save=save,
+)

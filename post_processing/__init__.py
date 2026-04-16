@@ -6,5 +6,5 @@ from .plotting import (
     show_solution_contour,  
     show_solution_surface, 
     show_solution_overview, 
-    plot_animation
+    show_solution_1d_animation,
 )

@@ -304,59 +304,66 @@ def show_solution_overview(
     plt.show()
 
 
-def _save_fig(fig: Figure, equation_name: str, fig_type: str = "figure") -> None:
-    equation_filename  = equation_name.lower().replace(" ", "_")
-    directory = "results/figures" if fig_type == "figure" else f"results/figures/{fig_type}"
-
-    os.makedirs(directory, exist_ok=True)
-    fig.savefig(f"{directory}/{equation_filename }_solution_{fig_type}.png")
-
-
-def plot_animation(
-    x_array: np.ndarray,
-    history_num: np.ndarray,
-    history_ana: np.ndarray=None,
-    equation: str="equation", 
-    save_fig: bool=False
+def show_solution_1d_animation(
+    x_values: np.ndarray,
+    num_solution_matrix: np.ndarray,
+    ana_solution_matrix: np.ndarray = None,
+    equation_name: str = 'equation',
+    save: bool = False
 ) -> None:
     """Creates an animation of the solution evolving over time."""
     
     fig, ax = plt.subplots()
-    num_line, = ax.plot(x_array, history_num[0], lw=2,  label='Numerical')
+    num_line, = ax.plot(x_values, num_solution_matrix[0], lw=2,  label='Numerical')
 
-    if history_ana is not None:
+    if ana_solution_matrix is not None:
 
-        ana_line, = ax.plot(x_array, history_ana[0], '--', lw=2, label='Analytical')
+        ana_line, = ax.plot(x_values, ana_solution_matrix[0], '--', lw=2, label='Analytical')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
 
-    if history_ana is not None:
+    if ana_solution_matrix is not None:
         ax.legend()
     
-    ax.set_title(f"{equation.title()} Solution Animation")
+    ax.set_title(f'{equation_name.title()} Solution Animation')
 
     def update(frame):
 
-        num_line.set_ydata(history_num[frame])
+        num_line.set_ydata(num_solution_matrix[frame])
 
-        if history_ana is not None:
+        if ana_solution_matrix is not None:
 
-            ana_line.set_ydata(history_ana[frame])
+            ana_line.set_ydata(ana_solution_matrix[frame])
 
-        ax.set_title(f"{equation.title()} Solution Animation (Time step: {frame})")
+        ax.set_title(f'{equation_name.title()} Solution Animation (Time step: {frame})')
 
-        return num_line, ana_line if history_ana is not None else num_line,
+        return num_line, ana_line if ana_solution_matrix is not None else num_line,
 
-    if history_ana is not None:
-        frames = history_ana.shape[0]
+    if ana_solution_matrix is not None:
+        frames = ana_solution_matrix.shape[0]
     else:
-        frames = history_num.shape[0]
+        frames = num_solution_matrix.shape[0]
 
     ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 
-    if save_fig:
-        os.makedirs('results/animations', exist_ok=True)
-        ani.save(f'results/animations/{equation.replace(" ", "_")}_solution_animation.mp4', writer="ffmpeg")
+    if save:
+        _save_ani(ani=ani, equation_name=equation_name, fig_type='1d')
 
     plt.show()
+
+
+def _save_fig(fig: Figure, equation_name: str, fig_type: str = 'figure') -> None:
+    equation_filename  = equation_name.lower().replace(" ", "_")
+    directory = 'results/figures' if fig_type == 'figure' else f'results/figures/{fig_type}'
+
+    os.makedirs(directory, exist_ok=True)
+    fig.savefig(f'{directory}/{equation_filename }_solution_{fig_type}.png')
+
+
+def _save_ani(ani: FuncAnimation, equation_name: str, fig_type: str = 'animations') -> None:
+    equation_filename  = equation_name.lower().replace(' ', '_')
+    directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
+
+    os.makedirs(directory, exist_ok=True)
+    ani.save(f'{directory}/{equation_filename }_solution_{fig_type}.mp4', writer='ffmpeg')
