@@ -2,7 +2,7 @@
 
 
 
-from .grids import compute_cole_hopf_dx, compute_dx
+from .grids import compute_cole_hopf_dx, compute_dx, compute_dx_2d
 
 
 
@@ -28,3 +28,11 @@ def compute_cole_hopf_dt(config: object) -> float:
     dx = compute_cole_hopf_dx(config)
     
     return dx * config.viscosity
+
+
+def compute_convective_dt_2d(config: object) -> float:
+    """Compute the time step for 1D advection and convection problems."""
+
+    dx = compute_dx_2d(config)
+    
+    return config.sigma * dx
