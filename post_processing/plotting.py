@@ -44,7 +44,7 @@ def plot_solution_traces(
         
         num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
         
-        ax.plot(x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), label=num_label)
+        ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
     
     if ana_solution_matrix is not None:
         for n in range(0, n_cuts, step_stride):
@@ -58,7 +58,7 @@ def plot_solution_traces(
         
             ana_label = f'Analytical ({cut_label}: {n})'
         
-            ax.plot(x_values, y_cut, color=cm.plasma(n/(n_cuts - 1)), linestyle='--', label=ana_label)
+            ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), linestyle='--', label=ana_label)
     
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -73,7 +73,7 @@ def plot_solution_contour(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.plasma,
+    cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -100,7 +100,7 @@ def plot_solution_surface(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.plasma,
+    cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -164,7 +164,7 @@ def show_solution_contour(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.plasma,
+    cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -202,7 +202,7 @@ def show_solution_surface(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.plasma,
+    cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -239,7 +239,7 @@ def show_solution_overview(
     y_values: np.ndarray, 
     num_solution_matrix: np.ndarray,
     ana_solution_matrix: np.ndarray = None,
-    cmap: Colormap = cm.plasma,
+    cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
