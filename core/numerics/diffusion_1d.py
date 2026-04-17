@@ -1,6 +1,7 @@
 import numpy as np
 
 from .operators import compute_diffusion_1d_term
+from .boundary_conditions import apply_periodic_diffusion_boundary_1d
 
 from ..config import Diffusion1DConfig
 from ..setup.grids import compute_dx
@@ -30,8 +31,13 @@ def solve_diffusion_1d(
         
         u[1:-1] = un[1:-1] + diffusion_term[1:-1]
 
-        u[0] = un[0] + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-1])
-        u[-1] = un[-1] + config.viscosity * dt / dx**2 * (un[0] - 2 * un[-1] + un[-2])
+        apply_periodic_diffusion_boundary_1d(
+            u=u,
+            un=un,
+            dt=dt,
+            dx=dx,
+            nu=config.viscosity,
+        )
 
         history[n] = u
     

@@ -1,6 +1,7 @@
 import numpy as np
 
 from .operators import compute_convection_1d_term, compute_diffusion_1d_term
+from .boundary_conditions import apply_periodic_burgers_boundary_1d
 
 from ..config import BurgersEquation1DConfig
 from ..setup.grids import compute_dx, compute_cole_hopf_dx
@@ -41,9 +42,13 @@ def solve_burgers_equation_1d(
         u[1:-1] = un[1:-1] - convection_term[1:-1] \
             + diffusion_term[1:-1]
         
-        u[0] = un[0] - un[0] * dt / dx * (un[0] - un[-2]) \
-            + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-2])
-        u[-1] = un[0]
+        apply_periodic_burgers_boundary_1d(
+            u=u,
+            un=un,
+            dt=dt,
+            dx=dx,
+            nu=config.viscosity,
+        )
         
         history[n] = u
     
