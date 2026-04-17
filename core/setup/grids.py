@@ -19,12 +19,18 @@ def make_cole_hopf_1d_grid(config: object) -> np.array:
 
 
 def compute_dx(config: object) -> float:
-    """Compute the uniform 1D grid spacing from the configuration."""
+    """Compute the uniform grid spacing in the x-direction from the configuration."""
 
-    return config.domain_length / (config.num_grid_points - 1)
+    return config.domain_length_x / (config.num_grid_points_x - 1)
+
+
+def compute_dy(config: object) -> float:
+    """Compute the uniform grid spacing in the y-direction from the configuration."""
+
+    return config.domain_length_y / (config.num_grid_points_y - 1)
 
 
 def compute_cole_hopf_dx(config: object) -> float:
     """Compute the uniform grid spacing for the Cole-Hopf periodic domain."""
-    
+
     return 2 * np.pi / (config.num_grid_points - 1)

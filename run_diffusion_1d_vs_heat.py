@@ -10,7 +10,7 @@ from core import (
     compute_diffusive_dt,
     compute_series_terms,
     generate_mode_indices,
-    hat_initial_condition,
+    hat_initial_condition_1d,
     make_1d_grid,
     solve_diffusion_1d,
     solve_heat_equation_1d,
@@ -79,7 +79,7 @@ time_array = np.arange(0, max_iterations + 1) * dt
 
 # Initialize the numerical initial condition
 
-initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
+initial_condition = hat_initial_condition_1d(x_array, diffusion_1d_config)
 
 
 # Fourier-series setup

@@ -5,7 +5,6 @@
 import numpy as np
 
 
-
 def apply_periodic_diffusion_boundary_1d(
     u: np.ndarray,
     un: np.ndarray,
@@ -34,3 +33,15 @@ def apply_periodic_burgers_boundary_1d(
     # Treat the last grid point as the periodic duplicate of the first,
     # so un[-2] is the last distinct neighbor and u[-1] is reset to u[0].
     u[-1] = un[0]
+
+
+def apply_periodic_advection_boundary_2d(
+    u: np.ndarray,
+    u_min: float,
+) -> None:
+    """Apply periodic boundary updates for the 2D advection equation."""
+
+    u[0, :] = u_min
+    u[-1, :] = u_min
+    u[:, 0] = u_min
+    u[:, -1] = u_min

@@ -6,7 +6,7 @@ import numpy as np
 
 from core import (
     Advection1DConfig,
-    hat_initial_condition,
+    hat_initial_condition_1d,
     make_1d_grid,
     solve_advection_1d,
 )
@@ -65,7 +65,7 @@ time_array = np.arange(0, advection_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition(x_array, advection_1d_config)
+initial_condition = hat_initial_condition_1d(x_array, advection_1d_config)
 
 
 

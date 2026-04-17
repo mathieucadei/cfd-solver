@@ -1,4 +1,4 @@
-"""Reusable finite-difference operators for 1D transport equations."""
+"""Reusable finite-difference operators for 1D & 2D transport equations."""
 
 
 
@@ -44,5 +44,21 @@ def compute_diffusion_1d_term(
     term = np.zeros_like(u)
 
     term[1:-1] = nu * dt / dx**2 * (u[2:] - 2 * u[1:-1] + u[:-2])
+
+    return term
+
+
+def compute_advection_2d_term(
+    u: np.ndarray,
+    c: float,
+    dx: float,
+    dy: float,
+    dt: float,
+) -> np.ndarray:
+    """Compute the 2D upwind advection term for a constant wave speed."""
+
+    term = np.zeros_like(u)
+
+    term[1:, 1:] = c * dt / dx * (u[1:, 1:] - u[1:, :-1]) + c * dt / dy * (u[1:, 1:] - u[:-1, 1:])
 
     return term

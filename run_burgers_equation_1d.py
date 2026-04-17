@@ -8,7 +8,7 @@ import numpy as np
 
 from core import (
     BurgersEquation1DConfig,
-    hat_initial_condition,
+    hat_initial_condition_1d,
     make_1d_grid,
     solve_burgers_equation_1d,
 )
@@ -70,7 +70,7 @@ time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition(x_array, burgers_1d_config)
+initial_condition = hat_initial_condition_1d(x_array, burgers_1d_config)
 
 
 
