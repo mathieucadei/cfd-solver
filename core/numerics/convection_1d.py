@@ -1,4 +1,7 @@
 import numpy as np
+
+from .operators import compute_convection_1d_term
+
 from ..config import Convection1DConfig
 from ..setup.grids import compute_dx
 from ..setup.time_stepping import compute_convective_dt
@@ -23,7 +26,9 @@ def solve_convection_1d(
 
         un = u.copy()
 
-        u[1:] = un[1:] - un[1:] * dt / dx * (un[1:] - un[:-1])
+        convection_term = compute_convection_1d_term(un, dx, dt)
+
+        u[1:] = un[1:] - convection_term[1:]
         
         history[n] = u
     

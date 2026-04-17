@@ -1,4 +1,7 @@
 import numpy as np
+
+from .operators import compute_convection_1d_term, compute_diffusion_1d_term
+
 from ..config import BurgersEquation1DConfig
 from ..setup.grids import compute_dx, compute_cole_hopf_dx
 from ..setup.time_stepping import compute_diffusive_dt, compute_cole_hopf_dt
@@ -32,8 +35,11 @@ def solve_burgers_equation_1d(
 
         un = u.copy()
 
-        u[1:-1] = un[1:-1] - un[1:-1] * dt / dx * (un[1:-1] - un[:-2]) \
-            + config.viscosity * dt / dx**2 * (un[2:] - 2 * un[1:-1] + un[:-2])
+        convection_term = compute_convection_1d_term(un, dx, dt)
+        diffusion_term = compute_diffusion_1d_term(un, dx, dt, config.viscosity)
+
+        u[1:-1] = un[1:-1] - convection_term[1:-1] \
+            + diffusion_term[1:-1]
         
         u[0] = un[0] - un[0] * dt / dx * (un[0] - un[-2]) \
             + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-2])

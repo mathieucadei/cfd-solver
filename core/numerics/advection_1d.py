@@ -1,4 +1,7 @@
 import numpy as np
+
+from .operators import compute_advection_1d_term
+
 from ..config import Advection1DConfig
 from ..setup.grids import compute_dx
 from ..setup.time_stepping import compute_convective_dt
@@ -22,7 +25,11 @@ def solve_advection_1d(
     for n in range(1, config.max_iterations + 1):
 
         un = u.copy()
-        u[1:] = un[1:] - config.wavespeed * dt / dx * (un[1:] - un[:-1])
+
+        advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt)
+        
+        u[1:] = un[1:] - advection_term[1:]
+        
         history[n] = u
     
     return history

@@ -1,4 +1,7 @@
 import numpy as np
+
+from .operators import compute_diffusion_1d_term
+
 from ..config import Diffusion1DConfig
 from ..setup.grids import compute_dx
 from ..setup.time_stepping import compute_diffusive_dt
@@ -22,8 +25,10 @@ def solve_diffusion_1d(
     for n in range(1, config.max_iterations + 1):
 
         un = u.copy()
+
+        diffusion_term = compute_diffusion_1d_term(un, dx, dt, config.viscosity)
         
-        u[1:-1] = un[1:-1] + config.viscosity * dt / dx**2 * (un[2:]- 2 * un[1:-1] + un[:-2])
+        u[1:-1] = un[1:-1] + diffusion_term[1:-1]
 
         u[0] = un[0] + config.viscosity * dt / dx**2 * (un[1] - 2 * un[0] + un[-1])
         u[-1] = un[-1] + config.viscosity * dt / dx**2 * (un[0] - 2 * un[-1] + un[-2])

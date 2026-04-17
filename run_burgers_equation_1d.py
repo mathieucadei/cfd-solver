@@ -43,7 +43,7 @@ u_max = 2.0
 step_stride = 20
 equation_name = '1d burgers'
 title = True
-save = True
+save = False
 
 
 # Create the configuration object
