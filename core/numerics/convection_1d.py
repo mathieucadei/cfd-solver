@@ -1,6 +1,7 @@
 import numpy as np
 from ..config import Convection1DConfig
 from ..setup.grids import compute_dx
+from ..setup.time_stepping import compute_convective_dt
 
 
 def solve_convection_1d(
@@ -10,6 +11,7 @@ def solve_convection_1d(
     """Solves the 1D convection equation using the provided initial condition and configuration."""
 
     dx = compute_dx(config)
+    dt = compute_convective_dt(config)
 
     u = initial_condition.copy()
 
@@ -21,7 +23,7 @@ def solve_convection_1d(
 
         un = u.copy()
 
-        u[1:] = un[1:] - un[1:] * config.time_step / dx * (un[1:] - un[:-1])
+        u[1:] = un[1:] - un[1:] * dt / dx * (un[1:] - un[:-1])
         
         history[n] = u
     

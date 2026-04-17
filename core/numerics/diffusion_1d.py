@@ -1,7 +1,7 @@
 import numpy as np
 from ..config import Diffusion1DConfig
 from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_dt
+from ..setup.time_stepping import compute_diffusive_dt
 
 
 def solve_diffusion_1d(
@@ -11,7 +11,7 @@ def solve_diffusion_1d(
     """Solves the numerical 1D diffusion equation using the provided initial condition and configuration."""
 
     dx = compute_dx(config)
-    dt = compute_dt(config)
+    dt = compute_diffusive_dt(config)
 
     u = initial_condition.copy()
 

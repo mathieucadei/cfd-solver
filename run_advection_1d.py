@@ -27,7 +27,7 @@ from post_processing import (
 domain_length = 2.0
 num_grid_points = 81
 max_iterations = 80
-time_step = 0.025
+sigma = 1
 wavespeed = 1.0
 hat_start = 0.5
 hat_end = 1.0
@@ -49,7 +49,7 @@ advection_1d_config = Advection1DConfig(
     domain_length=domain_length,
     num_grid_points=num_grid_points,
     max_iterations=max_iterations,
-    time_step=time_step,
+    sigma=sigma,
     wavespeed=wavespeed,
     hat_start=hat_start,
     hat_end=hat_end,

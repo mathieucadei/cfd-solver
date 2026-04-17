@@ -1,7 +1,7 @@
 import numpy as np
 from ..config import BurgersEquation1DConfig
 from ..setup.grids import compute_dx, compute_cole_hopf_dx
-from ..setup.time_stepping import compute_dt, compute_cole_hopf_dt
+from ..setup.time_stepping import compute_diffusive_dt, compute_cole_hopf_dt
 
 
 def solve_burgers_equation_1d(
@@ -12,7 +12,7 @@ def solve_burgers_equation_1d(
 
     if config.grid_type == "hat":
         dx = compute_dx(config)
-        dt = compute_dt(config)
+        dt = compute_diffusive_dt(config)
     
     elif config.grid_type == "cole_hopf":
 

@@ -28,7 +28,7 @@ from post_processing import (
 domain_length = 2.0
 num_grid_points = 101
 max_iterations = 100
-time_step = 0.0025
+sigma = 0.2
 hat_start = 0.5
 hat_end = 1.0
 u_min = 1.0
@@ -49,7 +49,7 @@ convection_1d_config = Convection1DConfig(
     domain_length=domain_length,
     num_grid_points=num_grid_points,
     max_iterations=max_iterations,
-    time_step=time_step,
+    sigma=sigma,
     hat_start=hat_start,
     hat_end=hat_end,
     u_min=u_min,

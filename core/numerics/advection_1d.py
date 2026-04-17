@@ -1,6 +1,7 @@
 import numpy as np
 from ..config import Advection1DConfig
 from ..setup.grids import compute_dx
+from ..setup.time_stepping import compute_convective_dt
 
 
 def solve_advection_1d(
@@ -10,6 +11,7 @@ def solve_advection_1d(
     """Solves the 1D linear advection equation using the provided initial condition and configuration."""
 
     dx = compute_dx(config)
+    dt = compute_convective_dt(config)
 
     u = initial_condition.copy()
     
@@ -20,7 +22,7 @@ def solve_advection_1d(
     for n in range(1, config.max_iterations + 1):
 
         un = u.copy()
-        u[1:] = un[1:] - config.wavespeed * config.time_step / dx * (un[1:] - un[:-1])
+        u[1:] = un[1:] - config.wavespeed * dt / dx * (un[1:] - un[:-1])
         history[n] = u
     
     return history

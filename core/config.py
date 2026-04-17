@@ -6,7 +6,7 @@ class Advection1DConfig:
     domain_length: float = 2.0
     num_grid_points: int = 81
     max_iterations: int = 25
-    time_step: float = 0.025
+    sigma: float = 1
     wavespeed: float = 1.0
     hat_start: float = 0.5
     hat_end: float = 1.0
@@ -19,7 +19,7 @@ class Convection1DConfig:
     domain_length: float = 2.0
     num_grid_points: int = 101
     max_iterations: int = 100
-    time_step: float = 0.0025
+    sigma: float = 0.2
     hat_start: float = 0.5
     hat_end: float = 1.0
     u_min: float = 1.0
