@@ -1,3 +1,7 @@
+"""Numerical solver for the 1D linear advection equation."""
+
+
+
 import numpy as np
 
 from .operators import compute_advection_1d_term
@@ -7,11 +11,12 @@ from ..setup.grids import compute_dx
 from ..setup.time_stepping import compute_convective_dt
 
 
+
 def solve_advection_1d(
     initial_condition: np.ndarray,
     config: Advection1DConfig,
 ) -> np.ndarray:
-    """Solves the 1D linear advection equation using the provided initial condition and configuration."""
+    """Solve the 1D linear advection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
     dt = compute_convective_dt(config)
@@ -29,7 +34,7 @@ def solve_advection_1d(
         advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt)
         
         u[1:] = un[1:] - advection_term[1:]
-        
+
         history[n] = u
     
     return history

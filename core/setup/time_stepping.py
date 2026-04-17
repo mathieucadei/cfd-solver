@@ -1,9 +1,13 @@
-import numpy as np
+"""Time-step utilities for 1D numerical and analytical solvers."""
 
-from .grids import compute_dx, compute_cole_hopf_dx
+
+
+from .grids import compute_cole_hopf_dx, compute_dx
+
+
 
 def compute_convective_dt(config: object) -> float:
-    """Computes the time step for the advection & convection equation based on the provided configuration."""
+    """Compute the time step for 1D advection and convection problems."""
 
     dx = compute_dx(config)
     
@@ -11,7 +15,7 @@ def compute_convective_dt(config: object) -> float:
 
 
 def compute_diffusive_dt(config: object) -> float:
-    """Computes the time step for the diffusion equation based on the provided configuration."""
+    """Compute the time step for 1D diffusion-dominated problems."""
 
     dx = compute_dx(config)
     
@@ -19,7 +23,7 @@ def compute_diffusive_dt(config: object) -> float:
 
 
 def compute_cole_hopf_dt(config: object) -> float:
-    """Computes the time step for the Cole-Hopf equation based on the provided configuration."""
+    """Compute the time step for the 1D Cole-Hopf analytical solution."""
 
     dx = compute_cole_hopf_dx(config)
     

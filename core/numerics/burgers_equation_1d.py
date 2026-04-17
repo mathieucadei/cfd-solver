@@ -1,18 +1,23 @@
+"""Numerical solver for the 1D Burgers' equation."""
+
+
+
 import numpy as np
 
 from .operators import compute_convection_1d_term, compute_diffusion_1d_term
 from .boundary_conditions import apply_periodic_burgers_boundary_1d
 
 from ..config import BurgersEquation1DConfig
-from ..setup.grids import compute_dx, compute_cole_hopf_dx
-from ..setup.time_stepping import compute_diffusive_dt, compute_cole_hopf_dt
+from ..setup.grids import compute_cole_hopf_dx, compute_dx
+from ..setup.time_stepping import compute_cole_hopf_dt, compute_diffusive_dt
+
 
 
 def solve_burgers_equation_1d(
     initial_condition: np.ndarray,
     config: BurgersEquation1DConfig,
 ) -> np.ndarray:
-    """Solves the numerical 1D Burgers' equation using the provided initial condition and configuration."""
+    """Solve the 1D Burgers' equation with an explicit finite-difference scheme."""
 
     if config.grid_type == "hat":
         dx = compute_dx(config)

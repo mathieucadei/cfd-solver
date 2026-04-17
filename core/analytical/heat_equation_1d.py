@@ -1,4 +1,8 @@
+"""Analytical Fourier-based solution utilities for the 1D heat equation."""
+
+
 import numpy as np
+
 
 
 def solve_heat_equation_1d(
@@ -9,7 +13,7 @@ def solve_heat_equation_1d(
     viscosity: float, 
     basis: str="periodic",
 ) -> np.ndarray:
-    """Compute the analytical solution to the 1D heat equation from Fourier modes."""
+    """Compute the analytical 1D heat equation solution from Fourier-series terms."""
 
     domain_length = np.round(np.max(x_array))
     

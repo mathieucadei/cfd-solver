@@ -30,4 +30,7 @@ def apply_periodic_burgers_boundary_1d(
 
     u[0] = un[0] - un[0] * dt / dx * (un[0] - un[-2]) \
         + nu * dt / dx**2 * (un[1] - 2 * un[0] + un[-2])
+    
+    # Treat the last grid point as the periodic duplicate of the first,
+    # so un[-2] is the last distinct neighbor and u[-1] is reset to u[0].
     u[-1] = un[0]

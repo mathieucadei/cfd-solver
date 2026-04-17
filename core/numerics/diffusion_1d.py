@@ -1,3 +1,7 @@
+"""Numerical solver for the 1D diffusion equation."""
+
+
+
 import numpy as np
 
 from .operators import compute_diffusion_1d_term
@@ -12,7 +16,7 @@ def solve_diffusion_1d(
     initial_condition: np.ndarray,
     config: Diffusion1DConfig,
 ) -> np.ndarray:
-    """Solves the numerical 1D diffusion equation using the provided initial condition and configuration."""
+    """Solve the 1D diffusion equation with an explicit central finite-difference scheme."""
 
     dx = compute_dx(config)
     dt = compute_diffusive_dt(config)

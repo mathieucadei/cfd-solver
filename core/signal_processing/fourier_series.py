@@ -1,8 +1,13 @@
+"""Fourier-series utilities for analytical solution reconstruction."""
+
+
+
 import numpy as np
 
 
+
 def generate_mode_indices(num_modes: int) -> np.ndarray:
-    """Generate mode indices for the selected basis."""
+    """Generate symmetric Fourier mode indices for the selected number of modes."""
 
     mode_indices = np.empty(2 * num_modes + 1, dtype=int)
     mode_indices[0] = 0
@@ -21,7 +26,7 @@ def compute_coefficients(
     mode_indices: np.ndarray, 
     basis: str="periodic",
 ) -> np.ndarray:
-    """Compute Fourier coefficients from a sampled signal."""
+    """Compute Fourier-series coefficients from sampled 1D signal values."""
 
     domain_length = np.round(np.max(x_array))
 
@@ -52,7 +57,7 @@ def compute_series_terms(
     x_array: np.ndarray, 
     basis: str="periodic",
 ) -> np.ndarray:
-    """Compute the contribution of each mode at each x value."""
+    """Compute cumulative partial sums of the Fourier series."""
 
     domain_length = np.round(np.max(x_array))
 

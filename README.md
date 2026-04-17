@@ -45,7 +45,7 @@ The current solvers advance:
 
 * the 1D Burgers equation:
 
-  du/dt + u du/dx = nu d²u/dx²
+  du/dt + u du/dx = ν d²u/dx²
 
   using an explicit upwind scheme for the convective term and a central scheme for the diffusive term.
 

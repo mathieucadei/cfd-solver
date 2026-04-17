@@ -1,12 +1,18 @@
+"""Plotting and animation utilities for 1D numerical and analytical solutions."""
+
+
+
 import os
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 from matplotlib import cm
-from matplotlib.figure import Figure
+from matplotlib.animation import FuncAnimation
 from matplotlib.axes import Axes
 from matplotlib.colors import Colormap
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from matplotlib.figure import Figure
+
 
 
 def plot_solution_traces(
@@ -23,6 +29,7 @@ def plot_solution_traces(
     equation_name: str = None,
     title: bool = False,
 ) -> None:
+    """Plot selected numerical and analytical 1D solution traces on an existing axis."""
 
     n_cuts = cut_values.shape[0]
 
@@ -30,10 +37,10 @@ def plot_solution_traces(
 
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
-        if axis == 1:
+        elif axis == 1:
             y_cut = num_solution_matrix[:, n]
         else:
-            ValueError('axis must be 0 or 1')
+            raise ValueError('axis must be 0 or 1')
         
         num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
         
@@ -44,10 +51,10 @@ def plot_solution_traces(
 
             if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
-            if axis == 1:
+            elif axis == 1:
                 y_cut = ana_solution_matrix[:, n]
             else:
-                ValueError('axis must be 0 or 1')
+                raise ValueError('axis must be 0 or 1')
         
             ana_label = f'Analytical ({cut_label}: {n})'
         
@@ -73,7 +80,8 @@ def plot_solution_contour(
     equation_name: str = None,
     title: bool = False,
 ):
-    
+    """Plot a filled contour view of a 1D solution evolving over time."""
+
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
     contour = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap)
@@ -99,7 +107,8 @@ def plot_solution_surface(
     equation_name: str = None,
     title: bool = False,
 ) -> None:
-    
+    """Plot a 3D surface view of a 1D solution evolving over time."""
+
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
     ax.plot_surface(x_grid, y_grid, solution_matrix, cmap=cmap)
@@ -126,7 +135,8 @@ def show_solution_traces(
     step_stride: int = 5,
     save: bool = False,       
 ) -> None:
-    
+    """Create and display a standalone trace plot for a 1D numerical or analytical solution."""
+
     fig, ax = plt.subplots()
 
     plot_solution_traces(
@@ -162,7 +172,8 @@ def show_solution_contour(
     title: bool = False,
     save: bool = False,     
 ) -> None:
-    
+    """Create and display a standalone contour plot of a 1D solution history."""
+
     fig = plt.figure()
     ax = fig.add_subplot()
 
@@ -199,7 +210,8 @@ def show_solution_surface(
     title: bool = False,
     save: bool = False,     
 ) -> None:
-    
+    """Create and display a standalone 3D surface plot of a 1D solution history."""
+
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
 
@@ -236,7 +248,7 @@ def show_solution_overview(
     title: bool = False, 
     save: bool=False,
 ) -> None:
-    """Plots snapshots of the solution at specified time steps."""
+    """Create and display a multi-panel overview of a 1D solution and its diagnostics."""
 
     fig = plt.figure(figsize=(14, 10), constrained_layout=True)
     gs = fig.add_gridspec(2, 2)
@@ -320,7 +332,7 @@ def show_solution_1d_animation(
     equation_name: str = 'equation',
     save: bool = False
 ) -> None:
-    """Creates an animation of the solution evolving over time."""
+    """Create and display an animation of a 1D numerical or analytical solution."""
     
     fig, ax = plt.subplots()
     num_line, = ax.plot(x_values, num_solution_matrix[0], lw=2,  label='Numerical')
@@ -363,6 +375,7 @@ def show_solution_1d_animation(
 
 
 def _save_fig(fig: Figure, equation_name: str, fig_type: str = 'figure') -> None:
+
     equation_filename  = equation_name.lower().replace(" ", "_")
     directory = 'results/figures' if fig_type == 'figure' else f'results/figures/{fig_type}'
 
@@ -371,6 +384,7 @@ def _save_fig(fig: Figure, equation_name: str, fig_type: str = 'figure') -> None
 
 
 def _save_ani(ani: FuncAnimation, equation_name: str, fig_type: str = 'animations') -> None:
+
     equation_filename  = equation_name.lower().replace(' ', '_')
     directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
 
