@@ -34,6 +34,7 @@ hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
 
+
 # Visualization parameters
 
 step_stride = 20
@@ -69,7 +70,6 @@ initial_condition = hat_initial_condition(x_array, advection_1d_config)
 
 
 
-# Run
 # Solve the advection equation
 
 history = solve_advection_1d(initial_condition, advection_1d_config)
@@ -92,6 +92,7 @@ show_solution_traces(
     x_values=time_array,
     num_solution_matrix=history,
     cut_values=x_array,
+    axis=1,
     step_stride=step_stride,
     cut_label='x',
     equation_name=equation_name,

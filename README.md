@@ -12,8 +12,9 @@ Currently implemented:
 * 1D Burgers equation
 * uniform 1D grid generation
 * hat function initial condition
+* Cole-Hopf initial condition
 * explicit finite-difference solvers
-* solution snapshots and animation
+* solution plots and animations
 
 Planned next steps:
 

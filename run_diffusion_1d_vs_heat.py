@@ -1,5 +1,8 @@
+"""Run the 1D diffusion & heat solvers and generate solution & comparision plots."""
+
+
+
 import numpy as np
-from pathlib import Path
 
 from core import (
     Diffusion1DConfig,
@@ -14,12 +17,18 @@ from core import (
     compute_series_terms,
 )
 
-from post_processing import (plot_snapshots, plot_animation)
+from post_processing import (
+    show_solution_traces,
+    show_solution_contour,
+    show_solution_surface, 
+    show_solution_overview, 
+    show_solution_1d_animation,
+)
 
 
-# Inputs
 
-## Configuration parameters for the 1D diffusion simulation
+# Pre-processing
+# Numerical simulation parameters
 
 domain_length = 2.0
 num_grid_points = 101
@@ -28,19 +37,22 @@ sigma = 0.2
 viscosity = 0.3
 hat_start = 0.5
 hat_end = 1.0
-
 u_min = 1.0
 u_max = 2.0
 
-## Configuration parameters for the analytical solution
+
+# Analytical simulation parameters
 
 num_modes = 100
 basis = "cosine"  # "periodic" or "cosine"
 
-## Visualization parameters
 
-step_stride = 200
-save_fig = False
+# Visualization parameters
+
+step_stride = 100
+equation_name = '1d diffusion vs fourier-based analytical'
+title = True
+save = True
 
 
 # Create the configuration object
@@ -58,25 +70,21 @@ diffusion_1d_config = Diffusion1DConfig(
 )
 
 
-# Generate the grid, initial condition, and solve the diffusion equation
-
-## Numerical solution
+# Generate the grid and time array
 
 x_array = make_1d_grid(diffusion_1d_config)
-
-time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
-
-initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
-
-history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
-
-## Analytical solution
-
-dx = compute_dx(diffusion_1d_config)
 
 dt = compute_dt(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
+
+
+# Initialize the numerical initial condition
+
+initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
+
+
+# Fourier-series setup
 
 mode_indices = generate_mode_indices(num_modes)
 
@@ -89,6 +97,16 @@ mode_coefficients = compute_coefficients(
 
 series_terms = compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
 
+
+
+# Solve
+# Numerical diffusion equation
+
+history_num = solve_diffusion_1d(initial_condition, diffusion_1d_config)
+
+
+# Heat analytical equation
+
 history_ana = solve_heat_equation_1d(
     series_terms, 
     mode_indices,
@@ -98,16 +116,66 @@ history_ana = solve_heat_equation_1d(
     basis=basis)
 
 
-# Vistualize the results
 
-## Extract the script name and equation name for plotting
+# Post-processing
 
-script_name = Path(__file__).name
-equation = script_name.split('.')[0].split('_')[1:]
-equation[0], equation[1] = equation[1], equation[0]
-equation_name = ' '.join(equation)
+show_solution_traces(
+    x_values=x_array,
+    num_solution_matrix=history_num,
+    cut_values=time_array,
+    ana_solution_matrix=history_ana,
+    step_stride=step_stride,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
 
-## Plot the results
+show_solution_traces(
+    x_values=time_array,
+    num_solution_matrix=history_num,
+    cut_values=x_array,
+    axis=1,
+    ana_solution_matrix=history_ana,
+    step_stride=step_stride,
+    cut_label='x',
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
 
-plot_snapshots(x_array, time_array, history_num=history, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x_array, history_num=history, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
+show_solution_contour(
+    x_values=x_array,
+    y_values=time_array,
+    solution_matrix=history_num,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_surface(
+    x_values=x_array,
+    y_values=time_array,
+    solution_matrix=history_num,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_overview(
+    x_array, 
+    time_array, 
+    history_num,
+    ana_solution_matrix=history_ana, 
+    step_stride=step_stride,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_1d_animation(
+    x_array, 
+    history_num,
+    ana_solution_matrix=history_ana, 
+    equation_name=equation_name,
+    save=save,
+)

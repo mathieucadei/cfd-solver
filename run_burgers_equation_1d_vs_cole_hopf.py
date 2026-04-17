@@ -1,5 +1,8 @@
+"""Run the 1D Burgers' & Cole-Hopf solvers and generate solution & comparision plots."""
+
+
+
 import numpy as np
-from pathlib import Path
 
 from core import (
     BurgersEquation1DConfig,
@@ -9,12 +12,18 @@ from core import (
     solve_cole_hopf_1d,
 )
 
-from post_processing import (plot_snapshots, plot_animation)
+from post_processing import (
+    show_solution_traces,
+    show_solution_contour,
+    show_solution_surface, 
+    show_solution_overview, 
+    show_solution_1d_animation,
+)
 
 
-# Inputs
 
-## Configuration parameters for the 1D Burgers' equation simulation
+# Pre-processing
+# Simulation parameters
 
 domain_length = 6.0
 num_grid_points = 101
@@ -28,10 +37,13 @@ hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
 
-## Visualization parameters
 
-step_stride = 25
-save_fig = False
+# Visualization parameters
+
+step_stride = 20
+equation_name = '1d burgers vs cole-hopf'
+title = True
+save = False
 
 
 # Create the configuration object
@@ -41,7 +53,7 @@ burgers_1d_config = BurgersEquation1DConfig(
     num_grid_points=num_grid_points,
     max_iterations=max_iterations,
     time_step=time_step,
-    grid_type = grid_type,
+    grid_type=grid_type,
     sigma=sigma,
     viscosity=viscosity,
     hat_start=hat_start,
@@ -51,33 +63,88 @@ burgers_1d_config = BurgersEquation1DConfig(
 )
 
 
-# Generate the grid, initial condition, and solve the Burgers' equation
-
-## Numerical solution
+# Generate the grid and time array
 
 x_array = make_cole_hopf_1d_grid(burgers_1d_config)
-
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
+
+# Initialize the initial condition
 
 initial_condition = cole_hopf_initial_condition(x_array, burgers_1d_config)
 
+
+
+# Solve
+# Numerical Burgers' equation
+
 history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
-## Analytical solution
+
+# Analytical Cole-Hopf equation
 
 history_ana = solve_cole_hopf_1d(x_array, burgers_1d_config)
 
 
-# Vistualize the results
 
-## Extract the script name and equation name for plotting
+# Post-processing
 
-script_name = Path(__file__).name
-equation = script_name.split('.')[0].split('_')[1:]
-equation[0], equation[1] = equation[1], equation[0]
-equation_name = ' '.join(equation)
+show_solution_traces(
+    x_values=x_array,
+    num_solution_matrix=history_num,
+    cut_values=time_array,
+    ana_solution_matrix=history_ana,
+    step_stride=step_stride,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
 
-## Plot the results
+show_solution_traces(
+    x_values=time_array,
+    num_solution_matrix=history_num,
+    cut_values=x_array,
+    axis=1,
+    ana_solution_matrix=history_ana,
+    step_stride=step_stride,
+    cut_label='x',
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
 
-plot_snapshots(x_array, time_array, history_num=history_num, history_ana=history_ana, equation=equation_name, step_stride=step_stride, save_fig=save_fig)
-plot_animation(x_array, history_num=history_num, history_ana=history_ana, equation=equation_name, save_fig=save_fig)
+show_solution_contour(
+    x_values=x_array,
+    y_values=time_array,
+    solution_matrix=history_num,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_surface(
+    x_values=x_array,
+    y_values=time_array,
+    solution_matrix=history_num,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_overview(
+    x_array, 
+    time_array, 
+    history_num,
+    ana_solution_matrix=history_ana, 
+    step_stride=step_stride,
+    equation_name=equation_name,
+    title=title,
+    save=save,
+)
+
+show_solution_1d_animation(
+    x_array, 
+    history_num,
+    ana_solution_matrix=history_ana, 
+    equation_name=equation_name,
+    save=save,
+)

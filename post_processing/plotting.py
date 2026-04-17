@@ -14,6 +14,7 @@ def plot_solution_traces(
     x_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     cut_values: np.ndarray,
+    axis: int = 0,
     step_stride: int = 5,
     ana_solution_matrix: np.ndarray = None,
     x_label: str = 'x',
@@ -27,10 +28,12 @@ def plot_solution_traces(
 
     for n in range(0, n_cuts, step_stride):
 
-        if n_cuts == num_solution_matrix.shape[0]:
+        if axis == 0:
             y_cut = num_solution_matrix[n, :]
-        else:
+        if axis == 1:
             y_cut = num_solution_matrix[:, n]
+        else:
+            ValueError('axis must be 0 or 1')
         
         num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
         
@@ -39,10 +42,12 @@ def plot_solution_traces(
     if ana_solution_matrix is not None:
         for n in range(0, n_cuts, step_stride):
 
-            if n_cuts == ana_solution_matrix.shape[0]:
+            if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
-            else:
+            if axis == 1:
                 y_cut = ana_solution_matrix[:, n]
+            else:
+                ValueError('axis must be 0 or 1')
         
             ana_label = f'Analytical ({cut_label}: {n})'
         
@@ -53,7 +58,7 @@ def plot_solution_traces(
     ax.legend()
 
     if title:
-        ax.set_title(f'{equation_name} Solution')
+        ax.set_title(f'{equation_name.title()} Solution')
 
 
 def plot_solution_contour(
@@ -77,7 +82,7 @@ def plot_solution_contour(
     ax.set_ylabel(y_label, rotation=0)
 
     if title:
-        ax.set_title(f'{equation_name} Solution')
+        ax.set_title(f'{equation_name.title()} Solution')
     
     return contour
 
@@ -104,13 +109,14 @@ def plot_solution_surface(
     ax.set_zlabel(z_label)
 
     if title:
-        ax.set_title(f'{equation_name} Solution')
+        ax.set_title(f'{equation_name.title()} Solution')
 
 
 def show_solution_traces(
     x_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     cut_values: np.ndarray,
+    axis: int = 0,
     ana_solution_matrix: np.ndarray = None,
     cut_label: str = 't',
     x_label: str = 'x',
@@ -128,6 +134,7 @@ def show_solution_traces(
         x_values=x_values,
         num_solution_matrix=num_solution_matrix,
         cut_values=cut_values,
+        axis=axis,
         ana_solution_matrix=ana_solution_matrix,
         cut_label=cut_label,
         x_label=x_label,
@@ -274,6 +281,7 @@ def show_solution_overview(
         x_values=x_values,
         num_solution_matrix=num_solution_matrix,
         cut_values=y_values,
+        axis=0,
         ana_solution_matrix=ana_solution_matrix,
         cut_label=y_label,
         x_label=x_label,
@@ -287,6 +295,7 @@ def show_solution_overview(
         x_values=y_values,
         num_solution_matrix=num_solution_matrix,
         cut_values=x_values,
+        axis=1,
         ana_solution_matrix=ana_solution_matrix,
         cut_label=x_label,
         x_label=y_label,
