@@ -2,22 +2,22 @@
 
 
 
-import numpy as np
 from pathlib import Path
+
+import numpy as np
 
 from core import (
     Convection1DConfig,
-    make_1d_grid,
     hat_initial_condition,
+    make_1d_grid,
     solve_convection_1d,
 )
-
 from post_processing import (
-    show_solution_traces,
-    show_solution_contour,
-    show_solution_surface, 
-    show_solution_overview, 
     show_solution_1d_animation,
+    show_solution_contour,
+    show_solution_overview,
+    show_solution_surface,
+    show_solution_traces,
 )
 
 

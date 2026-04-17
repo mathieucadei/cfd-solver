@@ -6,23 +6,21 @@ import numpy as np
 
 from core import (
     Diffusion1DConfig,
-    make_1d_grid,
-    compute_dx,
+    compute_coefficients,
+    compute_diffusive_dt,
+    compute_series_terms,
+    generate_mode_indices,
     hat_initial_condition,
-    compute_dt,
+    make_1d_grid,
     solve_diffusion_1d,
     solve_heat_equation_1d,
-    generate_mode_indices,
-    compute_coefficients,
-    compute_series_terms,
 )
-
 from post_processing import (
-    show_solution_traces,
-    show_solution_contour,
-    show_solution_surface, 
-    show_solution_overview, 
     show_solution_1d_animation,
+    show_solution_contour,
+    show_solution_overview,
+    show_solution_surface,
+    show_solution_traces,
 )
 
 
@@ -50,9 +48,9 @@ basis = "cosine"  # "periodic" or "cosine"
 # Visualization parameters
 
 step_stride = 100
-equation_name = '1d diffusion vs fourier-based analytical'
+equation_name = '1d diffusion vs heat'
 title = True
-save = True
+save = False
 
 
 # Create the configuration object
@@ -74,7 +72,7 @@ diffusion_1d_config = Diffusion1DConfig(
 
 x_array = make_1d_grid(diffusion_1d_config)
 
-dt = compute_dt(diffusion_1d_config)
+dt = compute_diffusive_dt(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
 

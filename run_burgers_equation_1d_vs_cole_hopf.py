@@ -6,18 +6,17 @@ import numpy as np
 
 from core import (
     BurgersEquation1DConfig,
-    make_cole_hopf_1d_grid,
     cole_hopf_initial_condition,
+    make_cole_hopf_1d_grid,
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
-
 from post_processing import (
-    show_solution_traces,
-    show_solution_contour,
-    show_solution_surface, 
-    show_solution_overview, 
     show_solution_1d_animation,
+    show_solution_contour,
+    show_solution_overview,
+    show_solution_surface,
+    show_solution_traces,
 )
 
 
