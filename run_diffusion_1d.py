@@ -37,7 +37,7 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 20
-equation_name = '1d diffusion'
+case_name = '1d diffusion'
 title = True
 save = False
 
@@ -82,7 +82,7 @@ show_solution_traces(
     num_solution_matrix=history,
     cut_values=time_array,
     step_stride=step_stride,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -94,7 +94,7 @@ show_solution_traces(
     axis=1,
     step_stride=step_stride,
     cut_label='x',
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -103,7 +103,7 @@ show_solution_contour(
     x_values=x_array,
     y_values=time_array,
     solution_matrix=history,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -112,24 +112,24 @@ show_solution_surface(
     x_values=x_array,
     y_values=time_array,
     solution_matrix=history,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
 
 show_solution_overview(
-    x_array, 
-    time_array, 
-    history, 
+    x_values=x_array, 
+    y_values=time_array, 
+    num_solution_matrix=history, 
     step_stride=step_stride,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
 
 show_solution_1d_animation(
-    x_array, 
-    history, 
-    equation_name=equation_name,
+    x_values=x_array,
+    num_solution_matrix=history,
+    case_name=case_name,
     save=save,
 )

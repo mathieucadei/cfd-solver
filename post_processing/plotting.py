@@ -26,7 +26,7 @@ def plot_solution_traces(
     x_label: str = 'x',
     y_label: str = 'u',
     cut_label: str = 't',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
 ) -> None:
     """Plot selected numerical and analytical 1D solution traces on an existing axis."""
@@ -65,7 +65,7 @@ def plot_solution_traces(
     ax.legend()
 
     if title:
-        ax.set_title(f'{equation_name.title()} Solution')
+        ax.set_title(f'{case_name.title()} Solution')
 
 
 def plot_solution_contour(
@@ -77,7 +77,7 @@ def plot_solution_contour(
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
 ):
     """Plot a filled contour view of a 1D solution evolving over time."""
@@ -90,7 +90,7 @@ def plot_solution_contour(
     ax.set_ylabel(y_label, rotation=0)
 
     if title:
-        ax.set_title(f'{equation_name.title()} Solution')
+        ax.set_title(f'{case_name.title()} Solution')
     
     return contour
 
@@ -104,7 +104,7 @@ def plot_solution_surface(
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
 ) -> None:
     """Plot a 3D surface view of a 1D solution evolving over time."""
@@ -118,7 +118,7 @@ def plot_solution_surface(
     ax.set_zlabel(z_label)
 
     if title:
-        ax.set_title(f'{equation_name.title()} Solution')
+        ax.set_title(f'{case_name.title()} Solution')
 
 
 def show_solution_traces(
@@ -130,7 +130,7 @@ def show_solution_traces(
     cut_label: str = 't',
     x_label: str = 'x',
     y_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
     step_stride: int = 5,
     save: bool = False,       
@@ -149,13 +149,13 @@ def show_solution_traces(
         cut_label=cut_label,
         x_label=x_label,
         y_label=y_label,
-        equation_name=equation_name,
+        case_name=case_name,
         title=title,
         step_stride=step_stride,
     )
 
     if save:
-        _save_fig(fig=fig, equation_name=equation_name, fig_type='traces')
+        _save_fig(fig=fig, case_name=case_name, fig_type='traces')
 
     plt.show()
 
@@ -168,7 +168,7 @@ def show_solution_contour(
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
     save: bool = False,     
 ) -> None:
@@ -186,14 +186,14 @@ def show_solution_contour(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label,
-        equation_name=equation_name,
+        case_name=case_name,
         title=title,   
     )
 
     fig.colorbar(contour, ax=ax)
 
     if save:
-        _save_fig(fig=fig, equation_name=equation_name, fig_type='contour')
+        _save_fig(fig=fig, case_name=case_name, fig_type='contour')
 
     plt.show()
 
@@ -206,7 +206,7 @@ def show_solution_surface(
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     title: bool = False,
     save: bool = False,     
 ) -> None:
@@ -224,12 +224,12 @@ def show_solution_surface(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label,
-        equation_name=equation_name,
+        case_name=case_name,
         title=title,   
     )
 
     if save:
-        _save_fig(fig=fig, equation_name=equation_name, fig_type='surface')
+        _save_fig(fig=fig, case_name=case_name, fig_type='surface')
 
     plt.show()
 
@@ -243,7 +243,7 @@ def show_solution_overview(
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
-    equation_name: str = None,
+    case_name: str = None,
     step_stride: int=5,
     title: bool = False, 
     save: bool=False,
@@ -268,7 +268,7 @@ def show_solution_overview(
             x_label=x_label,
             y_label=y_label,
             z_label=z_label,
-            equation_name=equation_name,  
+            case_name=case_name,  
         )
 
     ax1.set_box_aspect((2.0, 2.0, 1.2))
@@ -283,7 +283,7 @@ def show_solution_overview(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label,
-        equation_name=equation_name,  
+        case_name=case_name,  
     )
 
     fig.colorbar(contour, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
@@ -298,7 +298,7 @@ def show_solution_overview(
         cut_label=y_label,
         x_label=x_label,
         y_label=z_label,
-        equation_name=equation_name,
+        case_name=case_name,
         step_stride=step_stride,
     )
 
@@ -312,15 +312,15 @@ def show_solution_overview(
         cut_label=x_label,
         x_label=y_label,
         y_label=z_label,
-        equation_name=equation_name,
+        case_name=case_name,
         step_stride=step_stride,
     )
 
     if title:
-        fig.suptitle(f"{equation_name.title()} Solution Overview")
+        fig.suptitle(f"{case_name.title()} Solution Overview")
 
     if save:
-        _save_fig(fig=fig, equation_name=equation_name, fig_type='overview')
+        _save_fig(fig=fig, case_name=case_name, fig_type='overview')
 
     plt.show()
 
@@ -329,7 +329,7 @@ def show_solution_1d_animation(
     x_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     ana_solution_matrix: np.ndarray = None,
-    equation_name: str = 'equation',
+    case_name: str = 'equation',
     save: bool = False
 ) -> None:
     """Create and display an animation of a 1D numerical or analytical solution."""
@@ -347,7 +347,7 @@ def show_solution_1d_animation(
     if ana_solution_matrix is not None:
         ax.legend()
     
-    ax.set_title(f'{equation_name.title()} Solution Animation')
+    ax.set_title(f'{case_name.title()} Solution Animation')
 
     def update(frame):
 
@@ -357,7 +357,7 @@ def show_solution_1d_animation(
 
             ana_line.set_ydata(ana_solution_matrix[frame])
 
-        ax.set_title(f'{equation_name.title()} Solution Animation (Time step: {frame})')
+        ax.set_title(f'{case_name.title()} Solution Animation (Time step: {frame})')
 
         return num_line, ana_line if ana_solution_matrix is not None else num_line,
 
@@ -369,23 +369,23 @@ def show_solution_1d_animation(
     ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 
     if save:
-        _save_ani(ani=ani, equation_name=equation_name, fig_type='1d')
+        _save_ani(ani=ani, case_name=case_name, fig_type='1d')
 
     plt.show()
 
 
-def _save_fig(fig: Figure, equation_name: str, fig_type: str = 'figure') -> None:
+def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
-    equation_filename  = equation_name.lower().replace(" ", "_")
+    equation_filename  = case_name.lower().replace(" ", "_")
     directory = 'results/figures' if fig_type == 'figure' else f'results/figures/{fig_type}'
 
     os.makedirs(directory, exist_ok=True)
     fig.savefig(f'{directory}/{equation_filename }_solution_{fig_type}.png')
 
 
-def _save_ani(ani: FuncAnimation, equation_name: str, fig_type: str = 'animations') -> None:
+def _save_ani(ani: FuncAnimation, case_name: str, fig_type: str = 'animations') -> None:
 
-    equation_filename  = equation_name.lower().replace(' ', '_')
+    equation_filename  = case_name.lower().replace(' ', '_')
     directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
 
     os.makedirs(directory, exist_ok=True)

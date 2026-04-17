@@ -48,7 +48,7 @@ basis = "cosine"  # "periodic" or "cosine"
 # Visualization parameters
 
 step_stride = 100
-equation_name = '1d diffusion vs heat'
+case_name = '1d diffusion vs heat'
 title = True
 save = False
 
@@ -123,7 +123,7 @@ show_solution_traces(
     cut_values=time_array,
     ana_solution_matrix=history_ana,
     step_stride=step_stride,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -136,7 +136,7 @@ show_solution_traces(
     ana_solution_matrix=history_ana,
     step_stride=step_stride,
     cut_label='x',
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -145,7 +145,7 @@ show_solution_contour(
     x_values=x_array,
     y_values=time_array,
     solution_matrix=history_num,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
@@ -154,26 +154,26 @@ show_solution_surface(
     x_values=x_array,
     y_values=time_array,
     solution_matrix=history_num,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
 
 show_solution_overview(
-    x_array, 
-    time_array, 
-    history_num,
+    x_values=x_array, 
+    y_values=time_array, 
+    num_solution_matrix=history_num,
     ana_solution_matrix=history_ana, 
     step_stride=step_stride,
-    equation_name=equation_name,
+    case_name=case_name,
     title=title,
     save=save,
 )
 
 show_solution_1d_animation(
-    x_array, 
-    history_num,
+    x_values=x_array,
+    num_solution_matrix=history_num,
     ana_solution_matrix=history_ana, 
-    equation_name=equation_name,
+    case_name=case_name,
     save=save,
 )
