@@ -429,6 +429,7 @@ def show_solution_2d_animation(
     y_values: np.ndarray,
     solution_history: np.ndarray,
     cmap: Colormap = cm.viridis,
+    z_limits: tuple = None,
     x_label: str = 'x',
     y_label: str = 'y',
     z_label: str = 'u',
@@ -455,6 +456,10 @@ def show_solution_2d_animation(
         z_label=z_label,
         case_name=case_name,  
     )
+        
+        if z_limits is not None:
+            ax.set_zlim(z_limits)
+
         ax.set_title(f'Solution Animation (Time step: {frame})')
 
     ani = FuncAnimation(fig, update, frames=solution_history.shape[0], interval=100, blit=False)

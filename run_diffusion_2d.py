@@ -152,6 +152,7 @@ show_solution_2d_animation(
     x_values=x_array,
     y_values=y_array, 
     solution_history=solution_matrix,
+    z_limits=(u_min, u_max),
     case_name=case_name,
     save=save,
 )
