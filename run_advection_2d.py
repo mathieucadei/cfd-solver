@@ -80,7 +80,7 @@ initial_condition = hat_initial_condition_2d(advection_2d_config)
 
 # Solve the advection equation
 
-history = solve_advection_2d(initial_condition, advection_2d_config)
+solution_history = solve_advection_2d(initial_condition, advection_2d_config)
 
 
 
@@ -88,7 +88,7 @@ history = solve_advection_2d(initial_condition, advection_2d_config)
 
 # show_solution_traces(
 #     x_values=x_array,
-#     num_solution_matrix=history,
+#     num_solution_history=solution_history,
 #     cut_values=time_array,
 #     step_stride=step_stride,
 #     case_name=case_name,
@@ -98,7 +98,7 @@ history = solve_advection_2d(initial_condition, advection_2d_config)
 
 # show_solution_traces(
 #     x_values=time_array,
-#     num_solution_matrix=history,
+#     num_solution_history=solution_history,
 #     cut_values=x_array,
 #     axis=1,
 #     step_stride=step_stride,
@@ -111,7 +111,7 @@ history = solve_advection_2d(initial_condition, advection_2d_config)
 # show_solution_contour(
 #     x_values=x_array,
 #     y_values=time_array,
-#     solution_matrix=history,
+#     solution_matrix=solution_history,
 #     case_name=case_name,
 #     title=title,
 #     save=save,
@@ -120,7 +120,7 @@ history = solve_advection_2d(initial_condition, advection_2d_config)
 show_solution_surface(
     x_values=x_array,
     y_values=y_array,
-    solution_matrix=history[-1],
+    solution_matrix=solution_history[-1],
     case_name=case_name,
     title=title,
     save=save,
@@ -129,7 +129,7 @@ show_solution_surface(
 # show_solution_overview(
 #     x_values=x_array, 
 #     y_values=time_array, 
-#     num_solution_matrix=history, 
+#     num_solution_history=solution_history, 
 #     step_stride=step_stride,
 #     case_name=case_name,
 #     title=title,
@@ -138,7 +138,7 @@ show_solution_surface(
 
 # show_solution_1d_animation(
 #     x_values=x_array,
-#     num_solution_matrix=history,
+#     num_solution_history=solution_history,
 #     case_name=case_name,
 #     save=save,
 # )

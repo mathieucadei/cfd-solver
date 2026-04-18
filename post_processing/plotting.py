@@ -18,11 +18,11 @@ from matplotlib.figure import Figure
 def plot_solution_traces(
     ax: Axes,
     x_values: np.ndarray,
-    num_solution_matrix: np.ndarray,
+    num_solution_history: np.ndarray,
     cut_values: np.ndarray,
     axis: int = 0,
     step_stride: int = 5,
-    ana_solution_matrix: np.ndarray = None,
+    ana_solution_history: np.ndarray = None,
     x_label: str = 'x',
     y_label: str = 'u',
     cut_label: str = 't',
@@ -36,23 +36,23 @@ def plot_solution_traces(
     for n in range(0, n_cuts, step_stride):
 
         if axis == 0:
-            y_cut = num_solution_matrix[n, :]
+            y_cut = num_solution_history[n, :]
         elif axis == 1:
-            y_cut = num_solution_matrix[:, n]
+            y_cut = num_solution_history[:, n]
         else:
             raise ValueError('axis must be 0 or 1')
         
-        num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
+        num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_history is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
         
         ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
     
-    if ana_solution_matrix is not None:
+    if ana_solution_history is not None:
         for n in range(0, n_cuts, step_stride):
 
             if axis == 0:
-                y_cut = ana_solution_matrix[n, :]
+                y_cut = ana_solution_history[n, :]
             elif axis == 1:
-                y_cut = ana_solution_matrix[:, n]
+                y_cut = ana_solution_history[:, n]
             else:
                 raise ValueError('axis must be 0 or 1')
         
@@ -123,10 +123,10 @@ def plot_solution_surface(
 
 def show_solution_traces(
     x_values: np.ndarray,
-    num_solution_matrix: np.ndarray,
+    num_solution_history: np.ndarray,
     cut_values: np.ndarray,
     axis: int = 0,
-    ana_solution_matrix: np.ndarray = None,
+    ana_solution_history: np.ndarray = None,
     cut_label: str = 't',
     x_label: str = 'x',
     y_label: str = 'u',
@@ -142,10 +142,10 @@ def show_solution_traces(
     plot_solution_traces(
         ax=ax,
         x_values=x_values,
-        num_solution_matrix=num_solution_matrix,
+        num_solution_history=num_solution_history,
         cut_values=cut_values,
         axis=axis,
-        ana_solution_matrix=ana_solution_matrix,
+        ana_solution_history=ana_solution_history,
         cut_label=cut_label,
         x_label=x_label,
         y_label=y_label,
@@ -237,8 +237,8 @@ def show_solution_surface(
 def show_solution_overview(
     x_values: np.ndarray,
     y_values: np.ndarray, 
-    num_solution_matrix: np.ndarray,
-    ana_solution_matrix: np.ndarray = None,
+    num_solution_history: np.ndarray,
+    ana_solution_history: np.ndarray = None,
     cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
@@ -263,7 +263,7 @@ def show_solution_overview(
             ax=ax1,
             x_values=x_values,
             y_values=y_values,
-            solution_matrix=num_solution_matrix,
+            solution_matrix=num_solution_history,
             cmap=cmap,
             x_label=x_label,
             y_label=y_label,
@@ -278,7 +278,7 @@ def show_solution_overview(
         ax=ax2,
         x_values=x_values,
         y_values=y_values,
-        solution_matrix=num_solution_matrix,
+        solution_matrix=num_solution_history,
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
@@ -291,10 +291,10 @@ def show_solution_overview(
     plot_solution_traces(
         ax=ax3,
         x_values=x_values,
-        num_solution_matrix=num_solution_matrix,
+        num_solution_history=num_solution_history,
         cut_values=y_values,
         axis=0,
-        ana_solution_matrix=ana_solution_matrix,
+        ana_solution_history=ana_solution_history,
         cut_label=y_label,
         x_label=x_label,
         y_label=z_label,
@@ -305,10 +305,10 @@ def show_solution_overview(
     plot_solution_traces(
         ax=ax4,
         x_values=y_values,
-        num_solution_matrix=num_solution_matrix,
+        num_solution_history=num_solution_history,
         cut_values=x_values,
         axis=1,
-        ana_solution_matrix=ana_solution_matrix,
+        ana_solution_history=ana_solution_history,
         cut_label=x_label,
         x_label=y_label,
         y_label=z_label,
@@ -327,44 +327,44 @@ def show_solution_overview(
 
 def show_solution_1d_animation(
     x_values: np.ndarray,
-    num_solution_matrix: np.ndarray,
-    ana_solution_matrix: np.ndarray = None,
+    num_solution_history: np.ndarray,
+    ana_solution_history: np.ndarray = None,
     case_name: str = 'equation',
     save: bool = False
 ) -> None:
     """Create and display an animation of a 1D numerical or analytical solution."""
     
     fig, ax = plt.subplots()
-    num_line, = ax.plot(x_values, num_solution_matrix[0], lw=2,  label='Numerical')
+    num_line, = ax.plot(x_values, num_solution_history[0], lw=2,  label='Numerical')
 
-    if ana_solution_matrix is not None:
+    if ana_solution_history is not None:
 
-        ana_line, = ax.plot(x_values, ana_solution_matrix[0], '--', lw=2, label='Analytical')
+        ana_line, = ax.plot(x_values, ana_solution_history[0], '--', lw=2, label='Analytical')
 
     ax.set_xlabel("x")
     ax.set_ylabel("u", rotation=0)
 
-    if ana_solution_matrix is not None:
+    if ana_solution_history is not None:
         ax.legend()
     
     ax.set_title(f'{case_name.title()} Solution Animation')
 
     def update(frame):
 
-        num_line.set_ydata(num_solution_matrix[frame])
+        num_line.set_ydata(num_solution_history[frame])
 
-        if ana_solution_matrix is not None:
+        if ana_solution_history is not None:
 
-            ana_line.set_ydata(ana_solution_matrix[frame])
+            ana_line.set_ydata(ana_solution_history[frame])
 
         ax.set_title(f'{case_name.title()} Solution Animation (Time step: {frame})')
 
-        return num_line, ana_line if ana_solution_matrix is not None else num_line,
+        return num_line, ana_line if ana_solution_history is not None else num_line,
 
-    if ana_solution_matrix is not None:
-        frames = ana_solution_matrix.shape[0]
+    if ana_solution_history is not None:
+        frames = ana_solution_history.shape[0]
     else:
-        frames = num_solution_matrix.shape[0]
+        frames = num_solution_history.shape[0]
 
     ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 

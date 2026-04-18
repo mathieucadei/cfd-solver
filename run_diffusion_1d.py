@@ -71,7 +71,7 @@ initial_condition = hat_initial_condition_1d(x_array, diffusion_1d_config)
 
 # Solve the diffusion equation
 
-history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
+solution_history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 
 
@@ -79,7 +79,7 @@ history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 show_solution_traces(
     x_values=x_array,
-    num_solution_matrix=history,
+    num_solution_history=solution_history,
     cut_values=time_array,
     step_stride=step_stride,
     case_name=case_name,
@@ -89,7 +89,7 @@ show_solution_traces(
 
 show_solution_traces(
     x_values=time_array,
-    num_solution_matrix=history,
+    num_solution_history=solution_history,
     cut_values=x_array,
     axis=1,
     step_stride=step_stride,
@@ -102,7 +102,7 @@ show_solution_traces(
 show_solution_contour(
     x_values=x_array,
     y_values=time_array,
-    solution_matrix=history,
+    solution_matrix=solution_history,
     case_name=case_name,
     title=title,
     save=save,
@@ -111,7 +111,7 @@ show_solution_contour(
 show_solution_surface(
     x_values=x_array,
     y_values=time_array,
-    solution_matrix=history,
+    solution_matrix=solution_history,
     case_name=case_name,
     title=title,
     save=save,
@@ -120,7 +120,7 @@ show_solution_surface(
 show_solution_overview(
     x_values=x_array, 
     y_values=time_array, 
-    num_solution_matrix=history, 
+    num_solution_history=solution_history, 
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -129,7 +129,7 @@ show_solution_overview(
 
 show_solution_1d_animation(
     x_values=x_array,
-    num_solution_matrix=history,
+    num_solution_history=solution_history,
     case_name=case_name,
     save=save,
 )
