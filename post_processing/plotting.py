@@ -1,4 +1,4 @@
-"""Plotting and animation utilities for 1D numerical and analytical solutions."""
+"""Plotting and animation utilities for numerical and analytical solutions."""
 
 
 
@@ -18,41 +18,41 @@ from matplotlib.figure import Figure
 def plot_solution_traces(
     ax: Axes,
     x_values: np.ndarray,
-    num_solution_history: np.ndarray,
     cut_values: np.ndarray,
+    num_solution_matrix: np.ndarray,
     axis: int = 0,
     step_stride: int = 5,
-    ana_solution_history: np.ndarray = None,
+    ana_solution_matrix: np.ndarray = None,
     x_label: str = 'x',
     y_label: str = 'u',
     cut_label: str = 't',
     case_name: str = None,
     title: bool = False,
 ) -> None:
-    """Plot selected numerical and analytical 1D solution traces on an existing axis."""
+    """Plot selected numerical and analytical solution traces on an existing axis."""
 
     n_cuts = cut_values.shape[0]
 
     for n in range(0, n_cuts, step_stride):
 
         if axis == 0:
-            y_cut = num_solution_history[n, :]
+            y_cut = num_solution_matrix[n, :]
         elif axis == 1:
-            y_cut = num_solution_history[:, n]
+            y_cut = num_solution_matrix[:, n]
         else:
             raise ValueError('axis must be 0 or 1')
         
-        num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_history is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
+        num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
         
         ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
     
-    if ana_solution_history is not None:
+    if ana_solution_matrix is not None:
         for n in range(0, n_cuts, step_stride):
 
             if axis == 0:
-                y_cut = ana_solution_history[n, :]
+                y_cut = ana_solution_matrix[n, :]
             elif axis == 1:
-                y_cut = ana_solution_history[:, n]
+                y_cut = ana_solution_matrix[:, n]
             else:
                 raise ValueError('axis must be 0 or 1')
         
@@ -76,11 +76,10 @@ def plot_solution_contour(
     cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
-    z_label: str = 'u',
     case_name: str = None,
     title: bool = False,
 ):
-    """Plot a filled contour view of a 1D solution evolving over time."""
+    """Plot a filled contour view of a 2D solution field."""
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
@@ -107,7 +106,7 @@ def plot_solution_surface(
     case_name: str = None,
     title: bool = False,
 ) -> None:
-    """Plot a 3D surface view of a 1D solution evolving over time."""
+    """Plot a 3D surface view of a 2D solution field."""
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
@@ -123,10 +122,10 @@ def plot_solution_surface(
 
 def show_solution_traces(
     x_values: np.ndarray,
-    num_solution_history: np.ndarray,
     cut_values: np.ndarray,
+    num_solution_matrix: np.ndarray,
     axis: int = 0,
-    ana_solution_history: np.ndarray = None,
+    ana_solution_matrix: np.ndarray = None,
     cut_label: str = 't',
     x_label: str = 'x',
     y_label: str = 'u',
@@ -135,17 +134,17 @@ def show_solution_traces(
     step_stride: int = 5,
     save: bool = False,       
 ) -> None:
-    """Create and display a standalone trace plot for a 1D numerical or analytical solution."""
+    """Create and display a standalone trace plot for a numerical or analytical solution."""
 
     fig, ax = plt.subplots()
 
     plot_solution_traces(
         ax=ax,
         x_values=x_values,
-        num_solution_history=num_solution_history,
         cut_values=cut_values,
+        num_solution_matrix=num_solution_matrix,
         axis=axis,
-        ana_solution_history=ana_solution_history,
+        ana_solution_matrix=ana_solution_matrix,
         cut_label=cut_label,
         x_label=x_label,
         y_label=y_label,
@@ -172,7 +171,7 @@ def show_solution_contour(
     title: bool = False,
     save: bool = False,     
 ) -> None:
-    """Create and display a standalone contour plot of a 1D solution history."""
+    """Create and display a standalone contour plot of a 2D solution field."""
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -185,7 +184,6 @@ def show_solution_contour(
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
-        z_label=z_label,
         case_name=case_name,
         title=title,   
     )
@@ -210,7 +208,7 @@ def show_solution_surface(
     title: bool = False,
     save: bool = False,     
 ) -> None:
-    """Create and display a standalone 3D surface plot of a 1D solution history."""
+    """Create and display a standalone 3D surface plot of a 2D solution field."""
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
@@ -237,8 +235,8 @@ def show_solution_surface(
 def show_solution_overview(
     x_values: np.ndarray,
     y_values: np.ndarray, 
-    num_solution_history: np.ndarray,
-    ana_solution_history: np.ndarray = None,
+    num_solution_matrix: np.ndarray,
+    ana_solution_matrix: np.ndarray = None,
     cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 't',
@@ -248,7 +246,7 @@ def show_solution_overview(
     title: bool = False, 
     save: bool=False,
 ) -> None:
-    """Create and display a multi-panel overview of a 1D solution and its diagnostics."""
+    """Create and display a multi-panel overview of a solution and its diagnostics."""
 
     fig = plt.figure(figsize=(14, 10), constrained_layout=True)
     gs = fig.add_gridspec(2, 2)
@@ -263,7 +261,7 @@ def show_solution_overview(
             ax=ax1,
             x_values=x_values,
             y_values=y_values,
-            solution_matrix=num_solution_history,
+            solution_matrix=num_solution_matrix,
             cmap=cmap,
             x_label=x_label,
             y_label=y_label,
@@ -278,11 +276,10 @@ def show_solution_overview(
         ax=ax2,
         x_values=x_values,
         y_values=y_values,
-        solution_matrix=num_solution_history,
+        solution_matrix=num_solution_matrix,
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
-        z_label=z_label,
         case_name=case_name,  
     )
 
@@ -291,10 +288,10 @@ def show_solution_overview(
     plot_solution_traces(
         ax=ax3,
         x_values=x_values,
-        num_solution_history=num_solution_history,
         cut_values=y_values,
+        num_solution_matrix=num_solution_matrix,
         axis=0,
-        ana_solution_history=ana_solution_history,
+        ana_solution_matrix=ana_solution_matrix,
         cut_label=y_label,
         x_label=x_label,
         y_label=z_label,
@@ -305,10 +302,10 @@ def show_solution_overview(
     plot_solution_traces(
         ax=ax4,
         x_values=y_values,
-        num_solution_history=num_solution_history,
         cut_values=x_values,
+        num_solution_matrix=num_solution_matrix,
         axis=1,
-        ana_solution_history=ana_solution_history,
+        ana_solution_matrix=ana_solution_matrix,
         cut_label=x_label,
         x_label=y_label,
         y_label=z_label,
@@ -327,7 +324,7 @@ def show_solution_overview(
 
 def show_solution_1d_animation(
     x_values: np.ndarray,
-    num_solution_history: np.ndarray,
+    num_solution_history : np.ndarray,
     ana_solution_history: np.ndarray = None,
     case_name: str = 'equation',
     save: bool = False
@@ -335,7 +332,7 @@ def show_solution_1d_animation(
     """Create and display an animation of a 1D numerical or analytical solution."""
     
     fig, ax = plt.subplots()
-    num_line, = ax.plot(x_values, num_solution_history[0], lw=2,  label='Numerical')
+    num_line, = ax.plot(x_values, num_solution_history [0], lw=2,  label='Numerical')
 
     if ana_solution_history is not None:
 
@@ -351,7 +348,7 @@ def show_solution_1d_animation(
 
     def update(frame):
 
-        num_line.set_ydata(num_solution_history[frame])
+        num_line.set_ydata(num_solution_history [frame])
 
         if ana_solution_history is not None:
 
@@ -364,7 +361,7 @@ def show_solution_1d_animation(
     if ana_solution_history is not None:
         frames = ana_solution_history.shape[0]
     else:
-        frames = num_solution_history.shape[0]
+        frames = num_solution_history .shape[0]
 
     ani = FuncAnimation(fig, update, frames=frames, interval=100, blit=False)
 
@@ -377,7 +374,7 @@ def show_solution_1d_animation(
 def show_solution_2d_animation(
     x_values: np.ndarray,
     y_values: np.ndarray,
-    solution_matrix: np.ndarray,
+    solution_history: np.ndarray,
     cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 'y',
@@ -398,7 +395,7 @@ def show_solution_2d_animation(
         ax=ax,
         x_values=x_values,
         y_values=y_values,
-        solution_matrix=solution_matrix[frame],
+        solution_matrix=solution_history[frame],
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
@@ -407,7 +404,7 @@ def show_solution_2d_animation(
     )
         ax.set_title(f'Solution Animation (Time step: {frame})')
 
-    ani = FuncAnimation(fig, update, frames=solution_matrix.shape[0], interval=100, blit=False)
+    ani = FuncAnimation(fig, update, frames=solution_history.shape[0], interval=100, blit=False)
 
     if save:
         _save_ani(ani=ani, case_name=case_name, fig_type='2d')

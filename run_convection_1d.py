@@ -78,8 +78,8 @@ solution_history = solve_convection_1d(initial_condition, convection_1d_config)
 
 show_solution_traces(
     x_values=x_array,
-    num_solution_history=solution_history,
     cut_values=time_array,
+    num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -88,8 +88,8 @@ show_solution_traces(
 
 show_solution_traces(
     x_values=time_array,
-    num_solution_history=solution_history,
     cut_values=x_array,
+    num_solution_matrix=solution_history,
     axis=1,
     step_stride=step_stride,
     cut_label='x',
@@ -119,7 +119,7 @@ show_solution_surface(
 show_solution_overview(
     x_values=x_array, 
     y_values=time_array, 
-    num_solution_history=solution_history,
+    num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
     title=title,

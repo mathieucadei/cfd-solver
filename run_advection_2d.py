@@ -94,8 +94,8 @@ solution_final_y = solution_final_x.T
 
 show_solution_traces(
     x_values=x_array,
-    num_solution_history=solution_final_x,
     cut_values=y_array,
+    num_solution_matrix=solution_final_x,
     step_stride=step_stride,
     cut_label='y',
     case_name=case_name,
@@ -105,8 +105,8 @@ show_solution_traces(
 
 show_solution_traces(
     x_values=y_array,
-    num_solution_history=solution_final_y,
     cut_values=x_array,
+    num_solution_matrix=solution_final_y,
     step_stride=step_stride,
     cut_label='x',
     case_name=case_name,
@@ -138,7 +138,7 @@ show_solution_surface(
 show_solution_overview(
     x_values=x_array, 
     y_values=y_array, 
-    num_solution_history=solution_final,
+    num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
@@ -149,7 +149,7 @@ show_solution_overview(
 show_solution_2d_animation(
     x_values=x_array,
     y_values=y_array, 
-    solution_matrix=solution_matrix,
+    solution_history=solution_matrix,
     case_name=case_name,
     save=save,
 )

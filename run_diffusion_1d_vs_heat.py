@@ -119,9 +119,9 @@ solution_history_ana = solve_heat_equation_1d(
 
 show_solution_traces(
     x_values=x_array,
-    num_solution_history=solution_history_num,
     cut_values=time_array,
-    ana_solution_history=solution_history_ana,
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -130,10 +130,10 @@ show_solution_traces(
 
 show_solution_traces(
     x_values=time_array,
-    num_solution_history=solution_history_num,
     cut_values=x_array,
+    num_solution_matrix=solution_history_num,
     axis=1,
-    ana_solution_history=solution_history_ana,
+    ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     cut_label='x',
     case_name=case_name,
@@ -162,8 +162,8 @@ show_solution_surface(
 show_solution_overview(
     x_values=x_array, 
     y_values=time_array, 
-    num_solution_history=solution_history_num,
-    ana_solution_history=solution_history_ana, 
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana, 
     step_stride=step_stride,
     case_name=case_name,
     title=title,
