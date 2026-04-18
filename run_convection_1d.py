@@ -28,7 +28,7 @@ from post_processing import (
 domain_length = 2.0
 num_grid_points = 101
 max_iterations = 100
-sigma = 0.2
+sigma = 0.5
 hat_start = 0.5
 hat_end = 1.0
 u_min = 1.0

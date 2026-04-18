@@ -6,12 +6,20 @@ from .grids import compute_cole_hopf_dx, compute_dx, compute_dx_2d
 
 
 
-def compute_convective_dt(config: object) -> float:
-    """Compute the time step for 1D advection and convection problems."""
+def compute_advective_dt(config: object) -> float:
+    """Compute the time step for 1D advection problem."""
 
     dx = compute_dx(config)
     
-    return config.sigma * dx
+    return config.sigma * dx / config.wavespeed
+
+
+def compute_convective_dt(config: object) -> float:
+    """Compute the time step for 1D convection problem."""
+
+    dx = compute_dx(config)
+    
+    return config.sigma * dx / config.u_max
 
 
 def compute_diffusive_dt(config: object) -> float:
@@ -30,9 +38,17 @@ def compute_cole_hopf_dt(config: object) -> float:
     return dx * config.viscosity
 
 
-def compute_convective_dt_2d(config: object) -> float:
-    """Compute the time step for 1D advection and convection problems."""
+def compute_advective_dt_2d(config: object) -> float:
+    """Compute the time step for 2D advection problem."""
 
     dx = compute_dx_2d(config)
     
-    return config.sigma * dx
+    return config.sigma * dx /config.wavespeed
+
+
+def compute_convective_dt_2d(config: object) -> float:
+    """Compute the time step for 2D convection problem."""
+
+    dx = compute_dx_2d(config)
+    
+    return config.sigma * dx /config.u_max

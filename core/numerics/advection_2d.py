@@ -9,7 +9,7 @@ from .boundary_conditions import apply_periodic_advection_boundary_2d
 
 from ..config import Advection2DConfig
 from ..setup.grids import compute_dx_2d, compute_dy_2d
-from ..setup.time_stepping import compute_convective_dt_2d
+from ..setup.time_stepping import compute_advective_dt_2d
 
 
 
@@ -21,7 +21,7 @@ def solve_advection_2d(
 
     dx = compute_dx_2d(config)
     dy = compute_dy_2d(config)
-    dt = compute_convective_dt_2d(config)
+    dt = compute_advective_dt_2d(config)
 
     u = initial_condition.copy()
     

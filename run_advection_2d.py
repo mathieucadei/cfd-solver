@@ -11,7 +11,7 @@ from core import (
     solve_advection_2d,
 )
 from post_processing import (
-    show_solution_1d_animation,
+    show_solution_2d_animation,
     show_solution_contour,
     show_solution_overview,
     show_solution_surface,
@@ -27,7 +27,7 @@ domain_length_x: float = 2.0
 domain_length_y: float = 2.0
 num_grid_points_x: int = 81
 num_grid_points_y: int = 81
-max_iterations: int = 100
+max_iterations: int = 80
 sigma: float = 0.2
 wavespeed: float = 1.0
 hat_start_x: float = 0.5
@@ -40,7 +40,7 @@ u_max: float = 2.0
 
 # Visualization parameters
 
-step_stride = 20
+step_stride = 10
 case_name = '2d advection'
 title = True
 save = False
@@ -80,65 +80,76 @@ initial_condition = hat_initial_condition_2d(advection_2d_config)
 
 # Solve the advection equation
 
-solution_history = solve_advection_2d(initial_condition, advection_2d_config)
+solution_matrix = solve_advection_2d(initial_condition, advection_2d_config)
+
+solution_final = solution_matrix[-1, ...]
+
+solution_final_x = solution_matrix[-1, :, :]
+
+solution_final_y = solution_final_x.T
 
 
 
 # Post-processing
 
-# show_solution_traces(
-#     x_values=x_array,
-#     num_solution_history=solution_history,
-#     cut_values=time_array,
-#     step_stride=step_stride,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_solution_traces(
-#     x_values=time_array,
-#     num_solution_history=solution_history,
-#     cut_values=x_array,
-#     axis=1,
-#     step_stride=step_stride,
-#     cut_label='x',
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_solution_contour(
-#     x_values=x_array,
-#     y_values=time_array,
-#     solution_matrix=solution_history,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-show_solution_surface(
+show_solution_traces(
     x_values=x_array,
-    y_values=y_array,
-    solution_matrix=solution_history[-1],
+    num_solution_history=solution_final_x,
+    cut_values=y_array,
+    step_stride=step_stride,
+    cut_label='y',
     case_name=case_name,
     title=title,
     save=save,
 )
 
-# show_solution_overview(
-#     x_values=x_array, 
-#     y_values=time_array, 
-#     num_solution_history=solution_history, 
-#     step_stride=step_stride,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
+show_solution_traces(
+    x_values=y_array,
+    num_solution_history=solution_final_y,
+    cut_values=x_array,
+    step_stride=step_stride,
+    cut_label='x',
+    case_name=case_name,
+    title=title,
+    x_label='y',
+    save=save,
+)
 
-# show_solution_1d_animation(
-#     x_values=x_array,
-#     num_solution_history=solution_history,
-#     case_name=case_name,
-#     save=save,
-# )
+show_solution_contour(
+    x_values=x_array,
+    y_values=y_array,
+    solution_matrix=solution_final,
+    case_name=case_name,
+    title=title,
+    y_label='y',
+    save=save,
+)
+
+show_solution_surface(
+    x_values=x_array,
+    y_values=y_array,
+    solution_matrix=solution_final,
+    case_name=case_name,
+    title=title,
+    y_label='y',
+    save=save,
+)
+
+show_solution_overview(
+    x_values=x_array, 
+    y_values=y_array, 
+    num_solution_history=solution_final,
+    y_label='y',
+    step_stride=step_stride,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
+
+show_solution_2d_animation(
+    x_values=x_array,
+    y_values=y_array, 
+    solution_matrix=solution_matrix,
+    case_name=case_name,
+    save=save,
+)

@@ -374,6 +374,47 @@ def show_solution_1d_animation(
     plt.show()
 
 
+def show_solution_2d_animation(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.viridis,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    z_label: str = 'u',
+    case_name: str = None,
+    save: bool = False,     
+) -> None:
+    """Create and display an animation of a 2D numerical or analytical solution."""
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    def update(frame):
+
+        ax.clear()
+
+        plot_solution_surface(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=solution_matrix[frame],
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label,
+        case_name=case_name,  
+    )
+        ax.set_title(f'Solution Animation (Time step: {frame})')
+
+    ani = FuncAnimation(fig, update, frames=solution_matrix.shape[0], interval=100, blit=False)
+
+    if save:
+        _save_ani(ani=ani, case_name=case_name, fig_type='2d')
+
+    plt.show()
+
+
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
     equation_filename  = case_name.lower().replace(" ", "_")

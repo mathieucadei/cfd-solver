@@ -5,7 +5,6 @@
 import numpy as np
 
 from .grids import compute_dx_2d, compute_dy_2d
-
 from ..analytical.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
@@ -34,7 +33,7 @@ def hat_initial_condition_2d(config: object) -> np.ndarray:
     dx = compute_dx_2d(config)
     dy = compute_dy_2d(config)
 
-    initial_condition = np.full((config.num_grid_points_x, config.num_grid_points_y), float(config.u_min))
+    initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.u_min))
 
     initial_condition[
         int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
