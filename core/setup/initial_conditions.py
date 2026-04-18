@@ -27,6 +27,7 @@ def cole_hopf_initial_condition(x_array: np.ndarray, config: object) -> np.ndarr
 
     return initial_condition
 
+
 def hat_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D hat-function initial condition on the provided grid."""
 

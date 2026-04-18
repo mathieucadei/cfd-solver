@@ -1,8 +1,9 @@
-"""Boundary condition updates for 1D finite-difference solvers."""
+"""Boundary condition updates for finite-difference solvers."""
 
 
 
 import numpy as np
+
 
 
 def apply_periodic_diffusion_boundary_1d(
@@ -46,13 +47,14 @@ def apply_periodic_advection_boundary_2d(
     u[:, 0] = u_min
     u[:, -1] = u_min
 
+
 def apply_periodic_convection_boundary_2d(
     u: np.ndarray,
     v: np.ndarray,
     u_min: float,
     v_min: float,
 ) -> None:
-    """Apply periodic boundary updates for the 2D advection equation."""
+    """Apply periodic boundary updates for the 2D convection equation."""
 
     u[0, :] = u_min
     u[-1, :] = u_min
@@ -63,3 +65,15 @@ def apply_periodic_convection_boundary_2d(
     v[-1, :] = v_min
     v[:, 0] = v_min
     v[:, -1] = v_min
+
+
+def apply_periodic_diffusion_boundary_2d(
+    u: np.ndarray,
+    u_min: float,
+) -> None:
+    """Apply periodic boundary updates for the 2D diffusion equation."""
+
+    u[0, :] = u_min
+    u[-1, :] = u_min
+    u[:, 0] = u_min
+    u[:, -1] = u_min

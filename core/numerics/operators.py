@@ -79,3 +79,19 @@ def compute_convection_2d_term(
     v_term[1:, 1:] = u[1:, 1:] * dt / dx * (v[1:, 1:] - v[1:, :-1]) + v[1:, 1:] * dt / dy * (v[1:, 1:] - v[:-1, 1:])
 
     return u_term, v_term
+
+
+def compute_diffusion_2d_term(
+    u: np.ndarray,
+    dx: float,
+    dy: float,
+    dt: float,
+    nu: float,
+) -> np.ndarray:
+    """Compute the 1D central-difference diffusion term."""
+
+    term = np.zeros_like(u)
+
+    term[1:-1, 1:-1] = nu * dt / dx**2 * (u[1:-1, 2:] - 2 * u[1:-1, 1:-1] + u[1:-1, 0:-2]) + nu * dt / dy**2 * (u[2:,1: -1] - 2 * u[1:-1, 1:-1] + u[0:-2, 1:-1])
+
+    return term
