@@ -232,7 +232,7 @@ def show_solution_surface(
     plt.show()
 
 
-def show_solution_surfaces(
+def show_solution_uv_surfaces(
     x_values: np.ndarray,
     y_values: np.ndarray,
     u_solution_matrix: np.ndarray,

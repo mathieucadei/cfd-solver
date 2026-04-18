@@ -14,7 +14,7 @@ from post_processing import (
     show_solutions_2d_animation,
     show_solution_contour,
     show_solution_overview,
-    show_solution_surfaces, 
+    show_solution_uv_surfaces, 
     show_solution_traces,
 )
 
@@ -96,10 +96,9 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 
 
-
 # Post-processing
 
-show_solution_surfaces(
+show_solution_uv_surfaces(
     x_values=x_array,
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
