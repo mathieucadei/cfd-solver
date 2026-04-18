@@ -232,6 +232,59 @@ def show_solution_surface(
     plt.show()
 
 
+def show_solution_surfaces(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    cmap: Colormap = cm.viridis,
+    x_label: str = 'x',
+    y_label: str = 't',
+    z_label_u: str = "u",
+    z_label_v: str = "v",
+    case_name: str = None,
+    title: bool = False,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone 3D surface plot of a 2D solution field."""
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+    ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+
+
+    plot_solution_surface(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=u_solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label_u,
+        case_name=f'{case_name} u',
+        title=title,   
+    )
+
+    plot_solution_surface(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=v_solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label_v,
+        case_name=f'{case_name} v',
+        title=title,   
+    )
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='surface')
+
+    plt.show()
+
+
 def show_solution_overview(
     x_values: np.ndarray,
     y_values: np.ndarray, 
@@ -405,6 +458,65 @@ def show_solution_2d_animation(
         ax.set_title(f'Solution Animation (Time step: {frame})')
 
     ani = FuncAnimation(fig, update, frames=solution_history.shape[0], interval=100, blit=False)
+
+    if save:
+        _save_ani(ani=ani, case_name=case_name, fig_type='2d')
+
+    plt.show()
+
+
+def show_solutions_2d_animation(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_history: np.ndarray,
+    v_solution_history: np.ndarray,
+    cmap: Colormap = cm.viridis,
+    x_label: str = 'x',
+    y_label: str = 't',
+    z_label_u: str = "u",
+    z_label_v: str = "v",
+    case_name: str = None,
+    save: bool = False,     
+) -> None:
+    """Create and display an animation of a 2D numerical or analytical solution."""
+    
+    fig = plt.figure()
+    ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+    ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+
+    def update(frame):
+
+        ax1.clear()
+
+        plot_solution_surface(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=u_solution_history[frame],
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label_u,
+        case_name=case_name,  
+    )
+        ax1.set_title(f'U Solution Animation (Time step: {frame})')
+
+        ax2.clear()
+
+        plot_solution_surface(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=v_solution_history[frame],
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        z_label=z_label_v,
+        case_name=case_name,  
+    )
+        ax2.set_title(f'V Solution Animation (Time step: {frame})')       
+
+    ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
     if save:
         _save_ani(ani=ani, case_name=case_name, fig_type='2d')

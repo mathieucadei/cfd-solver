@@ -27,7 +27,7 @@ def solve_convection_2d(
     v = initial_condition[1].copy()
     
     u_history = np.zeros((config.max_iterations + 1, config.num_grid_points_x, config.num_grid_points_y))
-    v_history = u_history
+    v_history = np.zeros((config.max_iterations + 1, config.num_grid_points_x, config.num_grid_points_y))
 
 
     u_history[0] = initial_condition[0]

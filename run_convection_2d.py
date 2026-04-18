@@ -1,4 +1,4 @@
-"""Run the 1D advection solver and generate solution plots."""
+"""Run the 2D convection solver and generate solution plots."""
 
 
 
@@ -11,10 +11,10 @@ from core import (
     solve_convection_2d,
 )
 from post_processing import (
-    show_solution_2d_animation,
+    show_solutions_2d_animation,
     show_solution_contour,
     show_solution_overview,
-    show_solution_surface,
+    show_solution_surfaces, 
     show_solution_traces,
 )
 
@@ -86,76 +86,80 @@ initial_condition = hat_convective_initial_condition_2d(advection_2d_config)
 
 solution_matrix = solve_convection_2d(initial_condition, advection_2d_config)
 
-solution_matrix_u = solution_matrix[0]
+u_solution_matrix = solution_matrix[0]
 
-solution_final = solution_matrix_u[-1, ...]
+v_solution_matrix = solution_matrix[1]
 
-solution_final_x = solution_matrix_u[-1, :, :]
+# solution_final = u_solution_matrix[-1, ...]
 
-solution_final_y = solution_final_x.T
+# solution_final_x = u_solution_matrix[-1, :, :]
+
+# solution_final_y = solution_final_x.T
 
 
 
 # Post-processing
 
-show_solution_traces(
+# show_solution_traces(
+#     x_values=x_array,
+#     cut_values=y_array,
+#     num_solution_matrix=solution_final_x,
+#     step_stride=step_stride,
+#     cut_label='y',
+#     case_name=case_name,
+#     title=title,
+#     save=save,
+# )
+
+# show_solution_traces(
+#     x_values=y_array,
+#     cut_values=x_array,
+#     num_solution_matrix=solution_final_y,
+#     step_stride=step_stride,
+#     cut_label='x',
+#     case_name=case_name,
+#     title=title,
+#     x_label='y',
+#     save=save,
+# )
+
+# show_solution_contour(
+#     x_values=x_array,
+#     y_values=y_array,
+#     solution_matrix=solution_final,
+#     case_name=case_name,
+#     title=title,
+#     y_label='y',
+#     save=save,
+# )
+
+# show_solution_surfaces(
+#     x_values=x_array,
+#     y_values=y_array,
+#     u_solution_matrix=u_solution_matrix,
+#     v_solution_matrix=v_solution_matrix,
+#     case_name=case_name,
+#     title=title,
+#     y_label='y',
+#     save=save,
+# )
+
+# show_solution_overview(
+#     x_values=x_array, 
+#     y_values=y_array, 
+#     num_solution_matrix=solution_final,
+#     y_label='y',
+#     step_stride=step_stride,
+#     case_name=case_name,
+#     title=title,
+#     save=save,
+# )
+
+show_solutions_2d_animation(
     x_values=x_array,
-    cut_values=y_array,
-    num_solution_matrix=solution_final_x,
-    step_stride=step_stride,
-    cut_label='y',
-    case_name=case_name,
-    title=title,
-    save=save,
-)
-
-show_solution_traces(
-    x_values=y_array,
-    cut_values=x_array,
-    num_solution_matrix=solution_final_y,
-    step_stride=step_stride,
-    cut_label='x',
-    case_name=case_name,
-    title=title,
-    x_label='y',
-    save=save,
-)
-
-show_solution_contour(
-    x_values=x_array,
-    y_values=y_array,
-    solution_matrix=solution_final,
-    case_name=case_name,
-    title=title,
-    y_label='y',
-    save=save,
-)
-
-show_solution_surface(
-    x_values=x_array,
-    y_values=y_array,
-    solution_matrix=solution_final,
-    case_name=case_name,
-    title=title,
-    y_label='y',
-    save=save,
-)
-
-show_solution_overview(
-    x_values=x_array, 
     y_values=y_array, 
-    num_solution_matrix=solution_final,
-    y_label='y',
-    step_stride=step_stride,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
-
-show_solution_2d_animation(
-    x_values=x_array,
-    y_values=y_array, 
-    solution_history=solution_matrix_u,
+    u_solution_history=u_solution_matrix,
+    v_solution_history=v_solution_matrix,
     case_name=case_name,
     save=save,
 )
