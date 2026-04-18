@@ -44,6 +44,7 @@ step_stride = 20
 case_name = '1d burgers'
 title = True
 save = False
+show_individual_plots = False
 
 
 # Create the configuration object
@@ -82,45 +83,46 @@ solution_history = solve_burgers_equation_1d(initial_condition, burgers_1d_confi
 
 # Post-processing
 
-show_solution_traces(
-    x_values=x_array,
-    cut_values=time_array,
-    num_solution_matrix=solution_history,
-    step_stride=step_stride,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+if show_individual_plots:
+    show_solution_traces(
+        x_values=x_array,
+        cut_values=time_array,
+        num_solution_matrix=solution_history,
+        step_stride=step_stride,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_traces(
-    x_values=time_array,
-    cut_values=x_array,
-    num_solution_matrix=solution_history,
-    axis=1,
-    step_stride=step_stride,
-    cut_label='x',
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_traces(
+        x_values=time_array,
+        cut_values=x_array,
+        num_solution_matrix=solution_history,
+        axis=1,
+        step_stride=step_stride,
+        cut_label='x',
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_contour(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=solution_history,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_contour(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_surface(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=solution_history,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_surface(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
 show_solution_overview(
     x_values=x_array, 

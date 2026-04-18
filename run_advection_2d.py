@@ -44,6 +44,7 @@ step_stride = 10
 case_name = '2d advection'
 title = True
 save = False
+show_individual_plots = False
 
 
 # Create the configuration object
@@ -92,48 +93,49 @@ solution_final_y = solution_final_x.T
 
 # Post-processing
 
-show_solution_traces(
-    x_values=x_array,
-    cut_values=y_array,
-    num_solution_matrix=solution_final_x,
-    step_stride=step_stride,
-    cut_label='y',
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+if show_individual_plots:
+    show_solution_traces(
+        x_values=x_array,
+        cut_values=y_array,
+        num_solution_matrix=solution_final_x,
+        step_stride=step_stride,
+        cut_label='y',
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_traces(
-    x_values=y_array,
-    cut_values=x_array,
-    num_solution_matrix=solution_final_y,
-    step_stride=step_stride,
-    cut_label='x',
-    case_name=case_name,
-    title=title,
-    x_label='y',
-    save=save,
-)
+    show_solution_traces(
+        x_values=y_array,
+        cut_values=x_array,
+        num_solution_matrix=solution_final_y,
+        step_stride=step_stride,
+        cut_label='x',
+        case_name=case_name,
+        title=title,
+        x_label='y',
+        save=save,
+    )
 
-show_solution_contour(
-    x_values=x_array,
-    y_values=y_array,
-    solution_matrix=solution_final,
-    case_name=case_name,
-    title=title,
-    y_label='y',
-    save=save,
-)
+    show_solution_contour(
+        x_values=x_array,
+        y_values=y_array,
+        solution_matrix=solution_final,
+        case_name=case_name,
+        title=title,
+        y_label='y',
+        save=save,
+    )
 
-show_solution_surface(
-    x_values=x_array,
-    y_values=y_array,
-    solution_matrix=solution_final,
-    case_name=case_name,
-    title=title,
-    y_label='y',
-    save=save,
-)
+    show_solution_surface(
+        x_values=x_array,
+        y_values=y_array,
+        solution_matrix=solution_final,
+        case_name=case_name,
+        title=title,
+        y_label='y',
+        save=save,
+    )
 
 show_solution_overview(
     x_values=x_array, 

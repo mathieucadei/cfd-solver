@@ -90,70 +90,24 @@ u_solution_matrix = solution_matrix[0]
 
 v_solution_matrix = solution_matrix[1]
 
-# solution_final = u_solution_matrix[-1, ...]
+u_solution_matrix_final = u_solution_matrix[-1, ...]
 
-# solution_final_x = u_solution_matrix[-1, :, :]
+v_solution_matrix_final = v_solution_matrix[-1, ...]
 
-# solution_final_y = solution_final_x.T
 
 
 
 # Post-processing
 
-# show_solution_traces(
-#     x_values=x_array,
-#     cut_values=y_array,
-#     num_solution_matrix=solution_final_x,
-#     step_stride=step_stride,
-#     cut_label='y',
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_solution_traces(
-#     x_values=y_array,
-#     cut_values=x_array,
-#     num_solution_matrix=solution_final_y,
-#     step_stride=step_stride,
-#     cut_label='x',
-#     case_name=case_name,
-#     title=title,
-#     x_label='y',
-#     save=save,
-# )
-
-# show_solution_contour(
-#     x_values=x_array,
-#     y_values=y_array,
-#     solution_matrix=solution_final,
-#     case_name=case_name,
-#     title=title,
-#     y_label='y',
-#     save=save,
-# )
-
-# show_solution_surfaces(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_matrix=u_solution_matrix,
-#     v_solution_matrix=v_solution_matrix,
-#     case_name=case_name,
-#     title=title,
-#     y_label='y',
-#     save=save,
-# )
-
-# show_solution_overview(
-#     x_values=x_array, 
-#     y_values=y_array, 
-#     num_solution_matrix=solution_final,
-#     y_label='y',
-#     step_stride=step_stride,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
+show_solution_surfaces(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    case_name=f'{case_name} final',
+    title=title,
+    save=save,
+)
 
 show_solutions_2d_animation(
     x_values=x_array,
