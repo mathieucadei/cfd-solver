@@ -62,3 +62,20 @@ def compute_advection_2d_term(
     term[1:, 1:] = c * dt / dx * (u[1:, 1:] - u[1:, :-1]) + c * dt / dy * (u[1:, 1:] - u[:-1, 1:])
 
     return term
+
+def compute_convection_2d_term(
+    u: np.ndarray,
+    v: float,
+    dx: float,
+    dy: float,
+    dt: float,
+) -> np.ndarray:
+    """Compute the 2D upwind nonlinear convection u & v terms"""
+
+    u_term = np.zeros_like(u)
+    v_term = np.zeros_like(v)
+
+    u_term[1:, 1:] = u[1:, 1:] * dt / dx * (u[1:, 1:] - u[1:, :-1]) + v[1:, 1:] * dt / dy * (u[1:, 1:] - u[:-1, 1:])
+    v_term[1:, 1:] = u[1:, 1:] * dt / dx * (v[1:, 1:] - v[1:, :-1]) + v[1:, 1:] * dt / dy * (v[1:, 1:] - v[:-1, 1:])
+
+    return u_term, v_term

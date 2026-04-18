@@ -79,3 +79,23 @@ class Advection2DConfig:
     hat_end_y: float = 1.0
     u_min: float = 1.0
     u_max: float = 2.0
+
+
+@dataclass
+class Convection2DConfig:
+    """Configuration parameters for the 2D linear advection equation."""
+    domain_length_x: float = 2.0
+    domain_length_y: float = 2.0
+    num_grid_points_x: int = 81
+    num_grid_points_y: int = 81
+    max_iterations: int = 25
+    sigma: float = 1
+    wavespeed: float = 1.0
+    hat_start_x: float = 0.5
+    hat_start_y: float = 0.5
+    hat_end_x: float = 1.0
+    hat_end_y: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0
+    v_min: float = 1.0
+    v_max: float = 2.0

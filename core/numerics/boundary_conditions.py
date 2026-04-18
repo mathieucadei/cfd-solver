@@ -45,3 +45,21 @@ def apply_periodic_advection_boundary_2d(
     u[-1, :] = u_min
     u[:, 0] = u_min
     u[:, -1] = u_min
+
+def apply_periodic_convection_boundary_2d(
+    u: np.ndarray,
+    v: np.ndarray,
+    u_min: float,
+    v_min: float,
+) -> None:
+    """Apply periodic boundary updates for the 2D advection equation."""
+
+    u[0, :] = u_min
+    u[-1, :] = u_min
+    u[:, 0] = u_min
+    u[:, -1] = u_min
+
+    v[0, :] = v_min
+    v[-1, :] = v_min
+    v[:, 0] = v_min
+    v[:, -1] = v_min

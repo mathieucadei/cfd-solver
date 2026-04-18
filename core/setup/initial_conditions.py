@@ -41,3 +41,24 @@ def hat_initial_condition_2d(config: object) -> np.ndarray:
     ] = config.u_max
 
     return initial_condition
+
+
+def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
+    """Generate a 2D hat-function initial condition on the provided grid."""
+
+    dx = compute_dx_2d(config)
+    dy = compute_dy_2d(config)
+
+    u_initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.u_min))
+    v_initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.v_min))
+
+    u_initial_condition[
+        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
+        int(config.hat_start_x / dx):int(config.hat_end_x / dx + 1)
+    ] = config.u_max
+    v_initial_condition[
+        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
+        int(config.hat_start_x / dx):int(config.hat_end_x / dx + 1)
+    ] = config.v_max
+
+    return u_initial_condition, v_initial_condition
