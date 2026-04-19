@@ -30,7 +30,7 @@ def compute_diffusive_dt_1d(config: object) -> float:
     return config.sigma * dx**2 / config.viscosity
 
 
-def compute_cole_hopf_dt(config: object) -> float:
+def compute_cole_hopf_dt_1d(config: object) -> float:
     """Compute the time step for the 1D Cole-Hopf analytical solution."""
 
     dx = compute_cole_hopf_dx(config)

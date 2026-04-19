@@ -9,7 +9,7 @@ from .boundary_conditions import apply_periodic_burgers_boundary_1d
 
 from ..config import BurgersEquation1DConfig
 from ..setup.grids import compute_cole_hopf_dx, compute_dx
-from ..setup.time_stepping import compute_cole_hopf_dt, compute_diffusive_dt_1d
+from ..setup.time_stepping import compute_cole_hopf_dt_1d, compute_diffusive_dt_1d
 
 
 
@@ -26,7 +26,7 @@ def solve_burgers_equation_1d(
     elif config.grid_type == "cole_hopf":
 
         dx = compute_cole_hopf_dx(config)
-        dt = compute_cole_hopf_dt(config)
+        dt = compute_cole_hopf_dt_1d(config)
     
     else:
         raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
