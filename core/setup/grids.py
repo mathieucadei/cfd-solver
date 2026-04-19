@@ -1,4 +1,4 @@
-"""Grid generation and spacing utilities for 1D & 2D numerical solvers."""
+"""Grid generation and spacing utilities for numerical solvers."""
 
 
 
@@ -35,6 +35,6 @@ def compute_dy(config: object) -> float:
 
 
 def compute_cole_hopf_dx(config: object) -> float:
-    """Compute the uniform grid spacing for the Cole-Hopf periodic domain."""
+    """Compute the uniform grid spacing in the x-direction for the Cole-Hopf periodic domain."""
 
     return 2 * np.pi / (config.num_grid_points_x - 1)
