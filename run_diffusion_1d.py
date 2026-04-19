@@ -23,8 +23,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length = 2.0
-num_grid_points = 41
+domain_length_x = 2.0
+num_grid_points_x = 41
 max_iterations = 41
 sigma = 0.2
 viscosity = 0.3
@@ -46,8 +46,8 @@ show_individual_plots = False
 # Create the configuration object
 
 diffusion_1d_config = Diffusion1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     sigma=sigma,
     viscosity=viscosity,

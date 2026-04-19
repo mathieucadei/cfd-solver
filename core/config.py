@@ -36,8 +36,8 @@ class Convection1DConfig:
 @dataclass
 class Diffusion1DConfig:
     """Configuration parameters for the 1D diffusion equation."""
-    domain_length: float = 2.0
-    num_grid_points: int = 41
+    domain_length_x: float = 2.0
+    num_grid_points_x: int = 41
     max_iterations: int = 41
     sigma: float = 0.2
     viscosity: float = 0.3
