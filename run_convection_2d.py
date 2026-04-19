@@ -12,11 +12,8 @@ from core import (
     solve_convection_2d,
 )
 from post_processing import (
-    show_solution_contour,
-    show_solution_overview,
     show_solution_uv_2d_animations, 
     show_solution_uv_surfaces,
-    show_solution_traces,
 )
 
 
