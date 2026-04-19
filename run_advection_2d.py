@@ -7,7 +7,8 @@ import numpy as np
 from core import (
     Advection2DConfig,
     hat_initial_condition_2d,
-    make_1d_grid,
+    make_x_grid,
+    make_y_grid,
     solve_advection_2d,
 )
 from post_processing import (
@@ -68,8 +69,8 @@ advection_2d_config = Advection2DConfig(
 
 # Generate the grid and time array
 
-x_array = np.linspace(0.0, domain_length_x, num_grid_points_x)
-y_array = np.linspace(0.0, domain_length_y, num_grid_points_y)
+x_array = make_x_grid(advection_2d_config)
+y_array = make_y_grid(advection_2d_config)
 time_array = np.arange(0, advection_2d_config.max_iterations + 1)
 
 
