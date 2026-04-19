@@ -29,6 +29,11 @@ def compute_dx(config: object) -> float:
     return config.domain_length_x / (config.num_grid_points_x - 1)
 
 
+def compute_dy(config: object) -> float:
+    """Compute the uniform grid spacing in the y-direction from a 2D configuration."""
+    return config.domain_length_y / (config.num_grid_points_y - 1)
+
+
 def compute_cole_hopf_dx(config: object) -> float:
     """Compute the uniform grid spacing for the Cole-Hopf periodic domain."""
 
