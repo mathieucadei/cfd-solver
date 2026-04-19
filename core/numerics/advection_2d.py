@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_advection_2d_term
-from .boundary_conditions import apply_periodic_advection_boundary_2d
+from .boundary_conditions import apply_advection_boundary_2d
 
 from ..config import Advection2DConfig
 from ..setup.grids import compute_dx, compute_dy
@@ -37,7 +37,7 @@ def solve_advection_2d(
 
         u[1:, 1:] = un[1:, 1:] - advection_term[1:, 1:]
 
-        apply_periodic_advection_boundary_2d(u, config.u_min)
+        apply_advection_boundary_2d(u, config.u_min)
 
         history[n] = u
     

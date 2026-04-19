@@ -6,7 +6,7 @@ import numpy as np
 
 
 
-def apply_periodic_diffusion_boundary_1d(
+def apply_diffusion_boundary_1d(
     u: np.ndarray,
     un: np.ndarray,
     dt: float,
@@ -19,7 +19,7 @@ def apply_periodic_diffusion_boundary_1d(
     u[-1] = un[-1] + nu * dt / dx**2 * (un[0] - 2 * un[-1] + un[-2])
 
     
-def apply_periodic_burgers_boundary_1d(
+def apply_burgers_boundary_1d(
     u: np.ndarray,
     un: np.ndarray,
     dt: float,
@@ -36,7 +36,7 @@ def apply_periodic_burgers_boundary_1d(
     u[-1] = un[0]
 
 
-def apply_periodic_advection_boundary_2d(
+def apply_advection_boundary_2d(
     u: np.ndarray,
     u_min: float,
 ) -> None:
@@ -48,7 +48,7 @@ def apply_periodic_advection_boundary_2d(
     u[:, -1] = u_min
 
 
-def apply_periodic_convection_boundary_2d(
+def apply_convection_boundary_2d(
     u: np.ndarray,
     v: np.ndarray,
     u_min: float,
@@ -67,7 +67,7 @@ def apply_periodic_convection_boundary_2d(
     v[:, -1] = v_min
 
 
-def apply_periodic_diffusion_boundary_2d(
+def apply_diffusion_boundary_2d(
     u: np.ndarray,
     u_min: float,
 ) -> None:

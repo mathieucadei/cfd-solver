@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_convection_2d_term
-from .boundary_conditions import apply_periodic_convection_boundary_2d
+from .boundary_conditions import apply_convection_boundary_2d
 
 from ..config import Convection2DConfig
 from ..setup.grids import compute_dx, compute_dy
@@ -43,7 +43,7 @@ def solve_convection_2d(
         u[1:, 1:] = un[1:, 1:] - convection_u_term[1:, 1:]
         v[1:, 1:] = vn[1:, 1:] - convection_v_term[1:, 1:]
 
-        apply_periodic_convection_boundary_2d(u, v, config.u_min, config.v_min)
+        apply_convection_boundary_2d(u, v, config.u_min, config.v_min)
 
         u_history[n] = u
         v_history[n] = v
