@@ -10,7 +10,6 @@ from core import (
     make_x_grid,
     solve_advection_1d,
 )
-
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour,

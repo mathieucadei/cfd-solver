@@ -9,7 +9,7 @@ from .boundary_conditions import apply_periodic_diffusion_boundary_1d
 
 from ..config import Diffusion1DConfig
 from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_diffusive_dt
+from ..setup.time_stepping import compute_diffusive_dt_1d
 
 
 def solve_diffusion_1d(
@@ -19,7 +19,7 @@ def solve_diffusion_1d(
     """Solve the 1D diffusion equation with an explicit central finite-difference scheme."""
 
     dx = compute_dx(config)
-    dt = compute_diffusive_dt(config)
+    dt = compute_diffusive_dt_1d(config)
 
     u = initial_condition.copy()
 

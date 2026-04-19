@@ -22,7 +22,7 @@ def compute_convective_dt_1d(config: object) -> float:
     return config.sigma * dx / config.u_max
 
 
-def compute_diffusive_dt(config: object) -> float:
+def compute_diffusive_dt_1d(config: object) -> float:
     """Compute the time step for 1D diffusion-dominated problems."""
 
     dx = compute_dx(config)
