@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     Diffusion2DConfig,
     hat_initial_condition_2d,
-    make_1d_grid,
+    make_x_grid,
     solve_diffusion_2d,
 )
 from post_processing import (

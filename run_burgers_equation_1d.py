@@ -9,7 +9,7 @@ import numpy as np
 from core import (
     BurgersEquation1DConfig,
     hat_initial_condition_1d,
-    make_1d_grid,
+    make_x_grid,
     solve_burgers_equation_1d,
 )
 from post_processing import (
@@ -66,7 +66,7 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(burgers_1d_config)
+x_array = make_x_grid(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition

@@ -11,7 +11,7 @@ from core import (
     compute_series_terms,
     generate_mode_indices,
     hat_initial_condition_1d,
-    make_1d_grid,
+    make_x_grid,
     solve_diffusion_1d,
     solve_heat_equation_1d,
 )
@@ -71,7 +71,7 @@ diffusion_1d_config = Diffusion1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(diffusion_1d_config)
+x_array = make_x_grid(diffusion_1d_config)
 
 dt = compute_diffusive_dt(diffusion_1d_config)
 

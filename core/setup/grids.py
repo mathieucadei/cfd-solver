@@ -6,7 +6,7 @@ import numpy as np
 
 
 
-def make_1d_grid(config: object) -> np.ndarray:
+def make_x_grid(config: object) -> np.ndarray:
     """Generate a uniform 1D grid from the configuration."""
 
     return np.linspace(0.0, config.domain_length, config.num_grid_points)

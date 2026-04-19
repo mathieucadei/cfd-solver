@@ -9,7 +9,7 @@ import numpy as np
 from core import (
     Convection1DConfig,
     hat_initial_condition_1d,
-    make_1d_grid,
+    make_x_grid,
     solve_convection_1d,
 )
 from post_processing import (
@@ -60,7 +60,7 @@ convection_1d_config = Convection1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(convection_1d_config)
+x_array = make_x_grid(convection_1d_config)
 time_array = np.arange(0, convection_1d_config.max_iterations + 1)
 
 # Initialize the initial condition

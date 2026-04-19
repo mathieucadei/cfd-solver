@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     Advection1DConfig,
     hat_initial_condition_1d,
-    make_1d_grid,
+    make_x_grid,
     solve_advection_1d,
 )
 from post_processing import (
@@ -60,7 +60,7 @@ advection_1d_config = Advection1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(advection_1d_config)
+x_array = make_x_grid(advection_1d_config)
 time_array = np.arange(0, advection_1d_config.max_iterations + 1)
 
 

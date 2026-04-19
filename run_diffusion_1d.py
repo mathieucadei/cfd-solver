@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     Diffusion1DConfig,
     hat_initial_condition_1d,
-    make_1d_grid,
+    make_x_grid,
     solve_diffusion_1d,
 )
 from post_processing import (
@@ -60,7 +60,7 @@ diffusion_1d_config = Diffusion1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(diffusion_1d_config)
+x_array = make_x_grid(diffusion_1d_config)
 time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
 
 

@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     BurgersEquation2DConfig,
     hat_convective_initial_condition_2d,
-    make_1d_grid,
+    make_x_grid,
     solve_burgers_equation_2d,
 )
 from post_processing import (
