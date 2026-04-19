@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     BurgersEquation1DConfig,
     cole_hopf_initial_condition,
-    make_cole_hopf_1d_grid,
+    make_cole_hopf_x_grid,
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
@@ -65,7 +65,7 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_cole_hopf_1d_grid(burgers_1d_config)
+x_array = make_cole_hopf_x_grid(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition

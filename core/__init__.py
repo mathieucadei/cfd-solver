@@ -12,7 +12,7 @@ from .config import (
 from .setup.grids import (
     compute_cole_hopf_dx, 
     compute_dx, 
-    make_cole_hopf_1d_grid, 
+    make_cole_hopf_x_grid, 
     make_x_grid,
     make_y_grid,  
 )
