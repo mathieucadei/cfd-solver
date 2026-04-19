@@ -7,9 +7,15 @@ import numpy as np
 
 
 def make_x_grid(config: object) -> np.ndarray:
-    """Generate a uniform 1D grid from the configuration."""
+    """Generate a uniform x-coordinate grid from the configuration."""
 
-    return np.linspace(0.0, config.domain_length, config.num_grid_points)
+    return np.linspace(0.0, config.domain_length_x, config.num_grid_points_x)
+
+
+def make_y_grid(config: object) -> np.ndarray:
+    """Generate a uniform y-coordinate grid from the configuration."""
+
+    return np.linspace(0.0, config.domain_length_y, config.num_grid_points_y)
 
 
 def make_cole_hopf_1d_grid(config: object) -> np.array:
