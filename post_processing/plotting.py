@@ -483,7 +483,7 @@ def show_solution_uv_2d_animations(
     case_name: str = None,
     save: bool = False,     
 ) -> None:
-    """Create and display an animation of a 2D numerical or analytical solution."""
+    """Create and display side-by-side animations of the 2D u and v solution fields."""
     
     fig = plt.figure()
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
