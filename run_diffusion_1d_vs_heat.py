@@ -7,7 +7,7 @@ import numpy as np
 from core import (
     Diffusion1DConfig,
     compute_coefficients,
-    compute_diffusive_dt,
+    compute_diffusive_dt_1d,
     compute_series_terms,
     generate_mode_indices,
     hat_initial_condition_1d,
@@ -73,7 +73,7 @@ diffusion_1d_config = Diffusion1DConfig(
 
 x_array = make_x_grid(diffusion_1d_config)
 
-dt = compute_diffusive_dt(diffusion_1d_config)
+dt = compute_diffusive_dt_1d(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
 
