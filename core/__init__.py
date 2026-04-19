@@ -18,7 +18,7 @@ from .setup.grids import (
 )
 
 from .setup.time_stepping import (
-    compute_advective_dt,
+    compute_advective_dt_1d,
     compute_advective_dt_2d,
     compute_cole_hopf_dt,  
     compute_convective_dt, 

@@ -1,4 +1,4 @@
-"""Time-step utilities for 1D numerical and analytical solvers."""
+"""Time-step utilities for 1D & 2D numerical and analytical solvers."""
 
 
 
@@ -6,7 +6,7 @@ from .grids import compute_cole_hopf_dx, compute_dx, compute_dy
 
 
 
-def compute_advective_dt(config: object) -> float:
+def compute_advective_dt_1d(config: object) -> float:
     """Compute the time step for 1D advection problem."""
 
     dx = compute_dx(config)
@@ -55,7 +55,7 @@ def compute_convective_dt_2d(config: object) -> float:
 
 
 def compute_diffusive_dt_2d(config: object) -> float:
-    """Compute the time step for 1D diffusion-dominated problems."""
+    """Compute the time step for 2D diffusion-dominated problems."""
 
     dx = compute_dx(config)
     dy = compute_dy(config)

@@ -8,7 +8,7 @@ from .operators import compute_advection_1d_term
 
 from ..config import Advection1DConfig
 from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_advective_dt
+from ..setup.time_stepping import compute_advective_dt_1d
 
 
 
@@ -19,7 +19,7 @@ def solve_advection_1d(
     """Solve the 1D advection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
-    dt = compute_advective_dt(config)
+    dt = compute_advective_dt_1d(config)
 
     u = initial_condition.copy()
     
