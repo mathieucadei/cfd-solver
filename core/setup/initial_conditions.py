@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from .grids import compute_dx_2d, compute_dy_2d
+from .grids import compute_dx, compute_dy
 from ..analytical.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
@@ -31,8 +31,8 @@ def cole_hopf_initial_condition(x_array: np.ndarray, config: object) -> np.ndarr
 def hat_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D hat-function initial condition on the provided grid."""
 
-    dx = compute_dx_2d(config)
-    dy = compute_dy_2d(config)
+    dx = compute_dx(config)
+    dy = compute_dy(config)
 
     initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.u_min))
 
@@ -47,8 +47,8 @@ def hat_initial_condition_2d(config: object) -> np.ndarray:
 def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D hat-function initial condition on the provided grid."""
 
-    dx = compute_dx_2d(config)
-    dy = compute_dy_2d(config)
+    dx = compute_dx(config)
+    dy = compute_dy(config)
 
     u_initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.u_min))
     v_initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.v_min))
