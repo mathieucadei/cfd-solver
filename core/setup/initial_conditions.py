@@ -18,7 +18,7 @@ def hat_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
     return initial_condition
 
 
-def cole_hopf_initial_condition(x_array: np.ndarray, config: object) -> np.ndarray:
+def cole_hopf_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
     """Generate the Cole-Hopf analytical initial condition on the provided grid."""
 
     initial_condition_func = cole_hopf_1d_ufunc()
