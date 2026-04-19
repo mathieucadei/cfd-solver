@@ -1,4 +1,4 @@
-"""Initial condition utilities for 1D numerical and analytical solvers."""
+"""Initial condition utilities for 1D & 2D numerical and analytical solvers."""
 
 
 
@@ -45,7 +45,7 @@ def hat_initial_condition_2d(config: object) -> np.ndarray:
 
 
 def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
-    """Generate a 2D hat-function initial condition on the provided grid."""
+    """Generate a 2D hat-function initial condition on the provided grid for the 2D convection numerical solver."""
 
     dx = compute_dx(config)
     dy = compute_dy(config)
