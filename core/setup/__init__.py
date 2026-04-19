@@ -1,8 +1,6 @@
 from .grids import (
     compute_cole_hopf_dx, 
     compute_dx, 
-    compute_dx_2d, 
-    compute_dy_2d,
     make_cole_hopf_1d_grid, 
     make_x_grid,
     make_y_grid,  

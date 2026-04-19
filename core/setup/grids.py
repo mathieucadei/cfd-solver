@@ -40,11 +40,11 @@ def compute_cole_hopf_dx(config: object) -> float:
     return 2 * np.pi / (config.num_grid_points_x - 1)
 
 
-def compute_dx_2d(config: object) -> float:
-    """Compute the uniform grid spacing in the x-direction from a 2D configuration."""
-    return config.domain_length_x / (config.num_grid_points_x - 1)
+# def compute_dx_2d(config: object) -> float:
+#     """Compute the uniform grid spacing in the x-direction from a 2D configuration."""
+#     return config.domain_length_x / (config.num_grid_points_x - 1)
 
 
-def compute_dy_2d(config: object) -> float:
-    """Compute the uniform grid spacing in the y-direction from a 2D configuration."""
-    return config.domain_length_y / (config.num_grid_points_y - 1)
+# def compute_dy_2d(config: object) -> float:
+#     """Compute the uniform grid spacing in the y-direction from a 2D configuration."""
+#     return config.domain_length_y / (config.num_grid_points_y - 1)
