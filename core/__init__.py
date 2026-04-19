@@ -21,7 +21,7 @@ from .setup.time_stepping import (
     compute_advective_dt_1d,
     compute_advective_dt_2d,
     compute_cole_hopf_dt,  
-    compute_convective_dt, 
+    compute_convective_dt_1d, 
     compute_convective_dt_2d, 
     compute_diffusive_dt, 
     compute_diffusive_dt_2d, 

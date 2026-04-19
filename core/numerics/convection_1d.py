@@ -7,7 +7,7 @@ from .operators import compute_convection_1d_term
 
 from ..config import Convection1DConfig
 from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_convective_dt
+from ..setup.time_stepping import compute_convective_dt_1d
 
 
 
@@ -18,7 +18,7 @@ def solve_convection_1d(
     """Solve the 1D convection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
-    dt = compute_convective_dt(config)
+    dt = compute_convective_dt_1d(config)
 
     u = initial_condition.copy()
 
