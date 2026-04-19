@@ -23,8 +23,8 @@ class Advection1DConfig:
 @dataclass
 class Convection1DConfig:
     """Configuration parameters for the 1D nonlinear convection equation."""
-    domain_length: float = 2.0
-    num_grid_points: int = 101
+    domain_length_x: float = 2.0
+    num_grid_points_x: int = 101
     max_iterations: int = 100
     sigma: float = 0.2
     hat_start: float = 0.5

@@ -25,8 +25,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length = 2.0
-num_grid_points = 101
+domain_length_x = 2.0
+num_grid_points_x = 101
 max_iterations = 100
 sigma = 0.5
 hat_start = 0.5
@@ -47,8 +47,8 @@ show_individual_plots = False
 # Create the configuration object
 
 convection_1d_config = Convection1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     sigma=sigma,
     hat_start=hat_start,
