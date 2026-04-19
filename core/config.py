@@ -9,8 +9,8 @@ from dataclasses import dataclass
 @dataclass
 class Advection1DConfig:
     """Configuration parameters for the 1D linear advection equation."""
-    domain_length: float = 2.0
-    num_grid_points: int = 81
+    domain_length_x: float = 2.0
+    num_grid_points_x: int = 81
     max_iterations: int = 25
     sigma: float = 1
     wavespeed: float = 1.0

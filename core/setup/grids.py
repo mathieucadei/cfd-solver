@@ -26,7 +26,7 @@ def make_cole_hopf_1d_grid(config: object) -> np.array:
 def compute_dx(config: object) -> float:
     """Compute the uniform grid spacing in the x-direction from a 1D configuration."""
     
-    return config.domain_length / (config.num_grid_points - 1)
+    return config.domain_length_x / (config.num_grid_points_x - 1)
 
 
 def compute_cole_hopf_dx(config: object) -> float:

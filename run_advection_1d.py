@@ -10,6 +10,7 @@ from core import (
     make_x_grid,
     solve_advection_1d,
 )
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour,
@@ -23,8 +24,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length = 2.0
-num_grid_points = 81
+domain_length_x = 2.0
+num_grid_points_x = 81
 max_iterations = 80
 sigma = 1
 wavespeed = 1.0
@@ -46,8 +47,8 @@ show_individual_plots = False
 # Create the configuration object
 
 advection_1d_config = Advection1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     sigma=sigma,
     wavespeed=wavespeed,
