@@ -8,6 +8,7 @@ from core import (
     BurgersEquation2DConfig,
     hat_convective_initial_condition_2d,
     make_x_grid,
+    make_y_grid,
     solve_burgers_equation_2d,
 )
 from post_processing import (
@@ -50,7 +51,7 @@ save = False
 
 # Create the configuration object
 
-advection_2d_config = BurgersEquation2DConfig(
+burgers_equation_2d_config = BurgersEquation2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -71,20 +72,20 @@ advection_2d_config = BurgersEquation2DConfig(
 
 # Generate the grid and time array
 
-x_array = np.linspace(0.0, domain_length_x, num_grid_points_x)
-y_array = np.linspace(0.0, domain_length_y, num_grid_points_y)
-time_array = np.arange(0, advection_2d_config.max_iterations + 1)
+x_array = make_x_grid(burgers_equation_2d_config)
+y_array = make_y_grid(burgers_equation_2d_config)
+time_array = np.arange(0, burgers_equation_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_convective_initial_condition_2d(advection_2d_config)
+initial_condition = hat_convective_initial_condition_2d(burgers_equation_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_burgers_equation_2d(initial_condition, advection_2d_config)
+solution_matrix = solve_burgers_equation_2d(initial_condition, burgers_equation_2d_config)
 
 u_solution_matrix = solution_matrix[0]
 
