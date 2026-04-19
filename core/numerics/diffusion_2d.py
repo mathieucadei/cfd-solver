@@ -17,7 +17,7 @@ def solve_diffusion_2d(
     initial_condition: np.ndarray,
     config: Diffusion2DConfig,
 ) -> np.ndarray:
-    """Solve the 2D diffusion equation with an explicit upwind finite-difference scheme."""
+    """Solve the 2D diffusion equation with an explicit central finite-difference scheme."""
 
     dx = compute_dx(config)
     dy = compute_dy(config)
