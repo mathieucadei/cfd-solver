@@ -1,4 +1,4 @@
-"""Run the 2D convection solver and generate solution plots."""
+"""Run the 2D Burgers' equation solver and generate solution plots."""
 
 
 

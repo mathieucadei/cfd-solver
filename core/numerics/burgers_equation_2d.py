@@ -7,7 +7,7 @@ import numpy as np
 from .operators import compute_convection_2d_term, compute_diffusion_2d_term
 from .boundary_conditions import apply_periodic_convection_boundary_2d
 
-from ..config import Advection2DConfig
+from ..config import BurgersEquation2DConfig
 from ..setup.grids import compute_dx, compute_dy
 from ..setup.time_stepping import compute_diffusive_dt_2d
 
@@ -15,7 +15,7 @@ from ..setup.time_stepping import compute_diffusive_dt_2d
 
 def solve_burgers_equation_2d(
     initial_condition: np.ndarray,
-    config: Advection2DConfig,
+    config: BurgersEquation2DConfig,
 ) -> np.ndarray:
     """Solve the 2D Burgers' equation with an explicit finite-difference scheme."""
 
@@ -26,8 +26,8 @@ def solve_burgers_equation_2d(
     u = initial_condition[0].copy()
     v = initial_condition[1].copy()
     
-    u_history = np.zeros((config.max_iterations + 1, config.num_grid_points_x, config.num_grid_points_y))
-    v_history = np.zeros((config.max_iterations + 1, config.num_grid_points_x, config.num_grid_points_y))
+    u_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
+    v_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
 
     u_history[0] = initial_condition[0]
     v_history[0] = initial_condition[1]

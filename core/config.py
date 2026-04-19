@@ -1,4 +1,4 @@
-"""Configuration dataclasses for 1D numerical and analytical simulations."""
+"""Configuration dataclasses for 1D & 2D numerical and analytical simulations."""
 
 
 
@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Advection1DConfig:
-    """Configuration parameters for the 1D linear advection equation."""
+    """Configuration parameters for the 1D advection equation."""
     domain_length_x: float = 2.0
     num_grid_points_x: int = 81
     max_iterations: int = 25
@@ -22,7 +22,7 @@ class Advection1DConfig:
 
 @dataclass
 class Convection1DConfig:
-    """Configuration parameters for the 1D nonlinear convection equation."""
+    """Configuration parameters for the 1D convection equation."""
     domain_length_x: float = 2.0
     num_grid_points_x: int = 101
     max_iterations: int = 100
@@ -65,7 +65,7 @@ class BurgersEquation1DConfig:
 
 @dataclass
 class Advection2DConfig:
-    """Configuration parameters for the 1D linear advection equation."""
+    """Configuration parameters for the 2D linear advection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
     num_grid_points_x: int = 81
@@ -83,7 +83,7 @@ class Advection2DConfig:
 
 @dataclass
 class Convection2DConfig:
-    """Configuration parameters for the 2D linear advection equation."""
+    """Configuration parameters for the 2D convection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
     num_grid_points_x: int = 81
@@ -121,7 +121,7 @@ class Diffusion2DConfig:
 
 @dataclass
 class BurgersEquation2DConfig:
-    """Configuration parameters for the 2D linear advection equation."""
+    """Configuration parameters for the 2D Burgers equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
     num_grid_points_x: int = 41

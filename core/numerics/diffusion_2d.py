@@ -7,7 +7,7 @@ import numpy as np
 from .operators import compute_diffusion_2d_term
 from .boundary_conditions import apply_periodic_diffusion_boundary_2d
 
-from ..config import Advection2DConfig
+from ..config import Diffusion2DConfig
 from ..setup.grids import compute_dx, compute_dy
 from ..setup.time_stepping import compute_diffusive_dt_2d
 
@@ -15,7 +15,7 @@ from ..setup.time_stepping import compute_diffusive_dt_2d
 
 def solve_diffusion_2d(
     initial_condition: np.ndarray,
-    config: Advection2DConfig,
+    config: Diffusion2DConfig,
 ) -> np.ndarray:
     """Solve the 2D diffusion equation with an explicit upwind finite-difference scheme."""
 
