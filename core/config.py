@@ -50,8 +50,8 @@ class Diffusion1DConfig:
 @dataclass
 class BurgersEquation1DConfig:
     """Configuration parameters for the 1D Burgers' equation."""
-    domain_length: float = 2.0
-    num_grid_points: int = 101
+    domain_length_x: float = 2.0
+    num_grid_points_x: int = 101
     max_iterations: int = 100
     time_step: float = 0.0025
     sigma: float = 0.2
