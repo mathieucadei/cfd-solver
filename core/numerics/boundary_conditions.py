@@ -13,7 +13,7 @@ def apply_diffusion_boundary_1d(
     dx: float,
     nu: float,
 ) -> None:
-    """Apply periodic boundary updates for the 1D diffusion equation."""
+    """Apply boundary updates for the 1D diffusion equation."""
 
     u[0] = un[0] + nu * dt / dx**2 * (un[1] - 2 * un[0] + un[-1])
     u[-1] = un[-1] + nu * dt / dx**2 * (un[0] - 2 * un[-1] + un[-2])
@@ -26,7 +26,7 @@ def apply_burgers_boundary_1d(
     dx: float,
     nu: float,
 ) -> None:
-    """Apply periodic boundary updates for the 1D Burgers' equation."""
+    """Apply boundary updates for the 1D Burgers' equation."""
 
     u[0] = un[0] - un[0] * dt / dx * (un[0] - un[-2]) \
         + nu * dt / dx**2 * (un[1] - 2 * un[0] + un[-2])
@@ -40,7 +40,7 @@ def apply_advection_boundary_2d(
     u: np.ndarray,
     u_min: float,
 ) -> None:
-    """Apply periodic boundary updates for the 2D advection equation."""
+    """Apply boundary updates for the 2D advection equation."""
 
     u[0, :] = u_min
     u[-1, :] = u_min
@@ -54,7 +54,7 @@ def apply_convection_boundary_2d(
     u_min: float,
     v_min: float,
 ) -> None:
-    """Apply periodic boundary updates for the 2D convection equation."""
+    """Apply boundary updates for the 2D convection equation."""
 
     u[0, :] = u_min
     u[-1, :] = u_min
@@ -71,7 +71,7 @@ def apply_diffusion_boundary_2d(
     u: np.ndarray,
     u_min: float,
 ) -> None:
-    """Apply periodic boundary updates for the 2D diffusion equation."""
+    """Apply boundary updates for the 2D diffusion equation."""
 
     u[0, :] = u_min
     u[-1, :] = u_min
