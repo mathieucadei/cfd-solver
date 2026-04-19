@@ -42,7 +42,7 @@ def plot_solution_traces(
         else:
             raise ValueError('axis must be 0 or 1')
         
-        num_label = f'Numerical ({cut_label}: {np.max(cut_values)/n_cuts*n:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {np.max(cut_values)/n_cuts*n:.3g}'
+        num_label = f'Numerical ({cut_label}: {cut_values[n]:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.3g}'
         
         ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
     
