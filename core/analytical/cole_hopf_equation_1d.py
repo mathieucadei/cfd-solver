@@ -34,7 +34,7 @@ def solve_cole_hopf_1d(
 
     dt = compute_cole_hopf_dt(config)
 
-    history = np.zeros((config.max_iterations + 1, config.num_grid_points))
+    history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
     cole_hopf_func = cole_hopf_1d_ufunc()
 

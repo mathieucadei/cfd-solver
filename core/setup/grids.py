@@ -21,7 +21,7 @@ def make_y_grid(config: object) -> np.ndarray:
 def make_cole_hopf_1d_grid(config: object) -> np.array:
     """Generate the 1D periodic grid used for the Cole-Hopf analytical solution."""
 
-    return np.linspace(0, 2 * np.pi, config.num_grid_points)
+    return np.linspace(0, 2 * np.pi, config.num_grid_points_x)
 
 def compute_dx(config: object) -> float:
     """Compute the uniform grid spacing in the x-direction from a 1D configuration."""
@@ -32,7 +32,7 @@ def compute_dx(config: object) -> float:
 def compute_cole_hopf_dx(config: object) -> float:
     """Compute the uniform grid spacing for the Cole-Hopf periodic domain."""
 
-    return 2 * np.pi / (config.num_grid_points - 1)
+    return 2 * np.pi / (config.num_grid_points_x - 1)
 
 
 def compute_dx_2d(config: object) -> float:

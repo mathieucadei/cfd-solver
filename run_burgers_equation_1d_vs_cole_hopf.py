@@ -24,8 +24,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length = 6.0
-num_grid_points = 101
+domain_length_x = 6.0
+num_grid_points_x = 101
 max_iterations = 100
 time_step = 0.0025
 grid_type: str = "cole_hopf"
@@ -49,8 +49,8 @@ show_individual_plots = False
 # Create the configuration object
 
 burgers_1d_config = BurgersEquation1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     time_step=time_step,
     grid_type=grid_type,
