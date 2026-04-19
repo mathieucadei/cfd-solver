@@ -8,6 +8,7 @@ from core import (
     Diffusion2DConfig,
     hat_initial_condition_2d,
     make_x_grid,
+    make_y_grid,
     solve_diffusion_2d,
 )
 from post_processing import (
@@ -68,8 +69,8 @@ diffusion_2d_config = Diffusion2DConfig(
 
 # Generate the grid and time array
 
-x_array = np.linspace(0.0, domain_length_x, num_grid_points_x)
-y_array = np.linspace(0.0, domain_length_y, num_grid_points_y)
+x_array = make_x_grid(diffusion_2d_config)
+y_array = make_y_grid(diffusion_2d_config)
 time_array = np.arange(0, diffusion_2d_config.max_iterations + 1)
 
 
