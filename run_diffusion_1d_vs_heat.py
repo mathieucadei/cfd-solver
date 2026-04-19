@@ -7,11 +7,11 @@ import numpy as np
 from core import (
     Diffusion1DConfig,
     compute_coefficients,
-    compute_diffusive_dt,
+    compute_diffusive_dt_1d,
     compute_series_terms,
     generate_mode_indices,
-    hat_initial_condition,
-    make_1d_grid,
+    hat_initial_condition_1d,
+    make_x_grid,
     solve_diffusion_1d,
     solve_heat_equation_1d,
 )
@@ -28,8 +28,8 @@ from post_processing import (
 # Pre-processing
 # Numerical simulation parameters
 
-domain_length = 2.0
-num_grid_points = 101
+domain_length_x = 2.0
+num_grid_points_x = 101
 max_iterations = 1001
 sigma = 0.2
 viscosity = 0.3
@@ -51,13 +51,14 @@ step_stride = 100
 case_name = '1d diffusion vs heat'
 title = True
 save = False
+show_individual_plots = False
 
 
 # Create the configuration object
 
 diffusion_1d_config = Diffusion1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     sigma=sigma,
     viscosity=viscosity,
@@ -70,16 +71,16 @@ diffusion_1d_config = Diffusion1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_1d_grid(diffusion_1d_config)
+x_array = make_x_grid(diffusion_1d_config)
 
-dt = compute_diffusive_dt(diffusion_1d_config)
+dt = compute_diffusive_dt_1d(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
 
 
 # Initialize the numerical initial condition
 
-initial_condition = hat_initial_condition(x_array, diffusion_1d_config)
+initial_condition = hat_initial_condition_1d(x_array, diffusion_1d_config)
 
 
 # Fourier-series setup
@@ -100,12 +101,12 @@ series_terms = compute_series_terms(mode_indices, mode_coefficients, x_array, ba
 # Solve
 # Numerical diffusion equation
 
-history_num = solve_diffusion_1d(initial_condition, diffusion_1d_config)
+solution_history_num = solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 
 # Heat analytical equation
 
-history_ana = solve_heat_equation_1d(
+solution_history_ana = solve_heat_equation_1d(
     series_terms, 
     mode_indices,
     x_array,
@@ -117,53 +118,54 @@ history_ana = solve_heat_equation_1d(
 
 # Post-processing
 
-show_solution_traces(
-    x_values=x_array,
-    num_solution_matrix=history_num,
-    cut_values=time_array,
-    ana_solution_matrix=history_ana,
-    step_stride=step_stride,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+if show_individual_plots:
+    show_solution_traces(
+        x_values=x_array,
+        cut_values=time_array,
+        num_solution_matrix=solution_history_num,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_traces(
-    x_values=time_array,
-    num_solution_matrix=history_num,
-    cut_values=x_array,
-    axis=1,
-    ana_solution_matrix=history_ana,
-    step_stride=step_stride,
-    cut_label='x',
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_traces(
+        x_values=time_array,
+        cut_values=x_array,
+        num_solution_matrix=solution_history_num,
+        axis=1,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        cut_label='x',
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_contour(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=history_num,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_contour(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_surface(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=history_num,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_surface(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
 show_solution_overview(
     x_values=x_array, 
     y_values=time_array, 
-    num_solution_matrix=history_num,
-    ana_solution_matrix=history_ana, 
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana, 
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -172,8 +174,8 @@ show_solution_overview(
 
 show_solution_1d_animation(
     x_values=x_array,
-    num_solution_matrix=history_num,
-    ana_solution_matrix=history_ana, 
+    num_solution_history=solution_history_num,
+    ana_solution_history=solution_history_ana, 
     case_name=case_name,
     save=save,
 )

@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D nonlinear convection equation."""
+"""Numerical solver for the 1D convection equation."""
 
 
 import numpy as np
@@ -7,7 +7,7 @@ from .operators import compute_convection_1d_term
 
 from ..config import Convection1DConfig
 from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_convective_dt
+from ..setup.time_stepping import compute_convective_dt_1d
 
 
 
@@ -15,14 +15,14 @@ def solve_convection_1d(
     initial_condition: np.ndarray,
     config: Convection1DConfig,
 ) -> np.ndarray:
-    """Solve the 1D nonlinear convection equation with an explicit upwind finite-difference scheme."""
+    """Solve the 1D convection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
-    dt = compute_convective_dt(config)
+    dt = compute_convective_dt_1d(config)
 
     u = initial_condition.copy()
 
-    history = np.zeros((config.max_iterations + 1, config.num_grid_points))
+    history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
     history[0] = initial_condition
 

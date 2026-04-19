@@ -6,8 +6,8 @@ import numpy as np
 
 from core import (
     BurgersEquation1DConfig,
-    cole_hopf_initial_condition,
-    make_cole_hopf_1d_grid,
+    cole_hopf_initial_condition_1d,
+    make_cole_hopf_x_grid,
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
@@ -24,8 +24,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length = 6.0
-num_grid_points = 101
+domain_length_x = 6.0
+num_grid_points_x = 101
 max_iterations = 100
 time_step = 0.0025
 grid_type: str = "cole_hopf"
@@ -43,13 +43,14 @@ step_stride = 20
 case_name = '1d burgers vs cole-hopf'
 title = True
 save = False
+show_individual_plots = False
 
 
 # Create the configuration object
 
 burgers_1d_config = BurgersEquation1DConfig(
-    domain_length=domain_length,
-    num_grid_points=num_grid_points,
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
     time_step=time_step,
     grid_type=grid_type,
@@ -64,76 +65,77 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_cole_hopf_1d_grid(burgers_1d_config)
+x_array = make_cole_hopf_x_grid(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = cole_hopf_initial_condition(x_array, burgers_1d_config)
+initial_condition = cole_hopf_initial_condition_1d(x_array, burgers_1d_config)
 
 
 
 # Solve
 # Numerical Burgers' equation
 
-history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
+solution_history_num = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 
 # Analytical Cole-Hopf equation
 
-history_ana = solve_cole_hopf_1d(x_array, burgers_1d_config)
+solution_history_ana = solve_cole_hopf_1d(x_array, burgers_1d_config)
 
 
 
 # Post-processing
 
-show_solution_traces(
-    x_values=x_array,
-    num_solution_matrix=history_num,
-    cut_values=time_array,
-    ana_solution_matrix=history_ana,
-    step_stride=step_stride,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+if show_individual_plots:
+    show_solution_traces(
+        x_values=x_array,
+        cut_values=time_array,
+        num_solution_matrix=solution_history_num,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_traces(
-    x_values=time_array,
-    num_solution_matrix=history_num,
-    cut_values=x_array,
-    axis=1,
-    ana_solution_matrix=history_ana,
-    step_stride=step_stride,
-    cut_label='x',
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_traces(
+        x_values=time_array,
+        cut_values=x_array,
+        num_solution_matrix=solution_history_num,
+        axis=1,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        cut_label='x',
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_contour(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=history_num,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_contour(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
-show_solution_surface(
-    x_values=x_array,
-    y_values=time_array,
-    solution_matrix=history_num,
-    case_name=case_name,
-    title=title,
-    save=save,
-)
+    show_solution_surface(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
 
 show_solution_overview(
     x_values=x_array, 
     y_values=time_array, 
-    num_solution_matrix=history_num, 
-    ana_solution_matrix=history_ana, 
+    num_solution_matrix=solution_history_num, 
+    ana_solution_matrix=solution_history_ana, 
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -142,8 +144,8 @@ show_solution_overview(
 
 show_solution_1d_animation(
     x_values=x_array,
-    num_solution_matrix=history_num,
-    ana_solution_matrix=history_ana, 
+    num_solution_history=solution_history_num,
+    ana_solution_history=solution_history_ana, 
     case_name=case_name,
     save=save,
 )
