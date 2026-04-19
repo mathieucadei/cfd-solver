@@ -8,7 +8,7 @@ from .operators import compute_convection_2d_term
 from .boundary_conditions import apply_periodic_convection_boundary_2d
 
 from ..config import Advection2DConfig
-from ..setup.grids import compute_dx_2d, compute_dy_2d
+from ..setup.grids import compute_dx, compute_dy
 from ..setup.time_stepping import compute_convective_dt_2d
 
 
@@ -19,8 +19,8 @@ def solve_convection_2d(
 ) -> np.ndarray:
     """Solve the 2D linear advection equation with an explicit upwind finite-difference scheme."""
 
-    dx = compute_dx_2d(config)
-    dy = compute_dy_2d(config)
+    dx = compute_dx(config)
+    dy = compute_dy(config)
     dt = compute_convective_dt_2d(config)
 
     u = initial_condition[0].copy()
