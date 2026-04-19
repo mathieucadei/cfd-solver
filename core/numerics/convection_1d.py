@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D nonlinear convection equation."""
+"""Numerical solver for the 1D convection equation."""
 
 
 import numpy as np
@@ -15,7 +15,7 @@ def solve_convection_1d(
     initial_condition: np.ndarray,
     config: Convection1DConfig,
 ) -> np.ndarray:
-    """Solve the 1D nonlinear convection equation with an explicit upwind finite-difference scheme."""
+    """Solve the 1D convection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
     dt = compute_convective_dt(config)

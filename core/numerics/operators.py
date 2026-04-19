@@ -26,7 +26,7 @@ def compute_convection_1d_term(
     dx: float,
     dt: float,
 ) -> np.ndarray:
-    """Compute the 1D upwind nonlinear convection term."""
+    """Compute the 1D upwind convection term."""
     term = np.zeros_like(u)
 
     term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
@@ -70,7 +70,7 @@ def compute_convection_2d_term(
     dy: float,
     dt: float,
 ) -> np.ndarray:
-    """Compute the 2D upwind nonlinear convection u & v terms"""
+    """Compute the 2D upwind convection u & v terms"""
 
     u_term = np.zeros_like(u)
     v_term = np.zeros_like(v)

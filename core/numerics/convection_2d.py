@@ -1,4 +1,4 @@
-"""Numerical solver for the 2D linear advection equation."""
+"""Numerical solver for the 2D advection equation."""
 
 
 
@@ -17,7 +17,7 @@ def solve_convection_2d(
     initial_condition: np.ndarray,
     config: Advection2DConfig,
 ) -> np.ndarray:
-    """Solve the 2D linear advection equation with an explicit upwind finite-difference scheme."""
+    """Solve the 2D advection equation with an explicit upwind finite-difference scheme."""
 
     dx = compute_dx(config)
     dy = compute_dy(config)
