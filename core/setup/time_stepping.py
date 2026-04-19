@@ -1,6 +1,7 @@
 """Time-step utilities for 1D & 2D numerical and analytical solvers."""
 
 
+import numpy as np
 
 from .grids import compute_cole_hopf_dx, compute_dx, compute_dy
 
@@ -43,7 +44,7 @@ def compute_advective_dt_2d(config: object) -> float:
 
     dx = compute_dx(config)
     
-    return config.sigma * dx /config.wavespeed
+    return config.sigma * dx / config.wavespeed
 
 
 def compute_convective_dt_2d(config: object) -> float:
@@ -51,7 +52,7 @@ def compute_convective_dt_2d(config: object) -> float:
 
     dx = compute_dx(config)
     
-    return config.sigma * dx /config.u_max
+    return config.sigma * dx / np.max(config.u_max, config.v_max)
 
 
 def compute_diffusive_dt_2d(config: object) -> float:
