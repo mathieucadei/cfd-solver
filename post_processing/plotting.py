@@ -246,7 +246,7 @@ def show_solution_uv_surfaces(
     title: bool = False,
     save: bool = False,     
 ) -> None:
-    """Create and display a standalone 3D surface plot of a 2D solution field."""
+    """Create and display side-by-side 3D surface plots for the 2D u and v solution fields."""
 
     fig = plt.figure()
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
@@ -470,7 +470,7 @@ def show_solution_2d_animation(
     plt.show()
 
 
-def show_solutions_2d_animation(
+def show_solution_uv_2d_animations(
     x_values: np.ndarray,
     y_values: np.ndarray,
     u_solution_history: np.ndarray,

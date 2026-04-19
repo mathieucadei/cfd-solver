@@ -12,10 +12,10 @@ from core import (
     solve_convection_2d,
 )
 from post_processing import (
-    show_solutions_2d_animation,
     show_solution_contour,
     show_solution_overview,
-    show_solution_uv_surfaces, 
+    show_solution_uv_2d_animations, 
+    show_solution_uv_surfaces,
     show_solution_traces,
 )
 
@@ -109,7 +109,7 @@ show_solution_uv_surfaces(
     save=save,
 )
 
-show_solutions_2d_animation(
+show_solution_uv_2d_animations(
     x_values=x_array,
     y_values=y_array, 
     u_solution_history=u_solution_matrix,
