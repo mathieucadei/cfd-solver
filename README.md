@@ -21,6 +21,16 @@ Planned next steps:
 * improved testing and documentation
 * incompressible Navier-Stokes components
 
+## Example visualizations
+
+### 2D diffusion
+
+![2D diffusion](docs/images/diffusion_2d.gif)
+
+### Validation: 1D diffusion vs heat equation
+
+![1D diffusion vs heat equation](docs/images/diffusion_1d_vs_heat.png)
+
 ## Implemented models
 
 The current solvers advance:
