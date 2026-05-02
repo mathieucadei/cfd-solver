@@ -56,7 +56,7 @@ def plot_solution_traces(
             else:
                 raise ValueError('axis must be 0 or 1')
         
-            ana_label = f'Analytical ({cut_label}: {n})'
+            ana_label = f'Analytical ({cut_label}: {cut_values[n]:.3g})'
         
             ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), linestyle='--', label=ana_label)
     
