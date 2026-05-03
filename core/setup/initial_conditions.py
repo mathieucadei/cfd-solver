@@ -63,3 +63,16 @@ def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
     ] = config.v_max
 
     return u_initial_condition, v_initial_condition
+
+
+def laplace_initial_condition_2d(y_array, config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D Laplace numerical solver."""
+
+    p = np.zeros((config.num_grid_points_y, config.num_grid_points_x), dtype=float)
+
+    p[:, 0] = 0
+    p[:, -1] = y_array
+    p[0, :] = p[1, :]  # dp/dy = 0 @ y = 0
+    p[-1, :] = p[-2, :]  # dp/dy = 0 @ y = 1
+
+    return p

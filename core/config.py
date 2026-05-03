@@ -137,3 +137,13 @@ class BurgersEquation2DConfig:
     u_max: float = 2.0
     v_min: float = 1.0
     v_max: float = 2.0
+
+
+@dataclass
+class Laplace2DConfig:
+    """Configuration parameters for the 2D Laplace equation."""
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_grid_points_x: int = 31
+    num_grid_points_y: int = 31
+    l1_norm_target: float = 1e-4
