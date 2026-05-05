@@ -77,3 +77,18 @@ def apply_diffusion_boundary_2d(
     u[-1, :] = u_min
     u[:, 0] = u_min
     u[:, -1] = u_min
+
+
+def apply_laplace_boundary_2d(
+    p: np.ndarray,
+    bottom: float | np.ndarray,
+    top: float | np.ndarray,
+    right: float | np.ndarray,
+    left: float | np.ndarray,
+) -> None:
+    """Apply boundary updates for the 2D Laplace equation."""
+
+    p[:, 0] = left  # p = left @ x = 0
+    p[:, -1] = right  # p = right @ x = 2
+    p[0, :] = bottom  # p = bottom @ y = 0
+    p[-1, :] = top  # p = top @ y = 1

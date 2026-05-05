@@ -95,3 +95,17 @@ def compute_diffusion_2d_term(
     term[1:-1, 1:-1] = nu * dt / dx**2 * (u[1:-1, 2:] - 2 * u[1:-1, 1:-1] + u[1:-1, 0:-2]) + nu * dt / dy**2 * (u[2:,1: -1] - 2 * u[1:-1, 1:-1] + u[0:-2, 1:-1])
 
     return term
+
+
+def compute_laplace_2d_term(
+    p: np.ndarray,
+    dx: float,
+    dy: float,
+) -> np.ndarray:
+    """Compute the 2D central-difference Laplace term."""
+
+    term = np.zeros_like(p)
+
+    term[1:-1, 1:-1] = (p[1:-1, 2:] + p[1:-1, 0:-2]) * dy**2 + (p[2:, 1:-1] + p[0:-2, 1:-1]) * dx**2 / (2 * (dx**2 + dy**2))
+
+    return term
