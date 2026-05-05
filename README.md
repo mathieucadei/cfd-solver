@@ -10,16 +10,31 @@ Currently implemented:
 * 1D and 2D nonlinear convection
 * 1D and 2D diffusion
 * 1D and 2D Burgers equation
+* 2D Laplace equation
+* 2D Poisson equation with configurable source terms
 * uniform grid generation
 * hat-function and Cole-Hopf initial conditions
-* explicit finite-difference solvers
+* explicit finite-difference time-marching solvers
+* iterative pressure/potential solves using L1 convergence or fixed iteration limits
 * solution plots and animations
 
 Planned next steps:
 
-* validation of the 2D solvers
-* improved testing and documentation
-* incompressible Navier-Stokes components
+* validate 2D Laplace and Poisson solvers
+* use the Poisson solver as a pressure-projection building block
+* add tests for boundary conditions, source placement, and convergence behavior
+* continue toward incompressible Navier-Stokes / cavity flow
+
+## Project structure
+
+```text
+core/config.py              simulation dataclasses
+core/setup/                 grids, time steps, initial conditions
+core/numerics/              finite-difference solvers
+core/analytical/            analytical reference solutions
+post_processing/            plotting and animation helpers
+run_*.py                    executable examples
+```
 
 ## Example visualizations
 
@@ -31,9 +46,13 @@ Planned next steps:
 
 ![1D diffusion vs heat equation](docs/images/diffusion_1d_vs_heat_solution.png)
 
+### 2D Poisson equation
+
+![2D Poisson equation](docs/images/poisson_2d_solution.png)
+
 ## Implemented models
 
-The current solvers advance:
+The current solvers model:
 
 * the 1D linear advection equation:
 
@@ -87,6 +106,18 @@ The current solvers advance:
 
   using an explicit upwind scheme for the convective terms and a central scheme for the diffusive terms.
 
+* the 2D Laplace equation:
+
+  d²p/dx² + d²p/dy² = 0
+
+  solved iteratively with finite differences until an L1 target is reached.
+
+* the 2D Poisson equation:
+
+  d²p/dx² + d²p/dy² = b
+
+  solved iteratively with configurable positive and negative source terms.
+
 ## Validation
 
 This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
@@ -110,4 +141,6 @@ python run_diffusion_2d.py
 python run_burgers_equation_1d.py
 python run_burgers_equation_1d_vs_cole_hopf.py
 python run_burgers_equation_2d.py
+python run_laplace_2d.py
+python run_poisson_2d.py
 ```
