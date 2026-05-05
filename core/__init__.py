@@ -49,6 +49,7 @@ from .numerics import (
     solve_diffusion_1d, 
     solve_diffusion_2d,
     solve_laplace_2d,
+    solve_poisson_2d,
 )
 
 

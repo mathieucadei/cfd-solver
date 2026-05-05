@@ -10,9 +10,9 @@ from core import (
     poisson_initial_condition_2d,
     make_x_grid,
     make_y_grid,
-    solve_laplace_2d,
+    solve_poisson_2d,
 )
-from core.numerics.poisson_2d import solve_poisson_2d
+
 from post_processing import (
     show_solution_2d_animation,
     show_solution_contour,
