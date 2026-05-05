@@ -92,3 +92,14 @@ def apply_laplace_boundary_2d(
     p[:, -1] = right  # p = right @ x = 2
     p[0, :] = bottom  # p = bottom @ y = 0
     p[-1, :] = top  # p = top @ y = 1
+
+
+def apply_poisson_boundary_2d(
+    p: np.ndarray,
+) -> None:
+    """Apply boundary updates for the 2D Laplace equation."""
+
+    p[0, :] = 0
+    p[1, :] = 0
+    p[:, 0] = 0
+    p[:, -1] = 0

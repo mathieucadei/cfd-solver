@@ -1,8 +1,9 @@
 """Configuration dataclasses for 1D & 2D numerical and analytical simulations."""
 
 
+import numpy as np
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 
@@ -146,4 +147,26 @@ class Laplace2DConfig:
     domain_length_y: float = 1.0
     num_grid_points_x: int = 31
     num_grid_points_y: int = 31
+    l1_norm_target: float = 1e-4
+
+
+@dataclass
+class SourceTerm:
+    x: float
+    y: float
+    value: float
+
+
+@dataclass
+class Poisson2DConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_grid_points_x: int = 31
+    num_grid_points_y: int = 31
+    max_iterations: int = 100
+    pressure_init: float = 0.0
+    source_terms: list[SourceTerm] = field(default_factory=lambda: [
+        SourceTerm(x=0.3, y=0.5, value=10.0),
+        SourceTerm(x=0.6, y=0.2, value=-5.0),
+    ])
     l1_norm_target: float = 1e-4

@@ -7,3 +7,4 @@ from .diffusion_2d import solve_diffusion_2d
 from .burgers_equation_1d import solve_burgers_equation_1d
 from .burgers_equation_2d import solve_burgers_equation_2d
 from .laplace_2d import solve_laplace_2d
+from .poisson_2d import solve_poisson_2d
