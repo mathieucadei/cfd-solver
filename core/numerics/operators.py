@@ -109,3 +109,25 @@ def compute_laplace_2d_term(
     term[1:-1, 1:-1] = (p[1:-1, 2:] + p[1:-1, 0:-2]) * dy**2 + (p[2:, 1:-1] + p[0:-2, 1:-1]) * dx**2 / (2 * (dx**2 + dy**2))
 
     return term
+
+
+def compute_source_term_2d(
+    b: np.ndarray,
+    rho: float,
+    dt: float,
+    u: np.ndarray,
+    v: np.ndarray,
+    dx: float,
+    dy: float,
+) -> np.ndarray:
+    """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
+
+    b[1:-1, 1:-1] = (rho * (1 / dt * 
+                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) / 
+                     (2 * dx) + (v[2:, 1:-1] - v[0:-2, 1:-1]) / (2 * dy)) -
+                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) / (2 * dx))**2 -
+                      2 * ((u[2:, 1:-1] - u[0:-2, 1:-1]) / (2 * dy) *
+                           (v[1:-1, 2:] - v[1:-1, 0:-2]) / (2 * dx))-
+                          ((v[2:, 1:-1] - v[0:-2, 1:-1]) / (2 * dy))**2))
+
+    return b
