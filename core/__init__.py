@@ -8,6 +8,8 @@ from .config import (
     BurgersEquation1DConfig, 
     BurgersEquation2DConfig,
     Laplace2DConfig,
+    SourceTerm,
+    Poisson2DConfig,
 )
 
 from .setup.grids import (
@@ -34,6 +36,7 @@ from .setup.initial_conditions import (
     hat_initial_condition_1d, 
     hat_initial_condition_2d, 
     laplace_initial_condition_2d,
+    poisson_initial_condition_2d,
 )
 
 from .numerics import (
@@ -46,6 +49,7 @@ from .numerics import (
     solve_diffusion_1d, 
     solve_diffusion_2d,
     solve_laplace_2d,
+    solve_poisson_2d,
 )
 
 
