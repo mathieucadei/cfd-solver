@@ -13,8 +13,11 @@ from ..setup.grids import compute_dx, compute_dy
 
 
 def solve_laplace_2d(
-    y_array: np.ndarray,
     initial_condition: np.ndarray,
+    bottom_boundary: float | np.ndarray,
+    top_boundary: float | np.ndarray,
+    right_boundary: float | np.ndarray,
+    left_boundary: float | np.ndarray,
     config: Laplace2DConfig,
 ) -> np.ndarray:
     """Solve the 2D Laplace equation with an explicit central finite-difference scheme."""
@@ -37,13 +40,15 @@ def solve_laplace_2d(
                          dx**2 * (pn[2:, 1:-1] + pn[0:-2, 1:-1])) /
                         (2 * (dx**2 + dy**2)))
 
-        p[:, 0] = 0  # p = 0 @ x = 0
-        p[:, -1] = y_array  # p = y @ x = 2
-        p[0, :] = p[1, :]  # dp/dy = 0 @ y = 0
-        p[-1, :] = p[-2, :]  # dp/dy = 0 @ y = 1
+        apply_laplace_boundary_2d(p, bottom=bottom_boundary, top=top_boundary, right=right_boundary, left=left_boundary)
 
-        l1norm = (np.sum(np.abs(p[:]) - np.abs(pn[:])) /
-                np.sum(np.abs(pn[:])))
+        denominator = np.sum(np.abs(pn))
+
+        if denominator == 0:
+            l1norm = np.sum(np.abs(p) - np.abs(pn)) 
+        
+        else:
+            l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
         
         history.append(p.copy())
     

@@ -59,21 +59,25 @@ y_array = make_y_grid(laplace_2d_config)
 
 # Initialize the initial condition
 
-initial_condition = laplace_initial_condition_2d(y_array, laplace_2d_config)
+initial_condition = laplace_initial_condition_2d(laplace_2d_config)
+bottom_boundary = initial_condition[1, :]
+top_boundary = initial_condition[-2, :] 
+right_boundary = y_array
+left_boundary = 0
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_laplace_2d(y_array, initial_condition, laplace_2d_config)
+solution_matrix = solve_laplace_2d(initial_condition, bottom_boundary=bottom_boundary, top_boundary=top_boundary, right_boundary=right_boundary, left_boundary=left_boundary, config=laplace_2d_config)
 
 # print(type(solution_matrix))
 
 solution_final = solution_matrix[-1, ...]
 
-# solution_final_x = solution_matrix[-1, :, :]
+solution_final_x = solution_matrix[-1, :, :]
 
-# solution_final_y = solution_final_x.T
+solution_final_y = solution_final_x.T
 
 
 
@@ -123,32 +127,22 @@ if show_individual_plots:
         save=save,
     )
 
-# show_solution_surface(
-#     x_values=x_array,
-#     y_values=y_array,
-#     solution_matrix=solution_final,
-#     case_name=case_name,
-#     title=title,
-#     y_label='y',
-#     save=save,
-# )
-
-# show_solution_overview(
-#     x_values=x_array, 
-#     y_values=y_array, 
-#     num_solution_matrix=solution_final,
-#     y_label='y',
-#     step_stride=step_stride,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
+show_solution_overview(
+    x_values=x_array, 
+    y_values=y_array, 
+    num_solution_matrix=solution_final,
+    y_label='y',
+    step_stride=step_stride,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
 
 show_solution_2d_animation(
     x_values=x_array,
     y_values=y_array, 
     solution_history=solution_matrix,
-    z_limits=(0, 1),
+    z_limits=(np.min(solution_final), np.max(solution_final)),
     case_name=case_name,
     save=save,
 )
