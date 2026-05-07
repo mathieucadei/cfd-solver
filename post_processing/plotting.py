@@ -79,11 +79,11 @@ def plot_solution_contour(
     case_name: str = None,
     title: bool = False,
 ):
-    """Plot a filled contour view of a 2D solution field."""
+    """Plot a contour view of a 2D solution field."""
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contour = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap)
+    contour = ax.contour(x_grid, y_grid, solution_matrix, cmap=cmap)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -92,6 +92,58 @@ def plot_solution_contour(
         ax.set_title(f'{case_name.title()} Solution')
     
     return contour
+
+
+def plot_solution_contourf(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.viridis,
+    x_label: str = 'x',
+    y_label: str = 't',
+    case_name: str = None,
+    title: bool = False,
+):
+    """Plot a filled contour view of a 2D solution field."""
+
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    contour = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap)
+
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{case_name.title()} Solution')
+    
+    return contour
+
+
+def plot_quiver(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+) -> None:
+    """Plot a quiver view of 2D velocity vector fields."""
+
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    ax.quiver(x_grid, y_grid, u_solution_matrix, v_solution_matrix, scale=scale)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{case_name.title()} Velocity Field')
 
 
 def plot_solution_surface(
@@ -176,7 +228,7 @@ def show_solution_contour(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    contour = plot_solution_contour(
+    plot_solution_contour(
         ax=ax,
         x_values=x_values,
         y_values=y_values,
@@ -188,7 +240,19 @@ def show_solution_contour(
         title=title,   
     )
 
-    fig.colorbar(contour, ax=ax)
+    contourf = plot_solution_contourf(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    fig.colorbar(contourf, ax=ax)
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='contour')
@@ -325,7 +389,7 @@ def show_solution_overview(
     ax1.set_box_aspect((2.0, 2.0, 1.2))
 
 
-    contour = plot_solution_contour(
+    plot_solution_contour(
         ax=ax2,
         x_values=x_values,
         y_values=y_values,
@@ -336,7 +400,20 @@ def show_solution_overview(
         case_name=case_name,  
     )
 
-    fig.colorbar(contour, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
+
+    contourf = plot_solution_contourf(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=num_solution_matrix,
+        cmap=cmap,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,  
+    )
+
+    fig.colorbar(contourf, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
+    
 
     plot_solution_traces(
         ax=ax3,
