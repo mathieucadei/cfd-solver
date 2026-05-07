@@ -668,6 +668,68 @@ def show_solution_uv_2d_animations(
     plt.show()
 
 
+def show_cavity_flow_solution_animation(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_history: np.ndarray,
+    v_solution_history: np.ndarray,
+    p_solution_history: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    save: bool = False,     
+) -> None:
+    """Create and display side-by-side animations of the 2D u and v solution fields."""
+    
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    def update(frame):
+
+        ax.clear()
+
+        plot_solution_contourf(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_history[frame],
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,   
+    )
+
+        plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_history[frame],
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name, 
+        )
+
+        plot_quiver(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_history[frame],
+        v_solution_matrix=v_solution_history[frame],
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,   
+        )
+
+        ax.set_title(f'Cavity Flow Solution Animation (Time step: {frame})')
+
+    ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
+
+    if save:
+        _save_ani(ani=ani, case_name=case_name, fig_type='2d')
+
+    plt.show()
+
+
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
     equation_filename  = case_name.lower().replace(" ", "_")

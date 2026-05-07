@@ -23,6 +23,7 @@ from post_processing import (
     show_solution_surface,
     show_solution_traces,
     show_cavity_flow_solution,
+    show_cavity_flow_solution_animation,
 )
 
 
@@ -98,14 +99,25 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_cavity_flow_solution(
+# show_cavity_flow_solution(
+#     x_values=x_array,
+#     y_values=y_array,
+#     u_solution_matrix=u_solution_matrix_final,
+#     v_solution_matrix=v_solution_matrix_final,
+#     p_solution_matrix=p_solution_matrix_final,
+#     case_name=case_name,
+#     title=title,
+#     save=save,
+# )
+
+
+show_cavity_flow_solution_animation(
     x_values=x_array,
     y_values=y_array,
-    u_solution_matrix=u_solution_matrix_final,
-    v_solution_matrix=v_solution_matrix_final,
-    p_solution_matrix=p_solution_matrix_final,
+    u_solution_history=u_solution_matrix,
+    v_solution_history=v_solution_matrix,
+    p_solution_history=p_solution_matrix,
     case_name=case_name,
-    title=title,
     save=save,
 )
 
