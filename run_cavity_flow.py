@@ -22,7 +22,7 @@ from post_processing import (
     show_solution_overview,
     show_solution_surface,
     show_solution_traces,
-    show_solution_quiver,
+    show_cavity_flow_solution,
 )
 
 
@@ -98,11 +98,12 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_solution_quiver(
+show_cavity_flow_solution(
     x_values=x_array,
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
+    p_solution_matrix=p_solution_matrix_final,
     case_name=case_name,
     title=title,
     save=save,

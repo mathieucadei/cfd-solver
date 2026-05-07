@@ -5,7 +5,7 @@ from .plotting import (
     show_solution_traces,
     show_solution_contour,  
     show_solution_surface,
-    show_solution_quiver,
+    show_cavity_flow_solution,
     show_solution_uv_2d_animations,
     show_solution_uv_surfaces, 
     show_solution_overview, 

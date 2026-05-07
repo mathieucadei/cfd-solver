@@ -73,7 +73,8 @@ def plot_solution_contour(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.viridis,
+    colors: str = 'k',
+    linewidths: float = 0.5,
     x_label: str = 'x',
     y_label: str = 't',
     case_name: str = None,
@@ -83,7 +84,7 @@ def plot_solution_contour(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contour = ax.contour(x_grid, y_grid, solution_matrix, cmap=cmap)
+    contour = ax.contour(x_grid, y_grid, solution_matrix, colors=colors, linewidths=linewidths)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -217,6 +218,8 @@ def show_solution_contour(
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
     cmap: Colormap = cm.viridis,
+    colors: str = 'k',
+    linewidths: float = 0.5,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -234,7 +237,8 @@ def show_solution_contour(
         x_values=x_values,
         y_values=y_values,
         solution_matrix=solution_matrix,
-        cmap=cmap,
+        colors=colors,
+        linewidths=linewidths,
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
@@ -349,11 +353,12 @@ def show_solution_uv_surfaces(
 
     plt.show()
 
-def show_solution_quiver(
+def show_cavity_flow_solution(
     x_values: np.ndarray,
     y_values: np.ndarray,
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
+    p_solution_matrix: np.ndarray,
     scale: float = 20.0,
     x_label: str = 'x',
     y_label: str = 'y',
@@ -365,6 +370,28 @@ def show_solution_quiver(
 
     fig = plt.figure()
     ax = fig.add_subplot()
+
+    plot_solution_contourf(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
 
     plot_quiver(
         ax=ax,
@@ -430,7 +457,6 @@ def show_solution_overview(
         x_values=x_values,
         y_values=y_values,
         solution_matrix=num_solution_matrix,
-        cmap=cmap,
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,  
