@@ -137,7 +137,7 @@ def plot_quiver(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    ax.quiver(x_grid, y_grid, u_solution_matrix, v_solution_matrix, scale=scale)
+    qvr = ax.quiver(x_grid, y_grid, u_solution_matrix, v_solution_matrix, scale=scale)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -145,6 +145,7 @@ def plot_quiver(
     if title:
         ax.set_title(f'{case_name.title()} Velocity Field')
 
+    return qvr
 
 def plot_solution_surface(
     ax: Axes,
@@ -345,6 +346,41 @@ def show_solution_uv_surfaces(
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='surface')
+
+    plt.show()
+
+def show_solution_quiver(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    plot_quiver(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='quiver')
 
     plt.show()
 

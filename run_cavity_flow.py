@@ -22,6 +22,7 @@ from post_processing import (
     show_solution_overview,
     show_solution_surface,
     show_solution_traces,
+    show_solution_quiver,
 )
 
 
@@ -97,39 +98,49 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Post-processing
 
-X, Y = np.meshgrid(x_array, y_array)
+show_solution_quiver(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
 
-# plt.figure(figsize=(8, 4))
-# plt.contourf(X, Y, p_solution_matrix_final, cmap='viridis')
-# plt.colorbar(label='Pressure')
-# plt.contour(X, Y, p_solution_matrix_final, colors='k', linewidths=0.5)
-# plt.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix_final[::2, ::2], v_solution_matrix_final[::2, ::2], scale=20)
-# plt.title('Cavity Flow: Pressure Contours and Velocity Vectors')
+# X, Y = np.meshgrid(x_array, y_array)
+
+# # plt.figure(figsize=(8, 4))
+# # plt.contourf(X, Y, p_solution_matrix_final, cmap='viridis')
+# # plt.colorbar(label='Pressure')
+# # plt.contour(X, Y, p_solution_matrix_final, colors='k', linewidths=0.5)
+# # plt.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix_final[::2, ::2], v_solution_matrix_final[::2, ::2], scale=20)
+# # plt.title('Cavity Flow: Pressure Contours and Velocity Vectors')
+# # plt.show()
+
+# fig, ax = plt.subplots(figsize=(8, 4))
+# contour = ax.contourf(X, Y, p_solution_matrix_final, cmap='viridis')
+# fig.colorbar(contour, ax=ax, label='Pressure')
+# ax.contour(X, Y, p_solution_matrix_final, colors='k', linewidths=0.5)
+# ax.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix[0, ::2, ::2], v_solution_matrix[0, ::2, ::2], scale=20)
+# ax.set_title('Cavity Flow: Pressure Contours and Velocity Vectors')
+
+# def update(frame):
+#     ax.clear()
+#     ax.contourf(X, Y, p_solution_matrix[frame], cmap='viridis')
+#     ax.contour(X, Y, p_solution_matrix[frame], colors='k', linewidths=0.5)
+#     ax.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix[frame, ::2, ::2], v_solution_matrix[frame, ::2, ::2], scale=20)
+    
+#     ax.set_xlim(0, cavity_flow_config.domain_length_x)
+#     ax.set_ylim(0, cavity_flow_config.domain_length_y)
+    
+#     ax.set_title(f'Cavity Flow: Pressure Contours and Velocity Vectors (Iteration {frame})')
+
+# ani = FuncAnimation(fig, update, frames=range(0, max_iterations + 1, step_stride), repeat=False)
+
 # plt.show()
 
-fig, ax = plt.subplots(figsize=(8, 4))
-contour = ax.contourf(X, Y, p_solution_matrix_final, cmap='viridis')
-fig.colorbar(contour, ax=ax, label='Pressure')
-ax.contour(X, Y, p_solution_matrix_final, colors='k', linewidths=0.5)
-ax.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix[0, ::2, ::2], v_solution_matrix[0, ::2, ::2], scale=20)
-ax.set_title('Cavity Flow: Pressure Contours and Velocity Vectors')
-
-def update(frame):
-    ax.clear()
-    ax.contourf(X, Y, p_solution_matrix[frame], cmap='viridis')
-    ax.contour(X, Y, p_solution_matrix[frame], colors='k', linewidths=0.5)
-    ax.quiver(X[::2, ::2], Y[::2, ::2], u_solution_matrix[frame, ::2, ::2], v_solution_matrix[frame, ::2, ::2], scale=20)
-    
-    ax.set_xlim(0, cavity_flow_config.domain_length_x)
-    ax.set_ylim(0, cavity_flow_config.domain_length_y)
-    
-    ax.set_title(f'Cavity Flow: Pressure Contours and Velocity Vectors (Iteration {frame})')
-
-ani = FuncAnimation(fig, update, frames=range(0, max_iterations + 1, step_stride), repeat=False)
-
-plt.show()
-
-ani.save(f'results/animations/2d/cavity_flow_solution.mp4', writer='ffmpeg')
+# ani.save(f'results/animations/2d/cavity_flow_solution.mp4', writer='ffmpeg')
 
 
 # def update(frame):
