@@ -84,3 +84,14 @@ def poisson_initial_condition_2d(config: object) -> np.ndarray:
 
 
     return p, b
+
+
+def cavity_flow_initial_condition(config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D cavity flow numerical solver."""
+
+    u = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    v = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    p = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    b = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+
+    return u, v, p, b

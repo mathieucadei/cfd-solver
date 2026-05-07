@@ -44,7 +44,7 @@ l1_norm_target: float = 1e-4
 step_stride = 10
 case_name = '2d poisson'
 title = True
-save = False
+save = True
 show_individual_plots = False
 
 
