@@ -138,7 +138,7 @@ def plot_quiver(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    qvr = ax.quiver(x_grid, y_grid, u_solution_matrix, v_solution_matrix, scale=scale)
+    qvr = ax.quiver(x_grid[::2, ::2], y_grid[::2, ::2], u_solution_matrix[::2, ::2], v_solution_matrix[::2, ::2], scale=scale)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
