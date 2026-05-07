@@ -371,7 +371,7 @@ def show_cavity_flow_solution(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    plot_solution_contourf(
+    contourf = plot_solution_contourf(
         ax=ax,
         x_values=x_values,
         y_values=y_values,
@@ -381,6 +381,8 @@ def show_cavity_flow_solution(
         case_name=case_name,
         title=title,   
     )
+
+    fig.colorbar(contourf, ax=ax)
 
     plot_solution_contour(
         ax=ax,
@@ -684,6 +686,40 @@ def show_cavity_flow_solution_animation(
     
     fig, ax = plt.subplots(figsize=(8, 4))
 
+    contourf = plot_solution_contourf(
+    ax=ax,
+    x_values=x_values,
+    y_values=y_values,
+    solution_matrix=p_solution_history[0],
+    x_label=x_label,
+    y_label=y_label,
+    case_name=case_name,   
+    )
+
+    fig.colorbar(contourf, ax=ax, label='Pressure')
+
+    plot_solution_contour(
+    ax=ax,
+    x_values=x_values,
+    y_values=y_values,
+    solution_matrix=p_solution_history[0],
+    x_label=x_label,
+    y_label=y_label,
+    case_name=case_name, 
+    )
+
+    plot_quiver(
+    ax=ax,
+    x_values=x_values,
+    y_values=y_values,
+    u_solution_matrix=u_solution_history[0],
+    v_solution_matrix=v_solution_history[0],
+    scale=scale,
+    x_label=x_label,
+    y_label=y_label,
+    case_name=case_name,   
+    )
+
     def update(frame):
 
         ax.clear()
@@ -696,7 +732,7 @@ def show_cavity_flow_solution_animation(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,   
-    )
+        )
 
         plot_solution_contour(
         ax=ax,
@@ -719,6 +755,9 @@ def show_cavity_flow_solution_animation(
         y_label=y_label,
         case_name=case_name,   
         )
+
+        ax.set_xlim(0, 2)
+        ax.set_ylim(0, 1)
 
         ax.set_title(f'Cavity Flow Solution Animation (Time step: {frame})')
 
