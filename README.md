@@ -12,6 +12,7 @@ Currently implemented:
 * 1D and 2D Burgers equation
 * 2D Laplace equation
 * 2D Poisson equation with configurable source terms
+* 2D lid-driven cavity flow using a pressure Poisson solve
 * uniform grid generation
 * hat-function and Cole-Hopf initial conditions
 * explicit finite-difference time-marching solvers
@@ -23,7 +24,7 @@ Planned next steps:
 * validate 2D Laplace and Poisson solvers
 * use the Poisson solver as a pressure-projection building block
 * add tests for boundary conditions, source placement, and convergence behavior
-* continue toward incompressible Navier-Stokes / cavity flow
+* validate and refine the 2D cavity flow solver
 
 ## Project structure
 
@@ -32,7 +33,7 @@ core/config.py              simulation dataclasses
 core/setup/                 grids, time steps, initial conditions
 core/numerics/              finite-difference solvers
 core/analytical/            analytical reference solutions
-post_processing/            plotting and animation helpers
+post_processing/            contour, surface, quiver, and animation helpers
 run_*.py                    executable examples
 ```
 
@@ -46,9 +47,9 @@ run_*.py                    executable examples
 
 ![1D diffusion vs heat equation](docs/images/diffusion_1d_vs_heat_solution.png)
 
-### 2D Poisson equation
+### 2D lid-driven cavity flow
 
-![2D Poisson equation](docs/images/poisson_2d_solution.png)
+![2D cavity flow](docs/images/cavity_flow_2d_solution.png)
 
 ## Implemented models
 
@@ -118,6 +119,16 @@ The current solvers model:
 
   solved iteratively with configurable positive and negative source terms.
 
+* the 2D incompressible lid-driven cavity flow problem:
+
+  du/dt + u du/dx + v du/dy = -1/rho dp/dx + nu (d^2u/dx^2 + d^2u/dy^2)
+
+  dv/dt + u dv/dx + v dv/dy = -1/rho dp/dy + nu (d^2v/dx^2 + d^2v/dy^2)
+
+  d^2p/dx^2 + d^2p/dy^2 = b
+
+  using explicit finite differences for the velocity equations and an iterative pressure Poisson solve.
+
 ## Validation
 
 This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
@@ -143,4 +154,5 @@ python run_burgers_equation_1d_vs_cole_hopf.py
 python run_burgers_equation_2d.py
 python run_laplace_2d.py
 python run_poisson_2d.py
+python run_cavity_flow.py
 ```

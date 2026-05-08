@@ -17,11 +17,6 @@ from core import (
 )
 
 from post_processing import (
-    show_solution_2d_animation,
-    show_solution_contour_map,
-    show_solution_overview,
-    show_solution_surface,
-    show_solution_traces,
     show_cavity_flow_solution,
     show_cavity_flow_solution_animation,
 )
@@ -46,7 +41,7 @@ viscosity: float = 0.1
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d cavity flow'
+case_name = 'cavity flow'
 title = True
 save = False
 show_individual_plots = False

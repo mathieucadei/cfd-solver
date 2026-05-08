@@ -416,7 +416,7 @@ def show_cavity_flow_solution(
     )
 
     if save:
-        _save_fig(fig=fig, case_name=case_name, fig_type='quiver')
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
 
     plt.show()
 
@@ -753,7 +753,7 @@ def show_cavity_flow_solution_animation(
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
     if save:
-        _save_ani(ani=ani, case_name=case_name, fig_type='2d')
+        _save_ani(ani=ani, case_name=case_name, fig_type='cavity_flow')
 
     plt.show()
 

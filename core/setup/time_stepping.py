@@ -52,7 +52,7 @@ def compute_convective_dt_2d(config: object) -> float:
 
     dx = compute_dx(config)
     
-    return config.sigma * dx / np.max(config.u_max, config.v_max)
+    return config.sigma * dx / max(config.u_max, config.v_max)
 
 
 def compute_diffusive_dt_2d(config: object) -> float:
