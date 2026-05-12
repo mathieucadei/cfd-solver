@@ -5,6 +5,7 @@
 import os
 
 import matplotlib.pyplot as plt
+import math
 import numpy as np
 
 from matplotlib import cm
@@ -694,7 +695,7 @@ def show_cavity_flow_solution_animation(
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
-    levels = np.linspace(np.min(p_solution_matrix_final), np.max(p_solution_matrix_final), 30)
+    levels = np.linspace(math.floor(np.min(p_solution_matrix_final)), math.ceil(np.max(p_solution_matrix_final)), 30)
 
     initial_contourf = ax.contourf(
     x_values,
@@ -702,8 +703,9 @@ def show_cavity_flow_solution_animation(
     p_solution_history[0],
     levels=levels,
 )
+    
 
-    fig.colorbar(initial_contourf, ax=ax)
+    fig.colorbar(initial_contourf, ax=ax, label='Pressure')
 
     
     def update(frame):
@@ -747,7 +749,20 @@ def show_cavity_flow_solution_animation(
         ax.set_xlim(0, 2)
         ax.set_ylim(0, 1)
 
-        ax.set_title(f'Cavity Flow Solution Animation (Time step: {frame})')
+        lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
+
+        ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})", pad=24)
+
+        ax.text(
+            0.5,
+            1.02,
+            f"Lid velocity → {lid_velocity:.1f}",
+            transform=ax.transAxes,
+            ha="center",
+            va="bottom",
+        )
+
+
 
     
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
