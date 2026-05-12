@@ -170,3 +170,17 @@ class Poisson2DConfig:
         SourceTerm(x=0.6, y=0.2, value=-5.0),
     ])
     l1_norm_target: float = 1e-4
+
+
+@dataclass
+class CavityFlowConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_grid_points_x: int = 41
+    num_grid_points_y: int = 41
+    max_iterations: int = 500
+    max_pseudo_iterations: int = 50
+    time_step: float = 0.001
+    u_lid: float = 1.0
+    density: float = 1.0
+    viscosity: float = 0.1

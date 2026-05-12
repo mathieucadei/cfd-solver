@@ -73,17 +73,19 @@ def plot_solution_contour(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
-    cmap: Colormap = cm.viridis,
+    colors: str = 'k',
+    linewidths: float = 0.25,
     x_label: str = 'x',
     y_label: str = 't',
+    levels: np.ndarray = None,
     case_name: str = None,
     title: bool = False,
 ):
-    """Plot a filled contour view of a 2D solution field."""
+    """Plot a contour view of a 2D solution field."""
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contour = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap)
+    contour = ax.contour(x_grid, y_grid, solution_matrix, colors=colors, linewidths=linewidths, levels=levels)
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -93,6 +95,60 @@ def plot_solution_contour(
     
     return contour
 
+
+def plot_solution_contourf(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    solution_matrix: np.ndarray,
+    cmap: Colormap = cm.viridis,
+    x_label: str = 'x',
+    y_label: str = 't',
+    levels: np.ndarray = None,
+    case_name: str = None,
+    title: bool = False,
+):
+    """Plot a filled contour view of a 2D solution field."""
+
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels)
+
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{case_name.title()} Solution')
+    
+    return contourf
+
+
+def plot_quiver(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+) -> None:
+    """Plot a quiver view of 2D velocity vector fields."""
+
+    x_grid, y_grid = np.meshgrid(x_values, y_values)
+
+    qvr = ax.quiver(x_grid[::2, ::2], y_grid[::2, ::2], u_solution_matrix[::2, ::2], v_solution_matrix[::2, ::2], scale=scale)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{case_name.title()} Velocity Field')
+
+    return qvr
 
 def plot_solution_surface(
     ax: Axes,
@@ -159,11 +215,13 @@ def show_solution_traces(
     plt.show()
 
 
-def show_solution_contour(
+def show_solution_contour_map(
     x_values: np.ndarray,
     y_values: np.ndarray,
     solution_matrix: np.ndarray,
     cmap: Colormap = cm.viridis,
+    colors: str = 'k',
+    linewidths: float = 0.5,
     x_label: str = 'x',
     y_label: str = 't',
     z_label: str = 'u',
@@ -176,7 +234,20 @@ def show_solution_contour(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    contour = plot_solution_contour(
+    plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=solution_matrix,
+        colors=colors,
+        linewidths=linewidths,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    contourf = plot_solution_contourf(
         ax=ax,
         x_values=x_values,
         y_values=y_values,
@@ -188,7 +259,7 @@ def show_solution_contour(
         title=title,   
     )
 
-    fig.colorbar(contour, ax=ax)
+    fig.colorbar(contourf, ax=ax)
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='contour')
@@ -284,6 +355,71 @@ def show_solution_uv_surfaces(
 
     plt.show()
 
+def show_cavity_flow_solution(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    p_solution_matrix: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    levels = np.linspace(np.min(p_solution_matrix), np.max(p_solution_matrix), 30)
+
+
+    contourf = plot_solution_contourf(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        levels=levels,
+        case_name=case_name,
+        title=title,   
+    )
+
+    fig.colorbar(contourf, ax=ax)
+
+    plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        levels=levels,
+        case_name=case_name,
+        title=title,   
+    )
+
+    plot_quiver(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
+
+    plt.show()
+
 
 def show_solution_overview(
     x_values: np.ndarray,
@@ -325,7 +461,18 @@ def show_solution_overview(
     ax1.set_box_aspect((2.0, 2.0, 1.2))
 
 
-    contour = plot_solution_contour(
+    plot_solution_contour(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=num_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,  
+    )
+
+
+    contourf = plot_solution_contourf(
         ax=ax2,
         x_values=x_values,
         y_values=y_values,
@@ -336,7 +483,8 @@ def show_solution_overview(
         case_name=case_name,  
     )
 
-    fig.colorbar(contour, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
+    fig.colorbar(contourf, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
+    
 
     plot_solution_traces(
         ax=ax3,
@@ -529,6 +677,87 @@ def show_solution_uv_2d_animations(
     plt.show()
 
 
+def show_cavity_flow_solution_animation(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_history: np.ndarray,
+    v_solution_history: np.ndarray,
+    p_solution_history: np.ndarray,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    save: bool = False,     
+) -> None:
+    """Create and display side-by-side animations of the 2D u and v solution fields."""
+    
+    fig, ax = plt.subplots(figsize=(8, 4))
+
+    p_solution_matrix_final = p_solution_history
+    levels = np.linspace(np.min(p_solution_matrix_final), np.max(p_solution_matrix_final), 30)
+
+    initial_contourf = ax.contourf(
+    x_values,
+    y_values,
+    p_solution_history[0],
+    levels=levels,
+)
+
+    fig.colorbar(initial_contourf, ax=ax)
+
+    
+    def update(frame):
+
+        ax.clear()
+
+        contourf = plot_solution_contourf(
+            ax=ax,
+            x_values=x_values,
+            y_values=y_values,
+            solution_matrix=p_solution_history[frame],
+            x_label=x_label,
+            y_label=y_label,
+            levels=levels,
+            case_name=case_name,   
+            )
+
+        plot_solution_contour(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_history[frame],
+        x_label=x_label,
+        y_label=y_label,
+        levels=levels,
+        case_name=case_name, 
+        )
+
+        plot_quiver(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_history[frame],
+        v_solution_matrix=v_solution_history[frame],
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,   
+        )
+
+        ax.set_xlim(0, 2)
+        ax.set_ylim(0, 1)
+
+        ax.set_title(f'Cavity Flow Solution Animation (Time step: {frame})')
+
+    
+    ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
+
+    if save:
+        _save_ani(ani=ani, case_name=case_name, fig_type='cavity_flow')
+
+    plt.show()
+
+
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
     equation_filename  = case_name.lower().replace(" ", "_")
@@ -544,4 +773,4 @@ def _save_ani(ani: FuncAnimation, case_name: str, fig_type: str = 'animations') 
     directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
 
     os.makedirs(directory, exist_ok=True)
-    ani.save(f'{directory}/{equation_filename }_solution_{fig_type}.mp4', writer='ffmpeg')
+    ani.save(f'{directory}/{equation_filename }_solution.mp4', writer='ffmpeg')

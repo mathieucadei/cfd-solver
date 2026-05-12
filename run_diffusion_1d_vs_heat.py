@@ -17,7 +17,7 @@ from core import (
 )
 from post_processing import (
     show_solution_1d_animation,
-    show_solution_contour,
+    show_solution_contour_map,
     show_solution_overview,
     show_solution_surface,
     show_solution_traces,
@@ -143,7 +143,7 @@ if show_individual_plots:
         save=save,
     )
 
-    show_solution_contour(
+    show_solution_contour_map(
         x_values=x_array,
         y_values=time_array,
         solution_matrix=solution_history_num,

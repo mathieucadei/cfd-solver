@@ -10,6 +10,7 @@ from .config import (
     Laplace2DConfig,
     SourceTerm,
     Poisson2DConfig,
+    CavityFlowConfig
 )
 
 from .setup.grids import (
@@ -37,6 +38,7 @@ from .setup.initial_conditions import (
     hat_initial_condition_2d, 
     laplace_initial_condition_2d,
     poisson_initial_condition_2d,
+    cavity_flow_initial_condition,
 )
 
 from .numerics import (
@@ -50,6 +52,7 @@ from .numerics import (
     solve_diffusion_2d,
     solve_laplace_2d,
     solve_poisson_2d,
+    solve_cavity_flow,
 )
 
 

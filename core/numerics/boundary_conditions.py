@@ -103,3 +103,21 @@ def apply_poisson_boundary_2d(
     p[1, :] = 0
     p[:, 0] = 0
     p[:, -1] = 0
+
+
+def apply_cavity_flow_boundary_2d(
+    u: np.ndarray,
+    v: np.ndarray,
+    u_lid: float,
+) -> None:
+    """Apply boundary updates for the 2D cavity flow equation."""
+
+    u[0, :]  = 0
+    u[:, 0]  = 0
+    u[:, -1] = 0
+    u[-1, :] = u_lid
+
+    v[0, :] = 0
+    v[-1, :] = 0
+    v[:, 0] = 0
+    v[:, -1] = 0

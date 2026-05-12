@@ -15,7 +15,7 @@ from core import (
 
 from post_processing import (
     show_solution_2d_animation,
-    show_solution_contour,
+    show_solution_contour_map,
     show_solution_overview,
     show_solution_surface,
     show_solution_traces,
@@ -44,7 +44,7 @@ l1_norm_target: float = 1e-4
 step_stride = 10
 case_name = '2d poisson'
 title = True
-save = False
+save = True
 show_individual_plots = False
 
 
@@ -114,7 +114,7 @@ if show_individual_plots:
         save=save,
     )
 
-    show_solution_contour(
+    show_solution_contour_map(
         x_values=x_array,
         y_values=y_array,
         solution_matrix=solution_final,
