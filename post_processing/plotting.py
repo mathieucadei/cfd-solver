@@ -773,4 +773,4 @@ def _save_ani(ani: FuncAnimation, case_name: str, fig_type: str = 'animations') 
     directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
 
     os.makedirs(directory, exist_ok=True)
-    ani.save(f'{directory}/{equation_filename }_solution_{fig_type}.mp4', writer='ffmpeg')
+    ani.save(f'{directory}/{equation_filename }_solution.mp4', writer='ffmpeg')

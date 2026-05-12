@@ -49,7 +49,7 @@ run_*.py                    executable examples
 
 ### 2D lid-driven cavity flow
 
-![2D cavity flow](docs/images/cavity_flow_2d_solution.png)
+![2D cavity flow](docs/images/cavity_flow_solution.gif)
 
 ## Implemented models
 
