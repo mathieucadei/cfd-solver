@@ -30,15 +30,21 @@ def solve_cavity_flow(
 
     un = np.empty_like(u)
     vn = np.empty_like(v)
+    
     b = initial_condition[3]
+
+    u_l1norm = 1
 
     u_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
     v_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
     p_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
+    u_l1norm_history = np.zeros(config.max_iterations + 1)
 
     u_history[0] = initial_condition[0]
     v_history[0] = initial_condition[1]
     p_history[0] = initial_condition[2]
+
+    u_l1norm_history[0] = 0
 
     for n in range(1, config.max_iterations + 1):
 
@@ -90,5 +96,15 @@ def solve_cavity_flow(
         u_history[n] = u
         v_history[n] = v
         p_history[n] = p
+
+        denominator = np.sum(np.abs(un))
+
+        if denominator == 0:
+            u_l1norm = np.sum(np.abs(u) - np.abs(un)) 
+        
+        else:
+            u_l1norm = (np.sum(np.abs(u) - np.abs(un))) / denominator
+        
+        u_l1norm_history[n] = u_l1norm
     
-    return u_history, v_history, p_history
+    return u_history, v_history, p_history, u_l1norm_history
