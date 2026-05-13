@@ -95,3 +95,13 @@ def cavity_flow_initial_condition(config: object) -> np.ndarray:
     b = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
 
     return u, v, p, b
+
+def channel_flow_initial_condition(config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D channel flow numerical solver."""
+
+    u = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    v = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    p = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+    b = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
+
+    return u, v, p, b

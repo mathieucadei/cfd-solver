@@ -184,3 +184,17 @@ class CavityFlowConfig:
     u_lid: float = 1.0
     density: float = 1.0
     viscosity: float = 0.1
+
+@dataclass
+class ChannelFlowConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_grid_points_x: int = 41
+    num_grid_points_y: int = 41
+    max_iterations: int = 10
+    max_pseudo_iterations: int = 50
+    time_step: float = 0.001
+    source: float = 1.0
+    density: float = 1.0
+    viscosity: float = 0.1
+    u_l1_norm_target: float = 0.001

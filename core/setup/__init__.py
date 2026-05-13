@@ -23,5 +23,6 @@ from .initial_conditions import (
     hat_initial_condition_2d,
     laplace_initial_condition_2d,
     poisson_initial_condition_2d,
-    cavity_flow_initial_condition
+    cavity_flow_initial_condition,
+    channel_flow_initial_condition,
 )

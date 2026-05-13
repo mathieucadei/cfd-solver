@@ -121,3 +121,61 @@ def apply_cavity_flow_boundary_2d(
     v[-1, :] = 0
     v[:, 0] = 0
     v[:, -1] = 0
+
+
+def apply_periodic_source_boundary_2d(
+    b: np.ndarray,
+    rho: float,
+    dt: float,
+    u: np.ndarray,
+    v: np.ndarray,
+    dx: float,
+    dy: float,
+) -> np.ndarray:
+    """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
+
+    # Periodic BC Pressure @ x = outlet
+    b[1:-1, -1] = (rho * (1 / dt * ((u[1:-1, 0] - u[1:-1,-2]) / (2 * dx) +
+                                    (v[2:, -1] - v[0:-2, -1]) / (2 * dy)) -
+                          ((u[1:-1, 0] - u[1:-1, -2]) / (2 * dx))**2 -
+                          2 * ((u[2:, -1] - u[0:-2, -1]) / (2 * dy) *
+                               (v[1:-1, 0] - v[1:-1, -2]) / (2 * dx)) -
+                          ((v[2:, -1] - v[0:-2, -1]) / (2 * dy))**2))
+    
+    # Periodic BC Pressure @ x = inlet
+    b[1:-1, 0] = (rho * (1 / dt * ((u[1:-1, 1] - u[1:-1, -1]) / (2 * dx) +
+                                   (v[2:, 0] - v[0:-2, 0]) / (2 * dy)) -
+                         ((u[1:-1, 1] - u[1:-1, -1]) / (2 * dx))**2 -
+                         2 * ((u[2:, 0] - u[0:-2, 0]) / (2 * dy) *
+                              (v[1:-1, 1] - v[1:-1, -1]) / (2 * dx))-
+                         ((v[2:, 0] - v[0:-2, 0]) / (2 * dy))**2))   
+
+    return b
+
+
+def apply_periodic_pressure_poisson_boundary_2d(
+    b: np.ndarray,
+    p: np.ndarray,
+    pn: np.ndarray,
+    dx: float,
+    dy: float,
+) -> np.ndarray:
+    """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
+
+    # Periodic BC Pressure @ x = outlet
+    p[1:-1, -1] = (((pn[1:-1, 0] + pn[1:-1, -2])* dy**2 +
+                    (pn[2:, -1] + pn[0:-2, -1]) * dx**2) /
+                    (2 * (dx**2 + dy**2)) -
+                    dx**2 * dy**2 / (2 * (dx**2 + dy**2)) * b[1:-1, -1])
+
+    # Periodic BC Pressure @ x = inlet
+    p[1:-1, 0] = (((pn[1:-1, 1] + pn[1:-1, -1])* dy**2 +
+                    (pn[2:, 0] + pn[0:-2, 0]) * dx**2) /
+                    (2 * (dx**2 + dy**2)) -
+                    dx**2 * dy**2 / (2 * (dx**2 + dy**2)) * b[1:-1, 0])
+    
+    # Wall boundary conditions, pressure
+    p[-1, :] =p[-2, :]  # dp/dy = 0 at y = 2
+    p[0, :] = p[1, :]  # dp/dy = 0 at y = 0
+    
+    return p
