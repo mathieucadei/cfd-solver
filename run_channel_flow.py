@@ -88,20 +88,37 @@ v_solution_matrix = solution_matrix[1]
 
 p_solution_matrix = solution_matrix[2]
 
-u_solution_matrix_final = u_solution_matrix[-1, ...]
+u_solution_matrix_final = u_solution_matrix[10, ...]
 
-v_solution_matrix_final = v_solution_matrix[-1, ...]
+v_solution_matrix_final = v_solution_matrix[10, ...]
 
-p_solution_matrix_final = p_solution_matrix[-1, ...]
+p_solution_matrix_final = p_solution_matrix[10, ...]
 
 
 # Post-processing
 X, Y = np.meshgrid(x_array, y_array)
-magnitude = np.sqrt(u_solution_matrix_final[::3, ::3]**2 + v_solution_matrix_final[::3, ::3]**2)
-plt.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix_final[::3, ::3], v_solution_matrix_final[::3, ::3], magnitude, cmap='plasma')
-plt.colorbar(label='Velocity Magnitude')
-plt.show()
 
+# magnitude = np.sqrt(u_solution_matrix_final[::3, ::3]**2 + v_solution_matrix_final[::3, ::3]**2)
+# plt.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix_final[::3, ::3], v_solution_matrix_final[::3, ::3], magnitude, cmap='plasma')
+# plt.colorbar(label='Velocity Magnitude')
+# plt.show()
+
+fig, ax = plt.subplots()
+
+ax.quiver(X, Y, u_solution_matrix[0, ...], v_solution_matrix[0, ...])
+
+def update(frame):
+
+    ax.clear()
+
+    magnitude = np.sqrt(u_solution_matrix[frame, ...]**2 + v_solution_matrix[frame, ...]**2)
+    ax.quiver(X, Y, u_solution_matrix[frame, ...], v_solution_matrix[frame, ...], magnitude, cmap='plasma')
+    ax.set_title(f'Time Step = {frame}')
+    # plt.colorbar(label='Velocity Magnitude')
+
+ani = FuncAnimation(fig, update, frames=u_solution_matrix.shape[0], interval=100, blit=False)
+
+plt.show()
 
 # show_cavity_flow_solution(
 #     x_values=x_array,
