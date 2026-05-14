@@ -11,7 +11,7 @@ import numpy as np
 from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 from matplotlib.axes import Axes
-from matplotlib.colors import Colormap
+from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 
 
@@ -131,6 +131,8 @@ def plot_quiver(
     y_values: np.ndarray,
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
+    step: int = 2,
+    cmap: str = None, 
     scale: float = 20.0,
     x_label: str = 'x',
     y_label: str = 'y',
@@ -139,9 +141,29 @@ def plot_quiver(
 ) -> None:
     """Plot a quiver view of 2D velocity vector fields."""
 
-    x_grid, y_grid = np.meshgrid(x_values, y_values)
+    X, Y = np.meshgrid(x_values, y_values)
 
-    qvr = ax.quiver(x_grid[::2, ::2], y_grid[::2, ::2], u_solution_matrix[::2, ::2], v_solution_matrix[::2, ::2], scale=scale)
+    U = u_solution_matrix[::step, ::step]
+    V = v_solution_matrix[::step, ::step]
+
+    M = np.sqrt(U**2 + V**2)
+
+    vmin = math.floor(np.min(M))
+    vmax = math.ceil(np.max(M))
+    norm = Normalize(vmin=vmin, vmax=vmax)
+
+    qvr = ax.quiver(
+        X[::step, ::step], 
+        Y[::step, ::step], 
+        U, 
+        V,
+        M, 
+        cmap=cmap, 
+        norm=norm,
+        angles='xy',
+        scale_units='xy',
+        scale=scale
+    )
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -150,6 +172,7 @@ def plot_quiver(
         ax.set_title(f'{case_name.title()} Velocity Field')
 
     return qvr
+
 
 def plot_solution_surface(
     ax: Axes,
@@ -356,6 +379,7 @@ def show_solution_uv_surfaces(
 
     plt.show()
 
+
 def show_cavity_flow_solution(
     x_values: np.ndarray,
     y_values: np.ndarray,
@@ -418,6 +442,57 @@ def show_cavity_flow_solution(
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
+
+    plt.show()
+
+
+def show_channel_flow_solution(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    step: int = 3,
+    scale: float = 6.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure(figsize=(11,7), dpi=100)
+    ax = fig.add_subplot()
+
+    U = u_solution_matrix[::step, ::step]
+    V = v_solution_matrix[::step, ::step]
+
+    M = np.sqrt(U**2 + V**2)
+
+    vmin = math.floor(np.min(M))
+    vmax = math.ceil(np.max(M))
+
+    ticks = np.linspace(vmin, vmax, 11)
+
+    qvr = plot_quiver(
+        ax=ax,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        step=step,
+        cmap='plasma',
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='channel_flow')
 
     plt.show()
 

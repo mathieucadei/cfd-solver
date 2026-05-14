@@ -20,7 +20,7 @@ from core import (
 )
 
 from post_processing import (
-    show_cavity_flow_solution,
+    show_channel_flow_solution,
     show_cavity_flow_solution_animation,
 )
 
@@ -29,8 +29,8 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x: float = 2.0
-domain_length_y: float = 2.0
+domain_length_x: float = 2
+domain_length_y: float = 2
 num_grid_points_x: int = 41
 num_grid_points_y: int = 41
 max_iterations: int = 10
@@ -112,23 +112,23 @@ norm = Normalize(vmin=vmin, vmax=vmax)
 
 ticks = np.linspace(vmin, vmax, 11)
 
-# Static Plot
-plt.figure(figsize=(11,7), dpi=100)
-plt.quiver(
-    X[::3, ::3], 
-    Y[::3, ::3], 
-    U[-1], 
-    V[-1], 
-    M[-1], 
-    cmap='plasma', 
-    norm=norm,
-    angles='xy',
-    scale_units='xy',
-    scale=6)
+# # Static Plot
+# plt.figure(figsize=(11,7), dpi=100)
+# plt.quiver(
+#     X[::3, ::3], 
+#     Y[::3, ::3], 
+#     U[-1], 
+#     V[-1], 
+#     M[-1], 
+#     cmap='plasma', 
+#     norm=norm,
+#     angles='xy',
+#     scale_units='xy',
+#     scale=6)
 
-plt.colorbar(ticks=ticks, label='Velocity Magnitude')
-plt.gca().set_aspect('equal')
-plt.show()
+# plt.colorbar(ticks=ticks, label='Velocity Magnitude')
+# plt.gca().set_aspect('equal')
+# plt.show()
 
 # Animation Plot
 
@@ -162,16 +162,15 @@ ani = FuncAnimation(fig, update, frames=u_solution_matrix.shape[0], interval=100
 
 plt.show()
 
-# show_cavity_flow_solution(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_matrix=u_solution_matrix_final,
-#     v_solution_matrix=v_solution_matrix_final,
-#     p_solution_matrix=p_solution_matrix_final,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
+show_channel_flow_solution(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
 
 
 # show_cavity_flow_solution_animation(

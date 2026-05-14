@@ -6,6 +6,7 @@ from .plotting import (
     show_solution_contour_map,  
     show_solution_surface,
     show_cavity_flow_solution,
+    show_channel_flow_solution,
     show_solution_uv_2d_animations,
     show_solution_uv_surfaces, 
     show_solution_overview, 
