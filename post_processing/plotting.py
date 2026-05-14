@@ -874,7 +874,7 @@ def show_channel_flow_solution_animation(
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
     
-    fig, ax = plt.subplots(figsize=(11,7), dpi=100)
+    fig, ax = plt.subplots(figsize=(8, 4))
 
     U = u_solution_history[:, ::step, ::step]
     V = v_solution_history[:, ::step, ::step]
