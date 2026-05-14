@@ -10,7 +10,8 @@ from .config import (
     Laplace2DConfig,
     SourceTerm,
     Poisson2DConfig,
-    CavityFlowConfig
+    CavityFlowConfig,
+    ChannelFlowConfig,
 )
 
 from .setup.grids import (
@@ -39,6 +40,7 @@ from .setup.initial_conditions import (
     laplace_initial_condition_2d,
     poisson_initial_condition_2d,
     cavity_flow_initial_condition,
+    channel_flow_initial_condition,
 )
 
 from .numerics import (
@@ -53,6 +55,7 @@ from .numerics import (
     solve_laplace_2d,
     solve_poisson_2d,
     solve_cavity_flow,
+    solve_channel_flow,
 )
 
 

@@ -49,7 +49,7 @@ def solve_cavity_flow(
         # diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
         # diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
         b = compute_source_term_2d(b, config.density, config.time_step, un, vn, dx, dy)
-        p = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)
+        p = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[0]
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
                          un[1:-1, 1:-1] * dt / dx *

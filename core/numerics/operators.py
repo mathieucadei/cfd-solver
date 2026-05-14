@@ -142,7 +142,6 @@ def compute_pressure_poisson_term(
 ) -> np.ndarray:
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
 
-    pn = np.empty_like(p)
     pn = p.copy()
     
     for q in range(nit):
@@ -158,4 +157,4 @@ def compute_pressure_poisson_term(
         p[:, 0] = p[:, 1]   # dp/dx = 0 at x = 0
         p[-1, :] = 0        # p = 0 at y = 2
         
-    return p
+    return p, pn
