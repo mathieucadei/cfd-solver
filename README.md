@@ -13,18 +13,19 @@ Currently implemented:
 * 2D Laplace equation
 * 2D Poisson equation with configurable source terms
 * 2D lid-driven cavity flow using a pressure Poisson solve
+* 2D pressure-driven channel flow with periodic x-boundaries
 * uniform grid generation
 * hat-function and Cole-Hopf initial conditions
 * explicit finite-difference time-marching solvers
 * iterative pressure/potential solves using L1 convergence or fixed iteration limits
-* solution plots and animations
+* contour, surface, quiver, and animation visualizations
 
 Planned next steps:
 
-* validate 2D Laplace and Poisson solvers
-* use the Poisson solver as a pressure-projection building block
-* add tests for boundary conditions, source placement, and convergence behavior
 * validate and refine the 2D cavity flow solver
+* validate the 2D channel flow velocity profile against the expected pressure-driven flow behavior
+* add tests for periodic pressure/source boundary conditions
+* add tests for Navier-Stokes convergence behavior
 
 ## Project structure
 
@@ -50,6 +51,10 @@ run_*.py                    executable examples
 ### 2D lid-driven cavity flow
 
 ![2D cavity flow](docs/images/lid_driven_cavity_flow_solution.gif)
+
+### 2D pressure-driven channel flow
+
+![2D channel flow](docs/images/channel_flow_solution.gif)
 
 ## Implemented models
 
@@ -129,6 +134,16 @@ The current solvers model:
 
   using explicit finite differences for the velocity equations and an iterative pressure Poisson solve.
 
+* the 2D incompressible pressure-driven channel flow problem:
+
+  du/dt + u du/dx + v du/dy = -1/rho dp/dx + nu (d^2u/dx^2 + d^2u/dy^2) + F
+
+  dv/dt + u dv/dx + v dv/dy = -1/rho dp/dy + nu (d^2v/dx^2 + d^2v/dy^2)
+
+  d^2p/dx^2 + d^2p/dy^2 = b
+
+  using explicit finite differences for the velocity equations, an iterative pressure Poisson solve, periodic boundary conditions in x, and no-slip walls at y = 0 and y = Ly.
+
 ## Validation
 
 This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
@@ -155,4 +170,5 @@ python run_burgers_equation_2d.py
 python run_laplace_2d.py
 python run_poisson_2d.py
 python run_cavity_flow.py
+python run_channel_flow.py
 ```
