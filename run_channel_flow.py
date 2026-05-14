@@ -30,7 +30,7 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x: float = 2
-domain_length_y: float = 2
+domain_length_y: float = 1
 num_grid_points_x: int = 41
 num_grid_points_y: int = 41
 max_iterations: int = 10

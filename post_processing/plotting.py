@@ -906,7 +906,7 @@ def show_channel_flow_solution_animation(
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
 
-    ax.set_aspect("equal")
+    # ax.set_aspect("equal")
     
     def update(frame):
 
