@@ -1,8 +1,8 @@
 # CFD Solver
 
-Small Python CFD learning project evolving toward a Navier-Stokes solver, currently focused on 1D and 2D finite-difference models.
+Python finite-difference CFD project for rebuilding canonical incompressible-flow solvers from first principles. The focus is on numerical schemes, pressure-velocity coupling, boundary conditions, validation against analytical solutions, and visualisation of flow fields.
 
-## Current status
+## Implemented solvers and validation cases
 
 Currently implemented:
 
@@ -19,13 +19,6 @@ Currently implemented:
 * explicit finite-difference time-marching solvers
 * iterative pressure/potential solves using L1 convergence or fixed iteration limits
 * contour, surface, quiver, and animation visualizations
-
-Planned next steps:
-
-* validate and refine the 2D cavity flow solver
-* validate the 2D channel flow velocity profile against the expected pressure-driven flow behavior
-* add tests for periodic pressure/source boundary conditions
-* add tests for Navier-Stokes convergence behavior
 
 ## Project structure
 
@@ -153,6 +146,13 @@ For the 1D diffusion equation, the numerical solver is validated against a Fouri
 For the 1D Burgers equation, the numerical solver is validated against the analytical Cole-Hopf solution.
 
 These comparisons are used to assess solver correctness and visualize agreement between numerical and analytical results.
+
+## Roadmap
+
+* Benchmark lid-driven cavity profiles against reference data.
+* Validate pressure-driven channel flow against analytical Poiseuille behaviour.
+* Add regression tests for boundary conditions and pressure-source terms.
+* Add convergence studies for grid spacing and time-step sensitivity.
 
 ## Run
 
