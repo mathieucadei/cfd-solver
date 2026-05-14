@@ -21,7 +21,7 @@ from core import (
 
 from post_processing import (
     show_channel_flow_solution,
-    show_cavity_flow_solution_animation,
+    show_channel_flow_solution_animation,
 )
 
 
@@ -88,79 +88,12 @@ u_solution_matrix = solution_matrix[0]
 
 v_solution_matrix = solution_matrix[1]
 
-p_solution_matrix = solution_matrix[2]
-
 u_solution_matrix_final = u_solution_matrix[-1, ...]
 
 v_solution_matrix_final = v_solution_matrix[-1, ...]
 
-p_solution_matrix_final = p_solution_matrix[-1, ...]
-
 
 # Post-processing
-
-X, Y = np.meshgrid(x_array, y_array)
-
-U = u_solution_matrix[:, ::3, ::3]
-V = v_solution_matrix[:, ::3, ::3]
-
-M = np.sqrt(U**2 + V**2)
-
-vmin = math.floor(np.min(M))
-vmax = math.ceil(np.max(M))
-norm = Normalize(vmin=vmin, vmax=vmax)
-
-ticks = np.linspace(vmin, vmax, 11)
-
-# # Static Plot
-# plt.figure(figsize=(11,7), dpi=100)
-# plt.quiver(
-#     X[::3, ::3], 
-#     Y[::3, ::3], 
-#     U[-1], 
-#     V[-1], 
-#     M[-1], 
-#     cmap='plasma', 
-#     norm=norm,
-#     angles='xy',
-#     scale_units='xy',
-#     scale=6)
-
-# plt.colorbar(ticks=ticks, label='Velocity Magnitude')
-# plt.gca().set_aspect('equal')
-# plt.show()
-
-# Animation Plot
-
-fig, ax = plt.subplots(figsize=(11,7), dpi=100)
-
-qvr = ax.quiver(
-    X[::3, ::3], 
-    Y[::3, ::3], 
-    U[0], 
-    V[0], 
-    M[0], 
-    cmap='plasma',
-    norm=norm,
-    angles='xy',
-    scale_units='xy',
-    scale=5)
-
-cbar = fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
-
-ax.set_aspect("equal")
-
-def update(frame):
-
-    qvr.set_UVC(U[frame], V[frame], M[frame])
-
-    ax.set_title(f'Time Step = {frame}')
-
-    return qvr,
-
-ani = FuncAnimation(fig, update, frames=u_solution_matrix.shape[0], interval=100, blit=False)
-
-plt.show()
 
 show_channel_flow_solution(
     x_values=x_array,
@@ -172,13 +105,11 @@ show_channel_flow_solution(
     save=save,
 )
 
-
-# show_cavity_flow_solution_animation(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_history=u_solution_matrix,
-#     v_solution_history=v_solution_matrix,
-#     p_solution_history=p_solution_matrix,
-#     case_name=case_name,
-#     save=save,
-# )
+show_channel_flow_solution_animation(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_history=u_solution_matrix,
+    v_solution_history=v_solution_matrix,
+    case_name=case_name,
+    save=save,
+)

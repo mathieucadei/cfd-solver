@@ -13,4 +13,5 @@ from .plotting import (
     show_solution_1d_animation,
     show_solution_2d_animation,
     show_cavity_flow_solution_animation,
+    show_channel_flow_solution_animation,
 )
