@@ -131,6 +131,8 @@ def plot_quiver(
     y_values: np.ndarray,
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
+    magnitude: np.ndarray = None,
+    norm: Normalize = None,
     step: int = 2,
     cmap: str = None, 
     scale: float = 20.0,
@@ -146,24 +148,32 @@ def plot_quiver(
     U = u_solution_matrix[::step, ::step]
     V = v_solution_matrix[::step, ::step]
 
-    M = np.sqrt(U**2 + V**2)
+    M = magnitude
 
-    vmin = math.floor(np.min(M))
-    vmax = math.ceil(np.max(M))
-    norm = Normalize(vmin=vmin, vmax=vmax)
-
-    qvr = ax.quiver(
-        X[::step, ::step], 
-        Y[::step, ::step], 
-        U, 
-        V,
-        M, 
-        cmap=cmap, 
-        norm=norm,
-        angles='xy',
-        scale_units='xy',
-        scale=scale
-    )
+    if cmap is None:
+        qvr = ax.quiver(
+            X[::step, ::step],
+            Y[::step, ::step],
+            U,
+            V,
+            color='k',
+            angles='xy',
+            scale_units='xy',
+            scale=scale
+        )
+    else:
+        qvr = ax.quiver(
+            X[::step, ::step],
+            Y[::step, ::step],
+            U,
+            V,
+            M,
+            cmap=cmap,
+            norm=norm,
+            angles='xy',
+            scale_units='xy',
+            scale=scale
+        )
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -471,6 +481,7 @@ def show_channel_flow_solution(
 
     vmin = math.floor(np.min(M))
     vmax = math.ceil(np.max(M))
+    norm = Normalize(vmin=vmin, vmax=vmax)
 
     ticks = np.linspace(vmin, vmax, 11)
 
@@ -480,6 +491,8 @@ def show_channel_flow_solution(
         y_values=y_values,
         u_solution_matrix=u_solution_matrix,
         v_solution_matrix=v_solution_matrix,
+        magnitude=M,
+        norm=norm,
         step=step,
         cmap='plasma',
         scale=scale,
@@ -870,6 +883,7 @@ def show_channel_flow_solution_animation(
 
     vmin = math.floor(np.min(M))
     vmax = math.ceil(np.max(M))
+    norm = Normalize(vmin=vmin, vmax=vmax)
 
     ticks = np.linspace(vmin, vmax, 11)
 
@@ -879,6 +893,8 @@ def show_channel_flow_solution_animation(
         y_values=y_values,
         u_solution_matrix=u_solution_history[0],
         v_solution_matrix=v_solution_history[0],
+        magnitude=M[0],
+        norm=norm,
         step=step,
         cmap='plasma',
         scale=scale,
