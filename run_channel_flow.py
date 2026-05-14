@@ -5,6 +5,7 @@
 import os
 
 from matplotlib.animation import FuncAnimation
+from matplotlib.colors import Normalize
 import numpy as np
 import math
 from matplotlib import cm
@@ -106,24 +107,66 @@ plt.show()
 
 fig, ax = plt.subplots()
 
-magnitude = np.sqrt(u_solution_matrix[-1, ::3, ::3]**2 + v_solution_matrix[-1, ::3, ::3]**2)
-levels = np.linspace(math.floor(np.min(u_solution_matrix)), math.ceil(np.max(u_solution_matrix)), 30)
-qvr = ax.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix[0, ::3, ::3], v_solution_matrix[0, ::3, ::3], magnitude, cmap='plasma')
+U = u_solution_matrix[:, ::3, ::3]
+V = v_solution_matrix[:, ::3, ::3]
+
+M = np.sqrt(U**2 + V**2)
+
+vmin = np.min(M)
+vmax = np.max(M)
+norm = Normalize(vmin=vmin, vmax=vmax)
+
+levels = np.linspace(vmin, vmax, 11)
+
+qvr = ax.quiver(
+    X[::3, ::3], 
+    Y[::3, ::3], 
+    U[0], 
+    V[0], 
+    M[0], 
+    cmap='plasma',
+    norm=norm,
+    angles='xy',
+    scale_units='xy',
+    scale=5,
+    width=0.003)
+
+cbar = fig.colorbar(qvr, ax=ax, ticks=levels, label='Velocity Magnitude')
+
+ax.set_aspect("equal")
 
 def update(frame):
 
-    ax.clear()
-
-    magnitude = np.sqrt(u_solution_matrix[frame, ::3, ::3]**2 + v_solution_matrix[frame, ::3, ::3]**2)
-    qvr = ax.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix[frame, ::3, ::3], v_solution_matrix[frame, ::3, ::3], magnitude, cmap='plasma')
+    qvr.set_UVC(U[frame], V[frame], M[frame])
 
     ax.set_title(f'Time Step = {frame}')
 
-fig.colorbar(qvr, ax=ax, cmap='plasma', ticks=levels, label='Velocity Magnitude')
+    return qvr,
 
 ani = FuncAnimation(fig, update, frames=u_solution_matrix.shape[0], interval=100, blit=False)
 
 plt.show()
+
+# fig, ax = plt.subplots()
+
+# magnitude = np.sqrt(u_solution_matrix[0, ::3, ::3]**2 + v_solution_matrix[0, ::3, ::3]**2)
+# levels = np.linspace(math.floor(np.min(u_solution_matrix)), math.ceil(np.max(u_solution_matrix)), 11)
+# qvr = ax.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix[0, ::3, ::3], v_solution_matrix[0, ::3, ::3], magnitude, cmap='plasma')
+
+# def update(frame):
+
+#     ax.clear()
+
+#     magnitude = np.sqrt(u_solution_matrix[frame, ::3, ::3]**2 + v_solution_matrix[frame, ::3, ::3]**2)
+#     ax.quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix[frame, ::3, ::3], v_solution_matrix[frame, ::3, ::3], magnitude, cmap='plasma')
+
+#     ax.set_title(f'Time Step = {frame}')
+
+# fig.colorbar(qvr, ax=ax, ticks=levels, label='Velocity Magnitude')
+
+# ani = FuncAnimation(fig, update, frames=u_solution_matrix.shape[0], interval=100, blit=False)
+
+# plt.show()
 
 # show_cavity_flow_solution(
 #     x_values=x_array,
