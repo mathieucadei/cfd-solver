@@ -46,8 +46,8 @@ def solve_cavity_flow(
         vn = v.copy()
 
         # convection_u_term, convection_v_term = compute_convection_2d_term(un, vn, dx, dy, config.time_step)
-        # diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
-        # diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
+        diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
+        diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
         b = compute_source_term_2d(b, config.density, config.time_step, un, vn, dx, dy)
         p = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[0]
 
@@ -56,11 +56,8 @@ def solve_cavity_flow(
                         (un[1:-1, 1:-1] - un[1:-1, 0:-2]) -
                          vn[1:-1, 1:-1] * dt / dy *
                         (un[1:-1, 1:-1] - un[0:-2, 1:-1]) -
-                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) +
-                         nu * (dt / dx**2 *
-                        (un[1:-1, 2:] - 2 * un[1:-1, 1:-1] + un[1:-1, 0:-2]) +
-                         dt / dy**2 *
-                        (un[2:, 1:-1] - 2 * un[1:-1, 1:-1] + un[0:-2, 1:-1])))
+                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) + 
+                         diffusion_u_term[1:-1, 1:-1])
 
         v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
                         un[1:-1, 1:-1] * dt / dx *
@@ -68,10 +65,7 @@ def solve_cavity_flow(
                         vn[1:-1, 1:-1] * dt / dy *
                        (vn[1:-1, 1:-1] - vn[0:-2, 1:-1]) -
                         dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
-                        nu * (dt / dx**2 *
-                       (vn[1:-1, 2:] - 2 * vn[1:-1, 1:-1] + vn[1:-1, 0:-2]) +
-                        dt / dy**2 *
-                       (vn[2:, 1:-1] - 2 * vn[1:-1, 1:-1] + vn[0:-2, 1:-1])))
+                         diffusion_v_term[1:-1, 1:-1])
 
         u[0, :]  = 0
         u[:, 0]  = 0
