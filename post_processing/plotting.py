@@ -396,7 +396,7 @@ def show_cavity_flow_solution(
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
     p_solution_matrix: np.ndarray,
-    scale: float = 20.0,
+    scale: float = 10.0,
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
@@ -479,8 +479,8 @@ def show_channel_flow_solution(
 
     M = np.sqrt(U**2 + V**2)
 
-    vmin = math.floor(np.min(M))
-    vmax = math.ceil(np.max(M))
+    vmin = np.floor(np.min(M))
+    vmax = np.ceil(np.max(M))
     norm = Normalize(vmin=vmin, vmax=vmax)
 
     ticks = np.linspace(vmin, vmax, 11)
@@ -772,7 +772,7 @@ def show_cavity_flow_solution_animation(
     u_solution_history: np.ndarray,
     v_solution_history: np.ndarray,
     p_solution_history: np.ndarray,
-    scale: float = 20.0,
+    scale: float = 10.0,
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
@@ -783,7 +783,7 @@ def show_cavity_flow_solution_animation(
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
-    levels = np.linspace(math.floor(np.min(p_solution_matrix_final)), math.ceil(np.max(p_solution_matrix_final)), 30)
+    levels = np.linspace(np.floor(np.min(p_solution_matrix_final)), np.ceil(np.max(p_solution_matrix_final)), 30)
 
     initial_contourf = ax.contourf(
     x_values,
@@ -881,8 +881,8 @@ def show_channel_flow_solution_animation(
 
     M = np.sqrt(U**2 + V**2)
 
-    vmin = math.floor(np.min(M))
-    vmax = math.ceil(np.max(M))
+    vmin = np.floor(np.min(M))
+    vmax = np.ceil(np.max(M))
     norm = Normalize(vmin=vmin, vmax=vmax)
 
     ticks = np.linspace(vmin, vmax, 11)
