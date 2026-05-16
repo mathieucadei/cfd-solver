@@ -60,17 +60,8 @@ def solve_cavity_flow(
                         convection_v_term[1:-1, 1:-1] -
                         dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
                          diffusion_v_term[1:-1, 1:-1])
-
-        u[0, :]  = 0
-        u[:, 0]  = 0
-        u[:, -1] = 0
-        u[-1, :] = config.u_lid    # set velocity on cavity lid equal to 1
-        v[0, :]  = 0
-        v[-1, :] = 0
-        v[:, 0]  = 0
-        v[:, -1] = 0
         
-        # apply_cavity_flow_boundary_2d(u, v, config.u_lid)
+        apply_cavity_flow_boundary_2d(u, v, config.u_lid)
         
         u_history[n] = u
         v_history[n] = v
