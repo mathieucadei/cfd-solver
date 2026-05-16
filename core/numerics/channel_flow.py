@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
-from .boundary_conditions import apply_cavity_flow_boundary_2d, apply_periodic_source_boundary_2d, apply_periodic_pressure_poisson_boundary_2d
+from .boundary_conditions import apply_periodic_source_boundary_2d, apply_periodic_pressure_poisson_boundary_2d, apply_periodic_channel_flow_boundary_2d
 
 from ..config import ChannelFlowConfig
 from ..setup.grids import compute_dx, compute_dy
@@ -43,6 +43,10 @@ def solve_channel_flow(
         un = u.copy()
         vn = v.copy()
 
+
+        convection_u_term, convection_v_term = compute_convection_2d_term(un, vn, dx, dy, config.time_step)
+        diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
+        diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
         b_term = compute_source_term_2d(b, rho, dt, un, vn, dx, dy)
         p_term = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[0]
         pn_term = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[1]
@@ -50,83 +54,72 @@ def solve_channel_flow(
         b = apply_periodic_source_boundary_2d(b_term, rho, dt, un, vn, dx, dy)
         p = apply_periodic_pressure_poisson_boundary_2d(b, p_term, pn_term, dx, dy)
 
-        u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
-                         un[1:-1, 1:-1] * dt / dx *
-                        (un[1:-1, 1:-1] - un[1:-1, 0:-2]) -
-                         vn[1:-1, 1:-1] * dt / dy *
-                        (un[1:-1, 1:-1] - un[0:-2, 1:-1]) -
-                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) +
-                         nu * (dt / dx**2 *
-                        (un[1:-1, 2:] - 2 * un[1:-1, 1:-1] + un[1:-1, 0:-2]) +
-                         dt / dy**2 *
-                        (un[2:, 1:-1] - 2 * un[1:-1, 1:-1] + un[0:-2, 1:-1])) +
+        u[1:-1, 1:-1] = (un[1:-1, 1:-1] - 
+                        convection_u_term[1:-1, 1:-1] -
+                        dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) +
+                        diffusion_u_term[1:-1, 1:-1] + 
                         config.source * dt)
 
-        v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
-                        un[1:-1, 1:-1] * dt / dx *
-                       (vn[1:-1, 1:-1] - vn[1:-1, 0:-2]) -
-                        vn[1:-1, 1:-1] * dt / dy *
-                       (vn[1:-1, 1:-1] - vn[0:-2, 1:-1]) -
-                        dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
-                        nu * (dt / dx**2 *
-                       (vn[1:-1, 2:] - 2 * vn[1:-1, 1:-1] + vn[1:-1, 0:-2]) +
-                        dt / dy**2 *
-                       (vn[2:, 1:-1] - 2 * vn[1:-1, 1:-1] + vn[0:-2, 1:-1])))
+        v[1:-1,1:-1] = (vn[1:-1, 1:-1] - 
+                        convection_v_term[1:-1, 1:-1] - 
+                        dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) + 
+                        diffusion_v_term[1:-1, 1:-1])
         
-        
-        # Periodic BC u @ x = 2     
-        u[1:-1, -1] = (un[1:-1, -1] - un[1:-1, -1] * dt / dx * 
-                    (un[1:-1, -1] - un[1:-1, -2]) -
-                    vn[1:-1, -1] * dt / dy * 
-                    (un[1:-1, -1] - un[0:-2, -1]) -
-                    dt / (2 * rho * dx) *
-                    (p[1:-1, 0] - p[1:-1, -2]) + 
-                    nu * (dt / dx**2 * 
-                    (un[1:-1, 0] - 2 * un[1:-1,-1] + un[1:-1, -2]) +
-                    dt / dy**2 * 
-                    (un[2:, -1] - 2 * un[1:-1, -1] + un[0:-2, -1])) + config.source * dt)
+        apply_periodic_channel_flow_boundary_2d(u, v, p, un, vn, nu, rho, config.source, dx, dy, dt)
+         
+        # # Periodic BC u @ x = 2     
+        # u[1:-1, -1] = (un[1:-1, -1] - un[1:-1, -1] * dt / dx * 
+        #             (un[1:-1, -1] - un[1:-1, -2]) -
+        #             vn[1:-1, -1] * dt / dy * 
+        #             (un[1:-1, -1] - un[0:-2, -1]) -
+        #             dt / (2 * rho * dx) *
+        #             (p[1:-1, 0] - p[1:-1, -2]) + 
+        #             nu * (dt / dx**2 * 
+        #             (un[1:-1, 0] - 2 * un[1:-1,-1] + un[1:-1, -2]) +
+        #             dt / dy**2 * 
+        #             (un[2:, -1] - 2 * un[1:-1, -1] + un[0:-2, -1])) + config.source * dt)
 
-        # Periodic BC u @ x = 0
-        u[1:-1, 0] = (un[1:-1, 0] - un[1:-1, 0] * dt / dx *
-                    (un[1:-1, 0] - un[1:-1, -1]) -
-                    vn[1:-1, 0] * dt / dy * 
-                    (un[1:-1, 0] - un[0:-2, 0]) - 
-                    dt / (2 * rho * dx) * 
-                    (p[1:-1, 1] - p[1:-1, -1]) + 
-                    nu * (dt / dx**2 * 
-                    (un[1:-1, 1] - 2 * un[1:-1, 0] + un[1:-1, -1]) +
-                    dt / dy**2 *
-                    (un[2:, 0] - 2 * un[1:-1, 0] + un[0:-2, 0])) + config.source * dt)
+        # # Periodic BC u @ x = 0
+        # u[1:-1, 0] = (un[1:-1, 0] - un[1:-1, 0] * dt / dx *
+        #             (un[1:-1, 0] - un[1:-1, -1]) -
+        #             vn[1:-1, 0] * dt / dy * 
+        #             (un[1:-1, 0] - un[0:-2, 0]) - 
+        #             dt / (2 * rho * dx) * 
+        #             (p[1:-1, 1] - p[1:-1, -1]) + 
+        #             nu * (dt / dx**2 * 
+        #             (un[1:-1, 1] - 2 * un[1:-1, 0] + un[1:-1, -1]) +
+        #             dt / dy**2 *
+        #             (un[2:, 0] - 2 * un[1:-1, 0] + un[0:-2, 0])) + config.source * dt)
 
-        # Periodic BC v @ x = 2
-        v[1:-1, -1] = (vn[1:-1, -1] - un[1:-1, -1] * dt / dx *
-                    (vn[1:-1, -1] - vn[1:-1, -2]) - 
-                    vn[1:-1, -1] * dt / dy *
-                    (vn[1:-1, -1] - vn[0:-2, -1]) -
-                    dt / (2 * rho * dy) * 
-                    (p[2:, -1] - p[0:-2, -1]) +
-                    nu * (dt / dx**2 *
-                    (vn[1:-1, 0] - 2 * vn[1:-1, -1] + vn[1:-1, -2]) +
-                    dt / dy**2 *
-                    (vn[2:, -1] - 2 * vn[1:-1, -1] + vn[0:-2, -1])))
+        # # Periodic BC v @ x = 2
+        # v[1:-1, -1] = (vn[1:-1, -1] - un[1:-1, -1] * dt / dx *
+        #             (vn[1:-1, -1] - vn[1:-1, -2]) - 
+        #             vn[1:-1, -1] * dt / dy *
+        #             (vn[1:-1, -1] - vn[0:-2, -1]) -
+        #             dt / (2 * rho * dy) * 
+        #             (p[2:, -1] - p[0:-2, -1]) +
+        #             nu * (dt / dx**2 *
+        #             (vn[1:-1, 0] - 2 * vn[1:-1, -1] + vn[1:-1, -2]) +
+        #             dt / dy**2 *
+        #             (vn[2:, -1] - 2 * vn[1:-1, -1] + vn[0:-2, -1])))
 
-        # Periodic BC v @ x = 0
-        v[1:-1, 0] = (vn[1:-1, 0] - un[1:-1, 0] * dt / dx *
-                    (vn[1:-1, 0] - vn[1:-1, -1]) -
-                    vn[1:-1, 0] * dt / dy *
-                    (vn[1:-1, 0] - vn[0:-2, 0]) -
-                    dt / (2 * rho * dy) * 
-                    (p[2:, 0] - p[0:-2, 0]) +
-                    nu * (dt / dx**2 * 
-                    (vn[1:-1, 1] - 2 * vn[1:-1, 0] + vn[1:-1, -1]) +
-                    dt / dy**2 * 
-                    (vn[2:, 0] - 2 * vn[1:-1, 0] + vn[0:-2, 0])))   
+        # # Periodic BC v @ x = 0
+        # v[1:-1, 0] = (vn[1:-1, 0] - un[1:-1, 0] * dt / dx *
+        #             (vn[1:-1, 0] - vn[1:-1, -1]) -
+        #             vn[1:-1, 0] * dt / dy *
+        #             (vn[1:-1, 0] - vn[0:-2, 0]) -
+        #             dt / (2 * rho * dy) * 
+        #             (p[2:, 0] - p[0:-2, 0]) +
+        #             nu * (dt / dx**2 * 
+        #             (vn[1:-1, 1] - 2 * vn[1:-1, 0] + vn[1:-1, -1]) +
+        #             dt / dy**2 * 
+        #             (vn[2:, 0] - 2 * vn[1:-1, 0] + vn[0:-2, 0])))   
 
-        # Wall BC: u,v = 0 @ y = 0,2
-        u[0, :] = 0
-        u[-1, :] = 0
-        v[0, :] = 0
-        v[-1, :] = 0
+        # # Wall BC: u,v = 0 @ y = 0,2
+        # u[0, :] = 0
+        # u[-1, :] = 0
+        # v[0, :] = 0
+        # v[-1, :] = 0
 
         denominator = np.sum(np.abs(un))
 

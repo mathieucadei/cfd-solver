@@ -179,3 +179,72 @@ def apply_periodic_pressure_poisson_boundary_2d(
     p[0, :] = p[1, :]  # dp/dy = 0 at y = 0
     
     return p
+
+
+def apply_periodic_channel_flow_boundary_2d(
+        u: np.ndarray,
+        v: np.ndarray,
+        p: np.ndarray,
+        un: np.ndarray,
+        vn: np.ndarray,
+        nu: np.ndarray,
+        rho: np.ndarray,
+        source: np.ndarray,
+        dx: np.ndarray,
+        dy: np.ndarray,
+        dt: np.ndarray,
+) -> np.ndarray:
+    
+    # Periodic BC u @ x = 2     
+    u[1:-1, -1] = (un[1:-1, -1] - un[1:-1, -1] * dt / dx * 
+                (un[1:-1, -1] - un[1:-1, -2]) -
+                vn[1:-1, -1] * dt / dy * 
+                (un[1:-1, -1] - un[0:-2, -1]) -
+                dt / (2 * rho * dx) *
+                (p[1:-1, 0] - p[1:-1, -2]) + 
+                nu * (dt / dx**2 * 
+                (un[1:-1, 0] - 2 * un[1:-1,-1] + un[1:-1, -2]) +
+                dt / dy**2 * 
+                (un[2:, -1] - 2 * un[1:-1, -1] + un[0:-2, -1])) + source * dt)
+    
+    # Periodic BC u @ x = 0
+    u[1:-1, 0] = (un[1:-1, 0] - un[1:-1, 0] * dt / dx *
+                (un[1:-1, 0] - un[1:-1, -1]) -
+                vn[1:-1, 0] * dt / dy * 
+                (un[1:-1, 0] - un[0:-2, 0]) - 
+                dt / (2 * rho * dx) * 
+                (p[1:-1, 1] - p[1:-1, -1]) + 
+                nu * (dt / dx**2 * 
+                (un[1:-1, 1] - 2 * un[1:-1, 0] + un[1:-1, -1]) +
+                dt / dy**2 *
+                (un[2:, 0] - 2 * un[1:-1, 0] + un[0:-2, 0])) + source * dt)
+
+    # Periodic BC v @ x = 2
+    v[1:-1, -1] = (vn[1:-1, -1] - un[1:-1, -1] * dt / dx *
+                (vn[1:-1, -1] - vn[1:-1, -2]) - 
+                vn[1:-1, -1] * dt / dy *
+                (vn[1:-1, -1] - vn[0:-2, -1]) -
+                dt / (2 * rho * dy) * 
+                (p[2:, -1] - p[0:-2, -1]) +
+                nu * (dt / dx**2 *
+                (vn[1:-1, 0] - 2 * vn[1:-1, -1] + vn[1:-1, -2]) +
+                dt / dy**2 *
+                (vn[2:, -1] - 2 * vn[1:-1, -1] + vn[0:-2, -1])))
+
+    # Periodic BC v @ x = 0
+    v[1:-1, 0] = (vn[1:-1, 0] - un[1:-1, 0] * dt / dx *
+                (vn[1:-1, 0] - vn[1:-1, -1]) -
+                vn[1:-1, 0] * dt / dy *
+                (vn[1:-1, 0] - vn[0:-2, 0]) -
+                dt / (2 * rho * dy) * 
+                (p[2:, 0] - p[0:-2, 0]) +
+                nu * (dt / dx**2 * 
+                (vn[1:-1, 1] - 2 * vn[1:-1, 0] + vn[1:-1, -1]) +
+                dt / dy**2 * 
+                (vn[2:, 0] - 2 * vn[1:-1, 0] + vn[0:-2, 0])))   
+
+    # Wall BC: u,v = 0 @ y = 0,2
+    u[0, :] = 0
+    u[-1, :] = 0
+    v[0, :] = 0
+    v[-1, :] = 0
