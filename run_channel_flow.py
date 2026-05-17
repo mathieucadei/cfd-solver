@@ -110,6 +110,7 @@ show_channel_flow_solution_animation(
     y_values=y_array,
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
+    source=source,
     case_name=case_name,
     save=save,
 )

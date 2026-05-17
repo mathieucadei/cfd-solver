@@ -864,6 +864,7 @@ def show_channel_flow_solution_animation(
     y_values: np.ndarray,
     u_solution_history: np.ndarray,
     v_solution_history: np.ndarray,
+    source: float = None,
     step: int = 3,
     scale: float = 6.0,
     x_label: str = 'x',
@@ -906,13 +907,27 @@ def show_channel_flow_solution_animation(
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
 
-    # ax.set_aspect("equal")
+    if source is not None:
+        ax.text(
+            0.5,
+            1.02,
+            f"Source term = {source:.1f}",
+            transform=ax.transAxes,
+            ha="center",
+            va="bottom",
+        )
     
     def update(frame):
 
         qvr.set_UVC(U[frame], V[frame], M[frame])
 
-        ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})")
+        if source is not None:
+            
+            ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})", pad=24)
+        
+        else: 
+
+            ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})")
 
         return qvr,
 
