@@ -923,11 +923,11 @@ def show_channel_flow_solution_animation(
 
         if source is not None:
             
-            ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})", pad=24)
+            ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})", pad=24)
         
         else: 
 
-            ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})")
+            ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})")
 
         return qvr,
 
