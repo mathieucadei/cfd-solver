@@ -47,7 +47,7 @@ run_*.py                    executable examples
 
 ### 2D pressure-driven channel flow
 
-![2D channel flow](docs/images/pressure_driven_channel_flow_solution.gif)
+![2D channel flow](docs/images/channel_flow_solution.gif)
 
 ## Implemented models
 
