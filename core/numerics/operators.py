@@ -11,12 +11,19 @@ def compute_advection_1d_term(
     c: float,
     dx: float,
     dt: float,
+    scheme: str = 'upwind',
 ) -> np.ndarray:
     """Compute the 1D upwind advection term for a constant wave speed."""
 
     term = np.zeros_like(u)
 
-    term[1:] = c * dt / dx * (u[1:] - u[:-1])
+    if scheme == 'upwind':
+
+        term[1:] = c * dt / dx * (u[1:] - u[:-1])
+
+    elif scheme == 'leapfrog':
+
+        term[1:-1] = c * dt / dx * (u[2:] - u[:-2])
 
     return term
 

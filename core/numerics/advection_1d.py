@@ -31,9 +31,15 @@ def solve_advection_1d(
 
         un = u.copy()
 
-        advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt)
+        advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
+
+        if config.scheme == 'upwind':
         
-        u[1:] = un[1:] - advection_term[1:]
+            u[1:] = un[1:] - advection_term[1:]
+        
+        elif config.scheme == 'leapfrog':
+    
+            u[1:] = un[:-2] - advection_term[1:-1]
 
         history[n] = u
     

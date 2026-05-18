@@ -32,6 +32,7 @@ hat_start = 0.5
 hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
+scheme = 'leapfrog'
 
 
 # Visualization parameters
@@ -55,6 +56,7 @@ advection_1d_config = Advection1DConfig(
     hat_end=hat_end,
     u_min=u_min,
     u_max=u_max,
+    scheme=scheme,
 )
 
 
