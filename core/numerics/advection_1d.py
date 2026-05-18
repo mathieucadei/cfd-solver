@@ -29,6 +29,7 @@ def solve_advection_1d(
 
     for n in range(1, config.max_iterations + 1):
 
+        uo = u.copy()
         un = u.copy()
 
         advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
@@ -38,8 +39,10 @@ def solve_advection_1d(
             u[1:] = un[1:] - advection_term[1:]
         
         elif config.scheme == 'leapfrog':
-    
-            u[1:] = un[:-2] - advection_term[1:-1]
+
+            u[1:] = un[1:2] - advection_term[1:]
+            
+            u[2:] = uo[1:-1] - advection_term[1:-1]
 
         history[n] = u
     
