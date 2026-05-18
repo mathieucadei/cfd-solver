@@ -6,7 +6,7 @@ import numpy as np
 
 from core import (
     Advection1DConfig,
-    hat_initial_condition_1d,
+    heavy_side_initial_condition_1d,
     make_x_grid,
     solve_advection_1d,
 )
@@ -28,8 +28,6 @@ num_grid_points_x = 81
 max_iterations = 40
 sigma = 1
 wavespeed = 1.0
-hat_start = 0.0
-hat_end = 0.0
 u_min = 0.0
 u_max = 1.0
 schemes = [
@@ -62,8 +60,6 @@ for scheme in schemes:
         max_iterations=max_iterations,
         sigma=sigma,
         wavespeed=wavespeed,
-        hat_start=hat_start,
-        hat_end=hat_end,
         u_min=u_min,
         u_max=u_max,
         scheme=scheme,
@@ -78,7 +74,7 @@ for scheme in schemes:
 
     # Initialize the initial condition
 
-    initial_condition = hat_initial_condition_1d(x_array, advection_1d_config)
+    initial_condition = heavy_side_initial_condition_1d(x_array, advection_1d_config)
 
 
 

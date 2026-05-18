@@ -18,6 +18,15 @@ def hat_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
     return initial_condition
 
 
+def heavy_side_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
+    """Generate a 1D hat-function initial condition on the provided grid."""
+
+    initial_condition = np.full_like(x_array, config.u_min, dtype=float)
+    initial_condition[0] = config.u_max
+
+    return initial_condition
+
+
 def cole_hopf_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
     """Generate the Cole-Hopf analytical initial condition on the provided grid."""
 
