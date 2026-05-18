@@ -32,7 +32,7 @@ hat_start = 0.0
 hat_end = 0.0
 u_min = 0.0
 u_max = 1.0
-scheme = 'leapfrog'
+scheme = 'lax-friedrichs'
 
 
 # Visualization parameters

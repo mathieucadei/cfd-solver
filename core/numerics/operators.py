@@ -24,6 +24,10 @@ def compute_advection_1d_term(
     elif scheme == 'leapfrog':
 
         term[1:-1] = c * dt / dx * (u[2:] - u[:-2])
+    
+    elif scheme == 'lax-friedrichs':
+
+        term[1:-1] = c * dt / dx * (u[2:] - u[:-2]) / 2 
 
     return term
 

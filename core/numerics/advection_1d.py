@@ -66,5 +66,23 @@ def solve_advection_1d(
 
             uo = un
             un = u
+    
+    elif config.scheme == 'lax-friedrichs':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
+
+            u[1:-1] = (un[2:] + un[:-2]) / 2  - advection_term[1:-1]
+
+            history[n] = u
 
     return history
