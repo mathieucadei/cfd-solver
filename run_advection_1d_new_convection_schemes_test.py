@@ -25,14 +25,14 @@ from post_processing import (
 
 domain_length_x = 2.0
 num_grid_points_x = 81
-max_iterations = 80
-sigma = 1
+max_iterations = 40
+sigma = 1.0
 wavespeed = 1.0
-hat_start = 0.5
-hat_end = 1.0
-u_min = 1.0
-u_max = 2.0
-scheme = 'upwind'
+hat_start = 0.0
+hat_end = 0.0
+u_min = 0.0
+u_max = 1.0
+scheme = 'leapfrog'
 
 
 # Visualization parameters

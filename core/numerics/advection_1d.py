@@ -21,29 +21,50 @@ def solve_advection_1d(
     dx = compute_dx(config)
     dt = compute_advective_dt_1d(config)
 
-    u = initial_condition.copy()
+    if config.scheme == 'upwind':
+
+        u = initial_condition.copy()
     
-    history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
-    history[0] = initial_condition
+        history[0] = initial_condition
 
-    for n in range(1, config.max_iterations + 1):
+        for n in range(1, config.max_iterations + 1):
 
-        uo = u.copy()
-        un = u.copy()
+            un = u.copy()
 
-        advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
+            advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
 
-        if config.scheme == 'upwind':
-        
             u[1:] = un[1:] - advection_term[1:]
+
+            history[n] = u
         
-        elif config.scheme == 'leapfrog':
+    elif config.scheme == 'leapfrog':
 
-            u[1:] = un[1:2] - advection_term[1:]
-            
-            u[2:] = uo[1:-1] - advection_term[1:-1]
-
-        history[n] = u
+        uo = initial_condition.copy()
     
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        init_advection_term = compute_advection_1d_term(uo, config.wavespeed, dx, dt, 'upwind')
+
+        un = uo.copy()
+
+        un[1:] = uo[1:] - init_advection_term[1:]
+
+        history[0] = uo
+        history[1] = un
+
+        for n in range(1, config.max_iterations):
+
+            u = un.copy()
+
+            advection_term = compute_advection_1d_term(un, config.wavespeed, dx, dt, config.scheme)
+
+            u[1:-1] = uo[1:-1] - advection_term[1:-1]
+
+            history[n+1] = u
+
+            uo = un
+            un = u
+
     return history
