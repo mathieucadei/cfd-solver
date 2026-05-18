@@ -6,7 +6,8 @@ Python finite-difference CFD project for rebuilding canonical incompressible-flo
 
 Currently implemented:
 
-* 1D and 2D linear advection
+* 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff schemes
+* 2D linear advection
 * 1D and 2D nonlinear convection
 * 1D and 2D diffusion
 * 1D and 2D Burgers equation
@@ -15,7 +16,7 @@ Currently implemented:
 * 2D lid-driven cavity flow using a pressure Poisson solve
 * 2D pressure-driven channel flow with periodic x-boundaries
 * uniform grid generation
-* hat-function and Cole-Hopf initial conditions
+* hat-function, Heaviside-style step, and Cole-Hopf initial conditions
 * explicit finite-difference time-marching solvers
 * iterative pressure/potential solves using L1 convergence or fixed iteration limits
 * contour, surface, quiver, and animation visualizations
@@ -57,7 +58,7 @@ The current solvers model:
 
   du/dt + c du/dx = 0
 
-  using an explicit upwind finite-difference scheme.
+  using selectable explicit finite-difference schemes: upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff.
 
 * the 2D linear advection equation:
 
@@ -158,6 +159,7 @@ These comparisons are used to assess solver correctness and visualize agreement 
 
 ```bash
 python run_advection_1d.py
+python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
 python run_convection_1d.py
 python run_convection_2d.py

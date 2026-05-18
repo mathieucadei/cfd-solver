@@ -35,7 +35,8 @@ from .setup.time_stepping import (
 from .setup.initial_conditions import (
     cole_hopf_initial_condition_1d,
     hat_convective_initial_condition_2d, 
-    hat_initial_condition_1d, 
+    hat_initial_condition_1d,
+    heaviside_initial_condition_1d, 
     hat_initial_condition_2d, 
     laplace_initial_condition_2d,
     poisson_initial_condition_2d,
