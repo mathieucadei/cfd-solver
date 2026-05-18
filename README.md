@@ -16,7 +16,7 @@ Currently implemented:
 * 2D lid-driven cavity flow using a pressure Poisson solve
 * 2D pressure-driven channel flow with periodic x-boundaries
 * uniform grid generation
-* hat-function and Cole-Hopf initial conditions
+* hat-function, Heaviside-style step, and Cole-Hopf initial conditions
 * explicit finite-difference time-marching solvers
 * iterative pressure/potential solves using L1 convergence or fixed iteration limits
 * contour, surface, quiver, and animation visualizations

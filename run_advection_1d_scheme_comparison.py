@@ -6,7 +6,7 @@ import numpy as np
 
 from core import (
     Advection1DConfig,
-    heavy_side_initial_condition_1d,
+    heaviside_initial_condition_1d,
     make_x_grid,
     solve_advection_1d,
 )
@@ -74,7 +74,7 @@ for scheme in schemes:
 
     # Initialize the initial condition
 
-    initial_condition = heavy_side_initial_condition_1d(x_array, advection_1d_config)
+    initial_condition = heaviside_initial_condition_1d(x_array, advection_1d_config)
 
 
 
