@@ -1,14 +1,16 @@
-"""Run the 1D advection solver and generate solution plots."""
+"""Run the 1D convection solver and generate solution plots."""
 
 
+
+from pathlib import Path
 
 import numpy as np
 
 from core import (
-    Advection1DConfig,
+    Convection1DConfig,
     heaviside_initial_condition_1d,
     make_x_grid,
-    solve_advection_1d,
+    solve_convection_1d,
 )
 from post_processing import (
     show_solution_1d_animation,
@@ -24,24 +26,24 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 2.0
-num_grid_points_x = 81
-max_iterations = 40
-sigma = 1
-wavespeed = 1.0
-u_min = 0.0
-u_max = 1.0
+num_grid_points_x = 101
+max_iterations = 100
+sigma = 0.5
+hat_start = 0.5
+hat_end = 1.0
+u_min = 1.0
+u_max = 2.0
 schemes = [
     'upwind',
-    'leapfrog',
     'lax-friedrichs',
-    'lax-wendroff',
+    'richtmyer',
 ]
 
 
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d advection'
+case_name = '1d convection'
 title = True
 save = False
 show_individual_plots = False
@@ -53,12 +55,13 @@ for scheme in schemes:
 
     case_name_scheme = f'{case_name} - {scheme}'
 
-    advection_1d_config = Advection1DConfig(
+    convection_1d_config = Convection1DConfig(
         domain_length_x=domain_length_x,
         num_grid_points_x=num_grid_points_x,
         max_iterations=max_iterations,
         sigma=sigma,
-        wavespeed=wavespeed,
+        hat_start=hat_start,
+        hat_end=hat_end,
         u_min=u_min,
         u_max=u_max,
         scheme=scheme,
@@ -67,26 +70,24 @@ for scheme in schemes:
 
     # Generate the grid and time array
 
-    x_array = make_x_grid(advection_1d_config)
-    time_array = np.arange(0, advection_1d_config.max_iterations + 1)
-
+    x_array = make_x_grid(convection_1d_config)
+    time_array = np.arange(0, convection_1d_config.max_iterations + 1)
 
     # Initialize the initial condition
 
-    initial_condition = heaviside_initial_condition_1d(x_array, advection_1d_config)
+    initial_condition = heaviside_initial_condition_1d(x_array, convection_1d_config)
 
 
 
-    # Solve the advection equation
+    # Solve the convection equation
 
-    solution_history = solve_advection_1d(initial_condition, advection_1d_config)
+    solution_history = solve_convection_1d(initial_condition, convection_1d_config)
 
 
 
     # Post-processing
 
     if show_individual_plots:
-
         show_solution_traces(
             x_values=x_array,
             cut_values=time_array,
@@ -130,7 +131,7 @@ for scheme in schemes:
     show_solution_overview(
         x_values=x_array, 
         y_values=time_array, 
-        num_solution_matrix=solution_history, 
+        num_solution_matrix=solution_history,
         step_stride=step_stride,
         case_name=case_name_scheme,
         title=title,

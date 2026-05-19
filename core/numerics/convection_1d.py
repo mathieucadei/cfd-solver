@@ -20,20 +20,65 @@ def solve_convection_1d(
     dx = compute_dx(config)
     dt = compute_convective_dt_1d(config)
 
-    u = initial_condition.copy()
+    if config.scheme == 'upwind':
 
-    history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+        u = initial_condition.copy()
 
-    history[0] = initial_condition
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
-    for n in range(1, config.max_iterations + 1):
+        history[0] = initial_condition
 
-        un = u.copy()
+        for n in range(1, config.max_iterations + 1):
 
-        convection_term = compute_convection_1d_term(un, dx, dt)
+            un = u.copy()
 
-        u[1:] = un[1:] - convection_term[1:]
-        
-        history[n] = u
+            convection_term = compute_convection_1d_term(un, dx, dt)
+
+            u[1:] = un[1:] - convection_term[1:]
+            
+            history[n] = u
+
     
+    elif config.scheme == 'lax-friedrichs':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            convection_term = compute_convection_1d_term(un, dx, dt, config.scheme)
+
+            u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
+
+            history[n] = u
+    
+    elif config.scheme == 'richtmyer':
+
+        un_half = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un_half = u.copy()
+
+            un = un_half.copy()
+
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, config.scheme)
+
+            un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
+
+            convection_term_2 = compute_convection_1d_term(un_half, dx, dt, config.scheme)
+
+            u[1:] = un[1:] - convection_term_2[1:]
+
+            history[n] = u       
+
     return history

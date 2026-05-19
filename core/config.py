@@ -33,7 +33,7 @@ class Convection1DConfig:
     hat_end: float = 1.0
     u_min: float = 1.0
     u_max: float = 2.0
-
+    scheme: str = 'upwind'
 
 @dataclass
 class Diffusion1DConfig:
