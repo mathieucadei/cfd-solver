@@ -60,6 +60,8 @@ def solve_convection_1d(
     elif config.scheme == 'richtmyer':
 
         un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
     
         history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
@@ -67,7 +69,7 @@ def solve_convection_1d(
 
         for n in range(1, config.max_iterations + 1):
 
-            un = un_half.copy()
+            un = u.copy()
 
             convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs')
 
