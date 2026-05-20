@@ -56,7 +56,7 @@ def compute_convection_1d_term(
     
     elif scheme == 'leapfrog':
     
-        term[1:-1] = u[1:-1] * dt / dx * (un_half[2:] - un_half[:-2]) / 2    
+        term[1:-1] = u[1:-1] * dt / dx * (un_half[2:] - un_half[:-2]) / 4    
 
     elif scheme == 'lax-friedrichs':
 

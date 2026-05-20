@@ -79,7 +79,7 @@ def solve_convection_1d(
 
             u = un_half.copy()
             
-            u[1:] = un[1:] - convection_term_2[1:]
+            u[1:-1] = un[1:-1] - convection_term_2[1:]
 
             history[n] = u       
 

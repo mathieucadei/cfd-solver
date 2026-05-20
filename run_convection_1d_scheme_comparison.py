@@ -36,7 +36,6 @@ u_max = 2.0
 schemes = [
     'upwind',
     'lax-friedrichs',
-    'richtmyer',
 ]
 
 
