@@ -73,7 +73,7 @@ def solve_convection_1d(
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
-            convection_term_2 = compute_convection_1d_term(un, dx, dt, config.scheme, un_half)
+            convection_term_2 = compute_convection_1d_term(un, dx, dt, 'leapfrog', un_half)
 
             u = un_half.copy()
             
