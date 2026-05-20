@@ -45,6 +45,7 @@ def compute_convection_1d_term(
     dx: float,
     dt: float,
     scheme: str = 'upwind',
+    un_half: np.ndarray = None,
 ) -> np.ndarray:
     """Compute the 1D upwind convection term."""
     term = np.zeros_like(u)
@@ -59,18 +60,12 @@ def compute_convection_1d_term(
     
     elif scheme == 'richtmyer':
 
-        un_half = u.copy()
-
-        un_half[1:-1] = (u[2:] + u[:-2]) * dt / dx * (u[2:] - u[:-2]) / 4
-
-        term[1:-1] = u[1:] * dt / dx * (un_half[2:] - un_half[:-2]) / 2
+        term[1:-1] = u[1:-1] * dt / dx * (un_half[2:] - un_half[:-2]) / 2
 
     else:
         
         raise ValueError("basis must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
     
-    return term
-
     return term
 
 

@@ -67,16 +67,16 @@ def solve_convection_1d(
 
         for n in range(1, config.max_iterations + 1):
 
-            un_half = u.copy()
-
             un = un_half.copy()
 
-            convection_term_1 = compute_convection_1d_term(un, dx, dt, config.scheme)
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs')
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
-            convection_term_2 = compute_convection_1d_term(un_half, dx, dt, config.scheme)
+            convection_term_2 = compute_convection_1d_term(un, dx, dt, config.scheme, un_half)
 
+            u = un_half.copy()
+            
             u[1:] = un[1:] - convection_term_2[1:]
 
             history[n] = u       
