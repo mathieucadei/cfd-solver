@@ -51,7 +51,9 @@ def solve_convection_1d(
 
             un = u.copy()
 
-            convection_term = compute_convection_1d_term(un, dx, dt, config.scheme)
+            e = un**2 / 2
+
+            convection_term = compute_convection_1d_term(e, dx, dt, config.scheme)
 
             u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
 
@@ -71,7 +73,11 @@ def solve_convection_1d(
 
             un = u.copy()
 
-            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs')
+            un_half = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'lax-friedrichs')
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
