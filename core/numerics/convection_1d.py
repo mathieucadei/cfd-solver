@@ -39,7 +39,7 @@ def solve_convection_1d(
             history[n] = u
 
     
-    elif config.scheme == 'lax-friedrichs':
+    elif config.scheme == 'conservative-lax-friedrichs':
 
         u = initial_condition.copy()
     
@@ -59,7 +59,7 @@ def solve_convection_1d(
 
             history[n] = u
     
-    elif config.scheme == 'richtmyer':
+    elif config.scheme == 'conservative-richtmyer':
 
         un_half = initial_condition.copy()
 
@@ -77,15 +77,49 @@ def solve_convection_1d(
 
             e = un**2 / 2
 
-            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'lax-friedrichs')
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs')
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
-            convection_term_2 = compute_convection_1d_term(un, dx, dt, 'leapfrog', un_half)
+            u = un_half.copy()
+
+            e = un_half**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-leapfrog')
+            
+            u[1:-1] = un[1:-1] - convection_term_2[1:-1]
+
+            history[n] = u
+
+    elif config.scheme == 'conservative-lax-wendroff':
+
+        un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_half = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-upwind')
+
+            un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
             u = un_half.copy()
+
+            e =  un_half**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-leapfrog-lw')
             
-            u[1:-1] = un[1:-1] - convection_term_2[1:]
+            u[1:-1] = un[1:-1] - convection_term_2[1:-1]
 
             history[n] = u       
 

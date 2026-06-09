@@ -35,7 +35,9 @@ u_min = 1.0
 u_max = 2.0
 schemes = [
     'upwind',
-    'lax-friedrichs',
+    'conservative-lax-friedrichs',
+    'conservative-richtmyer',
+    'conservative-lax-wendroff'
 ]
 
 
