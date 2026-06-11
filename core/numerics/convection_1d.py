@@ -109,17 +109,15 @@ def solve_convection_1d(
 
             e = un**2 / 2
 
-            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-upwind')
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs-lw')
 
-            un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
-
-            u = un_half.copy()
+            un_half = (un[1:] + un[:-1]) / 2  - convection_term_1[1:]
 
             e =  un_half**2 / 2
 
             convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-leapfrog-lw')
             
-            u[1:-1] = un[1:-1] - convection_term_2[1:-1]
+            u[1:-1] = un[1:-1] - convection_term_2[1:]
 
             history[n] = u       
 

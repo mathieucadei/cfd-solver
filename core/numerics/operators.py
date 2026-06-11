@@ -62,13 +62,17 @@ def compute_convection_1d_term(
 
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
     
+    elif scheme == 'conservative-lax-friedrichs-lw':
+
+        term[1:] = dt / dx * (u[1:] - u[:-1]) / 2
+    
     elif scheme == 'conservative-leapfrog':
     
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
 
     elif scheme == 'conservative-leapfrog-lw':
     
-        term[1:-1] = dt / dx * (u[2:] - u[:-2])
+        term[1:] = dt / dx * (u[1:] - u[:-1])
 
     else:
         

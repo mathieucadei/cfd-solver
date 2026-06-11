@@ -34,9 +34,9 @@ hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
 schemes = [
-    'upwind',
-    'conservative-lax-friedrichs',
-    'conservative-richtmyer',
+    # 'upwind',
+    # 'conservative-lax-friedrichs',
+    # 'conservative-richtmyer',
     'conservative-lax-wendroff'
 ]
 
