@@ -56,19 +56,35 @@ def compute_convection_1d_term(
 
     elif scheme == 'conservative-upwind':
 
-        term[1:] = dt / dx * (u[1:] - u[:-1])   
+        term[1:] = dt / dx * (u[1:] - u[:-1])
+
+    elif scheme == 'lax-friedrichs':
+
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 4 
 
     elif scheme == 'conservative-lax-friedrichs':
 
-        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
+        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 4
+
+    elif scheme == 'lax-friedrichs-lw':
+
+        term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1]) / 2
     
     elif scheme == 'conservative-lax-friedrichs-lw':
 
         term[1:] = dt / dx * (u[1:] - u[:-1]) / 2
+
+    elif scheme == 'leapfrog':
+    
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 2
     
     elif scheme == 'conservative-leapfrog':
     
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
+
+    elif scheme == 'leapfrog-lw':
+    
+        term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
 
     elif scheme == 'conservative-leapfrog-lw':
     
