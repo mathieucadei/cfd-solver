@@ -60,9 +60,17 @@ def compute_convection_1d_term(
 
     elif scheme == 'lax-friedrichs':
 
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 2
+
+    elif scheme == 'lax-friedrichs-half':
+
         term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 4 
 
     elif scheme == 'conservative-lax-friedrichs':
+
+        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
+    
+    elif scheme == 'conservative-lax-friedrichs-half':
 
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 4
 

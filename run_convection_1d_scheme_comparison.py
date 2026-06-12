@@ -5,6 +5,7 @@
 from pathlib import Path
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from core import (
     Convection1DConfig,
@@ -34,14 +35,14 @@ hat_end = 1.0
 u_min = 1.0
 u_max = 2.0
 schemes = [
-    # 'upwind',
-    # 'conservative-upwind',
-    # 'lax-friedrichs',
-    # 'conservative-lax-friedrichs',
-    # 'richtmyer',  
-    # 'conservative-richtmyer',
+    'upwind',
+    'conservative-upwind',
+    'lax-friedrichs',
+    'conservative-lax-friedrichs',
+    'richtmyer',  
+    'conservative-richtmyer',
     'lax-wendroff',
-    # 'conservative-lax-wendroff'
+    'conservative-lax-wendroff'
 ]
 
 
@@ -88,11 +89,15 @@ for scheme in schemes:
 
     solution_history = solve_convection_1d(initial_condition, convection_1d_config)
 
+    plt.plot(x_array, solution_history[-1], label=scheme)
+
+
 
 
     # Post-processing
 
     if show_individual_plots:
+
         show_solution_traces(
             x_values=x_array,
             cut_values=time_array,
@@ -149,3 +154,6 @@ for scheme in schemes:
         case_name=case_name_scheme,
         save=save,
     )
+
+plt.legend()
+plt.show()

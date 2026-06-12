@@ -115,7 +115,7 @@ def solve_convection_1d(
 
             un_half = un.copy()
 
-            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs')
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs-half')
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
 
@@ -144,11 +144,9 @@ def solve_convection_1d(
 
             e = un**2 / 2
 
-            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs')
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs-half')
 
             un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
-
-            # u = un_half.copy()
 
             e = un_half**2 / 2
 
@@ -219,6 +217,16 @@ def solve_convection_1d(
 
     else:
         
-        raise ValueError("basis must be 'upwind', 'conservative-lax-friedrichs', 'conservative-richtmyer', or 'conservative-lax-wendroff'")       
+        raise ValueError(
+        "basis must be " \
+        "'upwind', " \
+        "'conservative-upwind, " \
+        "'lax-friedrichs', " \
+        "'conservative-lax-friedrichs', " \
+        "'richtmyer', " \
+        "'conservative-richtmyer', " \
+        "'lax-wendroff', or " \
+        "'conservative-lax-wendroff'"
+        )       
 
     return history
