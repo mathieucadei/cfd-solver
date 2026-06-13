@@ -26,14 +26,14 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x = 2.0
-num_grid_points_x = 101
-max_iterations = 100
-sigma = 0.5
-hat_start = 0.5
-hat_end = 1.0
-u_min = 1.0
-u_max = 2.0
+domain_length_x = 4.0
+num_grid_points_x = 41
+max_iterations = 40
+sigmas = [1.0, 0.5]
+hat_start = 2
+hat_end = 0
+u_min = 0
+u_max = 1.0
 schemes = [
     'upwind',
     'conservative-upwind',
@@ -44,6 +44,13 @@ schemes = [
     'lax-wendroff',
     'conservative-lax-wendroff'
 ]
+
+scheme_colors = {
+    'upwind': 'tab:blue',
+    'lax-friedrichs': 'tab:orange',
+    'richtmyer': 'tab:green',
+    'lax-wendroff': 'tab:red',
+}
 
 
 # Visualization parameters
@@ -56,104 +63,58 @@ show_individual_plots = False
 
 
 # Create the configuration object
+for sigma in sigmas: 
 
-for scheme in schemes:
+    plt.figure()
 
-    case_name_scheme = f'{case_name} - {scheme}'
+    for scheme in schemes:
 
-    convection_1d_config = Convection1DConfig(
-        domain_length_x=domain_length_x,
-        num_grid_points_x=num_grid_points_x,
-        max_iterations=max_iterations,
-        sigma=sigma,
-        hat_start=hat_start,
-        hat_end=hat_end,
-        u_min=u_min,
-        u_max=u_max,
-        scheme=scheme,
-    )
+        case_name_scheme = f'{case_name} - {scheme}'
 
-
-    # Generate the grid and time array
-
-    x_array = make_x_grid(convection_1d_config)
-    time_array = np.arange(0, convection_1d_config.max_iterations + 1)
-
-    # Initialize the initial condition
-
-    initial_condition = heaviside_initial_condition_1d(x_array, convection_1d_config)
-
-
-
-    # Solve the convection equation
-
-    solution_history = solve_convection_1d(initial_condition, convection_1d_config)
-
-    plt.plot(x_array, solution_history[-1], label=scheme)
-
-
-
-
-    # Post-processing
-
-    if show_individual_plots:
-
-        show_solution_traces(
-            x_values=x_array,
-            cut_values=time_array,
-            num_solution_matrix=solution_history,
-            step_stride=step_stride,
-            case_name=case_name_scheme,
-            title=title,
-            save=save,
+        convection_1d_config = Convection1DConfig(
+            domain_length_x=domain_length_x,
+            num_grid_points_x=num_grid_points_x,
+            max_iterations=max_iterations,
+            sigma=sigma,
+            hat_start=hat_start,
+            hat_end=hat_end,
+            u_min=u_min,
+            u_max=u_max,
+            scheme=scheme,
         )
 
-        show_solution_traces(
-            x_values=time_array,
-            cut_values=x_array,
-            num_solution_matrix=solution_history,
-            axis=1,
-            step_stride=step_stride,
-            cut_label='x',
-            case_name=case_name_scheme,
-            title=title,
-            save=save,
+
+        # Generate the grid and time array
+
+        x_array = make_x_grid(convection_1d_config)
+        time_array = np.arange(0, convection_1d_config.max_iterations + 1)
+
+        # Initialize the initial condition
+
+        initial_condition = heaviside_initial_condition_1d(x_array, convection_1d_config)
+
+
+
+        # Solve the convection equation
+
+        solution_history = solve_convection_1d(initial_condition, convection_1d_config)
+
+        base_scheme = scheme.replace('conservative-', '')
+
+
+        # Post-processing
+
+        plt.plot(
+            x_array,
+            solution_history[-1],
+            color=scheme_colors[base_scheme],
+            linestyle='--' if 'conservative' in scheme else '-',
+            label=scheme,
         )
+        
+    plt.xlabel('x')
+    plt.ylabel('u')
+    plt.title(f'Heaviside Solution @ Final Time Step = {max_iterations}')
 
-        show_solution_contour_map(
-            x_values=x_array,
-            y_values=time_array,
-            solution_matrix=solution_history,
-            case_name=case_name_scheme,
-            title=title,
-            save=save,
-        )
-
-        show_solution_surface(
-            x_values=x_array,
-            y_values=time_array,
-            solution_matrix=solution_history,
-            case_name=case_name_scheme,
-            title=title,
-            save=save,
-        )
-
-    show_solution_overview(
-        x_values=x_array, 
-        y_values=time_array, 
-        num_solution_matrix=solution_history,
-        step_stride=step_stride,
-        case_name=case_name_scheme,
-        title=title,
-        save=save,
-    )
-
-    show_solution_1d_animation(
-        x_values=x_array,
-        num_solution_history=solution_history,
-        case_name=case_name_scheme,
-        save=save,
-    )
-
-plt.legend()
-plt.show()
+    plt.legend()
+    plt.show()
