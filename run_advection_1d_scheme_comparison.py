@@ -28,6 +28,7 @@ num_grid_points_x = 81
 max_iterations = 40
 sigma = 1
 wavespeed = 1.0
+hat_start = 0
 u_min = 0.0
 u_max = 1.0
 schemes = [
@@ -59,6 +60,7 @@ for scheme in schemes:
         max_iterations=max_iterations,
         sigma=sigma,
         wavespeed=wavespeed,
+        hat_start=hat_start,
         u_min=u_min,
         u_max=u_max,
         scheme=scheme,
