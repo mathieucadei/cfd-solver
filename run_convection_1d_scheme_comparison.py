@@ -106,12 +106,17 @@ for current_ax, nx, n_iter, sigma in cases:
 
     current_ax.set_xticks(x_array, minor=True)
     current_ax.set_xticks(x_array[::5] if nx == 41 else x_array[::10])
-    current_ax.grid(True, which='minor', alpha=0.25)
-    current_ax.grid(True, which='major', alpha=0.6)
+    current_ax.grid(True, which='minor', alpha=0.15)
+    current_ax.grid(True, which='major', alpha=0.4)
     # current_ax.legend()
     current_ax.set_xlabel('x')
     current_ax.set_ylabel('u', rotation=0)
-    current_ax.set_title(f'nx={nx}, sigma={sigma}, steps={n_iter}')
+
+    final_time = n_iter * sigma * domain_length_x / ((nx - 1) * u_max)
+    
+    current_ax.set_title(
+        f'nx={nx}, sigma={sigma}, steps={n_iter}, t={final_time:.2f}'
+    )
     current_ax.tick_params(labelleft=True)
 
 
@@ -119,5 +124,5 @@ handles, labels = ax[0, 0].get_legend_handles_labels()
 fig.legend(handles, labels, loc='lower center', ncol=5)
 
 fig.suptitle('1D Convection Scheme Comparison: Heaviside Step', y=0.98)
-fig.tight_layout(rect=[0, 0.08, 1, 0.98])
+fig.tight_layout(rect=[0, 0.10, 1, 0.96])
 plt.show()

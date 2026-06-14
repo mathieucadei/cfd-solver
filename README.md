@@ -8,7 +8,8 @@ Currently implemented:
 
 * 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff schemes
 * 2D linear advection
-* 1D and 2D nonlinear convection
+* 1D nonlinear convection with upwind, Lax-Friedrichs, Richtmyer, Lax-Wendroff, and MacCormack schemes in non-conservative and conservative forms
+* 2D nonlinear convection
 * 1D and 2D diffusion
 * 1D and 2D Burgers equation
 * 2D Laplace equation
@@ -33,6 +34,10 @@ run_*.py                    executable examples
 ```
 
 ## Example visualizations
+
+### 1D nonlinear convection scheme comparison
+
+![1D convection scheme comparison](docs/images/convection_1d_scheme_comparison.png)
 
 ### 2D diffusion
 
@@ -70,7 +75,11 @@ The current solvers model:
 
   du/dt + u du/dx = 0
 
-  using an explicit upwind finite-difference scheme.
+  and its conservative form:
+
+  du/dt + d(u^2 / 2)/dx = 0
+
+  using selectable explicit schemes: upwind, Lax-Friedrichs, Richtmyer, Lax-Wendroff, and MacCormack. Conservative variants are included for flux-form shock propagation.
 
 * the 2D nonlinear convection equations:
 
@@ -138,13 +147,15 @@ The current solvers model:
 
   using explicit finite differences for the velocity equations, an iterative pressure Poisson solve, periodic boundary conditions in x, and no-slip walls at y = 0 and y = Ly.
 
-## Validation
+## Validation and numerical experiments
 
 This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
 
 For the 1D diffusion equation, the numerical solver is validated against a Fourier-based analytical solution of the heat equation.
 
 For the 1D Burgers equation, the numerical solver is validated against the analytical Cole-Hopf solution.
+
+The 1D convection scheme comparison script visualizes conservative and non-conservative schemes on a Heaviside step problem, comparing grid resolution and CFL number effects. This highlights numerical diffusion, dispersive oscillations near shocks, and conservative-form shock propagation.
 
 These comparisons are used to assess solver correctness and visualize agreement between numerical and analytical results.
 
@@ -154,6 +165,8 @@ These comparisons are used to assess solver correctness and visualize agreement 
 * Validate pressure-driven channel flow against analytical Poiseuille behaviour.
 * Add regression tests for boundary conditions and pressure-source terms.
 * Add convergence studies for grid spacing and time-step sensitivity.
+* Add limiters or artificial viscosity for oscillation control near shocks.
+* Add regression tests for 1D convection scheme updates.
 
 ## Run
 
@@ -162,6 +175,7 @@ python run_advection_1d.py
 python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
 python run_convection_1d.py
+python run_convection_1d_scheme_comparison.py
 python run_convection_2d.py
 python run_diffusion_1d.py
 python run_diffusion_1d_vs_heat.py
