@@ -213,6 +213,64 @@ def solve_convection_1d(
             u[1:-1] = un[1:-1] - convection_term_2[1:]
 
             history[n] = u
+    
+
+    elif config.scheme == 'mac-cormack':
+
+        un_star = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_star = un.copy()
+
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'downwind')
+
+            un_star[1:-1] = un[1:-1]  - convection_term_1[1:-1]
+
+            convection_term_2 = compute_convection_1d_term(un_star, dx, dt, 'upwind')
+            
+            u[1:-1] = (un[1:-1] + un_star[1:-1] - convection_term_2[1:-1]) / 2
+
+            history[n] = u
+
+    
+    elif config.scheme == 'conservative-mac-cormack':
+
+        un_star = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_star = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-downwind')
+
+            un_star[1:-1] = un[1:-1]  - convection_term_1[1:-1]
+
+            e = un_star**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-upwind')
+            
+            u[1:-1] = (un[1:-1] + un_star[1:-1] - convection_term_2[1:-1]) / 2
+
+            history[n] = u
 
 
     else:

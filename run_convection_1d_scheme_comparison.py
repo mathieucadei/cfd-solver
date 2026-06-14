@@ -27,7 +27,9 @@ schemes = [
     'richtmyer',  
     'conservative-richtmyer',
     'lax-wendroff',
-    'conservative-lax-wendroff'
+    'conservative-lax-wendroff',
+    'mac-cormack',
+    'conservative-mac-cormack',
 ]
 
 
@@ -38,6 +40,7 @@ scheme_colors = {
     'lax-friedrichs': 'tab:orange',
     'richtmyer': 'tab:green',
     'lax-wendroff': 'tab:red',
+    'mac-cormack': 'tab:purple',
 }
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 10), sharey=True)
@@ -113,7 +116,7 @@ for current_ax, nx, n_iter, sigma in cases:
 
 
 handles, labels = ax[0, 0].get_legend_handles_labels()
-fig.legend(handles, labels, loc='lower center', ncol=4)
+fig.legend(handles, labels, loc='lower center', ncol=5)
 
 fig.suptitle('1D Convection Scheme Comparison: Heaviside Step', y=0.98)
 fig.tight_layout(rect=[0, 0.08, 1, 0.98])
