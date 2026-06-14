@@ -19,10 +19,10 @@ def hat_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
 
 
 def heaviside_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
-    """Generate a 1D hat-function initial condition on the provided grid."""
+    """Generate a 1D Heaviside initial condition on the provided grid."""
 
     initial_condition = np.full_like(x_array, config.u_min, dtype=float)
-    initial_condition[0] = config.u_max
+    initial_condition[x_array <= config.hat_start] = config.u_max
 
     return initial_condition
 

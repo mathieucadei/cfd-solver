@@ -20,20 +20,273 @@ def solve_convection_1d(
     dx = compute_dx(config)
     dt = compute_convective_dt_1d(config)
 
-    u = initial_condition.copy()
+    if config.scheme == 'upwind':
 
-    history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+        u = initial_condition.copy()
 
-    history[0] = initial_condition
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
-    for n in range(1, config.max_iterations + 1):
+        history[0] = initial_condition
 
-        un = u.copy()
+        for n in range(1, config.max_iterations + 1):
 
-        convection_term = compute_convection_1d_term(un, dx, dt)
+            un = u.copy()
 
-        u[1:] = un[1:] - convection_term[1:]
-        
-        history[n] = u
+            convection_term = compute_convection_1d_term(un, dx, dt)
+
+            u[1:] = un[1:] - convection_term[1:]
+            
+            history[n] = u
     
+    elif config.scheme == 'conservative-upwind':
+
+        u = initial_condition.copy()
+
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            e = un**2 / 2
+
+            convection_term = compute_convection_1d_term(e, dx, dt, config.scheme)
+
+            u[1:] = un[1:] - convection_term[1:]
+            
+            history[n] = u
+    
+
+    elif config.scheme == 'lax-friedrichs':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            convection_term = compute_convection_1d_term(un, dx, dt, config.scheme)
+
+            u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
+
+            history[n] = u
+
+    
+    elif config.scheme == 'conservative-lax-friedrichs':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            e = un**2 / 2
+
+            convection_term = compute_convection_1d_term(e, dx, dt, config.scheme)
+
+            u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
+
+            history[n] = u
+    
+
+    elif config.scheme == 'richtmyer':
+
+        un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_half = un.copy()
+
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs-half')
+
+            un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
+
+            convection_term_2 = compute_convection_1d_term(un_half, dx, dt, 'leapfrog')
+            
+            u[1:-1] = un[1:-1] - convection_term_2[1:-1]
+
+            history[n] = u
+
+    
+    elif config.scheme == 'conservative-richtmyer':
+
+        un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_half = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs-half')
+
+            un_half[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term_1[1:-1]
+
+            e = un_half**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-leapfrog')
+            
+            u[1:-1] = un[1:-1] - convection_term_2[1:-1]
+
+            history[n] = u
+    
+
+    elif config.scheme == 'lax-wendroff':
+
+        un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_half = un.copy()
+
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'lax-friedrichs-lw')
+
+            un_half = (un[1:] + un[:-1]) / 2  - convection_term_1[1:]
+
+            convection_term_2 = compute_convection_1d_term(un_half, dx, dt, 'leapfrog-lw')
+            
+            u[1:-1] = un[1:-1] - convection_term_2[1:]
+
+            history[n] = u
+
+
+    elif config.scheme == 'conservative-lax-wendroff':
+
+        un_half = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_half = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-lax-friedrichs-lw')
+
+            un_half = (un[1:] + un[:-1]) / 2  - convection_term_1[1:]
+
+            e =  un_half**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-leapfrog-lw')
+            
+            u[1:-1] = un[1:-1] - convection_term_2[1:]
+
+            history[n] = u
+    
+
+    elif config.scheme == 'mac-cormack':
+
+        un_star = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_star = un.copy()
+
+            convection_term_1 = compute_convection_1d_term(un, dx, dt, 'downwind')
+
+            un_star[1:-1] = un[1:-1]  - convection_term_1[1:-1]
+
+            convection_term_2 = compute_convection_1d_term(un_star, dx, dt, 'upwind')
+            
+            u[1:-1] = (un[1:-1] + un_star[1:-1] - convection_term_2[1:-1]) / 2
+
+            history[n] = u
+
+    
+    elif config.scheme == 'conservative-mac-cormack':
+
+        un_star = initial_condition.copy()
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            un_star = un.copy()
+
+            e = un**2 / 2
+
+            convection_term_1 = compute_convection_1d_term(e, dx, dt, 'conservative-downwind')
+
+            un_star[1:-1] = un[1:-1]  - convection_term_1[1:-1]
+
+            e = un_star**2 / 2
+
+            convection_term_2 = compute_convection_1d_term(e, dx, dt, 'conservative-upwind')
+            
+            u[1:-1] = (un[1:-1] + un_star[1:-1] - convection_term_2[1:-1]) / 2
+
+            history[n] = u
+
+
+    else:
+        
+        raise ValueError(
+        "basis must be " \
+        "'upwind', " \
+        "'conservative-upwind, " \
+        "'lax-friedrichs', " \
+        "'conservative-lax-friedrichs', " \
+        "'richtmyer', " \
+        "'conservative-richtmyer', " \
+        "'lax-wendroff'," \
+        "'conservative-lax-wendroff'," \
+        "'mac-cormack' or" \
+        "'conservative-mac-cormack'"
+        )       
+
     return history

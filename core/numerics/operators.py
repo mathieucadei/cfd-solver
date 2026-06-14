@@ -35,7 +35,7 @@ def compute_advection_1d_term(
 
     else:
         
-        raise ValueError("basis must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
+        raise ValueError("scheme must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
     
     return term
 
@@ -44,12 +44,84 @@ def compute_convection_1d_term(
     u: np.ndarray,
     dx: float,
     dt: float,
+    scheme: str = 'upwind',
+    un_half: np.ndarray = None,
 ) -> np.ndarray:
     """Compute the 1D upwind convection term."""
     term = np.zeros_like(u)
 
-    term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
+    if scheme == 'upwind':
 
+        term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
+
+    elif scheme == 'conservative-upwind':
+
+        term[1:] = dt / dx * (u[1:] - u[:-1])
+
+    elif scheme == 'downwind':
+
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[1:-1])
+
+    elif scheme == 'conservative-downwind':
+
+        term[1:-1] = dt / dx * (u[2:] - u[1:-1])
+
+    elif scheme == 'lax-friedrichs':
+
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 2
+
+    elif scheme == 'lax-friedrichs-half':
+
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 4 
+
+    elif scheme == 'conservative-lax-friedrichs':
+
+        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
+    
+    elif scheme == 'conservative-lax-friedrichs-half':
+
+        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 4
+
+    elif scheme == 'lax-friedrichs-lw':
+
+        term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1]) / 2
+    
+    elif scheme == 'conservative-lax-friedrichs-lw':
+
+        term[1:] = dt / dx * (u[1:] - u[:-1]) / 2
+
+    elif scheme == 'leapfrog':
+    
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 2
+    
+    elif scheme == 'conservative-leapfrog':
+    
+        term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
+
+    elif scheme == 'leapfrog-lw':
+    
+        term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
+
+    elif scheme == 'conservative-leapfrog-lw':
+    
+        term[1:] = dt / dx * (u[1:] - u[:-1])
+
+    else:
+        
+        raise ValueError(
+        "scheme must be " \
+        "'upwind', " \
+        "'conservative-upwind, " \
+        "'lax-friedrichs', " \
+        "'conservative-lax-friedrichs', " \
+        "'richtmyer', " \
+        "'conservative-richtmyer', " \
+        "'lax-wendroff'," \
+        "'conservative-lax-wendroff'," \
+        "'mac-cormack' or" \
+        "'conservative-mac-cormack'"
+        )    
+    
     return term
 
 
