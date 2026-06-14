@@ -283,8 +283,10 @@ def solve_convection_1d(
         "'conservative-lax-friedrichs', " \
         "'richtmyer', " \
         "'conservative-richtmyer', " \
-        "'lax-wendroff', or " \
-        "'conservative-lax-wendroff'"
+        "'lax-wendroff'," \
+        "'conservative-lax-wendroff'," \
+        "'mac-cormack' or" \
+        "'conservative-mac-cormack'"
         )       
 
     return history

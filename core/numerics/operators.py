@@ -35,7 +35,7 @@ def compute_advection_1d_term(
 
     else:
         
-        raise ValueError("basis must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
+        raise ValueError("scheme must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
     
     return term
 
@@ -108,7 +108,19 @@ def compute_convection_1d_term(
 
     else:
         
-        raise ValueError("basis must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
+        raise ValueError(
+        "scheme must be " \
+        "'upwind', " \
+        "'conservative-upwind, " \
+        "'lax-friedrichs', " \
+        "'conservative-lax-friedrichs', " \
+        "'richtmyer', " \
+        "'conservative-richtmyer', " \
+        "'lax-wendroff'," \
+        "'conservative-lax-wendroff'," \
+        "'mac-cormack' or" \
+        "'conservative-mac-cormack'"
+        )    
     
     return term
 
