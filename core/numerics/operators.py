@@ -112,14 +112,17 @@ def compute_convection_1d_term(
         "scheme must be " \
         "'upwind', " \
         "'conservative-upwind, " \
+        "'downwind', " \
+        "'conservative-downwind, " \
         "'lax-friedrichs', " \
+        "'lax-friedrichs-half', " \
         "'conservative-lax-friedrichs', " \
-        "'richtmyer', " \
-        "'conservative-richtmyer', " \
-        "'lax-wendroff'," \
-        "'conservative-lax-wendroff'," \
-        "'mac-cormack' or" \
-        "'conservative-mac-cormack'"
+        "'conservative-lax-friedrichs-half', " \
+        "'lax-friedrichs-lw', " \
+        "'leapfrog', " \
+        "'conservative-leapfrog', " \
+        "'leapfrog-lw', " \
+        "'conservative-leapfrog-lw', "
         )    
     
     return term

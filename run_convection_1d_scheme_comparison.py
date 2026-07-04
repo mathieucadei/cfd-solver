@@ -26,8 +26,8 @@ schemes = [
     'conservative-lax-friedrichs',
     'richtmyer',  
     'conservative-richtmyer',
-    'lax-wendroff',
-    'conservative-lax-wendroff',
+    '2-step-lax-wendroff',
+    '2-step-conservative-lax-wendroff',
     'mac-cormack',
     'conservative-mac-cormack',
 ]
@@ -39,7 +39,7 @@ scheme_colors = {
     'upwind': 'tab:blue',
     'lax-friedrichs': 'tab:orange',
     'richtmyer': 'tab:green',
-    'lax-wendroff': 'tab:red',
+    '2-step-lax-wendroff': 'tab:red',
     'mac-cormack': 'tab:purple',
 }
 

@@ -157,7 +157,7 @@ def solve_convection_1d(
             history[n] = u
     
 
-    elif config.scheme == 'lax-wendroff':
+    elif config.scheme == '2-step-lax-wendroff':
 
         un_half = initial_condition.copy()
 
@@ -184,7 +184,7 @@ def solve_convection_1d(
             history[n] = u
 
 
-    elif config.scheme == 'conservative-lax-wendroff':
+    elif config.scheme == '2-step-conservative-lax-wendroff':
 
         un_half = initial_condition.copy()
 
@@ -283,8 +283,8 @@ def solve_convection_1d(
         "'conservative-lax-friedrichs', " \
         "'richtmyer', " \
         "'conservative-richtmyer', " \
-        "'lax-wendroff'," \
-        "'conservative-lax-wendroff'," \
+        "'2-step-lax-wendroff'," \
+        "'2-step-conservative-lax-wendroff'," \
         "'mac-cormack' or" \
         "'conservative-mac-cormack'"
         )       
