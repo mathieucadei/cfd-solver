@@ -97,6 +97,47 @@ def solve_convection_1d(
             u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
 
             history[n] = u
+
+
+    elif config.scheme == '1-step-lax-wendroff':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            u[1:-1] =  un[1:-1] - \
+                        (un[1:-1] * dt/(dx)) / 2 * (un[2:] + un[:-2]) + \
+                        (un[1:-1] * dt/(dx))**2 / 2 * (un[2:] - 2 * un[1:-1] + un[:-2])
+
+            history[n] = u  
+    
+
+    elif config.scheme == '1-step-conservative-lax-wendroff':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            e = un**2 / 2
+
+            u[1:-1] =  un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        (dt/(2*dx))**2 * ((un[2:] + un[1:-1]) * (e[2:] - e[1:-1]) - \
+                                           (un[1:-1] + un[:-2]) * (e[1:-1] - e[:-2]))
+
+            history[n] = u   
     
 
     elif config.scheme == 'richtmyer':
