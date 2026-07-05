@@ -34,17 +34,6 @@ schemes = [
 
 # Visualization parameters
 
-# scheme_colors = {
-#     'upwind': 'tab:blue',
-#     'lax-friedrichs': 'tab:orange',
-#     'richtmyer': 'tab:green',
-#     '1-step-lax-wendroff': 'tab:pink',
-#     '2-step-lax-wendroff': 'tab:red',
-#     'mac-cormack': 'tab:purple',
-#     'implicit-beam-warming': 'tab:cyan',
-#     'damped-implicit-beam-warming': 'tab:brown',
-# }
-
 fig, ax = plt.subplots(2, 2, figsize=(12, 10), sharey=True)
 
 
