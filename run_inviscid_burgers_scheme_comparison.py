@@ -34,20 +34,28 @@ schemes = [
 
 # Visualization parameters
 
-fig, ax = plt.subplots(4, 2, figsize=(12, 10), sharey=True)
+fig, ax = plt.subplots(4, 4, figsize=(12, 10), sharey=True)
 
 
 # Comparison cases parameters
 
 cases = [
-    (ax[0, 0], 81, 40, 1.0, 0.05),
-    (ax[0, 1], 81, 80, 0.5, 0.05),
-    (ax[1, 0], 81, 40, 1.0, 0.1),
-    (ax[1, 1], 81, 80, 0.5, 0.1),
-    (ax[2, 0], 81, 40, 1.0, 0.125),
-    (ax[2, 1], 81, 80, 0.5, 0.125),
-    (ax[3, 0], 81, 40, 1.0, 0.1275),
-    (ax[3, 1], 81, 80, 0.5, 0.1275),
+    (ax[0, 0], 41, 20, 1.0, 0.05),
+    (ax[0, 1], 41, 40, 0.5, 0.05),
+    (ax[0, 2], 81, 40, 1.0, 0.05),
+    (ax[0, 3], 81, 80, 0.5, 0.05),
+    (ax[1, 0], 41, 20, 1.0, 0.1),
+    (ax[1, 1], 41, 40, 0.5, 0.1),
+    (ax[1, 2], 81, 40, 1.0, 0.1),
+    (ax[1, 3], 81, 80, 0.5, 0.1),
+    (ax[2, 0], 41, 20, 1.0, 0.125),
+    (ax[2, 1], 41, 40, 0.5, 0.125),
+    (ax[2, 2], 81, 40, 1.0, 0.125),
+    (ax[2, 3], 81, 80, 0.5, 0.125),
+    (ax[3, 0], 41, 20, 1.0, 0.1275),
+    (ax[3, 1], 41, 40, 0.5, 0.1275),
+    (ax[3, 2], 81, 40, 1.0, 0.1275),
+    (ax[3, 3], 81, 80, 0.5, 0.1275),
 ]
 
 
@@ -109,7 +117,7 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
     final_time = n_iter * sigma * domain_length_x / ((nx - 1) * u_max)
     
     current_ax.set_title(
-        f'nx={nx}, sigma={sigma}, epsilon={epsilon} steps={n_iter}, t={final_time:.2f}'
+        f'nx={nx}, σ={sigma}, ε={epsilon} nt={n_iter}, t={final_time:.2f}'
     )
     current_ax.tick_params(labelleft=True)
 
