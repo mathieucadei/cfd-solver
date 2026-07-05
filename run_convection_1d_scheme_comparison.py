@@ -115,7 +115,7 @@ for current_ax, nx, n_iter, sigma in cases:
     final_time = n_iter * sigma * domain_length_x / ((nx - 1) * u_max)
     
     current_ax.set_title(
-        f'nx={nx}, sigma={sigma}, steps={n_iter}, t={final_time:.2f}'
+        f'nx={nx}, σ={sigma}, nt={n_iter}, t={final_time:.2f}'
     )
     current_ax.tick_params(labelleft=True)
 

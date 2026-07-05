@@ -125,6 +125,6 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
 handles, labels = ax[0, 0].get_legend_handles_labels()
 fig.legend(handles, labels, loc='lower center', ncol=5)
 
-fig.suptitle('1D Convection Scheme Comparison: Heaviside Step', y=0.98)
+fig.suptitle('1D Inviscid Burgers Scheme Comparison: Heaviside Step', y=0.98)
 fig.tight_layout(rect=[0, 0.10, 1, 0.96])
 plt.show()
