@@ -29,6 +29,7 @@ class Convection1DConfig:
     num_grid_points_x: int = 101
     max_iterations: int = 100
     sigma: float = 0.2
+    epsilon: float = 0.1
     hat_start: float = 0.5
     hat_end: float = 1.0
     u_min: float = 1.0

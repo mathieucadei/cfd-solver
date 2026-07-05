@@ -369,9 +369,8 @@ def solve_convection_1d(
 
             e = un**2 / 2
             b = un.copy()
-            epsilon = 0.001
             d = np.zeros(config.num_grid_points_x)   
-            d[2:-2] = - epsilon * (un[4:] - 4 * un[3:-1] + 6 * un[2:-2] + 4 * un[1:-3] + un[:-4])
+            d[2:-2] = - config.epsilon * (un[4:] - 4 * un[3:-1] + 6 * un[2:-2] - 4 * un[1:-3] + un[:-4])
             b[1:-1] = un[1:-1] - \
                         dt/(2*dx) * (e[2:] - e[:-2]) + \
                         dt/(4*dx) * (un[2:]**2 - un[:-2]**2) + \

@@ -17,34 +17,33 @@ from core import (
 
 domain_length_x = 4.0
 step_location  = 2
+epsilon = 0.1
 u_min = 0
 u_max = 1.0
 schemes = [
-    'upwind',
     'conservative-upwind',
-    'lax-friedrichs',
     'conservative-lax-friedrichs',
-    'richtmyer',  
     'conservative-richtmyer',
-    '1-step-lax-wendroff',
     '1-step-conservative-lax-wendroff',
-    '2-step-lax-wendroff',
     '2-step-conservative-lax-wendroff',
-    'mac-cormack',
     'conservative-mac-cormack',
+    'conservative-implicit-beam-warming',
+    'conservative-damped-implicit-beam-warming',
 ]
 
 
 # Visualization parameters
 
-scheme_colors = {
-    'upwind': 'tab:blue',
-    'lax-friedrichs': 'tab:orange',
-    'richtmyer': 'tab:green',
-    '1-step-lax-wendroff': 'tab:pink',
-    '2-step-lax-wendroff': 'tab:red',
-    'mac-cormack': 'tab:purple',
-}
+# scheme_colors = {
+#     'upwind': 'tab:blue',
+#     'lax-friedrichs': 'tab:orange',
+#     'richtmyer': 'tab:green',
+#     '1-step-lax-wendroff': 'tab:pink',
+#     '2-step-lax-wendroff': 'tab:red',
+#     'mac-cormack': 'tab:purple',
+#     'implicit-beam-warming': 'tab:cyan',
+#     'damped-implicit-beam-warming': 'tab:brown',
+# }
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 10), sharey=True)
 
@@ -73,6 +72,7 @@ for current_ax, nx, n_iter, sigma in cases:
             num_grid_points_x=nx,
             max_iterations=n_iter,
             sigma=sigma,
+            epsilon=epsilon,
             hat_start=step_location ,
             u_min=u_min,
             u_max=u_max,
@@ -102,8 +102,6 @@ for current_ax, nx, n_iter, sigma in cases:
         current_ax.plot(
             x_array,
             solution_history[-1],
-            color=scheme_colors[base_scheme],
-            linestyle='--' if 'conservative' in scheme else '-',
             label=scheme,
         )
 

@@ -30,8 +30,6 @@ schemes = [
     '2-step-conservative-lax-wendroff',
     'mac-cormack',
     'conservative-mac-cormack',
-    'conservative-implicit-beam-warming',
-    'conservative-damped-implicit-beam-warming',
 ]
 
 
@@ -43,8 +41,6 @@ scheme_colors = {
     'richtmyer': 'tab:green',
     '2-step-lax-wendroff': 'tab:red',
     'mac-cormack': 'tab:purple',
-    'implicit-beam-warming': 'tab:cyan',
-    'damped-implicit-beam-warming': 'tab:brown', 
 }
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 10), sharey=True)
