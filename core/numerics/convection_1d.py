@@ -314,6 +314,74 @@ def solve_convection_1d(
             history[n] = u
 
 
+    elif config.scheme == 'conservative-implicit-beam-warming':
+
+        u = initial_condition.copy()
+
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            A = np.zeros((config.num_grid_points_x, config.num_grid_points_x))
+
+            beta = dt/(4*dx)
+
+            A = np.diag(np.ones(config.num_grid_points_x)) + np.diag(-beta * un[:-1], k=-1) + np.diag(beta* un[1:], k=1)
+
+            A[0, :] = 0;   A[0, 0]   = 1
+            A[-1, :] = 0;  A[-1, -1] = 1
+
+            e = un**2 / 2
+            b = un.copy()
+            b[1:-1] = un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        dt/(4*dx) * (un[2:]**2 - un[:-2]**2)
+            
+            u = np.linalg.solve(A, b)
+                
+            history[n] = u
+
+
+    elif config.scheme == 'conservative-damped-implicit-beam-warming':
+
+        u = initial_condition.copy()
+
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            A = np.zeros((config.num_grid_points_x, config.num_grid_points_x))
+
+            beta = dt/(4*dx)
+
+            A = np.diag(np.ones(config.num_grid_points_x)) + np.diag(-beta * un[:-1], k=-1) + np.diag(beta* un[1:], k=1)
+
+            A[0, :] = 0;   A[0, 0]   = 1
+            A[-1, :] = 0;  A[-1, -1] = 1
+
+            e = un**2 / 2
+            b = un.copy()
+            epsilon = 0.001
+            d = np.zeros(config.num_grid_points_x)   
+            d[2:-2] = - epsilon * (un[4:] - 4 * un[3:-1] + 6 * un[2:-2] + 4 * un[1:-3] + un[:-4])
+            b[1:-1] = un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        dt/(4*dx) * (un[2:]**2 - un[:-2]**2) + \
+                        d[1:-1]
+            
+            u = np.linalg.solve(A, b)
+                
+            history[n] = u
+
+
     else:
         
         raise ValueError(
