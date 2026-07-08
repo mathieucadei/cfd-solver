@@ -8,7 +8,7 @@ Currently implemented:
 
 * 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff schemes
 * 2D linear advection
-* 1D nonlinear convection with upwind, Lax-Friedrichs, Richtmyer, Lax-Wendroff, and MacCormack schemes in non-conservative and conservative forms
+* 1D nonlinear convection / inviscid Burgers with upwind, Lax-Friedrichs, Richtmyer, one-step and two-step Lax-Wendroff, MacCormack, and implicit Beam-Warming schemes, including conservative flux-form variants
 * 2D nonlinear convection
 * 1D and 2D diffusion
 * 1D and 2D Burgers equation
@@ -38,6 +38,10 @@ run_*.py                    executable examples
 ### 1D nonlinear convection scheme comparison
 
 ![1D convection scheme comparison](docs/images/convection_1d_scheme_comparison.png)
+
+### 1D inviscid Burgers scheme comparison
+
+![1D inviscid Burgers scheme comparison](docs/images/inviscid_burgers_scheme_comparison.png)
 
 ### 2D diffusion
 
@@ -79,7 +83,7 @@ The current solvers model:
 
   du/dt + d(u^2 / 2)/dx = 0
 
-  using selectable explicit schemes: upwind, Lax-Friedrichs, Richtmyer, Lax-Wendroff, and MacCormack. Conservative variants are included for flux-form shock propagation.
+  using selectable explicit schemes: upwind, Lax-Friedrichs, Richtmyer, one-step Lax-Wendroff, two-step Lax-Wendroff, and MacCormack. Conservative flux-form variants are included for shock propagation, along with implicit Beam-Warming and damped implicit Beam-Warming variants for inviscid Burgers experiments.
 
 * the 2D nonlinear convection equations:
 
@@ -157,6 +161,8 @@ For the 1D Burgers equation, the numerical solver is validated against the analy
 
 The 1D convection scheme comparison script visualizes conservative and non-conservative schemes on a Heaviside step problem, comparing grid resolution and CFL number effects. This highlights numerical diffusion, dispersive oscillations near shocks, and conservative-form shock propagation.
 
+The inviscid Burgers scheme comparison script studies conservative shock-capturing schemes, including implicit Beam-Warming and damped implicit Beam-Warming, across grid resolutions, CFL numbers, and artificial-damping coefficients.
+
 These comparisons are used to assess solver correctness and visualize agreement between numerical and analytical results.
 
 ## Roadmap
@@ -167,6 +173,8 @@ These comparisons are used to assess solver correctness and visualize agreement 
 * Add convergence studies for grid spacing and time-step sensitivity.
 * Add limiters or artificial viscosity for oscillation control near shocks.
 * Add regression tests for 1D convection scheme updates.
+* Validate inviscid Burgers shock speeds against Rankine-Hugoniot predictions.
+* Study damping sensitivity for implicit Beam-Warming schemes.
 
 ## Run
 
@@ -176,6 +184,7 @@ python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
 python run_convection_1d.py
 python run_convection_1d_scheme_comparison.py
+python run_inviscid_burgers_scheme_comparison.py
 python run_convection_2d.py
 python run_diffusion_1d.py
 python run_diffusion_1d_vs_heat.py

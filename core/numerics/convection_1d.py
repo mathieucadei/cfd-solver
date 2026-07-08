@@ -97,6 +97,47 @@ def solve_convection_1d(
             u[1:-1] = (un[2:] + un[:-2]) / 2  - convection_term[1:-1]
 
             history[n] = u
+
+
+    elif config.scheme == '1-step-lax-wendroff':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            u[1:-1] =  un[1:-1] - \
+                        (un[1:-1] * dt/(dx)) / 2 * (un[2:] + un[:-2]) + \
+                        (un[1:-1] * dt/(dx))**2 / 2 * (un[2:] - 2 * un[1:-1] + un[:-2])
+
+            history[n] = u  
+    
+
+    elif config.scheme == '1-step-conservative-lax-wendroff':
+
+        u = initial_condition.copy()
+    
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            e = un**2 / 2
+
+            u[1:-1] =  un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        (dt/(2*dx))**2 * ((un[2:] + un[1:-1]) * (e[2:] - e[1:-1]) - \
+                                           (un[1:-1] + un[:-2]) * (e[1:-1] - e[:-2]))
+
+            history[n] = u   
     
 
     elif config.scheme == 'richtmyer':
@@ -157,7 +198,7 @@ def solve_convection_1d(
             history[n] = u
     
 
-    elif config.scheme == 'lax-wendroff':
+    elif config.scheme == '2-step-lax-wendroff':
 
         un_half = initial_condition.copy()
 
@@ -184,7 +225,7 @@ def solve_convection_1d(
             history[n] = u
 
 
-    elif config.scheme == 'conservative-lax-wendroff':
+    elif config.scheme == '2-step-conservative-lax-wendroff':
 
         un_half = initial_condition.copy()
 
@@ -273,6 +314,73 @@ def solve_convection_1d(
             history[n] = u
 
 
+    elif config.scheme == 'conservative-implicit-beam-warming':
+
+        u = initial_condition.copy()
+
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            A = np.zeros((config.num_grid_points_x, config.num_grid_points_x))
+
+            beta = dt/(4*dx)
+
+            A = np.diag(np.ones(config.num_grid_points_x)) + np.diag(-beta * un[:-1], k=-1) + np.diag(beta* un[1:], k=1)
+
+            A[0, :] = 0;   A[0, 0]   = 1
+            A[-1, :] = 0;  A[-1, -1] = 1
+
+            e = un**2 / 2
+            b = un.copy()
+            b[1:-1] = un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        dt/(4*dx) * (un[2:]**2 - un[:-2]**2)
+            
+            u = np.linalg.solve(A, b)
+                
+            history[n] = u
+
+
+    elif config.scheme == 'conservative-damped-implicit-beam-warming':
+
+        u = initial_condition.copy()
+
+        history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
+
+        history[0] = initial_condition
+
+        for n in range(1, config.max_iterations + 1):
+
+            un = u.copy()
+
+            A = np.zeros((config.num_grid_points_x, config.num_grid_points_x))
+
+            beta = dt/(4*dx)
+
+            A = np.diag(np.ones(config.num_grid_points_x)) + np.diag(-beta * un[:-1], k=-1) + np.diag(beta* un[1:], k=1)
+
+            A[0, :] = 0;   A[0, 0]   = 1
+            A[-1, :] = 0;  A[-1, -1] = 1
+
+            e = un**2 / 2
+            b = un.copy()
+            d = np.zeros(config.num_grid_points_x)   
+            d[2:-2] = - config.epsilon * (un[4:] - 4 * un[3:-1] + 6 * un[2:-2] - 4 * un[1:-3] + un[:-4])
+            b[1:-1] = un[1:-1] - \
+                        dt/(2*dx) * (e[2:] - e[:-2]) + \
+                        dt/(4*dx) * (un[2:]**2 - un[:-2]**2) + \
+                        d[1:-1]
+            
+            u = np.linalg.solve(A, b)
+                
+            history[n] = u
+
+
     else:
         
         raise ValueError(
@@ -283,8 +391,8 @@ def solve_convection_1d(
         "'conservative-lax-friedrichs', " \
         "'richtmyer', " \
         "'conservative-richtmyer', " \
-        "'lax-wendroff'," \
-        "'conservative-lax-wendroff'," \
+        "'2-step-lax-wendroff'," \
+        "'2-step-conservative-lax-wendroff'," \
         "'mac-cormack' or" \
         "'conservative-mac-cormack'"
         )       
