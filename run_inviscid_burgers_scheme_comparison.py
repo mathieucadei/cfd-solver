@@ -17,15 +17,15 @@ from core import (
 
 domain_length_x = 4.0
 step_location  = 2
-epsilon = 0.1
+epsilon = 0.125
 u_min = 0
 u_max = 1.0
 schemes = [
-    'conservative-upwind',
-    'conservative-lax-friedrichs',
-    'conservative-richtmyer',
-    '1-step-conservative-lax-wendroff',
-    '2-step-conservative-lax-wendroff',
+    # 'conservative-upwind',
+    # 'conservative-lax-friedrichs',
+    # 'conservative-richtmyer',
+    # '1-step-conservative-lax-wendroff',
+    # '2-step-conservative-lax-wendroff',
     'conservative-mac-cormack',
     'conservative-implicit-beam-warming',
     'conservative-damped-implicit-beam-warming',
@@ -34,34 +34,26 @@ schemes = [
 
 # Visualization parameters
 
-fig, ax = plt.subplots(4, 4, figsize=(12, 10), sharey=True)
+fig, ax = plt.subplots(4, 2, figsize=(12, 10), sharey=True)
 
 
 # Comparison cases parameters
 
 cases = [
-    (ax[0, 0], 41, 20, 1.0, 0.05),
-    (ax[0, 1], 41, 40, 0.5, 0.05),
-    (ax[0, 2], 81, 40, 1.0, 0.05),
-    (ax[0, 3], 81, 80, 0.5, 0.05),
-    (ax[1, 0], 41, 20, 1.0, 0.1),
-    (ax[1, 1], 41, 40, 0.5, 0.1),
-    (ax[1, 2], 81, 40, 1.0, 0.1),
-    (ax[1, 3], 81, 80, 0.5, 0.1),
-    (ax[2, 0], 41, 20, 1.0, 0.125),
-    (ax[2, 1], 41, 40, 0.5, 0.125),
-    (ax[2, 2], 81, 40, 1.0, 0.125),
-    (ax[2, 3], 81, 80, 0.5, 0.125),
-    (ax[3, 0], 41, 20, 1.0, 0.1275),
-    (ax[3, 1], 41, 40, 0.5, 0.1275),
-    (ax[3, 2], 81, 40, 1.0, 0.1275),
-    (ax[3, 3], 81, 80, 0.5, 0.1275),
+    (ax[0, 0], 41, 80, 0.25),
+    (ax[0, 1], 81, 160, 0.25),
+    (ax[1, 0], 41, 40, 0.5),
+    (ax[1, 1], 81, 80, 0.5),
+    (ax[2, 0], 41, 27, 0.75),
+    (ax[2, 1], 81, 54, 0.75),
+    (ax[3, 0], 41, 20, 1.0),
+    (ax[3, 1], 81, 40, 1.0),
 ]
 
 
 # Comparison loop
 
-for current_ax, nx, n_iter, sigma, epsilon in cases:
+for current_ax, nx, n_iter, sigma in cases:
 
     for scheme in schemes:
 
@@ -73,7 +65,6 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
             num_grid_points_x=nx,
             max_iterations=n_iter,
             sigma=sigma,
-            epsilon=epsilon,
             hat_start=step_location ,
             u_min=u_min,
             u_max=u_max,
@@ -117,7 +108,7 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
     final_time = n_iter * sigma * domain_length_x / ((nx - 1) * u_max)
     
     current_ax.set_title(
-        f'nx={nx}, σ={sigma}, ε={epsilon} nt={n_iter}, t={final_time:.2f}'
+        f'nx={nx}, σ={sigma}, nt={n_iter}, t={final_time:.2f}'
     )
     current_ax.tick_params(labelleft=True)
 
