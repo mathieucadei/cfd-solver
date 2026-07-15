@@ -200,3 +200,12 @@ class ChannelFlowConfig:
     density: float = 1.0
     viscosity: float = 0.1
     u_l1_norm_target: float = 0.001
+
+@dataclass
+class Mesh:
+    nx: int = 40
+    ny: int = 40
+    lx: float = 2.0
+    ly: float = 1.0
+    rx: float = 1.1
+    ry: float = 1.1
