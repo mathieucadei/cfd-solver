@@ -63,7 +63,7 @@ def build_faces(config: object):
     dist_x = np.array([xc[1:] - xc[:-1]] * config.ny)
     dist_y = np.array([yc[1:] - yc[:-1]] * config.nx).T
 
-    area_x = np.array([hy[:]] * (config.ny-1)).T
+    area_x = np.array([hy[:]] * (config.nx-1)).T
     area_y = np.array([hx[:]] * (config.ny-1))
 
     return owner_x, neigh_x, dist_x, area_x, owner_y, neigh_y, dist_y, area_y
