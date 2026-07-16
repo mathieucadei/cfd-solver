@@ -5,6 +5,7 @@
 import numpy as np
 
 from .grids import compute_dx, compute_dy
+from .mesh import build_mesh
 from ..analytical.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
@@ -105,6 +106,7 @@ def cavity_flow_initial_condition(config: object) -> np.ndarray:
 
     return u, v, p, b
 
+
 def channel_flow_initial_condition(config: object) -> np.ndarray:
     """Generate a 2D initial condition on the provided grid for the 2D channel flow numerical solver."""
 
@@ -114,3 +116,12 @@ def channel_flow_initial_condition(config: object) -> np.ndarray:
     b = np.zeros((config.num_grid_points_y, config.num_grid_points_x))
 
     return u, v, p, b
+
+
+def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
+
+    mesh = build_mesh(config)
+
+    phi = mesh['CX']**2 + mesh['CY']**2
+
+    return phi

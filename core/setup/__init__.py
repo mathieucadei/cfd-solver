@@ -6,6 +6,8 @@ from .grids import (
     make_y_grid,  
 )
 
+from .mesh import build_mesh
+
 from .time_stepping import (
     compute_advective_dt_1d,
     compute_advective_dt_2d,
@@ -26,4 +28,5 @@ from .initial_conditions import (
     poisson_initial_condition_2d,
     cavity_flow_initial_condition,
     channel_flow_initial_condition,
+    laplace_initial_condition_2d_fvm,
 )
