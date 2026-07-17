@@ -122,6 +122,8 @@ def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
 
     mesh = build_mesh(config)
 
-    phi = mesh['CX']**2 + mesh['CY']**2
+    # phi = mesh['CX']**2 + mesh['CY']**2
+
+    phi = np.zeros((config.ny, config.nx), dtype=float)
 
     return phi

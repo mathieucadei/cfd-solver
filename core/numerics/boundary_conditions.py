@@ -4,6 +4,7 @@
 
 import numpy as np
 
+from ..setup.mesh import build_mesh
 
 
 def apply_diffusion_boundary_1d(
@@ -248,3 +249,50 @@ def apply_periodic_channel_flow_boundary_2d(
     u[-1, :] = 0
     v[0, :] = 0
     v[-1, :] = 0
+
+
+def apply_laplace_boundary_2d_fvm(
+    phi: np.ndarray,
+    bottom: float | np.ndarray,
+    top: float | np.ndarray,
+    right: float | np.ndarray,
+    left: float | np.ndarray,
+    config: object,
+) -> None:
+    """Apply boundary updates for the 2D Laplace equation."""
+
+    mesh = build_mesh(config)
+
+    # phi[mesh] = left  # p = left @ x = 0
+    # phi[:, -1] = right  # p = right @ x = 2
+    # phi[0, :] = bottom  # p = bottom @ y = 0
+    # phi[-1, :] = top  # p = top @ y = 1
+
+    boundary_faces = {
+        'left': {
+            'owner': mesh['ids'][:, 0],
+            'dist_b': mesh['xc'][0],
+            'area': mesh['hy'],
+            'g': left,
+        },
+        'right': {
+            'owner': mesh['ids'][:, -1],
+            'dist_b': config.lx - mesh['xc'][-1],
+            'area': mesh['hy'],
+            'g': right,
+        },
+        'bottom': {
+            'owner': mesh['ids'][0, :],
+            'dist_b': mesh['yc'][0],
+            'area': mesh['hx'],
+            'g': bottom,
+        },
+        'top': {
+            'owner': mesh['ids'][-1, :],
+            'dist_b': config.ly - mesh['yc'][-1],
+            'area': mesh['hx'],
+            'g': top,
+        },
+    }
+
+    return boundary_faces
