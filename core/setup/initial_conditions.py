@@ -126,4 +126,9 @@ def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
 
     phi = np.zeros((config.ny, config.nx), dtype=float)
 
+    # b = phi.copy()
+
+    # for src in config.source_terms:
+    #         b[int(config.ny * src.y), int(config.nx * src.x)] = src.value
+
     return phi

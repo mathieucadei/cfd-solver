@@ -14,7 +14,8 @@ def solve_laplace_2d_fvm(
     top_boundary: float | np.ndarray,
     right_boundary: float | np.ndarray,
     left_boundary: float | np.ndarray,      
-    config: object,
+    config: object
+
 ):
 
     mesh = build_mesh(config)
@@ -46,40 +47,39 @@ def solve_laplace_2d_fvm(
     D.flat[boundary_faces['right']['owner']]  += ax_right
     D.flat[boundary_faces['bottom']['owner']] += ay_bottom
     D.flat[boundary_faces['top']['owner']]    += ay_top
+
     D = D / mesh['V']
-
-    b = np.zeros((config.ny, config.nx))   # source (zero for Laplace)
-
-    # dx = mesh['dist_x']
-    # dy = mesh['dist_y']
-    # area_x = mesh['area_x']
-    # area_y = mesh['area_y']
-
-    # ax = area_x / dx
-    # ay = area_y / dy
 
     l1norm = 1
 
     phi = initial_condition
-    
-    phi_n_x = phi[mesh['neigh_x']]
-    phi_p_x = phi[mesh['owner_x']]
-    phi_n_y = phi[mesh['neigh_y']]
-    phi_p_y = phi[mesh['owner_y']]
 
-    phin_n_x = np.empty_like(phi_n_x)
-    phin_p_x = np.empty_like(phi_p_x)
-    phin_n_y = np.empty_like(phi_n_y)
-    phin_p_y = np.empty_like(phi_p_y)
+    b = phi.copy()
+    
+    f = phi.ravel()
+    
+    # phi_n_x = phi[mesh['neigh_x']]
+    # phi_p_x = phi[mesh['owner_x']]
+    # phi_n_y = phi[mesh['neigh_y']]
+    # phi_p_y = phi[mesh['owner_y']]
+
+    # phin_n_x = np.empty_like(phi_n_x)
+    # phin_p_x = np.empty_like(phi_p_x)
+    # phin_n_y = np.empty_like(phi_n_y)
+    # phin_p_y = np.empty_like(phi_p_y)
 
     history = []
 
     while l1norm > config.l1_norm_target:
 
-        phin_n_x = np.copy(phi_n_x)
-        phin_p_x = np.copy(phi_p_x)
-        phin_n_y = np.copy(phi_n_y)
-        phin_p_y = np.copy(phi_p_y)
+        phin = phi.copy()
+
+        # phin_n_x = np.copy(phi_n_x)
+        # phin_p_x = np.copy(phi_p_x)
+        # phin_n_y = np.copy(phi_n_y)
+        # phin_p_y = np.copy(phi_p_y)
+
+        # face_fluxes_y = ay * (phin_n_y - phin_p_y)
 
         boundary_fluxes_x_left = ax_left * \
                             (boundary_faces['left']['g'] - f[boundary_faces['left']['owner']])
@@ -128,45 +128,68 @@ def solve_laplace_2d_fvm(
         poisson.flat[mesh['neigh_y']] -= face_fluxes_y
         poisson = poisson / mesh['V']
 
-        phi = phi + (poisson - b) / D
+        b[10:35,20:30] = -1000
+        phi = phin + (poisson - b) / D
         f = phi.ravel()
 
+        denominator = np.sum(np.abs(phin))
+
+        if denominator == 0:
+            l1norm = np.sum(np.abs(phi) - np.abs(phin)) 
+        
+        else:
+            l1norm = (np.sum(np.abs(phi) - np.abs(phin))) / denominator
 
 
-        return laplacian
+    return phi, b
 
 
 
 if __name__ == '__main__':
 
     @dataclass
+    class SourceTerm:
+        x: float
+        y: float
+        value: float
+    
+
+    @dataclass
     class Mesh:
-        nx: int = 6
-        ny: int = 6
-        lx: float = 1.0
+        nx: int = 80
+        ny: int = 80
+        lx: float = 2.0
         ly: float = 1.0
-        rx: float = 1.
-        ry: float = 1.
+        rx: float = 1.1
+        ry: float = 1.1
+        l1_norm_target: float = 1e-4
+    
+    source_terms: list[SourceTerm] = field(default_factory=lambda: [
+        SourceTerm(x=0.3, y=0.5, value=10.0),
+        SourceTerm(x=0.6, y=0.2, value=-5.0),
+    ])
 
     mesh = build_mesh(Mesh)
 
     initial_condition = laplace_initial_condition_2d_fvm(Mesh)
     
-    phi = apply_laplace_boundary_2d_fvm(
-        phi=initial_condition,
-        bottom=0,
-        top=0,
-        right=0,
-        left=100,
+    phi, b = solve_laplace_2d_fvm(
+        initial_condition=initial_condition,
+        bottom_boundary=0,
+        top_boundary=0,
+        right_boundary=0,
+        left_boundary=5000,
         config=Mesh,
     )
 
-    # laplacian = solve_laplace_2d_fvm(initial_condition, Mesh)
-
     print(phi)
 
-    # fig, ax = plt.subplots()
-    # pc = ax.pcolormesh(mesh['CX'], mesh['CY'], initial_condition.T, edgecolors='k', linewidth=0.3)
-    # fig.colorbar(pc, label='laplacian')
-    # ax.set_aspect('equal')
-    # plt.show()
+    # laplacian = solve_laplace_2d_fvm(initial_condition, Mesh)
+
+    # print(phi)
+
+    fig, ax = plt.subplots()
+    pc = ax.pcolormesh(mesh['CX'], mesh['CY'], phi.T, edgecolors='k', linewidth=0.3)
+    fig.colorbar(pc, label='phi')
+    ax.set_aspect('equal')
+    plt.show()
