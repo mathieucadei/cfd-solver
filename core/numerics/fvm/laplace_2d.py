@@ -128,7 +128,7 @@ def solve_laplace_2d_fvm(
         poisson.flat[mesh['neigh_y']] -= face_fluxes_y
         poisson = poisson / mesh['V']
 
-        b[10:35,20:30] = -1000
+        b[50:60,50:60] = -10000
         phi = phin + (poisson - b) / D
         f = phi.ravel()
 
@@ -178,7 +178,7 @@ if __name__ == '__main__':
         bottom_boundary=0,
         top_boundary=0,
         right_boundary=0,
-        left_boundary=5000,
+        left_boundary=10,
         config=Mesh,
     )
 
