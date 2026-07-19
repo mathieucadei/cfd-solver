@@ -13,15 +13,16 @@ from dataclasses import dataclass, field
 
 
 def solve_advection_1d_fvm(
-    initial_condition: np.ndarray,
     config: object,
     mesh: object,
 ) -> np.ndarray:
     """Solve the 1D advection equation with an explicit upwind finite-difference scheme."""
 
-    dt = 0.05
+    dt = 0.025
 
-    u = initial_condition.copy()
+    u = np.ones(config.nx)      #numpy function ones()
+
+    u[int(len(mesh['xc'])*0.25):int(len(mesh['xc'])*0.5)] = 2  #setting u = 2 between 0.5 and 1 as per our I.C.s
 
     # history = np.zeros((config.max_iterations + 1, config.nx))
 
@@ -35,7 +36,7 @@ def solve_advection_1d_fvm(
 
         f_e = config.c * u[:-1]
 
-        u[1:] = un[1:] - dt / mesh['hx'] * (f_w - f_e)
+        u[1:] = un[1:] - config.c * dt / mesh['hx'][1:] * (un[1:] - un[:-1])
 
         # history[n] = u
 
@@ -45,39 +46,30 @@ def solve_advection_1d_fvm(
 if __name__ == '__main__':
 
     @dataclass
-    class Mesh:
+    class Advection1DFVMConfig:
         nx: int = 40
-        ny: int = 40
+        ny: int = 1
         lx: float = 2.0
         ly: float = 1.0
         rx: float = 1.1
-        ry: float = 1.1
+        ry: float = 1.
         c: float = 1.0
-        sigma: float = 1
-        wavespeed: float = 1.0
-        u_min: float = 1.0
-        u_max: float = 2.0
-        hat_start: float = 0.5
-        hat_end: float = 1.0
         max_iterations: int = 25
     
-    mesh = build_mesh(Mesh)
+    mesh = build_mesh(Advection1DFVMConfig)
     
-    initial_condition = hat_initial_condition_1d(
-        x_array = mesh['CX'],
-        config=Mesh
-    )
-    
-    history = solve_advection_1d_fvm(
-        initial_condition=initial_condition,
-        config=Mesh,
+    u = solve_advection_1d_fvm(
+        config=Advection1DFVMConfig,
         mesh=mesh,
     )
 
-    print(history)
+    print(u)
 
-    plt.plot(initial_condition)
-    plt.plot(history[0])
-    plt.plot(history[-1])
+    fig, ax = plt.subplots(3,1, figsize=(12,12), constrained_layout=True)
+    ax[0].plot(mesh['xc'], u)
+    pc = ax[1].pcolormesh(mesh['xf'], [0, 1], u[None, :], edgecolors='k', linewidth=0.3)
+    ax[2].quiver(mesh['xc'][::4], np.zeros_like(mesh['xc'])[::4], u[::4], np.zeros_like(u)[::4])
+    fig.colorbar(pc, label='u')
+
     plt.show()
     

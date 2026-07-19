@@ -121,3 +121,5 @@ if __name__ == '__main__':
     fig.colorbar(pc, label='cell volume')
     ax.set_aspect('equal')
     plt.show()
+
+    print(mesh['hx'])
