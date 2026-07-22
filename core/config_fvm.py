@@ -8,6 +8,19 @@ from dataclasses import dataclass, field
 
 
 @dataclass
+class Advection1DFVMConfig:
+    num_cells_x: int = 100
+    domain_length_x: float = 2.0
+    x_expansion_ratio: float = 1.
+    sigma: float = 1.0
+    wavespeed: float = 1.0
+    max_iterations: int = 40
+    hat_start: float = 0.5
+    hat_end: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0
+
+@dataclass
 class Advection1DConfig:
     """Configuration parameters for the 1D advection equation."""
     domain_length_x: float = 2.0

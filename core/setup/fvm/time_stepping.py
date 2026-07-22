@@ -4,16 +4,14 @@
 import numpy as np
 
 from ..grids import compute_cole_hopf_dx, compute_dx, compute_dy
-from .mesh import build_mesh
+from .mesh import build_hx_spacing
 
 
 
 def compute_advective_dt_1d(config: object) -> float:
     """Compute the time step for 1D advection problem."""
 
-    mesh = build_mesh(config)
-
-    hx = mesh['hx']
+    hx = build_hx_spacing(config)
 
     hx_min = np.min(hx)
     

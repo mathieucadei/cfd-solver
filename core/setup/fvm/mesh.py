@@ -4,6 +4,32 @@ import matplotlib.pyplot as plt
 
 from dataclasses import dataclass, field
 
+def build_hx_spacing(config: object):
+
+    raw_hx = config.rx**np.arange(config.nx//2)
+    raw_hx_sum = np.sum(raw_hx)
+    hx = raw_hx / raw_hx_sum * 0.5 * config.lx
+    hx = np.append(hx, hx[::-1])
+
+    return hx
+
+def build_x_face_positions(config: object):
+
+    hx = build_hx_spacing(config)  
+
+    xf = np.cumsum(hx)
+    xf =  np.concatenate([[0.0], xf])
+
+    return xf
+
+def build_x_centers(config: object):
+
+    xf = build_x_face_positions(config)
+
+    xc = 0.5 * (xf[:-1] + xf[1:])
+
+    return xc
+
 def build_spacing(config: object):
 
     raw_hx = config.rx**np.arange(config.nx//2)
