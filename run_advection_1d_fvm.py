@@ -29,7 +29,7 @@ from post_processing import (
 domain_length_x = 2.0
 num_cells_x = 80
 expansion_ratio_x = 0.
-max_iterations = 40
+max_iterations = 25
 sigma = 1
 wavespeed = 1.0
 hat_start = 0.5
@@ -80,64 +80,18 @@ initial_condition = hat_initial_condition_1d_fvm(hx_array, advection_1d_config)
 
 solution_history = solve_advection_1d_fvm(initial_condition, advection_1d_config)
 
-u = solution_history[-1]
+solution_final = solution_history[-1]
 
 xf = build_x_face_positions(advection_1d_config)
 
 
 
-fig, ax = plt.subplots(3,1, figsize=(12,12), constrained_layout=True)
-ax[0].plot(xc_array, u)
-pc = ax[1].pcolormesh(xf, [0, 1], u[None, :], edgecolors='k', linewidth=0.3)
-ax[2].quiver(xc_array[::4], np.zeros_like(xc_array)[::4], u[::4], np.zeros_like(u)[::4])
-fig.colorbar(pc, label='u')
-
-plt.show()
-
-
-
 # Post-processing
 
-if show_individual_plots:
-    show_solution_traces(
-        x_values=xc_array,
-        cut_values=time_array,
-        num_solution_matrix=solution_history,
-        step_stride=step_stride,
-        case_name=case_name,
-        title=title,
-        save=save,
-    )
-
-    show_solution_traces(
-        x_values=time_array,
-        cut_values=xc_array,
-        num_solution_matrix=solution_history,
-        axis=1,
-        step_stride=step_stride,
-        cut_label='x',
-        case_name=case_name,
-        title=title,
-        save=save,
-    )
-
-    show_solution_contour_map(
-        x_values=xc_array,
-        y_values=time_array,
-        solution_matrix=solution_history,
-        case_name=case_name,
-        title=title,
-        save=save,
-    )
-
-    show_solution_surface(
-        x_values=xc_array,
-        y_values=time_array,
-        solution_matrix=solution_history,
-        case_name=case_name,
-        title=title,
-        save=save,
-    )
+fig, ax = plt.subplots()
+pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
+fig.colorbar(pc, label='u')
+plt.show()
 
 show_solution_overview(
     x_values=xc_array, 
