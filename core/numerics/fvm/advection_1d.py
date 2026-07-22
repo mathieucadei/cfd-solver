@@ -6,9 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .operators import compute_advection_1d_term
-from ...setup.fvm.time_stepping import compute_advective_dt_1d
+from ...setup.fvm.time_stepping import compute_advective_dt_1d_fvm
 from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers
-from ...setup.fvm.initial_conditions import hat_initial_condition_1d
+from ...setup.fvm.initial_conditions import hat_initial_condition_1d_fvm
 
 from dataclasses import dataclass
 
@@ -19,13 +19,13 @@ def solve_advection_1d_fvm(
 ) -> np.ndarray:
     """Solve the 1D advection equation with an explicit upwind finite-volume scheme."""
 
-    dt = compute_advective_dt_1d(config)
+    dt = compute_advective_dt_1d_fvm(config)
 
     hx = build_hx_spacing(config)
 
     u = initial_condition.copy()
 
-    history = np.zeros((config.max_iterations + 1, config.nx))
+    history = np.zeros((config.max_iterations + 1, config.num_cells_x))
 
     history[0] = initial_condition
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     
     hx = build_hx_spacing(Advection1DFVMConfig)
 
-    initial_condition = hat_initial_condition_1d(hx, Advection1DFVMConfig)
+    initial_condition = hat_initial_condition_1d_fvm(hx, Advection1DFVMConfig)
     
     history = solve_advection_1d_fvm(
         initial_condition=initial_condition,

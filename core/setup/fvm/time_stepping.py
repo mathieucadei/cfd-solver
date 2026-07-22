@@ -8,7 +8,7 @@ from .mesh import build_hx_spacing
 
 
 
-def compute_advective_dt_1d(config: object) -> float:
+def compute_advective_dt_1d_fvm(config: object) -> float:
     """Compute the time step for 1D advection problem."""
 
     hx = build_hx_spacing(config)

@@ -6,9 +6,11 @@ from dataclasses import dataclass, field
 
 def build_hx_spacing(config: object):
 
-    raw_hx = config.rx**np.arange(config.nx//2)
+    rx = 1.0 + config.expansion_ratio_x
+
+    raw_hx = rx**np.arange(config.num_cells_x//2)
     raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * 0.5 * config.lx
+    hx = raw_hx / raw_hx_sum * 0.5 * config.domain_length_x
     hx = np.append(hx, hx[::-1])
 
     return hx

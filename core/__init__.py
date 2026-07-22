@@ -14,6 +14,10 @@ from .config import (
     ChannelFlowConfig,
 )
 
+from .config_fvm import (
+    Advection1DFVMConfig,
+)
+
 from .setup.grids import (
     compute_cole_hopf_dx, 
     compute_dx, 
@@ -44,6 +48,20 @@ from .setup.initial_conditions import (
     channel_flow_initial_condition,
 )
 
+from .setup.fvm.mesh import (
+    build_hx_spacing,
+    build_x_face_positions,
+    build_x_centers,
+)
+
+from .setup.fvm.time_stepping import (
+    compute_advective_dt_1d_fvm,
+)
+
+from .setup.fvm.initial_conditions import (
+    hat_initial_condition_1d_fvm,
+)
+
 from .numerics import (
     solve_advection_1d, 
     solve_advection_2d,
@@ -57,6 +75,10 @@ from .numerics import (
     solve_poisson_2d,
     solve_cavity_flow,
     solve_channel_flow,
+)
+
+from .numerics.fvm.advection_1d import (
+    solve_advection_1d_fvm, 
 )
 
 
