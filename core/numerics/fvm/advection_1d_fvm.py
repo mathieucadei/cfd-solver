@@ -4,25 +4,29 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from .operators import compute_advection_1d_term
 
-from ..setup.mesh import build_mesh
-from ..setup.initial_conditions import hat_initial_condition_1d
+from ...setup.fvm.time_stepping import compute_advective_dt_1d
+from ...setup.fvm.mesh import build_mesh
+from ...setup.fvm.initial_conditions import hat_initial_condition_1d
 
 from dataclasses import dataclass, field
 
 
 def solve_advection_1d_fvm(
+    initial_condition: np.ndarray,
     config: object,
-    mesh: object,
 ) -> np.ndarray:
     """Solve the 1D advection equation with an explicit upwind finite-difference scheme."""
 
-    dt = 0.025
+    dt = compute_advective_dt_1d(config)
+    mesh = build_mesh(config)
+    hx = mesh['hx']
 
-    u = np.ones(config.nx)      #numpy function ones()
+    u = initial_condition.copy()
 
-    u[int(len(mesh['xc'])*0.25):int(len(mesh['xc'])*0.5)] = 2  #setting u = 2 between 0.5 and 1 as per our I.C.s
+    # u = np.ones(config.nx)      #numpy function ones()
+
+    # u[int(len(hx)*0.25):int(len(hx)*0.5)] = 2  #setting u = 2 between 0.5 and 1 as per our I.C.s
 
     # history = np.zeros((config.max_iterations + 1, config.nx))
 
@@ -32,11 +36,11 @@ def solve_advection_1d_fvm(
 
         un = u.copy()
 
-        f_w = config.c * u[1:]
+        f_w = config.wavespeed * u[1:] / hx[1:]
 
-        f_e = config.c * u[:-1]
+        f_e = config.wavespeed * u[:-1] / hx[1:]
 
-        u[1:] = un[1:] - config.c * dt / mesh['hx'][1:] * (un[1:] - un[:-1])
+        u[1:] = un[1:] - dt * (f_w - f_e)
 
         # history[n] = u
 
@@ -53,14 +57,21 @@ if __name__ == '__main__':
         ly: float = 1.0
         rx: float = 1.1
         ry: float = 1.
-        c: float = 1.0
-        max_iterations: int = 25
+        sigma: float = 1.0
+        wavespeed: float = 1.0
+        max_iterations: int = 50
+        hat_start: float = 0.5
+        hat_end: float = 1.0
+        u_min: float = 1.0
+        u_max: float = 2.0
     
     mesh = build_mesh(Advection1DFVMConfig)
+
+    initial_condition = hat_initial_condition_1d(mesh['hx'], Advection1DFVMConfig)
     
     u = solve_advection_1d_fvm(
-        config=Advection1DFVMConfig,
-        mesh=mesh,
+        initial_condition=initial_condition,
+        config=Advection1DFVMConfig
     )
 
     print(u)
