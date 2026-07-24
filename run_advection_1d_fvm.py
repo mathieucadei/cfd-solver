@@ -15,10 +15,7 @@ from core import (
 )
 from post_processing import (
     show_solution_1d_animation,
-    show_solution_contour_map,
     show_solution_overview,
-    show_solution_surface,
-    show_solution_traces,
 )
 
 
