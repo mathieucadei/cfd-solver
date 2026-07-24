@@ -85,7 +85,7 @@ xf = build_x_face_positions(advection_1d_config)
 
 # Post-processing
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(10,3))
 pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
 fig.colorbar(pc, label='u')
 plt.show()
