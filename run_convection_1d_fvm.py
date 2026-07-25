@@ -1,0 +1,106 @@
+"""Run the 1D advection solver and generate solution plots."""
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from core import (
+    Convection1DFVMConfig,
+    hat_initial_condition_1d_fvm,
+    build_hx_spacing,
+    build_x_face_positions,
+    build_x_centers,
+    solve_convection_1d_fvm,
+)
+from post_processing import (
+    show_solution_1d_animation,
+    show_solution_overview,
+)
+
+
+
+# Pre-processing
+# Simulation parameters
+
+domain_length_x = 2.0
+num_cells_x = 250
+expansion_ratio_x = 0.
+max_iterations = 100
+sigma = 1
+hat_start = 0.5
+hat_end = 1.0
+u_min = 1.0
+u_max = 2.0
+
+
+# Visualization parameters
+
+step_stride = 20
+case_name = '1d advection'
+title = True
+save = False
+show_individual_plots = False
+
+
+# Create the configuration object
+
+advection_1d_config = Convection1DFVMConfig(
+    domain_length_x=domain_length_x,
+    num_cells_x=num_cells_x,
+    expansion_ratio_x=expansion_ratio_x,
+    max_iterations=max_iterations,
+    sigma=sigma,
+    hat_start=hat_start,
+    hat_end=hat_end,
+    u_min=u_min,
+    u_max=u_max,
+)
+
+
+# Generate the grid and time array
+
+hx_array = build_hx_spacing(advection_1d_config)
+xc_array = build_x_centers(advection_1d_config)
+time_array = np.arange(0, advection_1d_config.max_iterations + 1)
+
+
+# Initialize the initial condition
+
+initial_condition = hat_initial_condition_1d_fvm(hx_array, advection_1d_config)
+
+
+
+# Solve the advection equation
+
+solution_history = solve_convection_1d_fvm(initial_condition, advection_1d_config)
+
+solution_final = solution_history[-1]
+
+xf = build_x_face_positions(advection_1d_config)
+
+
+
+# Post-processing
+
+fig, ax = plt.subplots(figsize=(10,3))
+pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
+fig.colorbar(pc, label='u')
+plt.show()
+
+show_solution_overview(
+    x_values=xc_array, 
+    y_values=time_array, 
+    num_solution_matrix=solution_history, 
+    step_stride=step_stride,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
+
+show_solution_1d_animation(
+    x_values=xc_array,
+    num_solution_history=solution_history,
+    case_name=case_name,
+    save=save,
+)

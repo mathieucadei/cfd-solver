@@ -16,6 +16,7 @@ from .config import (
 
 from .config_fvm import (
     Advection1DFVMConfig,
+    Convection1DFVMConfig,
 )
 
 from .setup.grids import (
@@ -56,6 +57,7 @@ from .setup.fvm.mesh import (
 
 from .setup.fvm.time_stepping import (
     compute_advective_dt_1d_fvm,
+    compute_convection_dt_1d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
@@ -78,7 +80,11 @@ from .numerics import (
 )
 
 from .numerics.fvm.advection_1d import (
-    solve_advection_1d_fvm, 
+    solve_advection_1d_fvm,
+)
+
+from .numerics.fvm.convection_1d import (
+    solve_convection_1d_fvm,
 )
 
 
