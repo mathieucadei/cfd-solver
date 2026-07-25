@@ -1,12 +1,13 @@
 # CFD Solver
 
-Python finite-difference CFD project for rebuilding canonical incompressible-flow solvers from first principles. The focus is on numerical schemes, pressure-velocity coupling, boundary conditions, validation against analytical solutions, and visualisation of flow fields.
+Python finite-difference and finite-volume CFD project for rebuilding canonical incompressible-flow solvers from first principles. The focus is on numerical schemes, pressure-velocity coupling, boundary conditions, validation against analytical solutions, and visualisation of flow fields.
 
 ## Implemented solvers and validation cases
 
 Currently implemented:
 
 * 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff schemes
+* 1D linear advection with an explicit upwind finite-volume method
 * 2D linear advection
 * 1D nonlinear convection / inviscid Burgers with upwind, Lax-Friedrichs, Richtmyer, one-step and two-step Lax-Wendroff, MacCormack, and implicit Beam-Warming schemes, including conservative flux-form variants
 * 2D nonlinear convection
@@ -26,8 +27,11 @@ Currently implemented:
 
 ```text
 core/config.py              simulation dataclasses
+core/config_fvm.py         finite-volume configuration dataclasses
 core/setup/                 grids, time steps, initial conditions
+core/setup/fvm/            finite-volume mesh, time-stepping, and initial-condition helpers
 core/numerics/              finite-difference solvers
+core/numerics/fvm/         finite-volume advection solvers
 core/analytical/            analytical reference solutions
 post_processing/            contour, surface, quiver, and animation helpers
 run_*.py                    executable examples
@@ -68,6 +72,8 @@ The current solvers model:
   du/dt + c du/dx = 0
 
   using selectable explicit finite-difference schemes: upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff.
+
+  A finite-volume variant is also included, using an explicit upwind scheme on a cell-centered mesh with conservative flux updates and a CFL-based time-step constraint.
 
 * the 2D linear advection equation:
 
@@ -180,6 +186,7 @@ These comparisons are used to assess solver correctness and visualize agreement 
 
 ```bash
 python run_advection_1d.py
+python run_advection_1d_fvm.py
 python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
 python run_convection_1d.py
