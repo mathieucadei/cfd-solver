@@ -10,6 +10,7 @@ Currently implemented:
 * 1D linear advection with an explicit upwind finite-volume method
 * 2D linear advection
 * 1D nonlinear convection / inviscid Burgers with upwind, Lax-Friedrichs, Richtmyer, one-step and two-step Lax-Wendroff, MacCormack, and implicit Beam-Warming schemes, including conservative flux-form variants
+* 1D nonlinear convection with an explicit finite-volume method
 * 2D nonlinear convection
 * 1D and 2D diffusion
 * 1D and 2D Burgers equation
@@ -90,6 +91,8 @@ The current solvers model:
   du/dt + d(u^2 / 2)/dx = 0
 
   using selectable explicit schemes: upwind, Lax-Friedrichs, Richtmyer, one-step Lax-Wendroff, two-step Lax-Wendroff, and MacCormack. Conservative flux-form variants are included for shock propagation, along with implicit Beam-Warming and damped implicit Beam-Warming variants for inviscid Burgers experiments.
+
+  A finite-volume variant is also included, using an explicit upwind scheme on a cell-centered mesh with conservative flux updates and a CFL-based time-step constraint.
 
 * the 2D nonlinear convection equations:
 
@@ -190,6 +193,7 @@ python run_advection_1d_fvm.py
 python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
 python run_convection_1d.py
+python run_convection_1d_fvm.py
 python run_convection_1d_scheme_comparison.py
 python run_inviscid_burgers_scheme_comparison.py
 python run_convection_2d.py
@@ -204,4 +208,3 @@ python run_poisson_2d.py
 python run_cavity_flow.py
 python run_channel_flow.py
 ```
-Merged finite-volume convection work into main.
