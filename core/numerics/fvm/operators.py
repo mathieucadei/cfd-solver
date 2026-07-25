@@ -9,7 +9,7 @@ import numpy as np
 def compute_advection_1d_term(
     u: np.ndarray,
     c: float,
-    hx: float,
+    hx: np.ndarray,
     dt: float,
 ) -> np.ndarray:
     """Compute the 1D upwind advection term for a constant wave speed."""
@@ -27,7 +27,7 @@ def compute_advection_1d_term(
 
 def compute_convection_1d_term(
     u: np.ndarray,
-    hx: float,
+    hx: np.ndarray,
     dt: float,
 ) -> np.ndarray:
     """Compute the 1D upwind advection term for a constant wave speed."""
@@ -41,5 +41,25 @@ def compute_convection_1d_term(
     f_e = e[:-1] / hx[1:]
 
     term[1:] = dt * (f_w - f_e)
+
+    return term
+
+
+def compute_diffusion_1d_term(
+    u: np.ndarray,
+    hx: np.ndarray,
+    dist_x: np.ndarray,
+    dt: float,
+    nu: float,
+) -> np.ndarray:
+    """Compute the 1D central-difference diffusion term."""
+
+    term = np.zeros_like(u)
+
+    f_w = nu * (u[1:] - u[:-1])/ dist_x[:-1]
+
+    f_e = nu * (u[2:] - u[1:]) / dist_x[1:]
+
+    term[1:] = dt / hx[1:] * (f_w - f_e)
 
     return term

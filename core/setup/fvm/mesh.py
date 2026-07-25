@@ -32,6 +32,15 @@ def build_x_centers(config: object):
 
     return xc
 
+def build_dist_x(config: object):
+
+    xc = build_x_centers(config)
+
+    dist_x = xc[1:] - xc[:-1]
+
+    return dist_x
+
+
 def build_spacing(config: object):
 
     raw_hx = config.rx**np.arange(config.nx//2)

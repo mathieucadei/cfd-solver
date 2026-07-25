@@ -26,3 +26,13 @@ def compute_convection_dt_1d_fvm(config: object) -> float:
     hx_min = np.min(hx)
     
     return config.sigma * hx_min / config.u_max
+
+
+def compute_diffusive_dt_1d_fvm(config: object) -> float:
+    """Compute the time step for 1D diffusion-dominated problems."""
+    
+    hx = build_hx_spacing(config)
+
+    hx_min = np.min(hx)
+    
+    return config.sigma * hx_min**2 / config.viscosity
