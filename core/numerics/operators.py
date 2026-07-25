@@ -137,7 +137,7 @@ def compute_diffusion_1d_term(
     """Compute the 1D central-difference diffusion term."""
     term = np.zeros_like(u)
 
-    termc= nu * dt / dx**2 * (u[2:] - 2 * u[1:-1] + u[:-2])
+    term[1:-1] = nu * dt / dx**2 * (u[2:] - 2 * u[1:-1] + u[:-2])
 
     return term
 

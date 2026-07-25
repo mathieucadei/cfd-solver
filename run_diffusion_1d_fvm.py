@@ -28,9 +28,9 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 2.0
-num_cells_x = 40
+num_cells_x = 80
 expansion_ratio_x = 0.
-max_iterations = 41
+max_iterations = 25
 sigma = 0.2
 viscosity = 0.3
 hat_start = 0.5

@@ -26,6 +26,6 @@ def apply_diffusion_boundary_1d(
 
     f_eb = nu * (u[0] - u[-1]) / (xc[0] + lx - xc[-1])
 
-    u[0] = un[0] + nu * dt / hx[0] * (f_wb - f_e)
+    u[0] = un[0] + dt / hx[0] * (f_wb - f_e)
 
-    u[-1] = un[-1] + nu * dt / hx[-1] * (f_w - f_eb)
+    u[-1] = un[-1] + dt / hx[-1] * (f_w - f_eb)
