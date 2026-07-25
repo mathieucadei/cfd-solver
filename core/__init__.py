@@ -3,7 +3,7 @@ from .config import (
     Advection2DConfig, 
     Convection1DConfig, 
     Convection2DConfig, 
-    Diffusion1DConfig, 
+    Diffusion1DConfig,
     Diffusion2DConfig, 
     BurgersEquation1DConfig, 
     BurgersEquation2DConfig,
@@ -17,6 +17,7 @@ from .config import (
 from .config_fvm import (
     Advection1DFVMConfig,
     Convection1DFVMConfig,
+    Diffusion1DFVMConfig
 )
 
 from .setup.grids import (
@@ -85,6 +86,10 @@ from .numerics.fvm.advection_1d import (
 
 from .numerics.fvm.convection_1d import (
     solve_convection_1d_fvm,
+)
+
+from .numerics.fvm.diffusion_1d import (
+    solve_diffusion_1d_fvm,
 )
 
 

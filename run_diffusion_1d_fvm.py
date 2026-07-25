@@ -1,4 +1,4 @@
-"""Run the 1D advection solver and generate solution plots."""
+"""Run the 1D diffusion solver and generate solution plots."""
 
 
 
@@ -6,17 +6,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from core import (
-    Convection1DFVMConfig,
+    Diffusion1DFVMConfig,
     hat_initial_condition_1d_fvm,
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
-    solve_convection_1d_fvm,
+    solve_diffusion_1d_fvm,
 )
 
 from post_processing import (
     show_solution_1d_animation,
+    show_solution_contour_map,
     show_solution_overview,
+    show_solution_surface,
+    show_solution_traces,
 )
 
 
@@ -25,10 +28,11 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 2.0
-num_cells_x = 250
+num_cells_x = 40
 expansion_ratio_x = 0.
-max_iterations = 100
-sigma = 1
+max_iterations = 41
+sigma = 0.2
+viscosity = 0.3
 hat_start = 0.5
 hat_end = 1.0
 u_min = 1.0
@@ -38,7 +42,7 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d advection'
+case_name = '1d diffusion'
 title = True
 save = False
 show_individual_plots = False
@@ -46,12 +50,13 @@ show_individual_plots = False
 
 # Create the configuration object
 
-convection_1d_config = Convection1DFVMConfig(
+diffusion_1d_config = Diffusion1DFVMConfig(
     domain_length_x=domain_length_x,
     num_cells_x=num_cells_x,
     expansion_ratio_x=expansion_ratio_x,
     max_iterations=max_iterations,
     sigma=sigma,
+    viscosity=viscosity,
     hat_start=hat_start,
     hat_end=hat_end,
     u_min=u_min,
@@ -61,24 +66,26 @@ convection_1d_config = Convection1DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array = build_hx_spacing(convection_1d_config)
-xc_array = build_x_centers(convection_1d_config)
-time_array = np.arange(0, convection_1d_config.max_iterations + 1)
+hx_array = build_hx_spacing(diffusion_1d_config)
+xc_array = build_x_centers(diffusion_1d_config)
+time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d_fvm(hx_array, convection_1d_config)
+initial_condition = hat_initial_condition_1d_fvm(hx_array, diffusion_1d_config)
 
 
 
-# Solve the advection equation
+# Solve the diffusion equation
 
-solution_history = solve_convection_1d_fvm(initial_condition, convection_1d_config)
+solution_history = solve_diffusion_1d_fvm(initial_condition, diffusion_1d_config)
+
+
 
 solution_final = solution_history[-1]
 
-xf = build_x_face_positions(convection_1d_config)
+xf = build_x_face_positions(diffusion_1d_config)
 
 
 

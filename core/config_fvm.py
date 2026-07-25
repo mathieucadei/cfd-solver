@@ -38,7 +38,8 @@ class Convection1DFVMConfig:
 class Diffusion1DFVMConfig:
     """Configuration parameters for the 1D diffusion equation."""
     domain_length_x: float = 2.0
-    num_grid_points_x: int = 41
+    num_cells_x: int = 41
+    expansion_ratio_x: float = 1.
     max_iterations: int = 41
     sigma: float = 0.2
     viscosity: float = 0.3
