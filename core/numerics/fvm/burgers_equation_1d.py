@@ -8,9 +8,8 @@ from .operators import compute_convection_1d_term, compute_diffusion_1d_term
 from .boundary_conditions import apply_burgers_boundary_1d
 
 from ...config_fvm import BurgersEquation1DFVMConfig
-from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x
-from ...setup.fvm.time_stepping import compute_diffusive_dt_1d_fvm
-from ...setup.time_stepping import compute_cole_hopf_dt_1d
+from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x, make_cole_hopf_x_mesh
+from ...setup.fvm.time_stepping import compute_diffusive_dt_1d_fvm, compute_cole_hopf_dt_1d_fvm
 
 
 def solve_burgers_equation_1d_fvm(
@@ -21,17 +20,18 @@ def solve_burgers_equation_1d_fvm(
 
     if config.grid_type == "hat":
         hx = build_hx_spacing(config)
-        dist_x = build_dist_x(config)
-        xc = build_x_centers(config)
         dt = compute_diffusive_dt_1d_fvm(config)
     
-    # elif config.grid_type == "cole_hopf":
+    elif config.grid_type == "cole_hopf":
 
-    #     dx = compute_cole_hopf_dx(config)
-    #     dt = compute_cole_hopf_dt_1d(config)
+        hx = make_cole_hopf_x_mesh(config)
+        dt = compute_cole_hopf_dt_1d_fvm(config)
     
-    # else:
-    #     raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
+    else:
+        raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
+
+    dist_x = build_dist_x(config)
+    xc = build_x_centers(config)
 
     u = initial_condition.copy()
 

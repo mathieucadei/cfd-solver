@@ -1,19 +1,18 @@
-"""Run the 1D Burgers' solver and generate solution plots."""
+"""Run the 1D Burgers' & Cole-Hopf solvers and generate solution & comparision plots."""
 
 
-
-from pathlib import Path
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from core import (
     BurgersEquation1DFVMConfig,
-    hat_initial_condition_1d_fvm,
+    cole_hopf_initial_condition_1d,
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
+    make_cole_hopf_x_mesh,
     solve_burgers_equation_1d_fvm,
+    solve_cole_hopf_1d_fvm,
 )
 
 from post_processing import (
@@ -26,13 +25,13 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x = 2.0
+domain_length_x = 6.0
 num_cells_x = 100
 expansion_ratio_x = 0.
-max_iterations = 200
+max_iterations = 100
 time_step = 0.0025
-grid_type: str = "hat"
-sigma = 0.2
+grid_type = "cole_hopf"
+sigma = 0.02
 viscosity = 0.07
 hat_start = 0.5
 hat_end = 1.0
@@ -43,7 +42,7 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d burgers'
+case_name = '1d burgers vs cole-hopf'
 title = True
 save = False
 show_individual_plots = False
@@ -75,31 +74,30 @@ time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d_fvm(hx_array, burgers_1d_config)
+initial_condition = cole_hopf_initial_condition_1d(xc_array, burgers_1d_config)
 
 
 
-# Solve the Burgers equation
+# Solve
+# Numerical Burgers' equation
 
-solution_history = solve_burgers_equation_1d_fvm(initial_condition, burgers_1d_config)
+solution_history_num = solve_burgers_equation_1d_fvm(initial_condition, burgers_1d_config)
 
-solution_final = solution_history[-1]
 
-xf = build_x_face_positions(burgers_1d_config)
+# Analytical Cole-Hopf equation
+
+solution_history_ana = solve_cole_hopf_1d_fvm(xc_array, burgers_1d_config)
 
 
 
 # Post-processing
 
-fig, ax = plt.subplots(figsize=(10,3))
-pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(pc, label='u')
-plt.show()
 
 show_solution_overview(
     x_values=xc_array, 
     y_values=time_array, 
-    num_solution_matrix=solution_history,
+    num_solution_matrix=solution_history_num, 
+    ana_solution_matrix=solution_history_ana, 
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -108,7 +106,8 @@ show_solution_overview(
 
 show_solution_1d_animation(
     x_values=xc_array,
-    num_solution_history=solution_history,
+    num_solution_history=solution_history_num,
+    ana_solution_history=solution_history_ana, 
     case_name=case_name,
     save=save,
 )

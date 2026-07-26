@@ -55,12 +55,14 @@ from .setup.fvm.mesh import (
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
+    make_cole_hopf_x_mesh
 )
 
 from .setup.fvm.time_stepping import (
     compute_advective_dt_1d_fvm,
     compute_convection_dt_1d_fvm,
     compute_diffusive_dt_1d_fvm,
+    compute_cole_hopf_dt_1d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
@@ -105,3 +107,5 @@ from .signal_processing import (
 )
 
 from .analytical import cole_hopf_1d_ufunc, solve_cole_hopf_1d, solve_heat_equation_1d
+
+from .analytical.fvm.cole_hopf_equation_1d import solve_cole_hopf_1d_fvm

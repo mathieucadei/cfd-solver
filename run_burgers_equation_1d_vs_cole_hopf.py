@@ -11,6 +11,7 @@ from core import (
     solve_burgers_equation_1d,
     solve_cole_hopf_1d,
 )
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,
