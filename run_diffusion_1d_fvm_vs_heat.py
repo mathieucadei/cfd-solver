@@ -38,7 +38,7 @@ from post_processing import (
 domain_length_x = 2.0
 num_cells_x = 100
 expansion_ratio_x = 0.
-max_iterations = 25
+max_iterations = 81
 sigma = 0.2
 viscosity = 0.3
 hat_start = 0.5
@@ -49,14 +49,13 @@ u_max = 2.0
 
 # Analytical simulation parameters
 
-num_grid_points_x = num_cells_x
 num_modes = 100
 basis = "cosine"  # "periodic" or "cosine"
 
 
 # Visualization parameters
 
-step_stride = 100
+step_stride = 20
 case_name = '1d diffusion vs heat'
 title = True
 save = False
@@ -78,20 +77,6 @@ diffusion_1d_config = Diffusion1DFVMConfig(
     u_max=u_max,
 )
 
-# Create the configuration object
-
-diffusion_1d_config_ana = Diffusion1DConfig(
-    domain_length_x=domain_length_x,
-    num_grid_points_x=num_grid_points_x,
-    max_iterations=max_iterations,
-    sigma=sigma,
-    viscosity=viscosity,
-    hat_start=hat_start,
-    hat_end=hat_end,
-    u_min=u_min,
-    u_max=u_max,
-)
-
 
 # Generate the grid and time array
 
@@ -99,8 +84,7 @@ hx_array = build_hx_spacing(diffusion_1d_config)
 xc_array = build_x_centers(diffusion_1d_config)
 time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
 
-x_array = make_x_grid(diffusion_1d_config_ana)
-dt = compute_diffusive_dt_1d(diffusion_1d_config_ana)
+dt = compute_diffusive_dt_1d_fvm(diffusion_1d_config)
 time_array = np.arange(0, max_iterations + 1) * dt
 
 
@@ -108,42 +92,38 @@ time_array = np.arange(0, max_iterations + 1) * dt
 
 initial_condition = hat_initial_condition_1d_fvm(hx_array, diffusion_1d_config)
 
-initial_condition_ana = hat_initial_condition_1d_fvm(x_array, diffusion_1d_config_ana)
-
 
 # Fourier-series setup
 
 mode_indices = generate_mode_indices(num_modes)
 
 mode_coefficients = compute_coefficients(
-    initial_condition_ana, 
-    x_array, 
+    initial_condition, 
+    xc_array, 
     mode_indices, 
     basis=basis,
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
+series_terms = compute_series_terms(mode_indices, mode_coefficients, xc_array, basis=basis)
 
 
 # Solve the diffusion equation
 
 solution_history_num = solve_diffusion_1d_fvm(initial_condition, diffusion_1d_config)
 
+solution_final = solution_history_num[-1]
+
+xf = build_x_face_positions(diffusion_1d_config)
 
 # Heat analytical equation
 
 solution_history_ana = solve_heat_equation_1d(
     series_terms, 
     mode_indices,
-    x_array,
+    xc_array,
     time_array, 
-    diffusion_1d_config_ana.viscosity,
+    diffusion_1d_config.viscosity,
     basis=basis)
-
-
-solution_final = solution_history_num[-1]
-
-xf = build_x_face_positions(diffusion_1d_config)
 
 
 
@@ -156,7 +136,7 @@ plt.show()
 
 
 show_solution_overview(
-    x_values=x_array, 
+    x_values=xc_array, 
     y_values=time_array, 
     num_solution_matrix=solution_history_num,
     ana_solution_matrix=solution_history_ana, 
@@ -167,7 +147,7 @@ show_solution_overview(
 )
 
 show_solution_1d_animation(
-    x_values=x_array,
+    x_values=xc_array,
     num_solution_history=solution_history_num,
     ana_solution_history=solution_history_ana, 
     case_name=case_name,
