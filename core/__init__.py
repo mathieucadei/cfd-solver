@@ -17,7 +17,8 @@ from .config import (
 from .config_fvm import (
     Advection1DFVMConfig,
     Convection1DFVMConfig,
-    Diffusion1DFVMConfig
+    Diffusion1DFVMConfig,
+    BurgersEquation1DFVMConfig,
 )
 
 from .setup.grids import (
@@ -92,6 +93,8 @@ from .numerics.fvm.convection_1d import (
 from .numerics.fvm.diffusion_1d import (
     solve_diffusion_1d_fvm,
 )
+
+from .numerics.fvm.burgers_equation_1d import solve_burgers_equation_1d_fvm
 
 
 from .signal_processing import (

@@ -29,3 +29,34 @@ def apply_diffusion_boundary_1d(
     u[0] = un[0] + dt / hx[0] * (f_wb - f_e)
 
     u[-1] = un[-1] + dt / hx[-1] * (f_w - f_eb)
+
+
+def apply_burgers_boundary_1d(
+    u: np.ndarray,
+    un: np.ndarray,
+    dt: float,
+    hx: np.ndarray,
+    dist_x: np.ndarray,
+    xc: np.ndarray,
+    lx: float,
+    nu: float,
+) -> None:
+    """Apply boundary updates for the 1D Burgers' equation."""
+
+    e = u**2 / 2
+
+    conv_f_wb = e[-1]
+
+    conv_f_e = e[0]
+
+    diff_f_e = nu * (u[1] - u[0]) / dist_x[0]
+
+    diff_f_wb = nu * (u[0] - u[-1]) / (xc[0] + lx - xc[-1])
+
+    u[0] = un[0] - dt * (conv_f_e - conv_f_wb) / hx[0] \
+        + dt / hx[0] * (diff_f_wb - diff_f_e)
+    
+    # Treat the last grid point as the periodic duplicate of the first,
+    # so un[-2] is the last distinct neighbor and u[-1] is reset to u[0].
+
+    u[-1] = un[0]

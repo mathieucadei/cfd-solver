@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 from core import (
     Diffusion1DFVMConfig,
-    Diffusion1DConfig,
     hat_initial_condition_1d_fvm,
     build_hx_spacing,
     build_x_face_positions,
