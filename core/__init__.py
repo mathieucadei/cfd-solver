@@ -59,6 +59,7 @@ from .setup.fvm.mesh import (
 from .setup.fvm.time_stepping import (
     compute_advective_dt_1d_fvm,
     compute_convection_dt_1d_fvm,
+    compute_diffusive_dt_1d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
