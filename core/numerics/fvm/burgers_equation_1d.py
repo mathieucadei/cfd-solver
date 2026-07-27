@@ -19,17 +19,17 @@ def solve_burgers_equation_1d_fvm(
     """Solve the 1D Burgers' equation with an explicit finite-difference scheme."""
 
     if config.grid_type == "hat":
-        hx = build_hx_spacing(config)
+
         dt = compute_diffusive_dt_1d_fvm(config)
     
     elif config.grid_type == "cole_hopf":
 
-        hx = make_cole_hopf_x_mesh(config)
         dt = compute_cole_hopf_dt_1d_fvm(config)
     
     else:
         raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
-
+    
+    hx = build_hx_spacing(config)
     dist_x = build_dist_x(config)
     xc = build_x_centers(config)
 

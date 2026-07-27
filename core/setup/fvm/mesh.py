@@ -137,32 +137,54 @@ def build_mesh(config: object):
 if __name__ == '__main__':
 
     @dataclass
-    class Mesh:
-        nx: int = 40
-        ny: int = 40
-        lx: float = 2.0
-        ly: float = 1.0
-        rx: float = 1.1
-        ry: float = 1.1
+    class BurgersEquation1DFVMConfig:
+        """Configuration parameters for the 1D Burgers' equation."""
+        domain_length_x: float = 2.0
+        num_cells_x: int = 101
+        expansion_ratio_x: float = 0.
+        max_iterations: int = 100
+        time_step: float = 0.0025
+        sigma: float = 0.2
+        viscosity: float = 0.07
+        grid_type: str = "hat"
+        hat_start: float = 0.5
+        hat_end: float = 1.0
+        u_min: float = 1.0
+        u_max: float = 2.0
 
-    mesh = build_mesh(Mesh)
+    config = BurgersEquation1DFVMConfig()
+    
+    hx = build_hx_spacing(config)
 
-    print(mesh['xf'])
+    print(hx[0])
 
-    fig, ax = plt.subplots()
-    for x in mesh['xf']:
-        ax.axvline(x, color='k', lw=0.5)
-    for y in mesh['yf']:
-        ax.axhline(y, color='k', lw=0.5)
-    ax.set_xlim(0, mesh['xf'][-1])
-    ax.set_ylim(0, mesh['yf'][-1])
-    ax.set_aspect('equal')
-    plt.show()
+    # @dataclass
+    # class Mesh:
+    #     nx: int = 40
+    #     ny: int = 40
+    #     lx: float = 2.0
+    #     ly: float = 1.0
+    #     rx: float = 1.1
+    #     ry: float = 1.1
 
-    fig, ax = plt.subplots()
-    pc = ax.pcolormesh(mesh['xf'], mesh['yf'], mesh['V'].T, edgecolors='k', linewidth=0.3)
-    fig.colorbar(pc, label='cell volume')
-    ax.set_aspect('equal')
-    plt.show()
+    # mesh = build_mesh(Mesh)
 
-    print(mesh['hx'])
+    # print(mesh['xf'])
+
+    # fig, ax = plt.subplots()
+    # for x in mesh['xf']:
+    #     ax.axvline(x, color='k', lw=0.5)
+    # for y in mesh['yf']:
+    #     ax.axhline(y, color='k', lw=0.5)
+    # ax.set_xlim(0, mesh['xf'][-1])
+    # ax.set_ylim(0, mesh['yf'][-1])
+    # ax.set_aspect('equal')
+    # plt.show()
+
+    # fig, ax = plt.subplots()
+    # pc = ax.pcolormesh(mesh['xf'], mesh['yf'], mesh['V'].T, edgecolors='k', linewidth=0.3)
+    # fig.colorbar(pc, label='cell volume')
+    # ax.set_aspect('equal')
+    # plt.show()
+
+    # print(mesh['hx'])
