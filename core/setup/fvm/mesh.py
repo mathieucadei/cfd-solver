@@ -41,6 +41,46 @@ def build_dist_x(config: object):
     return dist_x
 
 
+def build_cole_hopf_hx_spacing(config: object) -> float:
+    """Compute the uniform grid spacing in the x-direction for the Cole-Hopf periodic domain."""
+
+    rx = 1.0 + config.expansion_ratio_x
+
+    raw_hx = rx**np.arange(config.num_cells_x//2)
+    raw_hx_sum = np.sum(raw_hx)
+    hx = raw_hx / raw_hx_sum * np.pi
+    hx = np.append(hx, hx[::-1])
+
+    return hx
+
+
+def build_cole_hopf_x_face_positions(config: object):
+
+    hx = build_cole_hopf_hx_spacing(config)  
+
+    xf = np.cumsum(hx)
+    xf =  np.concatenate([[0.0], xf])
+
+    return xf
+
+
+def build_cole_hopf_x_centers(config: object):
+
+    xf = build_cole_hopf_x_face_positions(config)
+
+    xc = 0.5 * (xf[:-1] + xf[1:])
+
+    return xc
+
+def build_cole_hopf_dist_x(config: object):
+
+    xc = build_cole_hopf_x_centers(config)
+
+    dist_x = xc[1:] - xc[:-1]
+
+    return dist_x
+
+
 def build_spacing(config: object):
 
     raw_hx = config.rx**np.arange(config.nx//2)
@@ -131,32 +171,54 @@ def build_mesh(config: object):
 if __name__ == '__main__':
 
     @dataclass
-    class Mesh:
-        nx: int = 40
-        ny: int = 40
-        lx: float = 2.0
-        ly: float = 1.0
-        rx: float = 1.1
-        ry: float = 1.1
+    class BurgersEquation1DFVMConfig:
+        """Configuration parameters for the 1D Burgers' equation."""
+        domain_length_x: float = 2.0
+        num_cells_x: int = 101
+        expansion_ratio_x: float = 0.
+        max_iterations: int = 100
+        time_step: float = 0.0025
+        sigma: float = 0.2
+        viscosity: float = 0.07
+        grid_type: str = "hat"
+        hat_start: float = 0.5
+        hat_end: float = 1.0
+        u_min: float = 1.0
+        u_max: float = 2.0
 
-    mesh = build_mesh(Mesh)
+    config = BurgersEquation1DFVMConfig()
+    
+    hx = build_hx_spacing(config)
 
-    print(mesh['xf'])
+    print(hx[0])
 
-    fig, ax = plt.subplots()
-    for x in mesh['xf']:
-        ax.axvline(x, color='k', lw=0.5)
-    for y in mesh['yf']:
-        ax.axhline(y, color='k', lw=0.5)
-    ax.set_xlim(0, mesh['xf'][-1])
-    ax.set_ylim(0, mesh['yf'][-1])
-    ax.set_aspect('equal')
-    plt.show()
+    # @dataclass
+    # class Mesh:
+    #     nx: int = 40
+    #     ny: int = 40
+    #     lx: float = 2.0
+    #     ly: float = 1.0
+    #     rx: float = 1.1
+    #     ry: float = 1.1
 
-    fig, ax = plt.subplots()
-    pc = ax.pcolormesh(mesh['xf'], mesh['yf'], mesh['V'].T, edgecolors='k', linewidth=0.3)
-    fig.colorbar(pc, label='cell volume')
-    ax.set_aspect('equal')
-    plt.show()
+    # mesh = build_mesh(Mesh)
 
-    print(mesh['hx'])
+    # print(mesh['xf'])
+
+    # fig, ax = plt.subplots()
+    # for x in mesh['xf']:
+    #     ax.axvline(x, color='k', lw=0.5)
+    # for y in mesh['yf']:
+    #     ax.axhline(y, color='k', lw=0.5)
+    # ax.set_xlim(0, mesh['xf'][-1])
+    # ax.set_ylim(0, mesh['yf'][-1])
+    # ax.set_aspect('equal')
+    # plt.show()
+
+    # fig, ax = plt.subplots()
+    # pc = ax.pcolormesh(mesh['xf'], mesh['yf'], mesh['V'].T, edgecolors='k', linewidth=0.3)
+    # fig.colorbar(pc, label='cell volume')
+    # ax.set_aspect('equal')
+    # plt.show()
+
+    # print(mesh['hx'])

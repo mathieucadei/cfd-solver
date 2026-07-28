@@ -15,6 +15,8 @@ from core import (
     solve_diffusion_1d,
     solve_heat_equation_1d,
 )
+
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,

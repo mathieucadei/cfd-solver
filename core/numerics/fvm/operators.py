@@ -16,11 +16,11 @@ def compute_advection_1d_term(
 
     term = np.zeros_like(u)
 
-    f_w = c * u[1:] / hx[1:]
+    f_w = c * u[:-1]
 
-    f_e = c * u[:-1] / hx[1:]
+    f_e = c * u[1:]
 
-    term[1:] = dt * (f_w - f_e)
+    term[1:] = dt * (f_e - f_w) / hx[1:]
 
     return term
 
@@ -36,11 +36,11 @@ def compute_convection_1d_term(
 
     term = np.zeros_like(u)
 
-    f_w = e[1:] / hx[1:]
+    f_w = e[:-1]
 
-    f_e = e[:-1] / hx[1:]
+    f_e = e[1:]
 
-    term[1:] = dt * (f_w - f_e)
+    term[1:] = dt * (f_e - f_w) / hx[1:]
 
     return term
 
@@ -56,10 +56,10 @@ def compute_diffusion_1d_term(
 
     term = np.zeros_like(u)
 
-    f_w = nu * (u[1:] - u[:-1])/ dist_x[:-1]
+    f_w = nu * (u[1:] - u[:-1]) / dist_x
 
-    f_e = nu * (u[2:] - u[1:]) / dist_x[1:]
+    f_e = nu * (u[2:] - u[1:-1]) / dist_x[1:]
 
-    term[1:] = dt / hx[1:] * (f_w - f_e)
+    term[1:-1] = dt / hx[1:-1] * (f_e - f_w[:-1])
 
     return term

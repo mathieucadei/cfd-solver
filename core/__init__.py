@@ -3,7 +3,7 @@ from .config import (
     Advection2DConfig, 
     Convection1DConfig, 
     Convection2DConfig, 
-    Diffusion1DConfig, 
+    Diffusion1DConfig,
     Diffusion2DConfig, 
     BurgersEquation1DConfig, 
     BurgersEquation2DConfig,
@@ -17,6 +17,8 @@ from .config import (
 from .config_fvm import (
     Advection1DFVMConfig,
     Convection1DFVMConfig,
+    Diffusion1DFVMConfig,
+    BurgersEquation1DFVMConfig,
 )
 
 from .setup.grids import (
@@ -53,11 +55,17 @@ from .setup.fvm.mesh import (
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
+    build_cole_hopf_hx_spacing,
+    build_cole_hopf_x_face_positions,
+    build_cole_hopf_x_centers,
+    build_cole_hopf_dist_x,
 )
 
 from .setup.fvm.time_stepping import (
     compute_advective_dt_1d_fvm,
     compute_convection_dt_1d_fvm,
+    compute_diffusive_dt_1d_fvm,
+    compute_cole_hopf_dt_1d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
@@ -87,6 +95,12 @@ from .numerics.fvm.convection_1d import (
     solve_convection_1d_fvm,
 )
 
+from .numerics.fvm.diffusion_1d import (
+    solve_diffusion_1d_fvm,
+)
+
+from .numerics.fvm.burgers_equation_1d import solve_burgers_equation_1d_fvm
+
 
 from .signal_processing import (
     compute_coefficients,
@@ -96,3 +110,5 @@ from .signal_processing import (
 )
 
 from .analytical import cole_hopf_1d_ufunc, solve_cole_hopf_1d, solve_heat_equation_1d
+
+from .analytical.fvm.cole_hopf_equation_1d import solve_cole_hopf_1d_fvm
