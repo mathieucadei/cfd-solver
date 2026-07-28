@@ -55,7 +55,10 @@ from .setup.fvm.mesh import (
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
-    compute_cole_hopf_hx,
+    build_cole_hopf_hx_spacing,
+    build_cole_hopf_x_face_positions,
+    build_cole_hopf_x_centers,
+    build_cole_hopf_dist_x,
 )
 
 from .setup.fvm.time_stepping import (

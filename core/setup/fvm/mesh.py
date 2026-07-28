@@ -41,7 +41,7 @@ def build_dist_x(config: object):
     return dist_x
 
 
-def compute_cole_hopf_hx(config: object) -> float:
+def build_cole_hopf_hx_spacing(config: object) -> float:
     """Compute the uniform grid spacing in the x-direction for the Cole-Hopf periodic domain."""
 
     rx = 1.0 + config.expansion_ratio_x
@@ -52,6 +52,33 @@ def compute_cole_hopf_hx(config: object) -> float:
     hx = np.append(hx, hx[::-1])
 
     return hx
+
+
+def build_cole_hopf_x_face_positions(config: object):
+
+    hx = build_cole_hopf_hx_spacing(config)  
+
+    xf = np.cumsum(hx)
+    xf =  np.concatenate([[0.0], xf])
+
+    return xf
+
+
+def build_cole_hopf_x_centers(config: object):
+
+    xf = build_cole_hopf_x_face_positions(config)
+
+    xc = 0.5 * (xf[:-1] + xf[1:])
+
+    return xc
+
+def build_cole_hopf_dist_x(config: object):
+
+    xc = build_cole_hopf_x_centers(config)
+
+    dist_x = xc[1:] - xc[:-1]
+
+    return dist_x
 
 
 def build_spacing(config: object):

@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 from core import (
     BurgersEquation1DFVMConfig,
     cole_hopf_initial_condition_1d,
-    build_hx_spacing,
-    build_x_face_positions,
-    build_x_centers,
-    compute_cole_hopf_dx,
+    build_cole_hopf_hx_spacing,
+    build_cole_hopf_x_face_positions,
+    build_cole_hopf_x_centers,
     solve_burgers_equation_1d_fvm,
     solve_cole_hopf_1d_fvm,
 )
@@ -69,8 +68,8 @@ burgers_1d_config = BurgersEquation1DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array = build_hx_spacing(burgers_1d_config)
-xc_array = build_x_centers(burgers_1d_config)
+hx_array = build_cole_hopf_hx_spacing(burgers_1d_config)
+xc_array = build_cole_hopf_x_centers(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
@@ -86,7 +85,7 @@ solution_history_num = solve_burgers_equation_1d_fvm(initial_condition, burgers_
 
 solution_final = solution_history_num[-1]
 
-xf = build_x_face_positions(burgers_1d_config)
+xf = build_cole_hopf_x_face_positions(burgers_1d_config)
 
 # Analytical Cole-Hopf equation
 
