@@ -6,14 +6,14 @@ Python finite-difference and finite-volume CFD project for rebuilding canonical 
 
 Currently implemented:
 
-* 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff schemes
+* 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff finite-difference schemes
 * 1D linear advection with an explicit upwind finite-volume method
 * 2D linear advection
 * 1D nonlinear convection / inviscid Burgers with upwind, Lax-Friedrichs, Richtmyer, one-step and two-step Lax-Wendroff, MacCormack, and implicit Beam-Warming schemes, including conservative flux-form variants
 * 1D nonlinear convection with an explicit finite-volume method
 * 2D nonlinear convection
-* 1D and 2D diffusion
-* 1D and 2D Burgers equation
+* 1D and 2D diffusion, including a 1D finite-volume diffusion solver
+* 1D and 2D Burgers equation, including a 1D finite-volume Burgers solver
 * 2D Laplace equation
 * 2D Poisson equation with configurable source terms
 * 2D lid-driven cavity flow using a pressure Poisson solve
@@ -27,12 +27,12 @@ Currently implemented:
 ## Project structure
 
 ```text
-core/config.py              simulation dataclasses
-core/config_fvm.py         finite-volume configuration dataclasses
-core/setup/                 grids, time steps, initial conditions
-core/setup/fvm/            finite-volume mesh, time-stepping, and initial-condition helpers
+core/config.py              finite-difference simulation dataclasses
+core/config_fvm.py          finite-volume simulation dataclasses
+core/setup/                 finite-difference grids, time steps, and initial conditions
+core/setup/fvm/             finite-volume mesh, time-stepping, and initial-condition helpers
 core/numerics/              finite-difference solvers
-core/numerics/fvm/         finite-volume advection solvers
+core/numerics/fvm/          finite-volume 1D solvers
 core/analytical/            analytical reference solutions
 post_processing/            contour, surface, quiver, and animation helpers
 run_*.py                    executable examples
@@ -108,17 +108,21 @@ The current solvers model:
 
   using an explicit central finite-difference scheme.
 
-* the 2D diffusion equation:
+* the 1D diffusion equation:
 
-  du/dt = ν (d²u/dx² + d²u/dy²)
+  du/dt = nu d^2u/dx^2
 
-  using an explicit central finite-difference scheme.
+  using an explicit central finite-difference scheme. A 1D finite-volume diffusion variant is also included and can be compared against the heat-equation reference solution.
 
 * the 1D Burgers equation:
 
-  du/dt + u du/dx = ν d²u/dx²
+  du/dt + u du/dx = nu d^2u/dx^2
 
-  using an explicit upwind scheme for the convective term and a central scheme for the diffusive term.
+  with the conservative convective form:
+
+  du/dt + d(u^2 / 2)/dx = nu d^2u/dx^2
+
+  using an explicit upwind scheme for the finite-difference convective term and a central scheme for the diffusive term. A 1D finite-volume Burgers variant is also included, using conservative flux updates for the convective term and diffusive fluxes for viscosity, and can be compared against the Cole-Hopf analytical solution.
 
 * the 2D Burgers equations:
 
@@ -164,9 +168,9 @@ The current solvers model:
 
 This project includes validation workflows that compare numerical finite-difference solutions with analytical reference solutions.
 
-For the 1D diffusion equation, the numerical solver is validated against a Fourier-based analytical solution of the heat equation.
+For the 1D diffusion equation, finite-difference and finite-volume solvers can be compared against a Fourier-based analytical solution of the heat equation.
 
-For the 1D Burgers equation, the numerical solver is validated against the analytical Cole-Hopf solution.
+For the 1D Burgers equation, finite-difference and finite-volume solvers can be compared against the analytical Cole-Hopf solution.
 
 The 1D convection scheme comparison script visualizes conservative and non-conservative schemes on a Heaviside step problem, comparing grid resolution and CFL number effects. This highlights numerical diffusion, dispersive oscillations near shocks, and conservative-form shock propagation.
 
@@ -198,10 +202,14 @@ python run_convection_1d_scheme_comparison.py
 python run_inviscid_burgers_scheme_comparison.py
 python run_convection_2d.py
 python run_diffusion_1d.py
+python run_diffusion_1d_fvm.py
 python run_diffusion_1d_vs_heat.py
+python run_diffusion_1d_fvm_vs_heat.py
 python run_diffusion_2d.py
 python run_burgers_equation_1d.py
+python run_burgers_equation_1d_fvm.py
 python run_burgers_equation_1d_vs_cole_hopf.py
+python run_burgers_equation_1d_fvm_vs_cole_hopf.py
 python run_burgers_equation_2d.py
 python run_laplace_2d.py
 python run_poisson_2d.py
