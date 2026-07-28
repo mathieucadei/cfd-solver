@@ -11,7 +11,7 @@ from core import (
     build_hx_spacing,
     build_x_face_positions,
     build_x_centers,
-    make_cole_hopf_x_mesh,
+    compute_cole_hopf_dx,
     solve_burgers_equation_1d_fvm,
     solve_cole_hopf_1d_fvm,
 )

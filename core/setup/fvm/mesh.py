@@ -41,10 +41,17 @@ def build_dist_x(config: object):
     return dist_x
 
 
-def make_cole_hopf_x_mesh(config: object) -> np.array:
-    """Generate a uniform x-coordinate periodic grid used for the Cole-Hopf analytical solution."""
+def compute_cole_hopf_hx(config: object) -> float:
+    """Compute the uniform grid spacing in the x-direction for the Cole-Hopf periodic domain."""
 
-    return np.linspace(0, 2 * np.pi, config.num_cells_x)
+    rx = 1.0 + config.expansion_ratio_x
+
+    raw_hx = rx**np.arange(config.num_cells_x//2)
+    raw_hx_sum = np.sum(raw_hx)
+    hx = raw_hx / raw_hx_sum * np.pi
+    hx = np.append(hx, hx[::-1])
+
+    return hx
 
 
 def build_spacing(config: object):
