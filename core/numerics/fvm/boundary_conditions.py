@@ -31,7 +31,7 @@ def apply_diffusion_boundary_1d(
     u[-1] = un[-1] + dt / hx[-1] * (f_w - f_eb)
 
 
-def apply_burgers_boundary_1d(
+def apply_burgers_boundary_1d_fvm(
     u: np.ndarray,
     un: np.ndarray,
     dt: float,
@@ -57,12 +57,14 @@ def apply_burgers_boundary_1d(
 
     diff_f_wb = nu * (un[0] - un[-1]) / (xc[0] + lx - xc[-1])
 
-    diff_f_w = nu * (un[-1] - un[-2]) / dist_x[-1]
+    diff_f_w = nu * (un[0] - un[-2]) / dist_x[-1]
 
     diff_f_eb = diff_f_wb
 
-    u[0] = un[0] - dt * (conv_f_e - conv_f_wb) / hx[0] \
-        + dt * (diff_f_wb - diff_f_e) / hx[0]
+    u[0] = un[0] - dt * (conv_f_e - conv_f_w) / hx[0] \
+        + dt * (diff_f_e - diff_f_w) / hx[0]
 
-    u[-1] = un[-1] - dt * (conv_f_eb - conv_f_w) / hx[-1] \
-        + dt * (diff_f_w - diff_f_eb) / hx[-1]
+    u[-1] = u[0]
+
+    # u[-1] = un[-1] - dt * (conv_f_eb - conv_f_w) / hx[-1] \
+    #     + dt * (diff_f_eb - diff_f_w) / hx[-1]

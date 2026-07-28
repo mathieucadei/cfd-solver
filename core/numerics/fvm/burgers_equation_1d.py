@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_convection_1d_term, compute_diffusion_1d_term
-from .boundary_conditions import apply_burgers_boundary_1d
+from .boundary_conditions import apply_burgers_boundary_1d_fvm
 
 from ...config_fvm import BurgersEquation1DFVMConfig
 from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x, make_cole_hopf_x_mesh
@@ -49,7 +49,7 @@ def solve_burgers_equation_1d_fvm(
         u[1:-1] = un[1:-1] - convection_term[1:-1] \
             + diffusion_term[1:-1]
         
-        apply_burgers_boundary_1d(
+        apply_burgers_boundary_1d_fvm(
             u=u,
             un=un,
             dt=dt,

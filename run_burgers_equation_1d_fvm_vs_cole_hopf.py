@@ -3,6 +3,7 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from core import (
     BurgersEquation1DFVMConfig,
@@ -26,7 +27,7 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 6.0
-num_cells_x = 100
+num_cells_x = 200
 expansion_ratio_x = 0.
 max_iterations = 100
 time_step = 0.0025
@@ -83,6 +84,9 @@ initial_condition = cole_hopf_initial_condition_1d(xc_array, burgers_1d_config)
 
 solution_history_num = solve_burgers_equation_1d_fvm(initial_condition, burgers_1d_config)
 
+solution_final = solution_history_num[-1]
+
+xf = build_x_face_positions(burgers_1d_config)
 
 # Analytical Cole-Hopf equation
 
@@ -91,6 +95,11 @@ solution_history_ana = solve_cole_hopf_1d_fvm(xc_array, burgers_1d_config)
 
 
 # Post-processing
+
+fig, ax = plt.subplots(figsize=(10,3))
+pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
+fig.colorbar(pc, label='u')
+plt.show()
 
 
 show_solution_overview(
