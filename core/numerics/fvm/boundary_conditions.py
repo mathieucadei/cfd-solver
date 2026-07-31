@@ -122,4 +122,4 @@ def apply_advection_boundary_2d(
     u[1:, 0] = dt * (f_e_left - f_wb) / hx[0] + dt * (f_n_left - f_s_left) / hy[1:]
     # u[1:, -1] = dt * (f_eb - f_w_right) / hx[-1] + dt * (f_n_right- f_s_right) / hy[1:]
 
-    u[0, 0] = dt * (f_e_left[0] - f_wb) / hx[0] + dt * (f_n_left[0] - f_sb) / hy[0]   
+    u[0,0] = dt * (c * u[0,0] - f_wb) / hx[0] + dt * (c * u[0,0] - f_sb) / hy[0]   
