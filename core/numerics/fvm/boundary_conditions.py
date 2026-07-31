@@ -84,21 +84,21 @@ def apply_advection_boundary_2d(
 
     f_e_bottom  = c * u[0, 1:]
 
-    f_sb = u_min
+    f_sb = c * u_min
 
     f_n_bottom  = c * u[0, 1:]
 
 
-    f_w_top = c * u[-1, :-1]
+    # f_w_top = c * u[-1, :-1]
 
-    f_e_top  = c * u[-1, 1:]
+    # f_e_top  = c * u[-1, 1:]
 
-    f_s_top = c * u[-1, 1:]
+    # f_s_top = c * u[-1, 1:]
 
-    f_nb = u_min
+    # f_nb = c * u_min
 
 
-    f_wb = u_min
+    f_wb = c * u_min
 
     f_e_left  = c * u[1:, 0]
 
@@ -107,17 +107,19 @@ def apply_advection_boundary_2d(
     f_n_left  = c * u[:-1, 0]
 
 
-    f_w_right = c * u[:-1, -1]
+    # f_w_right = c * u[:-1, -1]
 
-    f_eb = u_min
+    # f_eb = c * u_min
 
-    f_s_right = c * u[1:, -1]
+    # f_s_right = c * u[1:, -1]
 
-    f_n_right  = c * u[:-1, -1]
+    # f_n_right  = c * u[:-1, -1]
 
 
 
     u[0, 1:] = dt * (f_e_bottom - f_w_bottom) / hx[1:] + dt * (f_n_bottom - f_sb) / hy[0]
-    u[-1, 1:] = dt * (f_e_top- f_w_top) / hx[1:] + dt * (f_nb - f_s_top) / hy[-1]
+    # u[-1, 1:] = dt * (f_e_top- f_w_top) / hx[1:] + dt * (f_nb - f_s_top) / hy[-1]
     u[1:, 0] = dt * (f_e_left - f_wb) / hx[0] + dt * (f_n_left - f_s_left) / hy[1:]
-    u[1:, -1] = dt * (f_eb - f_w_right) / hx[-1] + dt * (f_n_right- f_s_right) / hy[1:]
+    # u[1:, -1] = dt * (f_eb - f_w_right) / hx[-1] + dt * (f_n_right- f_s_right) / hy[1:]
+
+    u[0, 0] = dt * (f_e_left[0] - f_wb) / hx[0] + dt * (f_n_left[0] - f_sb) / hy[0]   
