@@ -81,16 +81,20 @@ def build_cole_hopf_dist_x(config: object):
     return dist_x
 
 
-def build_spacing(config: object):
+def build_h_spacing(config: object):
 
-    raw_hx = config.rx**np.arange(config.nx//2)
+    rx = 1.0 + config.expansion_ratio_x
+
+    raw_hx = rx**np.arange(config.num_cells_x//2)
     raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * 0.5 * config.lx
+    hx = raw_hx / raw_hx_sum * 0.5 * config.domain_length_x
     hx = np.append(hx, hx[::-1])
 
-    raw_hy = config.ry**np.arange(config.ny//2)
+    ry = 1.0 + config.expansion_ratio_y
+
+    raw_hy = ry**np.arange(config.num_cells_y//2)
     raw_hy_sum = np.sum(raw_hy)
-    hy = raw_hy / raw_hy_sum * 0.5 * config.ly
+    hy = raw_hy / raw_hy_sum * 0.5 * config.domain_length_y
     hy = np.append(hy, hy[::-1])
 
     return hx, hy
@@ -98,7 +102,7 @@ def build_spacing(config: object):
 
 def build_face_positions(config: object):
 
-    hx, hy = build_spacing(config)  
+    hx, hy = build_h_spacing(config)  
 
     xf = np.cumsum(hx)
     xf =  np.concatenate([[0.0], xf])
@@ -128,7 +132,7 @@ def build_faces(config: object):
 
     ids = build_cell_ids(config)
 
-    hx, hy = build_spacing(config)
+    hx, hy = build_h_spacing(config)
     xc, yc = build_centers(config)
     
     owner_x = ids[:, :-1]
@@ -148,7 +152,7 @@ def build_faces(config: object):
 
 def build_mesh(config: object):
 
-    hx, hy = build_spacing(config)
+    hx, hy = build_h_spacing(config)
     xf, yf = build_face_positions(config)
     xc, yc = build_centers(config)
     ids = build_cell_ids(config)

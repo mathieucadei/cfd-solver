@@ -68,3 +68,56 @@ def apply_burgers_boundary_1d_fvm(
 
     u[-1] = un[-1] - dt * (conv_f_eb - conv_f_w) / hx[-1] \
         + dt * (diff_f_eb - diff_f_w) / hx[-1]
+
+
+def apply_advection_boundary_2d(
+    u: np.ndarray,
+    c: float,
+    u_min: float,
+    dt: float,
+    hx: np.ndarray,
+    hy: np.ndarray,
+) -> None:
+    """Apply boundary updates for the 2D advection equation."""
+
+    f_w_bottom = c * u[0, :-1]
+
+    f_e_bottom  = c * u[0, 1:]
+
+    f_sb = u_min
+
+    f_n_bottom  = c * u[0, 1:]
+
+
+    f_w_top = c * u[-1, :-1]
+
+    f_e_top  = c * u[-1, 1:]
+
+    f_s_top = c * u[-1, 1:]
+
+    f_nb = u_min
+
+
+    f_wb = u_min
+
+    f_e_left  = c * u[1:, 0]
+
+    f_s_left = c * u[1:, 0]
+
+    f_n_left  = c * u[:-1, 0]
+
+
+    f_w_right = c * u[:-1, -1]
+
+    f_eb = u_min
+
+    f_s_right = c * u[1:, -1]
+
+    f_n_right  = c * u[:-1, -1]
+
+
+
+    u[0, :] = dt * (f_e_bottom - f_w_bottom) / hx[1:] + dt * (f_n_bottom - f_sb) / hy[1:]
+    u[-1, :] = dt * (f_e[-1, :] - f_w[-1, :]) / hx[1:] + dt * (f_nb - f_s[-1, :]) / hy[1:]
+    u[:, 0] = dt * (f_e[:, 0] - f_wb[:, 0]) / hx[1:] + dt * (f_n[:, 0] - f_s[:, 0]) / hy[1:]
+    u[:, -1] = dt * (f_eb - f_w[:, -1]) / hx[1:] + dt * (f_n[:, -1] - f_s[:, -1]) / hy[1:]

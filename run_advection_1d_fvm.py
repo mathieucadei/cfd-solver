@@ -13,6 +13,7 @@ from core import (
     build_x_centers,
     solve_advection_1d_fvm,
 )
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_overview,

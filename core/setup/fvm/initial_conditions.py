@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from .mesh import build_mesh
+from .mesh import build_mesh, build_h_spacing
 
 
 
@@ -13,5 +13,22 @@ def hat_initial_condition_1d_fvm(hx_array: np.ndarray, config: object) -> np.nda
 
     initial_condition = np.full_like(hx_array, config.u_min, dtype=float)
     initial_condition[int(len(hx_array)*config.hat_start/config.domain_length_x):int(len(hx_array)*config.hat_end/config.domain_length_x)] = config.u_max
+
+    return initial_condition
+
+
+def hat_initial_condition_2d_fvm(config: object) -> np.ndarray:
+    """Generate a 2D hat-function initial condition on the provided grid."""
+
+    hx, hy = build_h_spacing(config)
+
+    initial_condition = np.full((config.num_cells_y, config.num_cells_x), float(config.u_min))
+
+    initial_condition[
+        int(len(hy)*config.hat_start_y/config.domain_length_y):
+        int(len(hy)*config.hat_end_y/config.domain_length_y),
+        int(len(hx)*config.hat_start_x/config.domain_length_x):
+        int(len(hx)*config.hat_end_x/config.domain_length_x)
+    ] = config.u_max
 
     return initial_condition

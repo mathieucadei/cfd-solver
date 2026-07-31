@@ -43,16 +43,18 @@ def compute_advective_dt_2d(config: object) -> float:
     """Compute the time step for 2D advection problem."""
 
     dx = compute_dx(config)
+    dy = compute_dy(config)
     
-    return config.sigma * dx / config.wavespeed
+    return config.sigma * min(dx, dy) / config.wavespeed
 
 
 def compute_convective_dt_2d(config: object) -> float:
     """Compute the time step for 2D convection problem."""
 
     dx = compute_dx(config)
-    
-    return config.sigma * dx / max(config.u_max, config.v_max)
+    dy = compute_dy(config)
+
+    return config.sigma * min(dx, dy) / max(config.u_max, config.v_max)
 
 
 def compute_diffusive_dt_2d(config: object) -> float:
