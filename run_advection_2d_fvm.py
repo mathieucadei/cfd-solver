@@ -3,6 +3,7 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from core import (
     Advection2DFVMConfig,
@@ -100,6 +101,11 @@ xf, yf = build_face_positions(advection_2d_config)
 
 
 # Post-processing
+
+fig, ax = plt.subplots(figsize=(10,3))
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+fig.colorbar(pc, label='u')
+plt.show()
 
 show_solution_overview(
     x_values=xc_array, 
