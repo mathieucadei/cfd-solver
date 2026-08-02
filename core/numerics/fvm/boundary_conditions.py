@@ -108,33 +108,33 @@ def apply_convection_boundary_2d(
 ) -> None:
     """Apply boundary updates for the 2D advection equation."""
 
-    e_u = u**2 / 2
-    e_v = v**2 / 2
+    e_u = un**2 / 2
+    e_v = vn**2 / 2
 
     f_w_u_bottom = e_u[0, :-1]
     f_e_u_bottom  = e_u[0, 1:]
     f_sb_u = v_min * u_min
-    f_n_u_bottom  = v[0, 1:] * u[0, 1:]
+    f_n_u_bottom  = vn[0, 1:] * un[0, 1:]
 
     f_wb_u = u_min**2 / 2
     f_e_u_left  = e_u[1:, 0]
-    f_s_u_left = v[1:, 0] * u[1:, 0]
-    f_n_u_left  = v[:-1, 0] * u[:-1, 0]
+    f_s_u_left = vn[1:, 0] * un[1:, 0]
+    f_n_u_left  = vn[:-1, 0] * un[:-1, 0]
 
     u[0, 1:] = un[0, 1:] + dt * (f_e_u_bottom - f_w_u_bottom) / hx[1:] + dt * (f_n_u_bottom - f_sb_u) / hy[0]
     u[1:, 0] = un[1:, 0] + dt * (f_e_u_left - f_wb_u) / hx[0] + dt * (f_n_u_left - f_s_u_left) / hy[1:]
-    u[0, 0] = un[0, 0] + dt * (e_u[0, 0] - f_wb_u) / hx[0] + dt * (v[0, 0] * u[0, 0] - f_sb_u) / hy[0]   
+    u[0, 0] = un[0, 0] + dt * (e_u[0, 0] - f_wb_u) / hx[0] + dt * (vn[0, 0] * un[0, 0] - f_sb_u) / hy[0]   
 
-    f_w_v_bottom = u[0, :-1] * v[0, :-1]
-    f_e_v_bottom  = u[0, 1:] * v[0, 1:]
+    f_w_v_bottom = un[0, :-1] * vn[0, :-1]
+    f_e_v_bottom  = un[0, 1:] * vn[0, 1:]
     f_sb_v = v_min**2 / 2
     f_n_v_bottom  = e_v[0, 1:]
 
     f_wb_v = u_min * v_min
-    f_e_v_left  = u[1:, 0] * v[1:, 0]
+    f_e_v_left  = un[1:, 0] * vn[1:, 0]
     f_s_v_left = e_v[1:, 0]
     f_n_v_left  = e_v[:-1, 0]
 
     v[0, 1:] = vn[0, 1:] + dt * (f_e_v_bottom - f_w_v_bottom) / hx[1:] + dt * (f_n_v_bottom - f_sb_v) / hy[0]
     v[1:, 0] = vn[1:, 0] + dt * (f_e_v_left - f_wb_v) / hx[0] + dt * (f_n_v_left - f_s_v_left) / hy[1:]
-    v[0, 0] = vn[0, 0] + dt * (u[0, 0] * v[0, 0] - f_wb_v) / hx[0] + dt * (e_v[0, 0] - f_sb_v) / hy[0]  
+    v[0, 0] = vn[0, 0] + dt * (un[0, 0] * vn[0, 0] - f_wb_v) / hx[0] + dt * (e_v[0, 0] - f_sb_v) / hy[0]  
