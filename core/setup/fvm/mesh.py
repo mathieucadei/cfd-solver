@@ -123,6 +123,24 @@ def build_centers(config: object):
     return xc, yc
 
 
+def build_face_areas(config: object):
+
+    hx, hy = build_h_spacing(config)  
+
+    area_x = np.array([hy[:]] * (config.num_cells_x)).T
+    area_y = np.array([hx[:]] * (config.num_cells_y))
+
+    return area_x, area_y
+
+def compute_cell_volumes(config: object):
+
+    hx, hy = build_h_spacing(config)  
+
+    V  = hy[:,None] * hx[None,:]
+
+    return V
+
+
 def build_cell_ids(config: object):
 
     return np.arange(config.nx*config.ny).reshape((config.ny, config.nx))
@@ -175,26 +193,39 @@ def build_mesh(config: object):
 if __name__ == '__main__':
 
     @dataclass
-    class BurgersEquation1DFVMConfig:
-        """Configuration parameters for the 1D Burgers' equation."""
+    class Mesh:
         domain_length_x: float = 2.0
-        num_cells_x: int = 101
+        domain_length_y: float = 1.0
+        num_cells_x: int = 5
+        num_cells_y: int = 5
         expansion_ratio_x: float = 0.
-        max_iterations: int = 100
-        time_step: float = 0.0025
-        sigma: float = 0.2
-        viscosity: float = 0.07
-        grid_type: str = "hat"
-        hat_start: float = 0.5
-        hat_end: float = 1.0
-        u_min: float = 1.0
-        u_max: float = 2.0
+        expansion_ratio_y: float = 0.
 
-    config = BurgersEquation1DFVMConfig()
+    ax, ay = build_face_areas(Mesh)
+
+    print(ax, ay)
+
+    # @dataclass
+    # class BurgersEquation1DFVMConfig:
+    #     """Configuration parameters for the 1D Burgers' equation."""
+    #     domain_length_x: float = 2.0
+    #     num_cells_x: int = 101
+    #     expansion_ratio_x: float = 0.
+    #     max_iterations: int = 100
+    #     time_step: float = 0.0025
+    #     sigma: float = 0.2
+    #     viscosity: float = 0.07
+    #     grid_type: str = "hat"
+    #     hat_start: float = 0.5
+    #     hat_end: float = 1.0
+    #     u_min: float = 1.0
+    #     u_max: float = 2.0
+
+    # config = BurgersEquation1DFVMConfig()
     
-    hx = build_hx_spacing(config)
+    # hx = build_hx_spacing(config)
 
-    print(hx[0])
+    # print(hx[0])
 
     # @dataclass
     # class Mesh:
