@@ -20,6 +20,7 @@ from .config_fvm import (
     Diffusion1DFVMConfig,
     BurgersEquation1DFVMConfig,
     Advection2DFVMConfig,
+    Convection2DFVMConfig,
 )
 
 from .setup.grids import (
@@ -71,11 +72,13 @@ from .setup.fvm.time_stepping import (
     compute_diffusive_dt_1d_fvm,
     compute_cole_hopf_dt_1d_fvm,
     compute_advective_dt_2d_fvm,
+    compute_convective_dt_2d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
     hat_initial_condition_1d_fvm,
     hat_initial_condition_2d_fvm,
+    hat_convective_initial_condition_2d_fvm,   
 )
 
 from .numerics import (
@@ -111,6 +114,9 @@ from .numerics.fvm.advection_2d import (
     solve_advection_2d_fvm,
 )
 
+from .numerics.fvm.convection_2d import (
+    solve_convection_2d_fvm,
+)
 
 from .signal_processing import (
     compute_coefficients,

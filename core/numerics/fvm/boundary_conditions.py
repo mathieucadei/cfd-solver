@@ -81,45 +81,58 @@ def apply_advection_boundary_2d(
     """Apply boundary updates for the 2D advection equation."""
 
     f_w_bottom = c * u[0, :-1]
-
     f_e_bottom  = c * u[0, 1:]
-
     f_sb = c * u_min
-
     f_n_bottom  = c * u[0, 1:]
 
-
-    # f_w_top = c * u[-1, :-1]
-
-    # f_e_top  = c * u[-1, 1:]
-
-    # f_s_top = c * u[-1, 1:]
-
-    # f_nb = c * u_min
-
-
     f_wb = c * u_min
-
     f_e_left  = c * u[1:, 0]
-
     f_s_left = c * u[1:, 0]
-
     f_n_left  = c * u[:-1, 0]
 
-
-    # f_w_right = c * u[:-1, -1]
-
-    # f_eb = c * u_min
-
-    # f_s_right = c * u[1:, -1]
-
-    # f_n_right  = c * u[:-1, -1]
-
-
-
     u[0, 1:] = dt * (f_e_bottom - f_w_bottom) / hx[1:] + dt * (f_n_bottom - f_sb) / hy[0]
-    # u[-1, 1:] = dt * (f_e_top- f_w_top) / hx[1:] + dt * (f_nb - f_s_top) / hy[-1]
     u[1:, 0] = dt * (f_e_left - f_wb) / hx[0] + dt * (f_n_left - f_s_left) / hy[1:]
-    # u[1:, -1] = dt * (f_eb - f_w_right) / hx[-1] + dt * (f_n_right- f_s_right) / hy[1:]
+    u[0,0] = dt * (c * u[0,0] - f_wb) / hx[0] + dt * (c * u[0,0] - f_sb) / hy[0]
 
-    u[0,0] = dt * (c * u[0,0] - f_wb) / hx[0] + dt * (c * u[0,0] - f_sb) / hy[0]   
+
+def apply_convection_boundary_2d(
+    u: np.ndarray,
+    v: np.ndarray,
+    u_min: float,
+    v_min: float,
+    dt: float,
+    hx: np.ndarray,
+    hy: np.ndarray,
+) -> None:
+    """Apply boundary updates for the 2D advection equation."""
+
+    e_u = u**2 / 2
+    e_v = v**2 / 2
+
+    f_w_u_bottom = e_u[0, :-1]
+    f_e_u_bottom  = e_u[0, 1:]
+    f_sb_u = v_min * u_min
+    f_n_u_bottom  = v[0, 1:] * u[0, 1:]
+
+    f_wb_u = u_min**2 / 2
+    f_e_u_left  = e_u[1:, 0]
+    f_s_u_left = v[1:, 0] * u[1:, 0]
+    f_n_u_left  = v[:-1, 0] * u[:-1, 0]
+
+    u[0, 1:] = dt * (f_e_u_bottom - f_w_u_bottom) / hx[1:] + dt * (f_n_u_bottom - f_sb_u) / hy[0]
+    u[1:, 0] = dt * (f_e_u_left - f_wb_u) / hx[0] + dt * (f_n_u_left - f_s_u_left) / hy[1:]
+    u[0,0] = dt * (e_u[0,0] - f_wb_u) / hx[0] + dt * (v[0,0] * u[0,0] - f_sb_u) / hy[0]   
+
+    f_w_v_bottom = u[0, :-1] * v[0, :-1]
+    f_e_v_bottom  = u[0, 1:] * v[0, 1:]
+    f_sb_v = v_min**2 / 2
+    f_n_v_bottom  = e_v[0, 1:]
+
+    f_wb_v = u_min * v_min
+    f_e_v_left  = u[1:, 0] * v[1:, 0]
+    f_s_v_left = e_v[1:, 0]
+    f_n_v_left  = e_v[:-1, 0]
+
+    v[0, 1:] = dt * (f_e_v_bottom - f_w_v_bottom) / hx[1:] + dt * (f_n_v_bottom - f_sb_v) / hy[0]
+    v[1:, 0] = dt * (f_e_v_left - f_wb_v) / hx[0] + dt * (f_n_v_left - f_s_v_left) / hy[1:]
+    v[0,0] = dt * (u[0,0] * v[0,0] - f_wb_u) / hx[0] + dt * (e_v[0,0] - f_sb_v) / hy[0]  

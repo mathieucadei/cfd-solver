@@ -57,3 +57,14 @@ def compute_advective_dt_2d_fvm(config: object) -> float:
     hy_min = np.min(hy)
     
     return config.sigma * min(hx_min, hy_min) / config.wavespeed
+
+
+def compute_convective_dt_2d_fvm(config: object) -> float:
+    """Compute the time step for 2D convection problem."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma * min(hx_min, hy_min) / max(config.u_max, config.v_max)
