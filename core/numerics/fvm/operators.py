@@ -68,23 +68,24 @@ def compute_diffusion_1d_term(
 def compute_advection_2d_term(
     u: np.ndarray,
     c: float,
-    hx: float,
-    hy: float,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
     dt: float,
 ) -> np.ndarray:
     """Compute the 2D upwind advection term for a constant wave speed."""
 
     term = np.zeros_like(u)
 
-    f_w = c * u[1:, :-1]
+    f_w = c * u[1:, :-1] * face_areas_x[1:, :-1]
 
-    f_e = c * u[1:, 1:]
+    f_e = c * u[1:, 1:] * face_areas_x[1:, 1:]
 
-    f_s = c * u[:-1, 1:]
+    f_s = c * u[:-1, 1:] * face_areas_y[:-1, 1:]
 
-    f_n = c * u[1:, 1:]    
+    f_n = c * u[1:, 1:] * face_areas_y[1:, 1:]   
 
-    term[1:, 1:] = dt * (f_e - f_w) / hx[1:] + dt * (f_n - f_s) / hy[1:]
+    term[1:, 1:] = dt * (f_e - f_w) / cell_volumes[1:, 1:] + dt * (f_n - f_s) / cell_volumes[1:, 1:]
 
     return term
 
@@ -109,13 +110,13 @@ def compute_convection_2d_term(
 
     f_e_u = e_u[1:, 1:] * face_areas_x[1:, 1:]
 
-    f_s_u = v[:-1, 1:] * u[:-1, 1:] * face_areas_x[:-1, 1:]
+    f_s_u = v[:-1, 1:] * u[:-1, 1:] * face_areas_y[:-1, 1:]
 
-    f_n_u = v[1:, 1:] * u[1:, 1:] * face_areas_x[1:, 1:]
+    f_n_u = v[1:, 1:] * u[1:, 1:] * face_areas_y[1:, 1:]
 
-    f_w_v = u[1:, :-1] * v[1:, :-1] * face_areas_y[1:, :-1]
+    f_w_v = u[1:, :-1] * v[1:, :-1] * face_areas_x[1:, :-1]
 
-    f_e_v = u[1:, 1:] * v[1:, 1:] * face_areas_y[1:, 1:]
+    f_e_v = u[1:, 1:] * v[1:, 1:] * face_areas_x[1:, 1:]
 
     f_s_v = e_v[:-1, 1:] * face_areas_y[:-1, 1:]
 

@@ -75,25 +75,25 @@ def apply_advection_boundary_2d(
     c: float,
     u_min: float,
     dt: float,
-    hx: np.ndarray,
-    hy: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
 ) -> None:
     """Apply boundary updates for the 2D advection equation."""
 
-    f_w_bottom = c * u[0, :-1]
-    f_e_bottom  = c * u[0, 1:]
-    f_sb = c * u_min
-    f_n_bottom  = c * u[0, 1:]
+    f_w_bottom = c * u[0, :-1] * face_areas_x[0, :-1]
+    f_e_bottom  = c * u[0, 1:] * face_areas_x[0, 1:]
+    f_sb = c * u_min * face_areas_y[0, 1:]
+    f_n_bottom  = c * u[0, 1:] * face_areas_y[1, 1:]
 
-    f_wb = c * u_min
-    f_e_left  = c * u[1:, 0]
-    f_s_left = c * u[1:, 0]
-    f_n_left  = c * u[:-1, 0]
+    f_wb = c * u_min * face_areas_x[1:, 0]
+    f_e_left  = c * u[1:, 0] * face_areas_x[1:, 1]
+    f_s_left = c * u[1:, 0] * face_areas_y[:-1, 0]
+    f_n_left  = c * u[:-1, 0] * face_areas_y[1:, 0]
 
-    u[0, 1:] = dt * (f_e_bottom - f_w_bottom) / hx[1:] + dt * (f_n_bottom - f_sb) / hy[0]
-    u[1:, 0] = dt * (f_e_left - f_wb) / hx[0] + dt * (f_n_left - f_s_left) / hy[1:]
-    u[0,0] = dt * (c * u[0,0] - f_wb) / hx[0] + dt * (c * u[0,0] - f_sb) / hy[0]
-
+    u[0, 1:] = dt * (f_e_bottom - f_w_bottom) / cell_volumes[0, 1:] + dt * (f_n_bottom - f_sb) / cell_volumes[0, 1:]
+    u[1:, 0] = dt * (f_e_left - f_wb) / cell_volumes[1:, 0]  + dt * (f_n_left - f_s_left) / cell_volumes[1:, 0] 
+    u[0,0] = u_min
 
 def apply_convection_boundary_2d(
     u: np.ndarray,
