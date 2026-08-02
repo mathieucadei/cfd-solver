@@ -42,8 +42,10 @@ def solve_convection_2d_fvm(
         v[1:, 1:] = vn[1:, 1:] - convection_v_term[1:, 1:]
 
         apply_convection_boundary_2d(
-            u=un,
-            v=vn,
+            u=u,
+            v=v,
+            un=un,
+            vn=vn,
             u_min=config.u_min,
             v_min=config.v_min,
             dt=dt,

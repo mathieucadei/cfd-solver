@@ -98,6 +98,8 @@ def apply_advection_boundary_2d(
 def apply_convection_boundary_2d(
     u: np.ndarray,
     v: np.ndarray,
+    un: np.ndarray,
+    vn: np.ndarray,
     u_min: float,
     v_min: float,
     dt: float,
@@ -119,9 +121,9 @@ def apply_convection_boundary_2d(
     f_s_u_left = v[1:, 0] * u[1:, 0]
     f_n_u_left  = v[:-1, 0] * u[:-1, 0]
 
-    u[0, 1:] = dt * (f_e_u_bottom - f_w_u_bottom) / hx[1:] + dt * (f_n_u_bottom - f_sb_u) / hy[0]
-    u[1:, 0] = dt * (f_e_u_left - f_wb_u) / hx[0] + dt * (f_n_u_left - f_s_u_left) / hy[1:]
-    u[0,0] = dt * (e_u[0,0] - f_wb_u) / hx[0] + dt * (v[0,0] * u[0,0] - f_sb_u) / hy[0]   
+    u[0, 1:] = un[0, 1:] + dt * (f_e_u_bottom - f_w_u_bottom) / hx[1:] + dt * (f_n_u_bottom - f_sb_u) / hy[0]
+    u[1:, 0] = un[1:, 0] + dt * (f_e_u_left - f_wb_u) / hx[0] + dt * (f_n_u_left - f_s_u_left) / hy[1:]
+    u[0, 0] = un[0, 0] + dt * (e_u[0, 0] - f_wb_u) / hx[0] + dt * (v[0, 0] * u[0, 0] - f_sb_u) / hy[0]   
 
     f_w_v_bottom = u[0, :-1] * v[0, :-1]
     f_e_v_bottom  = u[0, 1:] * v[0, 1:]
@@ -133,6 +135,6 @@ def apply_convection_boundary_2d(
     f_s_v_left = e_v[1:, 0]
     f_n_v_left  = e_v[:-1, 0]
 
-    v[0, 1:] = dt * (f_e_v_bottom - f_w_v_bottom) / hx[1:] + dt * (f_n_v_bottom - f_sb_v) / hy[0]
-    v[1:, 0] = dt * (f_e_v_left - f_wb_v) / hx[0] + dt * (f_n_v_left - f_s_v_left) / hy[1:]
-    v[0,0] = dt * (u[0,0] * v[0,0] - f_wb_u) / hx[0] + dt * (e_v[0,0] - f_sb_v) / hy[0]  
+    v[0, 1:] = vn[0, 1:] + dt * (f_e_v_bottom - f_w_v_bottom) / hx[1:] + dt * (f_n_v_bottom - f_sb_v) / hy[0]
+    v[1:, 0] = vn[1:, 0] + dt * (f_e_v_left - f_wb_v) / hx[0] + dt * (f_n_v_left - f_s_v_left) / hy[1:]
+    v[0, 0] = vn[0, 0] + dt * (u[0, 0] * v[0, 0] - f_wb_v) / hx[0] + dt * (e_v[0, 0] - f_sb_v) / hy[0]  
