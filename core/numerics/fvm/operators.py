@@ -92,8 +92,6 @@ def compute_advection_2d_term(
 def compute_convection_2d_term(
     u: np.ndarray,
     v: np.ndarray,   
-    hx: np.ndarray,
-    hy: np.ndarray,
     face_areas_x: np.ndarray,
     face_areas_y: np.ndarray,
     cell_volumes: np.ndarray,
