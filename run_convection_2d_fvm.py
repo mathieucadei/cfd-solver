@@ -112,6 +112,19 @@ fig.colorbar(ax1, label='v')
 
 plt.show()
 
+
+X, Y = np.meshgrid(xc_array, xc_array)
+
+fig, ax = plt.subplots(1, 2, figsize=(12,6))
+
+ax[0].quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix_final[::3, ::3], v_solution_matrix_final[::3, ::3])
+
+div = np.gradient(u_solution_matrix_final, xc_array, axis=1) + np.gradient(v_solution_matrix_final, yc_array, axis=0)
+pc = ax[1].pcolormesh(X, Y, div)   # or contourf
+fig.colorbar(pc, label='v')
+
+plt.show()
+
 show_solution_uv_surfaces(
     x_values=xc_array,
     y_values=yc_array,
