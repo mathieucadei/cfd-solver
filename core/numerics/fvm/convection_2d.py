@@ -22,7 +22,6 @@ def solve_convection_2d_fvm(
 
     dt = compute_convective_dt_2d_fvm(config)
 
-    hx, hy = build_h_spacing(config)
     face_areas_x, face_areas_y = build_face_areas(config)
     cell_volumes = compute_cell_volumes(config)
 
