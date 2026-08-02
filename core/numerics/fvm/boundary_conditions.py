@@ -124,7 +124,7 @@ def apply_convection_boundary_2d(
 
     u[0, 1:] = un[0, 1:] + dt * (f_e_u_bottom - f_w_u_bottom) / cell_volumes[0, 1:] + dt * (f_n_u_bottom - f_sb_u) / cell_volumes[0, 1:]
     u[1:, 0] = un[1:, 0] + dt * (f_e_u_left - f_wb_u) / cell_volumes[1:, 0] + dt * (f_n_u_left - f_s_u_left) / cell_volumes[1:, 0]
-    # u[0, 0] = un[0, 0] + dt * (e_u[0, 0] - f_wb_u) / cell_volumes[0, 0]+ dt * (vn[0, 0] * un[0, 0] - f_sb_u) / cell_volumes[0, 0]  
+    u[0, 0] = u_min
 
     f_w_v_bottom = un[0, :-1] * vn[0, :-1] * face_areas_x[0, :-1]
     f_e_v_bottom  = un[0, 1:] * vn[0, 1:] * face_areas_x[0, 1:]
@@ -138,4 +138,4 @@ def apply_convection_boundary_2d(
 
     v[0, 1:] = vn[0, 1:] + dt * (f_e_v_bottom - f_w_v_bottom) / cell_volumes[0, 1:] + dt * (f_n_v_bottom - f_sb_v) / cell_volumes[0, 1:]
     v[1:, 0] = vn[1:, 0] + dt * (f_e_v_left - f_wb_v) / cell_volumes[1:, 0] + dt * (f_n_v_left - f_s_v_left) / cell_volumes[1:, 0]
-    # v[0, 0] = vn[0, 0] + dt * (un[0, 0] * vn[0, 0] - f_wb_v) / cell_volumes[0, 0] + dt * (e_v[0, 0] - f_sb_v) / cell_volumes[0, 0] 
+    v[0, 0] = v_min
