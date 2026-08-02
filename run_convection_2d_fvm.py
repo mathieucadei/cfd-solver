@@ -102,7 +102,7 @@ xf, yf = build_face_positions(convection_2d_config)
 
 # Post-processing
 
-fig, ax = plt.subplots(2, 1, figsize=(10,3))
+fig, ax = plt.subplots(2, 1, figsize=(12,6))
 
 ax0 = ax[0].pcolormesh(xf, yf, u_solution_matrix_final[:, :], edgecolors='k', linewidth=0.3)
 fig.colorbar(ax0, label='u')

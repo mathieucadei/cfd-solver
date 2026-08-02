@@ -88,8 +88,6 @@ initial_condition = hat_initial_condition_2d_fvm(advection_2d_config)
 
 solution_matrix = solve_advection_2d_fvm(initial_condition, advection_2d_config)
 
-solution_final = solution_matrix[-1, ...]
-
 solution_final_x = solution_matrix[-1, :, :]
 
 solution_final_y = solution_final_x.T
