@@ -29,10 +29,13 @@ def solve_channel_flow(
 
     u = initial_condition[0]
     v = initial_condition[1]
+    p = initial_condition[2]
+    b = initial_condition[3]
 
     un = np.empty_like(u)
     vn = np.empty_like(v)
-    b = initial_condition[3]
+    pn = np.empty_like(p)
+    bn = np.empty_like(b)
 
     u_history = []
     v_history = []
@@ -42,14 +45,15 @@ def solve_channel_flow(
 
         un = u.copy()
         vn = v.copy()
+        pn = p.copy()
+        bn = b.copy()
 
 
         convection_u_term, convection_v_term = compute_convection_2d_term(un, vn, dx, dy, config.time_step)
         diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
         diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
-        b_term = compute_source_term_2d(b, rho, dt, un, vn, dx, dy)
-        p_term = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[0]
-        pn_term = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[1]
+        b_term = compute_source_term_2d(bn, rho, dt, un, vn, dx, dy)
+        p_term, pn_term = compute_pressure_poisson_term(pn, b_term, config.max_pseudo_iterations, dx, dy)
 
         b = apply_periodic_source_boundary_2d(b_term, rho, dt, un, vn, dx, dy)
         p = apply_periodic_pressure_poisson_boundary_2d(b, p_term, pn_term, dx, dy)
