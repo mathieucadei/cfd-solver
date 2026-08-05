@@ -132,6 +132,7 @@ def build_face_areas(config: object):
 
     return area_x, area_y
 
+
 def compute_cell_volumes(config: object):
 
     hx, hy = build_h_spacing(config)  
@@ -139,6 +140,16 @@ def compute_cell_volumes(config: object):
     V  = hy[:,None] * hx[None,:]
 
     return V
+
+
+def build_dist(config: object):
+
+    xc, yc = build_centers(config)
+
+    dist_x = xc[1:] - xc[:-1]
+    dist_y = yc[1:] - yc[:-1]
+
+    return dist_x, dist_y
 
 
 def build_cell_ids(config: object):

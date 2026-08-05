@@ -139,3 +139,49 @@ def apply_convection_boundary_2d(
     v[0, 1:] = vn[0, 1:] + dt * (f_e_v_bottom - f_w_v_bottom) / cell_volumes[0, 1:] + dt * (f_n_v_bottom - f_sb_v) / cell_volumes[0, 1:]
     v[1:, 0] = vn[1:, 0] + dt * (f_e_v_left - f_wb_v) / cell_volumes[1:, 0] + dt * (f_n_v_left - f_s_v_left) / cell_volumes[1:, 0]
     v[0, 0] = v_min
+
+
+def apply_diffusion_boundary_2d(
+    u: np.ndarray,
+    un: np.ndarray,
+    dt: float,
+    dist_x: np.ndarray,
+    dist_y: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
+    xc: np.ndarray,
+    yc: np.ndarray,
+    lx: float,
+    ly: float,
+    nu: float,
+) -> None:
+    """Apply boundary updates for the 1D diffusion equation."""
+
+    f_e_left = nu * face_areas_x[1:, 1] * (u[1:, 1] - u[1:, 0]) / dist_x[0]
+    f_wb = nu * face_areas_x[1:, 0] * (u[1:, 0] - u[1:, -1]) / (xc[0] + lx - xc[-1])
+    f_n_left = nu * face_areas_y[2:, 0] * (u[2:, 0] - u[1:-1, 0]) / dist_y[1:]
+    f_s_left = nu * face_areas_y[1:-1, 0] * (u[1:-1, 0] - u[:-2, 0]) / dist_y[:-1]
+
+    u[1:, 0] = un[1:, 0] + dt / cell_volumes[1:, 0] * (f_wb - f_e_left) + dt / cell_volumes[1:, 0] * (f_n_left - f_s_left)
+
+    f_eb = nu * face_areas_x[1:, 0] * (u[1:, 0] - u[1:, -1]) / (xc[0] + lx - xc[-1])
+    f_w_right = nu * face_areas_x[1:, -1] * (u[1:, -1] - u[1:, -2]) / dist_x[-1]
+    f_n_right = nu * face_areas_y[2:, -1] * (u[2:, -1] - u[1:-1, -1]) / dist_y[1:]
+    f_s_right = nu * face_areas_y[:-2, -1] * (u[1:-1, -1] - u[:-2, -1]) / dist_y[:-1]
+
+    u[1:, -1] = un[1:, -1] + dt / cell_volumes[1:, -1] * (f_w_right - f_eb) + dt / cell_volumes[1:, -1] * (f_n_right - f_s_right)
+
+    f_e_bottom = nu * face_areas_x[0, 2:] * (u[0, 2:] - u[0, 1:-1]) / dist_x[1:]
+    f_w_bottom = nu * face_areas_x[0, 1:-1] * (u[0, 1:-1] - u[0, :-2]) / dist_x[:-1]
+    f_n_bottom = nu * face_areas_y[1, 1:] * (u[1, 1:] - u[0, 1:]) / dist_y[0]
+    f_sb = nu * face_areas_y[0, 1:] * (u[0, 1:] - u[-1, 1:]) / (yc[0] + ly - yc[-1])
+
+    u[0, 1:] = un[0, 1:] + dt / cell_volumes[0, 1:] * (f_w_bottom - f_e_bottom) + dt / cell_volumes[0, 1:] * (f_n_bottom - f_sb)
+
+    f_e_top = nu * face_areas_x[-1, 2:] * (u[-1, 2:] - u[-1, 1:-1]) / dist_x[1:]
+    f_w_top = nu * face_areas_x[-1, 1:-1] * (u[-1, 1:-1] - u[-1, :-2]) / dist_x[:-1]
+    f_nb = nu * face_areas_y[0, 1:] * (u[0, 1:] - u[-1, 1:]) / (yc[0] + ly - yc[-1])
+    f_s_top = nu * face_areas_y[-1, 1:] * (u[-1, 1:] - u[-2, 1:]) / dist_y[-1]
+
+    u[-1, 1:] = un[-1, 1:] + dt / cell_volumes[-1, 1:] * (f_w_bottom - f_e_bottom) + dt / cell_volumes[-1, 1:] * (f_n_bottom - f_sb)

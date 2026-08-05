@@ -105,3 +105,23 @@ class Convection2DFVMConfig:
     u_max: float = 2.0
     v_min: float = 1.0
     v_max: float = 2.0
+
+
+@dataclass
+class Diffusion2DFVMConfig:
+    """Configuration parameters for the 2D diffusion equation."""
+    domain_length_x: float = 2.0
+    domain_length_y: float = 2.0
+    num_cells_x: int = 30
+    num_cells_y: int = 30
+    expansion_ratio_x: float = 0.
+    expansion_ratio_y: float = 0.
+    max_iterations: int = 41
+    sigma: float = 0.25
+    viscosity: float = 0.05
+    hat_start_x: float = 0.5
+    hat_start_y: float = 0.5
+    hat_end_x: float = 1.0
+    hat_end_y: float = 1.0
+    u_min: float = 1.0
+    u_max: float = 2.0

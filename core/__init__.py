@@ -21,6 +21,7 @@ from .config_fvm import (
     BurgersEquation1DFVMConfig,
     Advection2DFVMConfig,
     Convection2DFVMConfig,
+    Diffusion2DFVMConfig,
 )
 
 from .setup.grids import (
@@ -116,6 +117,10 @@ from .numerics.fvm.advection_2d import (
 
 from .numerics.fvm.convection_2d import (
     solve_convection_2d_fvm,
+)
+
+from .numerics.fvm.diffusion_2d import (
+    solve_diffusion_2d_fvm,
 )
 
 from .signal_processing import (

@@ -92,7 +92,7 @@ def compute_advection_2d_term(
 
 def compute_convection_2d_term(
     u: np.ndarray,
-    v: np.ndarray,   
+    v: np.ndarray,  
     face_areas_x: np.ndarray,
     face_areas_y: np.ndarray,
     cell_volumes: np.ndarray,
@@ -127,3 +127,30 @@ def compute_convection_2d_term(
     v_term[1:, 1:] = dt * (f_e_v - f_w_v) / cell_volumes[1:, 1:] + dt * (f_n_v - f_s_v) / cell_volumes[1:, 1:]
 
     return u_term, v_term
+
+
+def compute_diffusion_2d_term(
+    u: np.ndarray,
+    dist_x: np.ndarray,
+    dist_y: np.ndarray, 
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
+    dt: float,
+    nu: float,
+) -> np.ndarray:
+    """Compute the 2D central-difference diffusion term."""
+
+    term = np.zeros_like(u)
+
+    f_w = nu * face_areas_x[1:, 1:] * (u[1:, 1:] - u[1:, :-1]) / dist_x
+
+    f_e = nu * face_areas_x[1:, 2:] * (u[1:, 2:] - u[1:, 1:-1]) / dist_x[1:]
+
+    f_s = nu * face_areas_y[:-1, 1:] * (u[1:, 1:] - u[:-1, 1:]) / dist_y
+
+    f_n = nu * face_areas_y[2:, 1:] * (u[2:, 1:] - u[1:-1, 1:]) / dist_y[1:, None]
+
+    term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_e[1:, :] - f_w[1:, :-1]) + dt / cell_volumes[1:-1, 1:-1] * (f_n[:, 1:] - f_s[:-1, 1:])
+
+    return term
