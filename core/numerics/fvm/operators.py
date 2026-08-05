@@ -147,10 +147,10 @@ def compute_diffusion_2d_term(
 
     f_e = nu * face_areas_x[1:, 2:] * (u[1:, 2:] - u[1:, 1:-1]) / dist_x[1:]
 
-    f_s = nu * face_areas_y[:-1, 1:] * (u[1:, 1:] - u[:-1, 1:]) / dist_y
+    f_s = nu * face_areas_y[:-1, 1:] * (u[1:, 1:] - u[:-1, 1:]) / dist_y[:, None]
 
     f_n = nu * face_areas_y[2:, 1:] * (u[2:, 1:] - u[1:-1, 1:]) / dist_y[1:, None]
 
-    term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_e[1:, :] - f_w[1:, :-1]) + dt / cell_volumes[1:-1, 1:-1] * (f_n[:, 1:] - f_s[:-1, 1:])
+    term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_e[:-1, :] - f_w[:-1, :-1]) + dt / cell_volumes[1:-1, 1:-1] * (f_n[:, :-1] - f_s[:-1, :-1])
 
     return term
