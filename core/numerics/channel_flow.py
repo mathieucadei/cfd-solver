@@ -74,10 +74,10 @@ def solve_channel_flow(
         denominator = np.sum(np.abs(un))
 
         if denominator == 0:
-            u_l1norm = np.sum(np.abs(u) - np.abs(un)) 
+            u_l1norm = np.sum(np.abs(u - un))
         
         else:
-            u_l1norm = (np.sum(np.abs(u) - np.abs(un))) / denominator
+            u_l1norm = np.sum(np.abs(u - un)) / denominator
         
         u_history.append(u.copy())
         v_history.append(v.copy())
