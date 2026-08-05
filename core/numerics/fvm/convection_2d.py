@@ -25,7 +25,7 @@ def solve_convection_2d_fvm(
     face_areas_x, face_areas_y = build_face_areas(config)
     cell_volumes = compute_cell_volumes(config)
 
-    u, v = initial_condition[0].copy(), initial_condition[1].copy(),
+    u, v = initial_condition[0].copy(), initial_condition[1].copy()
 
     u_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
     v_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
