@@ -23,6 +23,7 @@ from .config_fvm import (
     Convection2DFVMConfig,
     Diffusion2DFVMConfig,
     BurgersEquation2DFVMConfig,
+    Laplace2DFVMConfig,
 )
 
 from .setup.grids import (
@@ -80,7 +81,8 @@ from .setup.fvm.time_stepping import (
 from .setup.fvm.initial_conditions import (
     hat_initial_condition_1d_fvm,
     hat_initial_condition_2d_fvm,
-    hat_convective_initial_condition_2d_fvm,   
+    hat_convective_initial_condition_2d_fvm,
+    laplace_initial_condition_2d_fvm,  
 )
 
 from .numerics import (
@@ -125,6 +127,8 @@ from .numerics.fvm.diffusion_2d import (
 )
 
 from .numerics.fvm.burgers_equation_2d import solve_burgers_equation_2d_fvm
+
+from .numerics.fvm.laplace_2d import solve_laplace_2d_fvm
 
 from .signal_processing import (
     compute_coefficients,

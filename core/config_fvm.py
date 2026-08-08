@@ -147,3 +147,15 @@ class BurgersEquation2DFVMConfig:
     u_max: float = 2.0
     v_min: float = 1.0
     v_max: float = 2.0
+
+
+@dataclass
+class Laplace2DFVMConfig:
+    """Configuration parameters for the 2D Laplace equation."""
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_cells_x: int = 30
+    num_cells_y: int = 30
+    expansion_ratio_x: float = 0.
+    expansion_ratio_y: float = 0.
+    l1_norm_target: float = 1e-4
