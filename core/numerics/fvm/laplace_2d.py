@@ -37,22 +37,21 @@ def solve_laplace_2d_fvm(
 
         pn = p.copy()
 
-        f_w = face_areas_x[1:, 1:] * (pn[1:, 1:] - pn[1:, :-1]) / dist_x
+        f_w = face_areas_x[1:-1, 1:-1] * (pn[1:-1, 1:-1] - pn[1:-1, :-2]) / dist_x[:-1]
 
-        f_e = face_areas_x[1:, 2:] * (pn[1:, 2:] - pn[1:, 1:-1]) / dist_x[1:]
+        # f_wb_u = face_areas_x[1:, 0] * (p[1:, 0] - left_boundary) / xc[0]
 
-        f_s = face_areas_y[1:, 1:] * (pn[1:, 1:] - pn[:-1, 1:]) / dist_y[:, None]
+        # f_w = np.hstack((f_wb_u[:,None], f_w_i))
 
-        f_n = face_areas_y[2:, 1:] * (pn[2:, 1:] - pn[1:-1, 1:]) / dist_y[1:, None]
+        f_e = face_areas_x[1:-1, 2:] * (pn[1:-1, 2:] - pn[1:-1, 1:-1]) / dist_x[1:]
+
+        f_s = face_areas_y[1:-1, 1:-1] * (pn[1:-1, 1:-1] - pn[:-2, 1:-1]) / dist_y[:-1, None]
+
+        f_n = face_areas_y[2:, 1:-1] * (pn[2:, 1:-1] - pn[1:-1, 1:-1]) / dist_y[1:, None]
 
         # f_wb =  face_areas_x[1:, 0] * (pn[1:, 1:] - pn[1:, :-1]) / xc
 
-        p[1:-1, 1:-1] = (f_e[:-1, :] - f_w[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +  (f_n[:, :-1] - f_s[:-1, :-1]) / cell_volumes[1:-1, 1:-1]
-
-
-
-
-
+        p[1:-1, 1:-1] = (f_e - f_w) / cell_volumes[1:-1, 1:-1] + (f_n - f_s) / cell_volumes[1:-1, 1:-1]
 
         apply_laplace_boundary_2d(
             p, 
@@ -71,13 +70,21 @@ def solve_laplace_2d_fvm(
             yc=yc,
             )
 
+        # denominator = np.sum(np.abs(pn))
+
+        # if denominator == 0:
+        #     l1norm = np.sum(np.abs(p) - np.abs(pn)) 
+        
+        # else:
+        #     l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
+
         denominator = np.sum(np.abs(pn))
 
         if denominator == 0:
-            l1norm = np.sum(np.abs(p) - np.abs(pn)) 
+            l1norm = np.sum(np.abs(p - pn))
         
         else:
-            l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
+            l1norm = np.sum(np.abs(p - pn)) / denominator
         
         history.append(p.copy())
     
