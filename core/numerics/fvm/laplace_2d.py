@@ -51,7 +51,12 @@ def solve_laplace_2d_fvm(
 
         # f_wb =  face_areas_x[1:, 0] * (pn[1:, 1:] - pn[1:, :-1]) / xc
 
-        p[1:-1, 1:-1] = (f_e - f_w) / cell_volumes[1:-1, 1:-1] + (f_n - f_s) / cell_volumes[1:-1, 1:-1]
+        p[1:-1, 1:-1] = (((f_e - f_w) + (f_n - f_s)) / cell_volumes[1:-1, 1:-1]) / \
+                        ((face_areas_x[1:-1, 1:-1] / dist_x[:-1] \
+                         + face_areas_x[1:-1, 2:] / dist_x[1:] \
+                         + face_areas_y[1:-1, 1:-1] / dist_y[:-1, None] \
+                         + face_areas_y[2:, 1:-1] / dist_y[1:, None]) \
+                        / cell_volumes[1:-1, 1:-1])
 
         apply_laplace_boundary_2d(
             p, 
@@ -70,21 +75,14 @@ def solve_laplace_2d_fvm(
             yc=yc,
             )
 
-        # denominator = np.sum(np.abs(pn))
-
-        # if denominator == 0:
-        #     l1norm = np.sum(np.abs(p) - np.abs(pn)) 
-        
-        # else:
-        #     l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
 
         denominator = np.sum(np.abs(pn))
 
         if denominator == 0:
-            l1norm = np.sum(np.abs(p - pn))
+            l1norm = np.sum(np.abs(p) - np.abs(pn)) 
         
         else:
-            l1norm = np.sum(np.abs(p - pn)) / denominator
+            l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
         
         history.append(p.copy())
     
