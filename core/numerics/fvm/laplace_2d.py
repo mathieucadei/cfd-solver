@@ -75,16 +75,15 @@ def solve_laplace_2d_fvm(
             yc=yc,
             )
 
-
         denominator = np.sum(np.abs(pn))
 
         if denominator == 0:
-            l1norm = np.sum(np.abs(p) - np.abs(pn)) 
+            l1norm = np.sum(np.abs(p - pn))
         
         else:
-            l1norm = (np.sum(np.abs(p) - np.abs(pn))) / denominator
-        
-        history.append(p.copy())
+            l1norm = np.sum(np.abs(p - pn)) / denominator
+
+        history.append(p.copy())        
     
     history_array = np.stack(history, axis=0)
 
