@@ -37,21 +37,21 @@ def solve_laplace_2d_fvm(
 
         pn = p.copy()
 
-        f_w = face_areas_x[1:-1, 1:-1] * (pn[1:-1, 1:-1] - pn[1:-1, :-2]) / dist_x[:-1]
+        f_w = face_areas_x[1:-1, 1:-1] * (pn[1:-1, :-2]) / dist_x[:-1]
 
         # f_wb_u = face_areas_x[1:, 0] * (p[1:, 0] - left_boundary) / xc[0]
 
         # f_w = np.hstack((f_wb_u[:,None], f_w_i))
 
-        f_e = face_areas_x[1:-1, 2:] * (pn[1:-1, 2:] - pn[1:-1, 1:-1]) / dist_x[1:]
+        f_e = face_areas_x[1:-1, 2:] * (pn[1:-1, 2:]) / dist_x[1:]
 
-        f_s = face_areas_y[1:-1, 1:-1] * (pn[1:-1, 1:-1] - pn[:-2, 1:-1]) / dist_y[:-1, None]
+        f_s = face_areas_y[1:-1, 1:-1] * (pn[:-2, 1:-1]) / dist_y[:-1, None]
 
-        f_n = face_areas_y[2:, 1:-1] * (pn[2:, 1:-1] - pn[1:-1, 1:-1]) / dist_y[1:, None]
+        f_n = face_areas_y[2:, 1:-1] * (pn[2:, 1:-1]) / dist_y[1:, None]
 
         # f_wb =  face_areas_x[1:, 0] * (pn[1:, 1:] - pn[1:, :-1]) / xc
 
-        p[1:-1, 1:-1] = (((f_e - f_w) + (f_n - f_s)) / cell_volumes[1:-1, 1:-1]) / \
+        p[1:-1, 1:-1] = (((f_e + f_w) + (f_n + f_s)) / cell_volumes[1:-1, 1:-1]) / \
                         ((face_areas_x[1:-1, 1:-1] / dist_x[:-1] \
                          + face_areas_x[1:-1, 2:] / dist_x[1:] \
                          + face_areas_y[1:-1, 1:-1] / dist_y[:-1, None] \
