@@ -62,8 +62,8 @@ xc_array, yc_array = build_centers(laplace_2d_config)
 initial_condition = laplace_initial_condition_2d_fvm(laplace_2d_config)
 bottom_boundary = initial_condition[0, :]
 top_boundary = initial_condition[-1, :]
-right_boundary = initial_condition[:, -1]
-left_boundary = yc_array
+right_boundary = yc_array
+left_boundary = initial_condition[:, 0]
 
 
 

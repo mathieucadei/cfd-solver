@@ -270,7 +270,7 @@ def apply_laplace_boundary_2d(
 
     a_wb_top= face_areas_x[-1, 0] / xc[0]
     a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
-    a_s_top_left = face_areas_y[-1, 0] / dist_y[-1]
+    a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
     a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
 
     f_wb_top = a_wb_top * left[-1]
@@ -284,7 +284,7 @@ def apply_laplace_boundary_2d(
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
     a_sb_right = face_areas_y[0, -1] / yc[0]
-    a_n_bottom_right = face_areas_y[1, -1] / dist_y[-1]   
+    a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
 
     f_w_bottom_right = a_w_bottom_right * p[0, -2]
     f_eb_bottom = a_eb_bottom * right[-1]
