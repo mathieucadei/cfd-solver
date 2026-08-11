@@ -60,10 +60,10 @@ xc_array, yc_array = build_centers(laplace_2d_config)
 # Initialize the initial condition
 
 initial_condition = laplace_initial_condition_2d_fvm(laplace_2d_config)
-bottom_boundary = initial_condition[0, :]
-top_boundary = initial_condition[-1, :]
+bottom_boundary = np.zeros_like(initial_condition[0, :])
+top_boundary = np.zeros_like(initial_condition[-1, :])
 right_boundary = yc_array
-left_boundary = initial_condition[:, 0]
+left_boundary = np.zeros_like(initial_condition[:, 0])
 
 
 
