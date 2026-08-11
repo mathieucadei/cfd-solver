@@ -287,7 +287,7 @@ def apply_laplace_boundary_2d(
     a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
 
     f_w_bottom_right = a_w_bottom_right * p[0, -2]
-    f_eb_bottom = a_eb_bottom * right[-1]
+    f_eb_bottom = a_eb_bottom * right[0]
     f_sb_right = a_sb_right * bottom[-1]
     f_n_bottom_right = a_n_bottom_right * p[1, -1]
 
