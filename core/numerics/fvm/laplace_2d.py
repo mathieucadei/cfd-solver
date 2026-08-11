@@ -33,30 +33,22 @@ def solve_laplace_2d_fvm(
 
     history = []
 
+    a_w = face_areas_x[1:-1, 1:-1] / dist_x[:-1]
+    a_e = face_areas_x[1:-1, 2:] / dist_x[1:]
+    a_s = face_areas_y[1:-1, 1:-1] / dist_y[:-1, None]
+    a_n = face_areas_y[2:, 1:-1] / dist_y[1:, None]
+
+
     while l1norm > config.l1_norm_target:
 
         pn = p.copy()
 
-        f_w = face_areas_x[1:-1, 1:-1] * (pn[1:-1, :-2]) / dist_x[:-1]
+        f_w = a_w * pn[1:-1, :-2]
+        f_e = a_e * pn[1:-1, 2:]
+        f_s = a_s * pn[:-2, 1:-1]
+        f_n = a_n * pn[2:, 1:-1]
 
-        # f_wb_u = face_areas_x[1:, 0] * (p[1:, 0] - left_boundary) / xc[0]
-
-        # f_w = np.hstack((f_wb_u[:,None], f_w_i))
-
-        f_e = face_areas_x[1:-1, 2:] * (pn[1:-1, 2:]) / dist_x[1:]
-
-        f_s = face_areas_y[1:-1, 1:-1] * (pn[:-2, 1:-1]) / dist_y[:-1, None]
-
-        f_n = face_areas_y[2:, 1:-1] * (pn[2:, 1:-1]) / dist_y[1:, None]
-
-        # f_wb =  face_areas_x[1:, 0] * (pn[1:, 1:] - pn[1:, :-1]) / xc
-
-        p[1:-1, 1:-1] = (((f_e + f_w) + (f_n + f_s)) / cell_volumes[1:-1, 1:-1]) / \
-                        ((face_areas_x[1:-1, 1:-1] / dist_x[:-1] \
-                         + face_areas_x[1:-1, 2:] / dist_x[1:] \
-                         + face_areas_y[1:-1, 1:-1] / dist_y[:-1, None] \
-                         + face_areas_y[2:, 1:-1] / dist_y[1:, None]) \
-                        / cell_volumes[1:-1, 1:-1])
+        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s) / (a_w + a_e + a_s + a_n)
 
         apply_laplace_boundary_2d(
             p, 
