@@ -159,3 +159,27 @@ class Laplace2DFVMConfig:
     expansion_ratio_x: float = 0.
     expansion_ratio_y: float = 0.
     l1_norm_target: float = 1e-4
+
+
+@dataclass
+class SourceTermFVM:
+    x: float
+    y: float
+    value: float
+
+
+@dataclass
+class Poisson2DFVMConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_cells_x: int = 31
+    num_cells_y: int = 31
+    expansion_ratio_x: float = 0.
+    expansion_ratio_y: float = 0.
+    max_iterations: int = 100
+    pressure_init: float = 0.0
+    source_terms: list[SourceTermFVM] = field(default_factory=lambda: [
+        SourceTermFVM(x=0.3, y=0.5, value=10.0),
+        SourceTermFVM(x=0.6, y=0.2, value=-5.0),
+    ])
+    l1_norm_target: float = 1e-4

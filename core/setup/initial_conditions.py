@@ -90,8 +90,6 @@ def poisson_initial_condition_2d(config: object) -> np.ndarray:
     for src in config.source_terms:
             b[int(config.num_grid_points_y * src.y), int(config.num_grid_points_x * src.x)] = src.value
 
-
-
     return p, b
 
 

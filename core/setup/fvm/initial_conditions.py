@@ -65,3 +65,15 @@ def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
     p = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
 
     return p
+
+
+def poisson_initial_condition_2d_fvm(config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D Poisson numerical solver."""
+
+    p = np.full((config.num_cells_y, config.num_cells_x), float(config.pressure_init))
+    b = p.copy()
+
+    for src in config.source_terms:
+            b[int(config.num_cells_y * src.y), int(config.num_cells_x * src.x)] = src.value
+
+    return p, b
