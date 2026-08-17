@@ -3,6 +3,7 @@
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from core import (
     SourceTermFVM,
@@ -87,9 +88,16 @@ solution_final_x = solution_matrix[-1, :, :]
 
 solution_final_y = solution_final_x.T
 
-
+xf, yf = build_face_positions(poisson_2d_config)
 
 # Post-processing
+
+fig, ax = plt.subplots(figsize=(12,6))
+
+ax = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+fig.colorbar(ax, label='p')
+
+plt.show()
 
 
 show_solution_overview(
