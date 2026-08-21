@@ -102,13 +102,13 @@ def solve_cavity_flow_fvm(
                 face_areas_y,
             )[0]
         
-        f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] - p[1:, :-1]) / dist_x
+        f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] + p[1:, :-1]) / 2
 
-        f_e_p = face_areas_x[1:, 2:] * (p[1:, 2:] - p[1:, 1:-1]) / dist_x[1:]
+        f_e_p = face_areas_x[1:, 2:] * (p[1:, 2:] + p[1:, 1:-1]) / 2
 
-        f_s_p = face_areas_y[:-1, 1:] * (p[1:, 1:] - p[:-1, 1:]) / dist_y[:, None]
+        f_s_p = face_areas_y[:-1, 1:] * (p[1:, 1:] + p[:-1, 1:]) / 2
 
-        f_n_p = face_areas_y[2:, 1:] * (p[2:, 1:] - p[1:-1, 1:]) / dist_y[1:, None]
+        f_n_p = face_areas_y[2:, 1:] * (p[2:, 1:] + p[1:-1, 1:]) / 2
 
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
