@@ -170,21 +170,21 @@ def compute_source_term_2d(
 ) -> np.ndarray:
     """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
 
-    f_w_u = face_areas_x[1:, 1:] * (u[1:, 1:] - u[1:, :-1]) / dist_x
+    f_w_u = face_areas_x[1:, 1:] * (u[1:, 1:] + u[1:, :-1]) / 2
 
-    f_e_u = face_areas_x[1:, 2:] * (u[1:, 2:] - u[1:, 1:-1]) / dist_x[1:]
+    f_e_u = face_areas_x[1:, 2:] * (u[1:, 2:] + u[1:, 1:-1]) / 2
 
-    f_s_u = face_areas_y[:-1, 1:] * (u[1:, 1:] - u[:-1, 1:]) / dist_y[:, None]
+    f_s_u = face_areas_y[:-1, 1:] * (u[1:, 1:] + u[:-1, 1:]) / 2
 
-    f_n_u = face_areas_y[2:, 1:] * (u[2:, 1:] - u[1:-1, 1:]) / dist_y[1:, None]
+    f_n_u = face_areas_y[2:, 1:] * (u[2:, 1:] + u[1:-1, 1:]) / 2
 
-    f_w_v = face_areas_x[1:, 1:] * (v[1:, 1:] - v[1:, :-1]) / dist_x
+    f_w_v = face_areas_x[1:, 1:] * (v[1:, 1:] + v[1:, :-1]) / 2
 
-    f_e_v = face_areas_x[1:, 2:] * (v[1:, 2:] - v[1:, 1:-1]) / dist_x[1:]
+    f_e_v = face_areas_x[1:, 2:] * (v[1:, 2:] + v[1:, 1:-1]) / 2
 
-    f_s_v = face_areas_y[:-1, 1:] * (v[1:, 1:] - v[:-1, 1:]) / dist_y[:, None]
+    f_s_v = face_areas_y[:-1, 1:] * (v[1:, 1:] + v[:-1, 1:]) / 2
 
-    f_n_v = face_areas_y[2:, 1:] * (v[2:, 1:] - v[1:-1, 1:]) / dist_y[1:, None]
+    f_n_v = face_areas_y[2:, 1:] * (v[2:, 1:] + v[1:-1, 1:]) / 2
 
     b[1:-1, 1:-1] = (
                         rho * 
