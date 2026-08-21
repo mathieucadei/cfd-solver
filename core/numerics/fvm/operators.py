@@ -214,6 +214,7 @@ def compute_pressure_poisson_term(
     dist_y: np.ndarray,
     face_areas_x: np.ndarray,
     face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
 ) -> np.ndarray:
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
 
@@ -233,7 +234,7 @@ def compute_pressure_poisson_term(
         f_s = a_s * pn[:-2, 1:-1]
         f_n = a_n * pn[2:, 1:-1]
 
-        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
+        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1] * cell_volumes[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
 
         # p[:, -1] = p[:, -2] # dp/dx = 0 at x = 2
         # p[0, :] = p[1, :]   # dp/dy = 0 at y = 0

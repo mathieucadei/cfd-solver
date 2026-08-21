@@ -100,6 +100,7 @@ def solve_cavity_flow_fvm(
                 dist_y,                           
                 face_areas_x,
                 face_areas_y,
+                cell_volumes, 
             )[0]
         
         f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] + p[1:, :-1]) / 2
