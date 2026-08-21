@@ -162,46 +162,82 @@ def compute_source_term_2d(
     dt: float,
     u: np.ndarray,
     v: np.ndarray,
-    dx: float,
-    dy: float,
+    dist_x: np.ndarray,
+    dist_y: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
 ) -> np.ndarray:
     """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
 
-    b[1:-1, 1:-1] = (rho * (1 / dt * 
-                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) / 
-                     (2 * dx) + (v[2:, 1:-1] - v[0:-2, 1:-1]) / (2 * dy)) -
-                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) / (2 * dx))**2 -
-                      2 * ((u[2:, 1:-1] - u[0:-2, 1:-1]) / (2 * dy) *
-                           (v[1:-1, 2:] - v[1:-1, 0:-2]) / (2 * dx))-
-                          ((v[2:, 1:-1] - v[0:-2, 1:-1]) / (2 * dy))**2))
+    f_w_u = face_areas_x[1:, 1:] * (u[1:, 1:] - u[1:, :-1]) / dist_x
+
+    f_e_u = face_areas_x[1:, 2:] * (u[1:, 2:] - u[1:, 1:-1]) / dist_x[1:]
+
+    f_s_u = face_areas_y[:-1, 1:] * (u[1:, 1:] - u[:-1, 1:]) / dist_y[:, None]
+
+    f_n_u = face_areas_y[2:, 1:] * (u[2:, 1:] - u[1:-1, 1:]) / dist_y[1:, None]
+
+    f_w_v = face_areas_x[1:, 1:] * (v[1:, 1:] - v[1:, :-1]) / dist_x
+
+    f_e_v = face_areas_x[1:, 2:] * (v[1:, 2:] - v[1:, 1:-1]) / dist_x[1:]
+
+    f_s_v = face_areas_y[:-1, 1:] * (v[1:, 1:] - v[:-1, 1:]) / dist_y[:, None]
+
+    f_n_v = face_areas_y[2:, 1:] * (v[2:, 1:] - v[1:-1, 1:]) / dist_y[1:, None]
+
+    b[1:-1, 1:-1] = (
+                        rho * 
+                            (1 / dt *   (
+                                            (f_e_u[:-1, :] - f_w_u[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +
+                                            (f_n_v[:, :-1] - f_s_v[:-1, :-1]) / cell_volumes[1:-1, 1:-1]
+                                        ) -
+                                        (
+                                            (f_e_u[:-1, :] - f_w_u[:-1, :-1]) / cell_volumes[1:-1, 1:-1])**2 -
+                                    2 * (
+                                            (f_n_u[:, :-1] - f_s_u[:-1, :-1]) / cell_volumes[1:-1, 1:-1] *
+                                            (f_e_v[:-1, :] - f_w_v[:-1, :-1]) / cell_volumes[1:-1, 1:-1]
+                                        ) -
+                                        (
+                                            (f_n_v[:, :-1] - f_s_v[:-1, :-1]) / cell_volumes[1:-1, 1:-1])**2
+                            )
+                    )
 
     return b
 
 
 def compute_pressure_poisson_term(
-        p: np.ndarray,
-        b: np.ndarray,
-        nit: int, 
-        dx: float, 
-        dy: float, 
+    p: np.ndarray,
+    b: np.ndarray,
+    nit: int, 
+    dist_x: np.ndarray,
+    dist_y: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
 ) -> np.ndarray:
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
 
     pn = p.copy()
+
+    a_w = face_areas_x[1:-1, 1:-1] / dist_x[:-1]
+    a_e = face_areas_x[1:-1, 2:] / dist_x[1:]
+    a_s = face_areas_y[1:-1, 1:-1] / dist_y[:-1, None]
+    a_n = face_areas_y[2:, 1:-1] / dist_y[1:, None]
     
     for q in range(nit):
         
         pn = p.copy()
 
-        p[1:-1, 1:-1] = (((pn[1:-1, 2:] + pn[1:-1, 0:-2]) * dy**2 + 
-                          (pn[2:, 1:-1] + pn[0:-2, 1:-1]) * dx**2) /
-                          (2 * (dx**2 + dy**2)) -
-                          dx**2 * dy**2 / (2 * (dx**2 + dy**2)) * 
-                          b[1:-1,1:-1])
+        f_w = a_w * pn[1:-1, :-2]
+        f_e = a_e * pn[1:-1, 2:]
+        f_s = a_s * pn[:-2, 1:-1]
+        f_n = a_n * pn[2:, 1:-1]
 
-        p[:, -1] = p[:, -2] # dp/dx = 0 at x = 2
-        p[0, :] = p[1, :]   # dp/dy = 0 at y = 0
-        p[:, 0] = p[:, 1]   # dp/dx = 0 at x = 0
-        p[-1, :] = 0        # p = 0 at y = 2
+        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
+
+        # p[:, -1] = p[:, -2] # dp/dx = 0 at x = 2
+        # p[0, :] = p[1, :]   # dp/dy = 0 at y = 0
+        # p[:, 0] = p[:, 1]   # dp/dx = 0 at x = 0
+        # p[-1, :] = 0        # p = 0 at y = 2
         
     return p, pn

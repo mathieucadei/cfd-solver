@@ -305,3 +305,65 @@ def apply_laplace_boundary_2d(
     f_nb_right = a_nb_right * top[-1]
 
     p[-1, -1] =(f_eb_top + f_w_top_right + f_nb_right + f_s_top_right) / (a_w_top_right + a_eb_top + a_s_top_right + a_nb_right)
+
+
+def apply_cavity_flow_boundary_2d(
+    u: np.ndarray,
+    v: np.ndarray,
+    u_lid: float,
+    dist_x: np.ndarray,
+    dist_y: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    lx: float,
+    ly: float,
+    xc: np.ndarray, 
+    yc: np.ndarray,
+) -> None:
+    """Apply boundary updates for the 2D cavity flow equation."""
+
+    a_w_top = face_areas_x[-1, 1:-1] / dist_x[:-1]
+    a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
+    a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
+    a_nb = face_areas_y[-1, 1:-1] / (ly - yc[-1])
+  
+    f_w_top = a_w_top * u[-1, :-2]
+    f_e_top = a_e_top * u[-1, 2:]
+    f_s_top = a_s_top * u[-2, 1:-1]
+    f_nb = a_nb * u_lid
+
+    u[-1, 1:-1] =(f_e_top + f_w_top + f_nb + f_s_top) / (a_w_top + a_e_top + a_s_top + a_nb)
+
+    a_wb_top= face_areas_x[-1, 0] / xc[0]
+    a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
+    a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
+    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
+
+    f_wb_top = a_wb_top * 0
+    f_e_top_left = a_e_top_left * u[-1, 1]
+    f_s_top_left = a_s_top_left * u[-2, 0]
+    f_nb_left = a_nb_left * u_lid
+
+    u[-1, 0] =(f_e_top_left + f_wb_top + f_nb_left + f_s_top_left) / (a_wb_top + a_e_top_left + a_s_top_left + a_nb_left)
+
+    a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
+    a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
+    a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
+    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])  
+
+    f_w_top_right = a_w_top_right * u[-1, -2]
+    f_eb_top = a_eb_top * 0
+    f_s_top_right = a_s_top_right * u[-2, -1]
+    f_nb_right = a_nb_right * u_lid
+
+    u[-1, -1] =(f_eb_top + f_w_top_right + f_nb_right + f_s_top_right) / (a_w_top_right + a_eb_top + a_s_top_right + a_nb_right)
+
+    # u[0, :]  = 0
+    # u[:, 0]  = 0
+    # u[:, -1] = 0
+    # u[-1, :] = u_lid
+
+    # v[0, :] = 0
+    # v[-1, :] = 0
+    # v[:, 0] = 0
+    # v[:, -1] = 0

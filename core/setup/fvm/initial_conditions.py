@@ -77,3 +77,14 @@ def poisson_initial_condition_2d_fvm(config: object) -> np.ndarray:
             b[int(config.num_cells_y * src.y), int(config.num_cells_x * src.x)] = src.value
 
     return p, b
+
+
+def cavity_flow_initial_condition_fvm(config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D cavity flow numerical solver."""
+
+    u = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    v = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    p = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    b = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+
+    return u, v, p, b

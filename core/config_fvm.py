@@ -183,3 +183,19 @@ class Poisson2DFVMConfig:
         SourceTermFVM(x=0.6, y=0.2, value=-5.0),
     ])
     l1_norm_target: float = 1e-4
+
+
+@dataclass
+class CavityFlowFVMConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_cells_x: int = 31
+    num_cells_y: int = 31
+    expansion_ratio_x: float = 0.
+    expansion_ratio_y: float = 0.
+    max_iterations: int = 500
+    max_pseudo_iterations: int = 50
+    time_step: float = 0.001
+    u_lid: float = 1.0
+    density: float = 1.0
+    viscosity: float = 0.1

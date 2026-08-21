@@ -11,8 +11,7 @@ from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_fac
 
 
 
-
-def solve_cavity_flow(
+def solve_cavity_flow_fvm(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:
@@ -38,8 +37,9 @@ def solve_cavity_flow(
     u_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
     v_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
     p_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
+    b_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
 
-    u_history[0], v_history[0], p_history[0] = initial_condition
+    u_history[0], v_history[0], p_history[0], b_history[0] = initial_condition
 
     for n in range(1, config.max_iterations + 1):
 
@@ -58,41 +58,82 @@ def solve_cavity_flow(
                                                 )
         
         diffusion_u_term = compute_diffusion_2d_term(
-                            un,
-                            dist_x,
-                            dist_y,
-                            face_areas_x, 
-                            face_areas_y, 
-                            cell_volumes,                             
-                            dt, 
-                            config.viscosity
-                        )
+                                un,
+                                dist_x,
+                                dist_y,
+                                face_areas_x, 
+                                face_areas_y, 
+                                cell_volumes,                             
+                                dt, 
+                                config.viscosity
+                            )
 
         diffusion_v_term = compute_diffusion_2d_term(
-                            vn,
-                            dist_x,
-                            dist_y,
-                            face_areas_x, 
-                            face_areas_y, 
-                            cell_volumes,                             
-                            dt, 
-                            config.viscosity
-                        )
+                                vn,
+                                dist_x,
+                                dist_y,
+                                face_areas_x, 
+                                face_areas_y, 
+                                cell_volumes,                             
+                                dt, 
+                                config.viscosity
+                            )
         
-        b = compute_source_term_2d(bn, config.density, config.time_step, un, vn, dx, dy)
-        p = compute_pressure_poisson_term(pn, b, config.max_pseudo_iterations, dx, dy)[0]
+        b = compute_source_term_2d(
+                bn, 
+                config.density, 
+                config.time_step, 
+                un, 
+                vn,
+                dist_x,
+                dist_y,                           
+                face_areas_x,
+                face_areas_y, 
+                cell_volumes, 
+            )
+        
+        p = compute_pressure_poisson_term(
+                pn, 
+                b, 
+                config.max_pseudo_iterations, 
+                dist_x,
+                dist_y,                           
+                face_areas_x,
+                face_areas_y,
+            )[0]
+        
+        f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] - p[1:, :-1]) / dist_x
+
+        f_e_p = face_areas_x[1:, 2:] * (p[1:, 2:] - p[1:, 1:-1]) / dist_x[1:]
+
+        f_s_p = face_areas_y[:-1, 1:] * (p[1:, 1:] - p[:-1, 1:]) / dist_y[:, None]
+
+        f_n_p = face_areas_y[2:, 1:] * (p[2:, 1:] - p[1:-1, 1:]) / dist_y[1:, None]
+
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
                          convection_u_term[1:-1, 1:-1] -
-                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) + 
+                         dt / rho * (f_e_p[:-1, :] - f_w_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] + 
                          diffusion_u_term[1:-1, 1:-1])
 
         v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
                         convection_v_term[1:-1, 1:-1] -
-                        dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
+                        dt / rho * (f_n_p[:, :-1] - f_s_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +
                          diffusion_v_term[1:-1, 1:-1])
         
-        apply_cavity_flow_boundary_2d(u, v, config.u_lid)
+        apply_cavity_flow_boundary_2d(
+            u, 
+            v, 
+            config.u_lid,
+            dist_x=dist_x,
+            dist_y=dist_y,
+            face_areas_x=face_areas_x, 
+            face_areas_y=face_areas_y, 
+            lx=config.domain_length_x,
+            ly=config.domain_length_y,
+            xc=xc,
+            yc=yc,
+        )
         
         u_history[n] = u
         v_history[n] = v

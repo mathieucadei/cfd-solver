@@ -33,11 +33,6 @@ def solve_poisson_2d_fvm(
     a_s = face_areas_y[1:-1, 1:-1] / dist_y[:-1, None]
     a_n = face_areas_y[2:, 1:-1] / dist_y[1:, None]
 
-    fb_w = a_w * b[1:-1, :-2]
-    fb_e = a_e * b[1:-1, 2:]
-    fb_s = a_s * b[:-2, 1:-1]
-    fb_n = a_n * b[2:, 1:-1]
-
     for n in range(1, config.max_iterations + 1):
 
         pn = p.copy()
