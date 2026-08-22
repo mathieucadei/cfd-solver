@@ -92,7 +92,7 @@ def compute_advection_2d_term(
 
 def compute_convection_2d_term(
     u: np.ndarray,
-    v: np.ndarray,  
+    v: np.ndarray,      
     face_areas_x: np.ndarray,
     face_areas_y: np.ndarray,
     cell_volumes: np.ndarray,
@@ -100,31 +100,54 @@ def compute_convection_2d_term(
 ) -> np.ndarray:
     """Compute the 2D upwind convection u & v terms"""
 
-    e_u = u**2 / 2
-    e_v = v**2 / 2
+    u_w = (u[1:-1, :-2] + u[1:-1, 1:-1]) / 2
+    u_e = (u[1:-1, 1:-1] + u[1:-1, 2:]) / 2
+    v_s = (v[:-2, 1:-1] + v[1:-1, 1:-1]) / 2
+    v_n = (v[1:-1 , 1:-1] + v[2:, 1:-1]) / 2   
+
+    f_w = u_w * face_areas_x[1:-1, 1:-1]
+    f_e = u_e * face_areas_x[1:-1, 2:]
+    f_s = v_s * face_areas_y[1:-1, 1:-1]
+    f_n = v_n * face_areas_y[2:, 1:-1] 
+
+    u_w = np.where(f_w>0, u[1:-1, :-2], u[1:-1, 1:-1])
+    u_e = np.where(f_e>0, u[1:-1, 1:-1], u[1:-1, 2:])
+    u_s = np.where(f_s>0, u[:-2, 1:-1], u[1:-1, 1:-1])
+    u_n = np.where(f_n>0, u[1:-1, 1:-1], u[2:, 1:-1])
+
+    v_w = np.where(f_w>0, v[1:-1, :-2], v[1:-1, 1:-1])
+    v_e = np.where(f_e>0, v[1:-1, 1:-1], v[1:-1, 2:])
+    v_s = np.where(f_s>0, v[:-2, 1:-1], v[1:-1, 1:-1])
+    v_n = np.where(f_n>0, v[1:-1, 1:-1], v[2:, 1:-1])
+
+    # e_u = u**2 / 2
+    # e_v = v**2 / 2
 
     u_term = np.zeros_like(u)
     v_term = np.zeros_like(v)
 
-    f_w_u = e_u[1:, :-1] * face_areas_x[1:, :-1]
+    u_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_e * u_e - f_w * u_w + f_n * u_n - f_s * u_s)
+    v_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_e * v_e - f_w * v_w + f_n * v_n - f_s * v_s)
 
-    f_e_u = e_u[1:, 1:] * face_areas_x[1:, 1:]
+    # f_w_u = e_u[1:, :-1] * face_areas_x[1:, :-1]
 
-    f_s_u = v[:-1, 1:] * u[:-1, 1:] * face_areas_y[:-1, 1:]
+    # f_e_u = e_u[1:, 1:] * face_areas_x[1:, 1:]
 
-    f_n_u = v[1:, 1:] * u[1:, 1:] * face_areas_y[1:, 1:]
+    # f_s_u = v[:-1, 1:] * u[:-1, 1:] * face_areas_y[:-1, 1:]
 
-    f_w_v = u[1:, :-1] * v[1:, :-1] * face_areas_x[1:, :-1]
+    # f_n_u = v[1:, 1:] * u[1:, 1:] * face_areas_y[1:, 1:]
 
-    f_e_v = u[1:, 1:] * v[1:, 1:] * face_areas_x[1:, 1:]
+    # f_w_v = u[1:, :-1] * v[1:, :-1] * face_areas_x[1:, :-1]
 
-    f_s_v = e_v[:-1, 1:] * face_areas_y[:-1, 1:]
+    # f_e_v = u[1:, 1:] * v[1:, 1:] * face_areas_x[1:, 1:]
 
-    f_n_v = e_v[1:, 1:] * face_areas_y[1:, 1:]
+    # f_s_v = e_v[:-1, 1:] * face_areas_y[:-1, 1:]
 
-    u_term[1:, 1:] = dt * (f_e_u - f_w_u) / cell_volumes[1:, 1:] + dt * (f_n_u - f_s_u) / cell_volumes[1:, 1:]
+    # f_n_v = e_v[1:, 1:] * face_areas_y[1:, 1:]
 
-    v_term[1:, 1:] = dt * (f_e_v - f_w_v) / cell_volumes[1:, 1:] + dt * (f_n_v - f_s_v) / cell_volumes[1:, 1:]
+    # u_term[1:, 1:] = dt * (f_e_u - f_w_u) / cell_volumes[1:, 1:] + dt * (f_n_u - f_s_u) / cell_volumes[1:, 1:]
+
+    # v_term[1:, 1:] = dt * (f_e_v - f_w_v) / cell_volumes[1:, 1:] + dt * (f_n_v - f_s_v) / cell_volumes[1:, 1:]
 
     return u_term, v_term
 
