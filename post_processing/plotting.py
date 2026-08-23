@@ -113,7 +113,7 @@ def plot_solution_contourf(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels)
+    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels, extend='both')
 
 
     ax.set_xlabel(x_label)
@@ -408,7 +408,7 @@ def show_cavity_flow_solution(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    levels = np.linspace(np.min(p_solution_matrix), np.max(p_solution_matrix), 30)
+    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
