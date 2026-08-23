@@ -184,7 +184,7 @@ def apply_diffusion_boundary_2d(
     f_nb = nu * face_areas_y[0, 1:] * (u[0, 1:] - u[-1, 1:]) / (yc[0] + ly - yc[-1])
     f_s_top = nu * face_areas_y[-1, 1:] * (u[-1, 1:] - u[-2, 1:]) / dist_y[-1]
 
-    u[-1, 1:] = un[-1, 1:] + dt / cell_volumes[-1, 1:] * (f_w_bottom - f_e_bottom) + dt / cell_volumes[-1, 1:] * (f_n_bottom - f_sb)
+    u[-1, 1:] = un[-1, 1:] + dt / cell_volumes[-1, 1:] * (f_w_top - f_e_top) + dt / cell_volumes[-1, 1:] * (f_nb - f_s_top)
 
 
 def apply_laplace_boundary_2d(
