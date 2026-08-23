@@ -112,22 +112,12 @@ def solve_cavity_flow_fvm(
                 dist_y,                           
                 face_areas_x,
                 face_areas_y,
-                cell_volumes, 
+                cell_volumes,
+                lx=config.domain_length_x,
+                ly=config.domain_length_y,
+                xc=xc,
+                yc=yc,
             )[0]
-
-        apply_pressure_poisson_term_boundary(
-            p,
-            b,
-            dist_x,
-            dist_y,                           
-            face_areas_x,
-            face_areas_y,
-            cell_volumes, 
-            lx=config.domain_length_x,
-            ly=config.domain_length_y,
-            xc=xc,
-            yc=yc,       
-        )
         
         f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] + p[1:, :-1]) / 2
 
