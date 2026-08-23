@@ -813,12 +813,12 @@ def apply_cavity_flow_boundary_2d(
     u_w_bottom = np.where(f_w_bottom>0, u[0, :-2], u[0, 1:-1])
     u_e_bottom = np.where(f_e_bottom>0, u[0, 1:-1], u[0, 2:])
     u_sb = 0
-    u_n_bottom = np.where(f_n_bottom>0, u[0, -1], u[1, -1])
+    u_n_bottom = np.where(f_n_bottom>0, u[0, 1:-1], u[1, 1:-1])
 
     v_w_bottom = np.where(f_w_bottom>0, v[0, :-2], v[0, 1:-1])
     v_e_bottom = np.where(f_e_bottom>0, v[0, 1:-1], v[0, 2:])
     v_sb = 0
-    v_n_bottom = np.where(f_n_bottom>0, v[0, -1], v[1, -1])
+    v_n_bottom = np.where(f_n_bottom>0, v[0, 1:-1], v[1, 1:-1])
 
     ## diffusion
 
