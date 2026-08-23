@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
-from .boundary_conditions import apply_cavity_flow_boundary_2d
+from .boundary_conditions import apply_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_cavity_flow_boundary_2d
 
 from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 
@@ -91,6 +91,18 @@ def solve_cavity_flow_fvm(
                 face_areas_y, 
                 cell_volumes, 
             )
+
+        apply_source_term_boundary_2d(
+                b,
+                config.density, 
+                config.time_step, 
+                un, 
+                vn,
+                config.u_lid,
+                face_areas_x,
+                face_areas_y, 
+                cell_volumes, 
+        )
         
         p = compute_pressure_poisson_term(
                 pn, 
@@ -102,6 +114,20 @@ def solve_cavity_flow_fvm(
                 face_areas_y,
                 cell_volumes, 
             )[0]
+
+        apply_pressure_poisson_term_boundary(
+            p,
+            b,
+            dist_x,
+            dist_y,                           
+            face_areas_x,
+            face_areas_y,
+            cell_volumes, 
+            lx=config.domain_length_x,
+            ly=config.domain_length_y,
+            xc=xc,
+            yc=yc,       
+        )
         
         f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] + p[1:, :-1]) / 2
 
@@ -124,12 +150,16 @@ def solve_cavity_flow_fvm(
         
         apply_cavity_flow_boundary_2d(
             u, 
-            v, 
+            v,
+            p, 
+            b,  
             config.u_lid,
+            config.time_step, 
             dist_x=dist_x,
             dist_y=dist_y,
             face_areas_x=face_areas_x, 
-            face_areas_y=face_areas_y, 
+            face_areas_y=face_areas_y,
+            cell_volumes=cell_volumes, 
             lx=config.domain_length_x,
             ly=config.domain_length_y,
             xc=xc,
