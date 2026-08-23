@@ -811,12 +811,12 @@ def apply_cavity_flow_boundary_2d(
     f_n_bottom = v_n_bottom * face_areas_y[1, 1:-1] 
 
     u_w_bottom = np.where(f_w_bottom>0, u[0, :-2], u[0, 1:-1])
-    u_e_bottom = np.where(f_e_bottom>0, u[0, 1:-1], u[0, :-2])
+    u_e_bottom = np.where(f_e_bottom>0, u[0, 1:-1], u[0, 2:])
     u_sb = 0
     u_n_bottom = np.where(f_n_bottom>0, u[0, -1], u[1, -1])
 
     v_w_bottom = np.where(f_w_bottom>0, v[0, :-2], v[0, 1:-1])
-    v_e_bottom = np.where(f_e_bottom>0, v[0, 1:-1], v[0, :-2])
+    v_e_bottom = np.where(f_e_bottom>0, v[0, 1:-1], v[0, 2:])
     v_sb = 0
     v_n_bottom = np.where(f_n_bottom>0, v[0, -1], v[1, -1])
 
@@ -862,12 +862,12 @@ def apply_cavity_flow_boundary_2d(
     f_nb = v_nb * face_areas_y[-1, 1:-1] 
 
     u_w_top = np.where(f_w_top>0, u[-1, :-2], u[-1, 1:-1])
-    u_e_top = np.where(f_e_top>0, u[-1, 1:-1], u[-1, :-2])
+    u_e_top = np.where(f_e_top>0, u[-1, 1:-1], u[-1, 2:])
     u_s_top = np.where(f_s_top>0, u[-2, 1:-1], u[-1, 1:-1])
     u_nb = u_lid
 
     v_w_top = np.where(f_w_top>0, v[-1, :-2], v[-1, 1:-1])
-    v_e_top = np.where(f_e_top>0, v[-1, 1:-1], v[-1, :-2])
+    v_e_top = np.where(f_e_top>0, v[-1, 1:-1], v[-1, 2:])
     v_s_top = np.where(f_s_top>0, v[-2, 1:-1], v[-1, 1:-1])
     v_nb = 0
 
