@@ -720,7 +720,7 @@ def apply_cavity_flow_boundary_2d(
     ## diffusion
 
     a_e_left = face_areas_x[1:-1, 1] / dist_x[0]
-    a_wb = face_areas_x[1:-1, 0] / (xc[0] + lx - xc[-1])
+    a_wb = face_areas_x[1:-1, 0] / xc[0]
     a_n_left = face_areas_y[2:, 0] / dist_y[1:]
     a_s_left = face_areas_y[1:-1, 0] / dist_y[:-1]
 
@@ -770,7 +770,7 @@ def apply_cavity_flow_boundary_2d(
 
     ## diffusion
 
-    a_eb = face_areas_x[1:-1, -1] / (xc[0] + lx - xc[-1])
+    a_eb = face_areas_x[1:-1, -1] / (lx - xc[-1])
     a_w_right = face_areas_x[1:-1, -1] / dist_x[-1]
     a_n_right = face_areas_y[2:, -1] / dist_y[1:]
     a_s_right = face_areas_y[1:-1, -1] / dist_y[:-1]
@@ -825,7 +825,7 @@ def apply_cavity_flow_boundary_2d(
     a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
     a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
     a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]
-    a_sb = face_areas_y[0, 1:-1] / (yc[0] + ly - yc[-1])
+    a_sb = face_areas_y[0, 1:-1] / yc[0]
 
     ## pressure
 
@@ -875,7 +875,7 @@ def apply_cavity_flow_boundary_2d(
 
     a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
     a_w_top = face_areas_x[-1, 1:-1] / dist_x[:-1]
-    a_nb = face_areas_y[-1, 1:-1] / (yc[0] + ly - yc[-1])
+    a_nb = face_areas_y[-1, 1:-1] / (ly - yc[-1])
     a_s_top = face_areas_y[-1, 1:-1] / dist_y[-1]
 
     ## pressure
@@ -919,9 +919,9 @@ def apply_cavity_flow_boundary_2d(
     ## diffusion
 
     a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
-    a_wb_bottom = face_areas_x[0, 0] / (xc[0] + lx - xc[-1])
+    a_wb_bottom = face_areas_x[0, 0] / xc[0]
     a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
-    a_sb_left = face_areas_y[0, 0] / (yc[0] + ly - yc[-1])
+    a_sb_left = face_areas_y[0, 0] / yc[0]
 
     ## pressure
 
@@ -964,10 +964,10 @@ def apply_cavity_flow_boundary_2d(
 
     ## diffusion
     
-    a_eb_bottom = face_areas_x[0, -1] / (xc[0] + lx - xc[-1])
+    a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
-    a_sb_right = face_areas_y[0, -1] / (yc[0] + ly - yc[-1])
+    a_sb_right = face_areas_y[0, -1] / yc[0]
 
     ## pressure
 
@@ -1011,9 +1011,9 @@ def apply_cavity_flow_boundary_2d(
     ## diffusion
 
     a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
-    a_wb_top = face_areas_x[-1, 0] / (xc[0] + lx - xc[-1])
+    a_wb_top = face_areas_x[-1, 0] / xc[0]
     a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-    a_nb_left = face_areas_y[-1, 0] / (yc[0] + ly - yc[-1])
+    a_nb_left = face_areas_y[-1, 0] / ly - yc[-1]
 
     ## pressure
 
@@ -1055,9 +1055,9 @@ def apply_cavity_flow_boundary_2d(
     v_s_top_right = np.where(f_s_top_right>0, v[-2, -1], v[-1, -1])
 
     ## diffusion
-    a_eb_top = face_areas_x[-1, -1] / (xc[0] + lx - xc[-1])
+    a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
     a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
-    a_nb_right = face_areas_y[-1, -1] / (yc[0] + ly - yc[-1])
+    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])
     a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
 
     ## pressure
