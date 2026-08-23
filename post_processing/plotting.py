@@ -783,7 +783,8 @@ def show_cavity_flow_solution_animation(
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
-    levels = np.linspace(np.floor(np.min(p_solution_matrix_final)), np.ceil(np.max(p_solution_matrix_final)), 30)
+
+    levels = np.linspace(np.percentile(p_solution_matrix_final, 1), np.percentile(p_solution_matrix_final, 99), 30)
 
     initial_contourf = ax.contourf(
     x_values,
