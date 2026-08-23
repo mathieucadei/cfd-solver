@@ -785,13 +785,13 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[1:-1, -1] = un[1:-1, -1] + dt / cell_volumes[1:-1, -1] * (
-        (f_eb * u_eb - f_w_right * u_w_right + f_n_right * u_n_right - f_s_right * u_s_right) +
+        -(f_eb * u_eb - f_w_right * u_w_right + f_n_right * u_n_right - f_s_right * u_s_right) +
         nu * (a_eb * (u_eb - u[1:-1, -1]) - a_w_right * (u[1:-1, -1] - u[1:-1, -2]) + a_n_right * (u[2:, -1] - u[1:-1, -1]) - a_s_right * (u[1:-1, -1] - u[:-2, -1]))
         ) - (dt / rho * (pf_eb_p - pf_w_p_right) / cell_volumes[1:-1, -1])
 
 
     v[1:-1, -1] = vn[1:-1, -1] + dt / cell_volumes[1:-1, -1] * (
-        (f_eb * v_eb - f_w_right * v_w_right + f_n_right * v_n_right - f_s_right * v_s_right) +
+        -(f_eb * v_eb - f_w_right * v_w_right + f_n_right * v_n_right - f_s_right * v_s_right) +
         nu * (a_eb * (v_eb - v[1:-1, -1]) - a_w_right * (v[1:-1, -1] - v[1:-1, -2]) + a_n_right * (v[2:, -1] - v[1:-1, -1]) - a_s_right * (v[1:-1, -1] - v[:-2, -1]))
         ) - (dt / rho * (pf_n_p_right - pf_s_p_right) / cell_volumes[1:-1, -1])
 
@@ -837,12 +837,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[0, 1:-1] = un[0, 1:-1] + dt / cell_volumes[0, 1:-1] * (
-        (f_e_bottom * u_e_bottom - f_w_bottom * u_w_bottom + f_n_bottom * u_n_bottom - f_sb * u_sb) +
+        -(f_e_bottom * u_e_bottom - f_w_bottom * u_w_bottom + f_n_bottom * u_n_bottom - f_sb * u_sb) +
         nu * (a_e_bottom * (u[0, 2:] - u[0, 1:-1]) - a_w_bottom * (u[0, 1:-1] - u[0, :-2]) + a_n_bottom * (u[1, 1:-1] - u[0, 1:-1]) - a_sb * (u[0, 1:-1] - u_sb))
         ) - (dt / rho * (pf_e_p_bottom - pf_w_p_bottom) / cell_volumes[0, 1:-1])
 
     v[0, 1:-1] = vn[0, 1:-1] + dt / cell_volumes[0, 1:-1] * (
-            (f_e_bottom * v_e_bottom - f_w_bottom * v_w_bottom + f_n_bottom * v_n_bottom - f_sb * v_sb) +
+            -(f_e_bottom * v_e_bottom - f_w_bottom * v_w_bottom + f_n_bottom * v_n_bottom - f_sb * v_sb) +
             nu * (a_e_bottom * (v[0, 2:] - v[0, 1:-1]) - a_w_bottom * (v[0, 1:-1] - v[0, :-2]) + a_n_bottom * (v[1, 1:-1] - v[0, 1:-1]) - a_sb * (v[0, 1:-1] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom - pf_sb_p) / cell_volumes[0, 1:-1])
 
@@ -888,12 +888,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[-1, 1:-1] = un[-1, 1:-1] + dt / cell_volumes[0, 1:-1] * (
-        (f_e_top * u_e_top - f_w_top * u_w_top + f_nb * u_nb - f_s_top * u_s_top) +
+        -(f_e_top * u_e_top - f_w_top * u_w_top + f_nb * u_nb - f_s_top * u_s_top) +
         nu * (a_e_top * (u[-1, 2:] - u[-1, 1:-1]) - a_w_top * (u[-1, 1:-1] - u[-1, :-2]) + a_nb * (u_nb - u[-1, 1:-1]) - a_s_top * (u[-1, 1:-1] - u[-2, 1:-1]))
         ) - (dt / rho * (pf_e_p_top - pf_w_p_top) / cell_volumes[-1, 1:-1])
 
     v[-1, 1:-1] = vn[-1, 1:-1] + dt / cell_volumes[0, 1:-1] * (
-        (f_e_top * v_e_top - f_w_top * v_w_top + f_nb * v_nb - f_s_top * v_s_top) +
+        -(f_e_top * v_e_top - f_w_top * v_w_top + f_nb * v_nb - f_s_top * v_s_top) +
         nu * (a_e_top * (v[-1, 2:] - v[-1, 1:-1]) - a_w_top * (v[-1, 1:-1] - v[-1, :-2]) + a_nb * (v_nb - v[-1, 1:-1]) - a_s_top * (v[-1, 1:-1] - v[-2, 1:-1]))
         ) - (dt / rho * (pf_nb_p - pf_s_p_top) / cell_volumes[-1, 1:-1])
 
@@ -934,12 +934,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[0, 0] = un[0, 0] + dt / cell_volumes[0, 0] * (
-        (f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_wb + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) + 
+        -(f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_wb + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) + 
         nu * (a_e_bottom_left * (u[0, 1] - u[0, 0]) - a_wb_bottom * (u[0, 0] - u_wb) + a_n_bottom_left * (u[1, 0] - u[0, 0]) - a_sb_left * (u[0, 0] - u_sb))
         ) - (dt / rho * (pf_e_p_bottom_left - pf_wb_p_bottom) / cell_volumes[0, 0])
     
     v[0, 0] = vn[0, 0] + dt / cell_volumes[0, 0] * (
-        (f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_wb + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) + 
+        -(f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_wb + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) + 
         nu * (a_e_bottom_left * (v[0, 1] - v[0, 0]) - a_wb_bottom * (v[0, 0] - v_wb) + a_n_bottom_left * (v[1, 0] - v[0, 0]) - a_sb_left * (v[0, 0] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_left - pf_sb_p_left) / cell_volumes[0, 0])
 
@@ -980,12 +980,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[0, -1] = un[0, -1] + dt / cell_volumes[0, -1] * (
-        (f_eb_bottom * u_eb - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) + 
+        -(f_eb_bottom * u_eb - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) + 
         nu * (a_eb_bottom * (u_eb - u[0, -1]) - a_w_bottom_right * (u[0, -1] - u[0, -2]) + a_n_bottom_right * (u[1, -1] - u[0, -1]) - a_sb_right * (u[0, -1] - u_sb))
         ) - (dt / rho * (pf_eb_p_bottom - pf_w_p_bottom_right) / cell_volumes[0, -1])
     
     v[0, -1] = vn[0, -1] + dt / cell_volumes[0, -1] * (
-        (f_eb_bottom * v_eb - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) + 
+        -(f_eb_bottom * v_eb - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) + 
         nu * (a_eb_bottom * (v_eb - v[0, -1]) - a_w_bottom_right * (v[0, -1] - v[0, -2]) + a_n_bottom_right * (v[1, -1] - v[0, -1]) - a_sb_right * (v[0, -1] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_right - pf_sb_p_right) / cell_volumes[0, -1])
 
@@ -1026,12 +1026,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[-1, 0] = un[-1, 0] + dt / cell_volumes[-1, 0] * (
-        (f_e_top_left * u_e_top_left - f_wb_top * u_wb + f_nb_left * u_nb - f_s_top_left * u_s_top_left) + 
+        -(f_e_top_left * u_e_top_left - f_wb_top * u_wb + f_nb_left * u_nb - f_s_top_left * u_s_top_left) + 
         nu * (a_e_top_left * (u[-1, 1] - u[-1, 0]) - a_wb_top * (u[-1, 0] - u_wb) + a_nb_left * (u_nb - u[-1, 0]) - a_s_top_left * (u[-1, 0] - u[-2, 0]))
         ) - (dt / rho * (pf_e_p_top_left - pf_wb_p_top) / cell_volumes[-1, 0])
     
     v[-1, 0] = vn[-1, 0] + dt / cell_volumes[-1, 0] * (
-        (f_e_top_left * v_e_top_left - f_wb_top * v_wb + f_nb_left * v_nb - f_s_top_left * v_s_top_left) + 
+        -(f_e_top_left * v_e_top_left - f_wb_top * v_wb + f_nb_left * v_nb - f_s_top_left * v_s_top_left) + 
         nu * (a_e_top_left * (v[-1, 1] - v[-1, 0]) - a_wb_top * (v[-1, 0] - v_wb) + a_nb_left * (v_nb - v[-1, 0]) - a_s_top_left * (v[-1, 0] - v[-2, 0]))
         ) - (dt / rho * (pf_nb_p_left - pf_s_p_top_left) / cell_volumes[-1, 0])
 
@@ -1071,11 +1071,11 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[-1, -1] = un[-1, -1] + dt / cell_volumes[-1, -1] * (
-        (f_eb_top * u_eb - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) + 
+        -(f_eb_top * u_eb - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) + 
         nu * (a_eb_top * (u_eb - u[-1, -1]) - a_w_top_right * (u[-1, -2] - u[-1, -1]) + a_nb_right * (u_nb - u[-1, -1]) - a_s_top_right * (u[-1, -1] - u[-2, -1]))
         ) - (dt / rho * (pf_eb_p_top - pf_w_p_top_right) / cell_volumes[-1, -1])
     
     v[-1, -1] = vn[-1, -1] + dt / cell_volumes[-1, -1] * (
-        (f_eb_top * v_eb - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) + 
+        -(f_eb_top * v_eb - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) + 
         nu * (a_eb_top * (v_eb - v[-1, -1]) - a_w_top_right * (v[-1, -2] - v[-1, -1]) + a_nb_right * (v_nb - v[-1, -1]) - a_s_top_right * (v[-1, -1] - v[-2, -1]))
         ) - (dt / rho * (pf_nb_p_right - pf_s_p_top_right) / cell_volumes[-1, -1])
