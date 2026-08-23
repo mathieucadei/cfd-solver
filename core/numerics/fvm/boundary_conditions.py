@@ -1013,7 +1013,7 @@ def apply_cavity_flow_boundary_2d(
     a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
     a_wb_top = face_areas_x[-1, 0] / xc[0]
     a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-    a_nb_left = face_areas_y[-1, 0] / ly - yc[-1]
+    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1])
 
     ## pressure
 
@@ -1032,7 +1032,7 @@ def apply_cavity_flow_boundary_2d(
     
     v[-1, 0] = vn[-1, 0] + dt / cell_volumes[-1, 0] * (
         (f_e_top_left * v_e_top_left - f_wb_top * v_wb + f_nb_left * v_nb - f_s_top_left * v_s_top_left) + 
-        nu * (a_e_top_left * (v[-1, 1] - v[-1, 0]) - a_wb_top * (v[-1, 0] - v_wb) + a_nb_left * (v_nb - v[-1, 0]) - a_s_top_left * (v[-1, 0] - u[-2, 0]))
+        nu * (a_e_top_left * (v[-1, 1] - v[-1, 0]) - a_wb_top * (v[-1, 0] - v_wb) + a_nb_left * (v_nb - v[-1, 0]) - a_s_top_left * (v[-1, 0] - v[-2, 0]))
         ) - (dt / rho * (pf_nb_p_left - pf_s_p_top_left) / cell_volumes[-1, 0])
 
 
