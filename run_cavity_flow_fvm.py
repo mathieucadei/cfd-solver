@@ -117,6 +117,7 @@ show_cavity_flow_solution_animation(
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
     p_solution_history=p_solution_matrix,
+    u_lid=u_lid,
     case_name=case_name,
     save=save,
 )

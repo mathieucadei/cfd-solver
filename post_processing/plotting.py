@@ -775,6 +775,7 @@ def show_cavity_flow_solution_animation(
     scale: float = 10.0,
     x_label: str = 'x',
     y_label: str = 'y',
+    u_lid: float = None,
     case_name: str = None,
     save: bool = False,     
 ) -> None:
@@ -838,7 +839,13 @@ def show_cavity_flow_solution_animation(
         ax.set_xlim(0, 2)
         ax.set_ylim(0, 1)
 
-        lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
+        if u_lid is not None:
+
+            lid_velocity = u_lid
+
+        else: 
+
+            lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
 
         ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})", pad=24)
 
