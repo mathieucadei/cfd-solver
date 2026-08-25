@@ -27,6 +27,7 @@ from .config_fvm import (
     SourceTermFVM,
     Poisson2DFVMConfig,
     CavityFlowFVMConfig,
+    ChannelFlowFVMConfig,
 )
 
 from .setup.grids import (
@@ -88,6 +89,7 @@ from .setup.fvm.initial_conditions import (
     laplace_initial_condition_2d_fvm,
     poisson_initial_condition_2d_fvm,
     cavity_flow_initial_condition_fvm,
+    channel_flow_initial_condition_fvm,
 )
 
 from .numerics import (
@@ -138,6 +140,8 @@ from .numerics.fvm.laplace_2d import solve_laplace_2d_fvm
 from .numerics.fvm.poisson_2d import solve_poisson_2d_fvm
 
 from .numerics.fvm.cavity_flow import solve_cavity_flow_fvm
+
+from .numerics.fvm.channel_flow import solve_channel_flow_fvm
 
 from .signal_processing import (
     compute_coefficients,

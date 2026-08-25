@@ -253,7 +253,6 @@ def compute_pressure_poisson_term(
     a_n = face_areas_y[2:, 1:-1] / dist_y[1:, None]
 
     top = 0
-    right = pn[:, -1]
     
     for q in range(nit):
         
@@ -348,6 +347,124 @@ def compute_pressure_poisson_term(
         f_nb_right = a_nb_right * top
 
         p[-1, -1] =(f_w_top_right + f_nb_right + f_s_top_right - b[-1, -1] * cell_volumes[-1, -1]) / (a_w_top_right + a_s_top_right + a_nb_right)
+
+        
+    return p, pn
+
+
+def compute_periodic_pressure_poisson_term(
+    p: np.ndarray,
+    b: np.ndarray,
+    nit: int, 
+    dist_x: np.ndarray,
+    dist_y: np.ndarray,
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
+    lx: float,
+    ly: float,
+    xc: np.ndarray, 
+    yc: np.ndarray,
+) -> np.ndarray:
+    """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
+
+    pn = p.copy()
+
+    a_w = face_areas_x[1:-1, 1:-1] / dist_x[:-1]
+    a_e = face_areas_x[1:-1, 2:] / dist_x[1:]
+    a_s = face_areas_y[1:-1, 1:-1] / dist_y[:-1, None]
+    a_n = face_areas_y[2:, 1:-1] / dist_y[1:, None]
+    
+    for q in range(nit):
+        
+        pn = p.copy()
+
+        f_w = a_w * pn[1:-1, :-2]
+        f_e = a_e * pn[1:-1, 2:]
+        f_s = a_s * pn[:-2, 1:-1]
+        f_n = a_n * pn[2:, 1:-1]
+
+        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1] * cell_volumes[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
+
+        a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
+        a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
+        a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]   
+
+        f_w_bottom = a_w_bottom * pn[0, :-2]
+        f_e_bottom = a_e_bottom * pn[0, 2:]
+        f_n_bottom = a_n_bottom * pn[1, 1:-1]
+
+        p[0, 1:-1] =(f_e_bottom + f_w_bottom + f_n_bottom - b[0, 1:-1] * cell_volumes[0, 1:-1]) / (a_w_bottom + a_e_bottom + a_n_bottom)
+
+
+        a_w_top = face_areas_x[-1, 1:-1] / dist_x[:-1]
+        a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
+        a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
+    
+        f_w_top = a_w_top * pn[-1, :-2]
+        f_e_top = a_e_top * pn[-1, 2:]
+        f_s_top = a_s_top * pn[-2, 1:-1]
+
+        p[-1, 1:-1] =(f_e_top + f_w_top + f_s_top - b[-1, 1:-1] * cell_volumes[-1, 1:-1]) / (a_w_top + a_e_top + a_s_top)
+
+        a_w_right = face_areas_x[1:-1, -2] / dist_x[-1]
+        a_e_left = face_areas_x[1:-1, 1] / dist_x[0]
+        a_s_left = face_areas_y[1:-1, 0] / dist_y[:-1]
+        a_n_left = face_areas_y[2:, 0] / dist_y[1:]
+
+        f_w_right = a_w_right * pn[1:-1, -2]
+        f_e_left= a_e_left * pn[1:-1, 1]
+        f_s_left = a_s_left * pn[:-2, 0]
+        f_n_left = a_n_left * pn[2:, 0]
+
+        p[1:-1, 0] =(f_e_left + f_w_right + f_n_left + f_s_left - b[1:-1, 0] * cell_volumes[1:-1, 0]) / (a_e_left + a_w_right + a_s_left + a_n_left)
+
+
+        # a_w_right = face_areas_x[1:-1, -2] / dist_x[-1]
+        a_s_right = face_areas_y[1:-1, -1] / dist_y[:-1]
+        a_n_right = face_areas_y[2:, -1] / dist_y[1:]
+    
+        # f_w_right = a_w_right * pn[1:-1, -2]
+        f_s_right = a_s_right * pn[:-2, -1]
+        f_n_right = a_n_right * pn[2:, -1]
+
+        p[1:-1, -1] =(f_e_left + f_w_right + f_n_right + f_s_right - b[1:-1, -1] * cell_volumes[1:-1, -1]) / (a_e_left + a_w_right + a_s_right + a_n_right)
+
+        a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
+        a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
+        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+
+        f_w_top_right = a_w_top_right * pn[-1, -2]
+        f_e_bottom_left = a_e_bottom_left * pn[0, 1]
+        f_n_bottom_left = a_n_bottom_left * pn[1, 0]
+
+        p[0, 0] =(f_e_bottom_left + f_w_top_right + f_n_bottom_left - b[0, 0] * cell_volumes[0, 0]) / (a_e_bottom_left + a_w_top_right + a_n_bottom_left)
+
+        a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
+        a_s_top_left = face_areas_y[-2, 0] / dist_y[-1] 
+
+        f_e_top_left = a_e_top_left * pn[-1, 1]
+        f_s_top_left = a_s_top_left * pn[-2, 0]
+
+        p[-1, 0] =(f_e_top_left + f_s_top_left - b[-1, 0] * cell_volumes[-1, 0]) / (a_e_top_left + a_s_top_left)
+
+
+        a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
+        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+
+        f_w_bottom_right = a_w_bottom_right * pn[0, -2]
+        f_n_bottom_right = a_n_bottom_right * pn[1, -1]
+
+        p[0, -1] =(f_e_bottom_left + f_w_bottom_right + f_n_bottom_right - b[0, -1] * cell_volumes[0, -1]) / (a_e_bottom_left + a_w_bottom_right + a_n_bottom_right)
+
+
+        # a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
+        a_s_top_right = face_areas_y[-2, -1] / dist_y[-1] 
+
+        # f_w_top_right = a_w_top_right * pn[-1, -2]
+        f_s_top_right = a_s_top_right * pn[-2, -1]
+
+        p[-1, -1] =(f_w_top_right + f_s_top_right - b[-1, -1] * cell_volumes[-1, -1]) / (a_w_top_right + a_s_top_right)
 
         
     return p, pn

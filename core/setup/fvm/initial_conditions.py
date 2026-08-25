@@ -88,3 +88,13 @@ def cavity_flow_initial_condition_fvm(config: object) -> np.ndarray:
     b = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
 
     return u, v, p, b
+
+def channel_flow_initial_condition_fvm(config: object) -> np.ndarray:
+    """Generate a 2D initial condition on the provided grid for the 2D channel flow numerical solver."""
+
+    u = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    v = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    p = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+    b = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
+
+    return u, v, p, b

@@ -189,8 +189,8 @@ class Poisson2DFVMConfig:
 class CavityFlowFVMConfig:
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
-    num_cells_x: int = 31
-    num_cells_y: int = 31
+    num_cells_x: int = 40
+    num_cells_y: int = 40
     expansion_ratio_x: float = 0.
     expansion_ratio_y: float = 0.
     max_iterations: int = 500
@@ -199,3 +199,20 @@ class CavityFlowFVMConfig:
     u_lid: float = 1.0
     density: float = 1.0
     viscosity: float = 0.1
+
+
+@dataclass
+class ChannelFlowFVMConfig:
+    domain_length_x: float = 2.0
+    domain_length_y: float = 1.0
+    num_cells_x: int = 40
+    num_cells_y: int = 40
+    expansion_ratio_x: float = 0.
+    expansion_ratio_y: float = 0.
+    max_iterations: int = 10
+    max_pseudo_iterations: int = 50
+    time_step: float = 0.001
+    source: float = 1.0
+    density: float = 1.0
+    viscosity: float = 0.1
+    u_l1_norm_target: float = 0.001
