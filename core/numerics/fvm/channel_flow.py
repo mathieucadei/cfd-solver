@@ -5,7 +5,7 @@
 import numpy as np
 
 from .operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_periodic_pressure_poisson_term
-from .boundary_conditions import apply_periodic_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_cavity_flow_boundary_2d
+from .boundary_conditions import apply_periodic_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_channel_flow_boundary_2d
 
 from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 
@@ -136,7 +136,7 @@ def solve_channel_flow_fvm(
                         dt / rho * (f_n_p[:, :-1] - f_s_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +
                          diffusion_v_term[1:-1, 1:-1])
         
-        apply_cavity_flow_boundary_2d(
+        apply_channel_flow_boundary_2d(
             u, 
             v,
             un,
