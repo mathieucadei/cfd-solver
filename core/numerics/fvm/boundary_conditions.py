@@ -1747,5 +1747,5 @@ def apply_channel_flow_boundary_2d(
     
     v[-1, -1] = vn[-1, -1] + dt / cell_volumes[-1, -1] * (
         -(f_eb_top * v_eb_top - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) + 
-        nu * (a_eb_top * (v[-1, 0] - v[-1, -1]) - a_w_top_right * (v[-1, -2] - v[-1, -1]) + a_nb_right * (v_nb - v[-1, -1]) - a_s_top_right * (v[-1, -1] - v[-2, -1]))
+        nu * (a_eb_top * (v[-1, 0] - v[-1, -1]) - a_w_top_right * (v[-1, -1] - v[-1, -2]) + a_nb_right * (v_nb - v[-1, -1]) - a_s_top_right * (v[-1, -1] - v[-2, -1]))
         ) - (dt / rho * (pf_nb_p_right - pf_s_p_top_right) / cell_volumes[-1, -1])
