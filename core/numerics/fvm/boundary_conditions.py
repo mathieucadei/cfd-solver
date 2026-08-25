@@ -1225,7 +1225,7 @@ def apply_periodic_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_e_u_bottom_left - f_wb_u_bottom) / cell_volumes[0, 0] +
-                                            (f_n_v_bottom_left - f_sb_u) / cell_volumes[0, 0]
+                                            (f_n_v_bottom_left - f_sb_v) / cell_volumes[0, 0]
                                         ) -
                                         (
                                             (f_e_u_bottom_left - f_wb_u_bottom) / cell_volumes[0, 0])**2 -
@@ -1252,7 +1252,7 @@ def apply_periodic_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_eb_u_bottom - f_w_u_bottom_right) / cell_volumes[0, -1] +
-                                            (f_n_v_bottom_right - f_sb_u) / cell_volumes[0, -1]
+                                            (f_n_v_bottom_right - f_sb_v) / cell_volumes[0, -1]
                                         ) -
                                         (
                                             (f_eb_u_bottom - f_w_u_bottom_right) / cell_volumes[0, -1])**2 -
@@ -1276,12 +1276,13 @@ def apply_periodic_source_term_boundary_2d(
     f_e_v_top_left = face_areas_x[-1, 1] * (v[-1, 0] + v[-1, 1]) / 2
     f_wb_v_top = face_areas_x[-1, 0] * (v[-1, -1] + v[-1, 0]) / 2
     f_s_v_top_left = face_areas_y[-2, 0] * (v[-2, 0] + v[-1, 0]) / 2
+    f_nb_v_left = 0
 
     b[-1, 0] = (
                         rho * 
                             (1 / dt *   (
                                             (f_e_u_top_left - f_wb_u_top) / cell_volumes[-1, 0] +
-                                            (f_nb_u_left - f_s_u_top_left) / cell_volumes[-1, -1]
+                                            (f_nb_v_left - f_s_v_top_left) / cell_volumes[-1, 0]
                                         ) -
                                         (
                                             (f_e_u_top_left - f_wb_u_top) / cell_volumes[-1, 0])**2 -
@@ -1305,12 +1306,13 @@ def apply_periodic_source_term_boundary_2d(
     f_eb_v_top = face_areas_x[-1, 0] * (v[-1, -1] + v[-1, 0]) / 2
     f_w_v_top_right = face_areas_x[-1, -1] * (v[-1, -2] + v[-1, -1]) / 2
     f_s_v_top_right = face_areas_y[-2, -1] * (v[-2, -1] + v[-1, -1]) / 2
+    f_nb_v_right = 0
 
     b[-1, -1] = (
                         rho * 
                             (1 / dt *   (
                                             (f_eb_u_top - f_w_u_top_right) / cell_volumes[-1, -1] +
-                                            (f_nb_u_right - f_s_u_top_right) / cell_volumes[-1, -1]
+                                            (f_nb_v_right - f_s_v_top_right) / cell_volumes[-1, -1]
                                         ) -
                                         (
                                             (f_eb_u_top - f_w_u_top_right) / cell_volumes[-1, -1])**2 -

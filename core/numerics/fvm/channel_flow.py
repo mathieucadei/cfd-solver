@@ -118,8 +118,6 @@ def solve_channel_flow_fvm(
                 yc=yc,
             )[0]
 
-        # p = apply_periodic_pressure_poisson_boundary_2d(b, p_term, pn_term, dx, dy)
-
         f_w_p = face_areas_x[1:, 1:] * (p[1:, 1:] + p[1:, :-1]) / 2
         f_e_p = face_areas_x[1:, 2:] * (p[1:, 2:] + p[1:, 1:-1]) / 2
         f_s_p = face_areas_y[:-1, 1:] * (p[1:, 1:] + p[:-1, 1:]) / 2
