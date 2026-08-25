@@ -1622,7 +1622,7 @@ def apply_channel_flow_boundary_2d(
     u_w_bottom_right = np.where(f_w_bottom_right>0, u[0, -2], u[0, -1])
     u_n_bottom_right = np.where(f_n_bottom_right>0, u[0, -1], u[1, -1])
 
-    v_eb_bottom = np.where(f_eb_bottom>0, u[0, -1], u[0, 0])
+    v_eb_bottom = np.where(f_eb_bottom>0, v[0, -1], v[0, 0])
     v_w_bottom_right = np.where(f_w_bottom_right>0, v[0, -2], v[0, -1])
     v_n_bottom_right = np.where(f_n_bottom_right>0, v[0, -1], v[1, -1])
 
