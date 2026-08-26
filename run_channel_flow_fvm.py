@@ -48,7 +48,7 @@ u_l1_norm_target: float = 0.001
 # Visualization parameters
 
 step_stride = 10
-case_name = 'channel flow'
+case_name = 'channel flow FVM'
 title = True
 save = False
 show_individual_plots = False
