@@ -46,7 +46,7 @@ def solve_advection_2d_fvm(
         u[1:, 1:] = un[1:, 1:] - advection_term[1:, 1:]
 
         apply_advection_boundary_2d(
-            u=un,
+            u=u,
             c=config.wavespeed,
             u_min=config.u_min,
             dt=dt,
