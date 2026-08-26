@@ -72,6 +72,7 @@ def apply_burgers_boundary_1d_fvm(
 
 def apply_advection_boundary_2d(
     u: np.ndarray,
+    un: np.ndarray,
     c: float,
     u_min: float,
     dt: float,
@@ -88,11 +89,11 @@ def apply_advection_boundary_2d(
 
     f_wb = c * u_min * face_areas_x[1:, 0]
     f_e_left  = c * u[1:, 0] * face_areas_x[1:, 1]
-    f_s_left = c * u[1:, 0] * face_areas_y[:-1, 0]
-    f_n_left  = c * u[:-1, 0] * face_areas_y[1:, 0]
+    f_s_left = c * u[:-1, 0] * face_areas_y[:-1, 0]
+    f_n_left  = c * u[1:, 0] * face_areas_y[1:, 0]
 
-    u[0, 1:] = dt * (f_e_bottom - f_w_bottom) / cell_volumes[0, 1:] + dt * (f_n_bottom - f_sb) / cell_volumes[0, 1:]
-    u[1:, 0] = dt * (f_e_left - f_wb) / cell_volumes[1:, 0]  + dt * (f_n_left - f_s_left) / cell_volumes[1:, 0] 
+    u[0, 1:] = un[0, 1:] - dt * (f_e_bottom - f_w_bottom) / cell_volumes[0, 1:] + dt * (f_n_bottom - f_sb) / cell_volumes[0, 1:]
+    u[1:, 0] = un[1:, 0] - dt * (f_e_left - f_wb) / cell_volumes[1:, 0]  + dt * (f_n_left - f_s_left) / cell_volumes[1:, 0] 
     u[0,0] = u_min
 
 def apply_convection_boundary_2d(

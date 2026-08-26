@@ -47,6 +47,7 @@ def solve_advection_2d_fvm(
 
         apply_advection_boundary_2d(
             u=u,
+            un=un,
             c=config.wavespeed,
             u_min=config.u_min,
             dt=dt,
