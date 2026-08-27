@@ -7,20 +7,20 @@ import matplotlib.pyplot as plt
 
 from .operators import compute_advection_2d_term
 from .boundary_conditions import apply_advection_boundary_2d
-from ...setup.fvm.time_stepping import compute_advective_dt_2d_fvm
-from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_x_face_positions, build_x_centers, build_face_areas, compute_cell_volumes
-from ...setup.fvm.initial_conditions import hat_initial_condition_2d_fvm
+from ..time_stepping import compute_advective_dt_2d
+from ..mesh import build_mesh, build_h_spacing, build_x_face_positions, build_x_centers, build_face_areas, compute_cell_volumes
+from ..initial_conditions import hat_initial_condition_2d
 
 from dataclasses import dataclass
 
 
-def solve_advection_2d_fvm(
+def solve_advection_2d(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:
     """Solve the 1D advection equation with an explicit upwind finite-volume scheme."""
 
-    dt = compute_advective_dt_2d_fvm(config)
+    dt = compute_advective_dt_2d(config)
 
     face_areas_x, face_areas_y = build_face_areas(config)
     cell_volumes = compute_cell_volumes(config)

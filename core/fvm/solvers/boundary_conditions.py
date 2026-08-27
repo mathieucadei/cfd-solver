@@ -31,7 +31,7 @@ def apply_diffusion_boundary_1d(
     u[-1] = un[-1] + dt / hx[-1] * (f_w - f_eb)
 
 
-def apply_burgers_boundary_1d_fvm(
+def apply_burgers_boundary_1d(
     u: np.ndarray,
     un: np.ndarray,
     dt: float,

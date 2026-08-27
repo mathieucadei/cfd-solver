@@ -6,12 +6,12 @@ import numpy as np
 
 from .operators import compute_diffusion_2d_term
 from .boundary_conditions import apply_diffusion_boundary_2d
-from ...setup.fvm.time_stepping import compute_diffusive_dt_2d_fvm
-from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
-from ...setup.fvm.initial_conditions import hat_initial_condition_2d_fvm
+from ..time_stepping import compute_diffusive_dt_2d
+from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
+from ..initial_conditions import hat_initial_condition_2d
 
 
-def solve_diffusion_2d_fvm(
+def solve_diffusion_2d(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:
@@ -21,7 +21,7 @@ def solve_diffusion_2d_fvm(
     face_areas_x, face_areas_y = build_face_areas(config)
     cell_volumes = compute_cell_volumes(config)   
     xc, yc = build_centers(config)
-    dt = compute_diffusive_dt_2d_fvm(config)
+    dt = compute_diffusive_dt_2d(config)
 
     u = initial_condition.copy()
 

@@ -8,7 +8,7 @@ from .mesh import build_mesh, build_h_spacing
 
 
 
-def hat_initial_condition_1d_fvm(hx_array: np.ndarray, config: object) -> np.ndarray:
+def hat_initial_condition_1d(hx_array: np.ndarray, config: object) -> np.ndarray:
     """Generate a 1D hat-function initial condition on the provided grid."""
 
     initial_condition = np.full_like(hx_array, config.u_min, dtype=float)
@@ -17,7 +17,7 @@ def hat_initial_condition_1d_fvm(hx_array: np.ndarray, config: object) -> np.nda
     return initial_condition
 
 
-def hat_initial_condition_2d_fvm(config: object) -> np.ndarray:
+def hat_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D hat-function initial condition on the provided grid."""
 
     hx, hy = build_h_spacing(config)
@@ -34,7 +34,7 @@ def hat_initial_condition_2d_fvm(config: object) -> np.ndarray:
     return initial_condition
 
 
-def hat_convective_initial_condition_2d_fvm(config: object) -> np.ndarray:
+def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D hat-function initial condition on the provided grid."""
 
     hx, hy = build_h_spacing(config)
@@ -59,7 +59,7 @@ def hat_convective_initial_condition_2d_fvm(config: object) -> np.ndarray:
     return u_initial_condition, v_initial_condition
 
 
-def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
+def laplace_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D initial condition on the provided grid for the 2D Laplace numerical solver."""
 
     p = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
@@ -67,7 +67,7 @@ def laplace_initial_condition_2d_fvm(config: object) -> np.ndarray:
     return p
 
 
-def poisson_initial_condition_2d_fvm(config: object) -> np.ndarray:
+def poisson_initial_condition_2d(config: object) -> np.ndarray:
     """Generate a 2D initial condition on the provided grid for the 2D Poisson numerical solver."""
 
     p = np.full((config.num_cells_y, config.num_cells_x), float(config.pressure_init))
@@ -79,7 +79,7 @@ def poisson_initial_condition_2d_fvm(config: object) -> np.ndarray:
     return p, b
 
 
-def cavity_flow_initial_condition_fvm(config: object) -> np.ndarray:
+def cavity_flow_initial_condition(config: object) -> np.ndarray:
     """Generate a 2D initial condition on the provided grid for the 2D cavity flow numerical solver."""
 
     u = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)
@@ -89,7 +89,7 @@ def cavity_flow_initial_condition_fvm(config: object) -> np.ndarray:
 
     return u, v, p, b
 
-def channel_flow_initial_condition_fvm(config: object) -> np.ndarray:
+def channel_flow_initial_condition(config: object) -> np.ndarray:
     """Generate a 2D initial condition on the provided grid for the 2D channel flow numerical solver."""
 
     u = np.zeros((config.num_cells_y, config.num_cells_x), dtype=float)

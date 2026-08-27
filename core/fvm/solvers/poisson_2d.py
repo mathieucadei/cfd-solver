@@ -6,11 +6,11 @@ import numpy as np
 
 # from .boundary_conditions import apply_poisson_boundary_2d
 
-from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
+from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 
 
 
-def solve_poisson_2d_fvm(
+def solve_poisson_2d(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:

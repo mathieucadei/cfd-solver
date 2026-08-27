@@ -7,11 +7,11 @@ import numpy as np
 from .operators import compute_diffusion_1d_term
 from .boundary_conditions import apply_diffusion_boundary_1d
 
-from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x
-from ...setup.fvm.time_stepping import compute_diffusive_dt_1d_fvm
+from ..mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x
+from ..time_stepping import compute_diffusive_dt_1d
 
 
-def solve_diffusion_1d_fvm(
+def solve_diffusion_1d(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:
@@ -20,7 +20,7 @@ def solve_diffusion_1d_fvm(
     hx = build_hx_spacing(config)
     dist_x = build_dist_x(config)
     xc = build_x_centers(config)
-    dt = compute_diffusive_dt_1d_fvm(config)
+    dt = compute_diffusive_dt_1d(config)
 
     u = initial_condition.copy()
 

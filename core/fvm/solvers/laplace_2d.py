@@ -5,13 +5,13 @@
 import numpy as np
 
 from .boundary_conditions import apply_laplace_boundary_2d
-from ...setup.fvm.time_stepping import compute_diffusive_dt_2d_fvm
-from ...setup.fvm.mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
-from ...setup.fvm.initial_conditions import hat_initial_condition_2d_fvm
+from ..time_stepping import compute_diffusive_dt_2d
+from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
+from ..initial_conditions import hat_initial_condition_2d
 
 
 
-def solve_laplace_2d_fvm(
+def solve_laplace_2d(
     initial_condition: np.ndarray,
     bottom_boundary: float | np.ndarray,
     top_boundary: float | np.ndarray,

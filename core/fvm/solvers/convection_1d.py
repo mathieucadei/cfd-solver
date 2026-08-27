@@ -6,20 +6,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .operators import compute_convection_1d_term
-from ...setup.fvm.time_stepping import compute_convection_dt_1d_fvm
-from ...setup.fvm.mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers
-from ...setup.fvm.initial_conditions import hat_initial_condition_1d_fvm
+from ..time_stepping import compute_convection_dt_1d
+from ..mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers
+from ..initial_conditions import hat_initial_condition_1d
 
 from dataclasses import dataclass
 
 
-def solve_convection_1d_fvm(
+def solve_convection_1d(
     initial_condition: np.ndarray,
     config: object,
 ) -> np.ndarray:
     """Solve the 1D convection equation with an explicit upwind finite-volume scheme."""
 
-    dt = compute_convection_dt_1d_fvm(config)
+    dt = compute_convection_dt_1d(config)
 
     hx = build_hx_spacing(config)
 

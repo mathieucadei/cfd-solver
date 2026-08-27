@@ -8,7 +8,7 @@ from .operators import compute_convection_2d_term, compute_diffusion_2d_term
 # from .boundary_conditions import apply_burgers_boundary_2d_fvm
 
 from ...config_fvm import BurgersEquation1DFVMConfig
-from ...setup.fvm.mesh import (
+from ..mesh import (
     build_mesh, 
     build_h_spacing, 
     build_face_areas,
@@ -16,10 +16,10 @@ from ...setup.fvm.mesh import (
     build_centers, 
     build_dist,
 )
-from ...setup.fvm.time_stepping import compute_diffusive_dt_2d_fvm
+from ..time_stepping import compute_diffusive_dt_2d
 
 
-def solve_burgers_equation_2d_fvm(
+def solve_burgers_equation_2d(
     initial_condition: np.ndarray,
     config: BurgersEquation1DFVMConfig,
 ) -> np.ndarray:
@@ -29,7 +29,7 @@ def solve_burgers_equation_2d_fvm(
     face_areas_x, face_areas_y = build_face_areas(config)
     cell_volumes = compute_cell_volumes(config)   
     xc, yc = build_centers(config)
-    dt = compute_diffusive_dt_2d_fvm(config)
+    dt = compute_diffusive_dt_2d(config)
 
     u, v = initial_condition[0].copy(), initial_condition[1].copy()
 
@@ -77,7 +77,7 @@ def solve_burgers_equation_2d_fvm(
         u[1:-1, 1:-1] = un[1:-1, 1:-1] - convection_u_term[1:-1, 1:-1] + diffusion_u_term[1:-1, 1:-1]
         v[1:-1, 1:-1] = vn[1:-1, 1:-1] - convection_v_term[1:-1, 1:-1] + diffusion_v_term[1:-1, 1:-1]
         
-        # apply_burgers_boundary_2d_fvm(
+        # apply_burgers_boundary_2d(
         #     u=u,
         #     un=un,
         #     dt=dt,
