@@ -4,7 +4,7 @@
 import numpy as np
 
 from ..grids import compute_cole_hopf_dx, compute_dx, compute_dy
-from .mesh import build_hx_spacing, build_x_centers
+from .mesh import build_hx_spacing, build_x_centers, build_h_spacing
 
 
 
@@ -46,3 +46,36 @@ def compute_cole_hopf_dt_1d_fvm(config: object) -> float:
     hx_min = np.min(hx)
     
     return hx_min * config.viscosity
+
+
+def compute_advective_dt_2d_fvm(config: object) -> float:
+    """Compute the time step for 2D advection problem."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma * min(hx_min, hy_min) / config.wavespeed
+
+
+def compute_convective_dt_2d_fvm(config: object) -> float:
+    """Compute the time step for 2D convection problem."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma / (config.u_max / hx_min + config.v_max / hy_min)
+
+
+def compute_diffusive_dt_2d_fvm(config: object) -> float:
+    """Compute the time step for 2D diffusion-dominated problems."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma * hx_min * hy_min / config.viscosity

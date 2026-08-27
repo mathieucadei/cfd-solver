@@ -157,6 +157,7 @@ def compute_advection_2d_term(
 
     return term
 
+
 def compute_convection_2d_term(
     u: np.ndarray,
     v: float,

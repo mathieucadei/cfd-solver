@@ -27,10 +27,13 @@ def solve_cavity_flow(
 
     u = initial_condition[0]
     v = initial_condition[1]
+    p = initial_condition[2]
+    b = initial_condition[3]
 
     un = np.empty_like(u)
     vn = np.empty_like(v)
-    b = initial_condition[3]
+    pn = np.empty_like(p)
+    bn = np.empty_like(b)
 
     u_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
     v_history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
@@ -44,12 +47,15 @@ def solve_cavity_flow(
 
         un = u.copy()
         vn = v.copy()
+        pn = p.copy()
+        bn = b.copy()
+
 
         convection_u_term, convection_v_term = compute_convection_2d_term(un, vn, dx, dy, config.time_step)
         diffusion_u_term = compute_diffusion_2d_term(un, dx, dy, config.time_step, config.viscosity)
         diffusion_v_term = compute_diffusion_2d_term(vn, dx, dy, config.time_step, config.viscosity)
-        b = compute_source_term_2d(b, config.density, config.time_step, un, vn, dx, dy)
-        p = compute_pressure_poisson_term(initial_condition[2], b, config.max_pseudo_iterations, dx, dy)[0]
+        b = compute_source_term_2d(bn, config.density, config.time_step, un, vn, dx, dy)
+        p = compute_pressure_poisson_term(pn, b, config.max_pseudo_iterations, dx, dy)[0]
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
                          convection_u_term[1:-1, 1:-1] -

@@ -113,7 +113,7 @@ def plot_solution_contourf(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels)
+    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels, extend='both')
 
 
     ax.set_xlabel(x_label)
@@ -408,7 +408,7 @@ def show_cavity_flow_solution(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    levels = np.linspace(np.min(p_solution_matrix), np.max(p_solution_matrix), 30)
+    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
@@ -775,6 +775,7 @@ def show_cavity_flow_solution_animation(
     scale: float = 10.0,
     x_label: str = 'x',
     y_label: str = 'y',
+    u_lid: float = None,
     case_name: str = None,
     save: bool = False,     
 ) -> None:
@@ -783,7 +784,8 @@ def show_cavity_flow_solution_animation(
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
-    levels = np.linspace(np.floor(np.min(p_solution_matrix_final)), np.ceil(np.max(p_solution_matrix_final)), 30)
+
+    levels = np.linspace(np.percentile(p_solution_matrix_final, 1), np.percentile(p_solution_matrix_final, 99), 30)
 
     initial_contourf = ax.contourf(
     x_values,
@@ -837,7 +839,13 @@ def show_cavity_flow_solution_animation(
         ax.set_xlim(0, 2)
         ax.set_ylim(0, 1)
 
-        lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
+        if u_lid is not None:
+
+            lid_velocity = u_lid
+
+        else: 
+
+            lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
 
         ax.set_title(f"Cavity Flow Solution Animation (Time step: {frame})", pad=24)
 

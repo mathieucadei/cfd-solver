@@ -81,16 +81,20 @@ def build_cole_hopf_dist_x(config: object):
     return dist_x
 
 
-def build_spacing(config: object):
+def build_h_spacing(config: object):
 
-    raw_hx = config.rx**np.arange(config.nx//2)
+    rx = 1.0 + config.expansion_ratio_x
+
+    raw_hx = rx**np.arange(config.num_cells_x//2)
     raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * 0.5 * config.lx
+    hx = raw_hx / raw_hx_sum * 0.5 * config.domain_length_x
     hx = np.append(hx, hx[::-1])
 
-    raw_hy = config.ry**np.arange(config.ny//2)
+    ry = 1.0 + config.expansion_ratio_y
+
+    raw_hy = ry**np.arange(config.num_cells_y//2)
     raw_hy_sum = np.sum(raw_hy)
-    hy = raw_hy / raw_hy_sum * 0.5 * config.ly
+    hy = raw_hy / raw_hy_sum * 0.5 * config.domain_length_y
     hy = np.append(hy, hy[::-1])
 
     return hx, hy
@@ -98,7 +102,7 @@ def build_spacing(config: object):
 
 def build_face_positions(config: object):
 
-    hx, hy = build_spacing(config)  
+    hx, hy = build_h_spacing(config)  
 
     xf = np.cumsum(hx)
     xf =  np.concatenate([[0.0], xf])
@@ -119,6 +123,35 @@ def build_centers(config: object):
     return xc, yc
 
 
+def build_face_areas(config: object):
+
+    hx, hy = build_h_spacing(config)  
+
+    area_x = np.array([hy[:]] * (config.num_cells_x)).T
+    area_y = np.array([hx[:]] * (config.num_cells_y))
+
+    return area_x, area_y
+
+
+def compute_cell_volumes(config: object):
+
+    hx, hy = build_h_spacing(config)  
+
+    V  = hy[:,None] * hx[None,:]
+
+    return V
+
+
+def build_dist(config: object):
+
+    xc, yc = build_centers(config)
+
+    dist_x = xc[1:] - xc[:-1]
+    dist_y = yc[1:] - yc[:-1]
+
+    return dist_x, dist_y
+
+
 def build_cell_ids(config: object):
 
     return np.arange(config.nx*config.ny).reshape((config.ny, config.nx))
@@ -128,7 +161,7 @@ def build_faces(config: object):
 
     ids = build_cell_ids(config)
 
-    hx, hy = build_spacing(config)
+    hx, hy = build_h_spacing(config)
     xc, yc = build_centers(config)
     
     owner_x = ids[:, :-1]
@@ -148,7 +181,7 @@ def build_faces(config: object):
 
 def build_mesh(config: object):
 
-    hx, hy = build_spacing(config)
+    hx, hy = build_h_spacing(config)
     xf, yf = build_face_positions(config)
     xc, yc = build_centers(config)
     ids = build_cell_ids(config)
@@ -171,26 +204,39 @@ def build_mesh(config: object):
 if __name__ == '__main__':
 
     @dataclass
-    class BurgersEquation1DFVMConfig:
-        """Configuration parameters for the 1D Burgers' equation."""
+    class Mesh:
         domain_length_x: float = 2.0
-        num_cells_x: int = 101
+        domain_length_y: float = 1.0
+        num_cells_x: int = 5
+        num_cells_y: int = 5
         expansion_ratio_x: float = 0.
-        max_iterations: int = 100
-        time_step: float = 0.0025
-        sigma: float = 0.2
-        viscosity: float = 0.07
-        grid_type: str = "hat"
-        hat_start: float = 0.5
-        hat_end: float = 1.0
-        u_min: float = 1.0
-        u_max: float = 2.0
+        expansion_ratio_y: float = 0.
 
-    config = BurgersEquation1DFVMConfig()
+    ax, ay = build_face_areas(Mesh)
+
+    print(ax, ay)
+
+    # @dataclass
+    # class BurgersEquation1DFVMConfig:
+    #     """Configuration parameters for the 1D Burgers' equation."""
+    #     domain_length_x: float = 2.0
+    #     num_cells_x: int = 101
+    #     expansion_ratio_x: float = 0.
+    #     max_iterations: int = 100
+    #     time_step: float = 0.0025
+    #     sigma: float = 0.2
+    #     viscosity: float = 0.07
+    #     grid_type: str = "hat"
+    #     hat_start: float = 0.5
+    #     hat_end: float = 1.0
+    #     u_min: float = 1.0
+    #     u_max: float = 2.0
+
+    # config = BurgersEquation1DFVMConfig()
     
-    hx = build_hx_spacing(config)
+    # hx = build_hx_spacing(config)
 
-    print(hx[0])
+    # print(hx[0])
 
     # @dataclass
     # class Mesh:

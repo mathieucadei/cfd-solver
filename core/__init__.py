@@ -19,6 +19,15 @@ from .config_fvm import (
     Convection1DFVMConfig,
     Diffusion1DFVMConfig,
     BurgersEquation1DFVMConfig,
+    Advection2DFVMConfig,
+    Convection2DFVMConfig,
+    Diffusion2DFVMConfig,
+    BurgersEquation2DFVMConfig,
+    Laplace2DFVMConfig,
+    SourceTermFVM,
+    Poisson2DFVMConfig,
+    CavityFlowFVMConfig,
+    ChannelFlowFVMConfig,
 )
 
 from .setup.grids import (
@@ -59,6 +68,9 @@ from .setup.fvm.mesh import (
     build_cole_hopf_x_face_positions,
     build_cole_hopf_x_centers,
     build_cole_hopf_dist_x,
+    build_h_spacing,
+    build_face_positions,
+    build_centers,
 )
 
 from .setup.fvm.time_stepping import (
@@ -66,10 +78,18 @@ from .setup.fvm.time_stepping import (
     compute_convection_dt_1d_fvm,
     compute_diffusive_dt_1d_fvm,
     compute_cole_hopf_dt_1d_fvm,
+    compute_advective_dt_2d_fvm,
+    compute_convective_dt_2d_fvm,
 )
 
 from .setup.fvm.initial_conditions import (
     hat_initial_condition_1d_fvm,
+    hat_initial_condition_2d_fvm,
+    hat_convective_initial_condition_2d_fvm,
+    laplace_initial_condition_2d_fvm,
+    poisson_initial_condition_2d_fvm,
+    cavity_flow_initial_condition_fvm,
+    channel_flow_initial_condition_fvm,
 )
 
 from .numerics import (
@@ -101,6 +121,27 @@ from .numerics.fvm.diffusion_1d import (
 
 from .numerics.fvm.burgers_equation_1d import solve_burgers_equation_1d_fvm
 
+from .numerics.fvm.advection_2d import (
+    solve_advection_2d_fvm,
+)
+
+from .numerics.fvm.convection_2d import (
+    solve_convection_2d_fvm,
+)
+
+from .numerics.fvm.diffusion_2d import (
+    solve_diffusion_2d_fvm,
+)
+
+from .numerics.fvm.burgers_equation_2d import solve_burgers_equation_2d_fvm
+
+from .numerics.fvm.laplace_2d import solve_laplace_2d_fvm
+
+from .numerics.fvm.poisson_2d import solve_poisson_2d_fvm
+
+from .numerics.fvm.cavity_flow import solve_cavity_flow_fvm
+
+from .numerics.fvm.channel_flow import solve_channel_flow_fvm
 
 from .signal_processing import (
     compute_coefficients,

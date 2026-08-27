@@ -8,17 +8,17 @@ Currently implemented:
 
 * 1D linear advection with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff finite-difference schemes
 * 1D linear advection with an explicit upwind finite-volume method
-* 2D linear advection
+* 2D linear advection, with finite-difference and explicit upwind finite-volume methods
 * 1D nonlinear convection / inviscid Burgers with upwind, Lax-Friedrichs, Richtmyer, one-step and two-step Lax-Wendroff, MacCormack, and implicit Beam-Warming schemes, including conservative flux-form variants
 * 1D nonlinear convection with an explicit finite-volume method
-* 2D nonlinear convection
-* 1D and 2D diffusion, including a 1D finite-volume diffusion solver
-* 1D and 2D Burgers equation, including a 1D finite-volume Burgers solver
-* 2D Laplace equation
-* 2D Poisson equation with configurable source terms
-* 2D lid-driven cavity flow using a pressure Poisson solve
-* 2D pressure-driven channel flow with periodic x-boundaries
-* uniform grid generation
+* 2D nonlinear convection, with finite-difference and finite-volume methods
+* 1D and 2D diffusion, with finite-difference and finite-volume methods
+* 1D and 2D Burgers equation, with finite-difference and finite-volume methods
+* 2D Laplace equation, with finite-difference and finite-volume methods
+* 2D Poisson equation with configurable source terms, with finite-difference and finite-volume methods
+* 2D lid-driven cavity flow using a pressure Poisson solve, with finite-difference and finite-volume methods
+* 2D pressure-driven channel flow with periodic x-boundaries, with finite-difference and finite-volume methods
+* uniform grid generation for finite differences, and cell-centred mesh generation with face areas, cell volumes and centre-to-centre distances for finite volumes
 * hat-function, Heaviside-style step, and Cole-Hopf initial conditions
 * explicit finite-difference time-marching solvers
 * iterative pressure/potential solves using L1 convergence or fixed iteration limits
@@ -32,7 +32,7 @@ core/config_fvm.py          finite-volume simulation dataclasses
 core/setup/                 finite-difference grids, time steps, and initial conditions
 core/setup/fvm/             finite-volume mesh, time-stepping, and initial-condition helpers
 core/numerics/              finite-difference solvers
-core/numerics/fvm/          finite-volume 1D solvers
+core/numerics/fvm/          finite-volume 1D and 2D solvers
 core/analytical/            analytical reference solutions
 post_processing/            contour, surface, quiver, and animation helpers
 run_*.py                    executable examples
@@ -63,6 +63,14 @@ run_*.py                    executable examples
 ### 2D pressure-driven channel flow
 
 ![2D channel flow](docs/images/channel_flow_solution.gif)
+
+### 2D lid-driven cavity flow, finite volume
+
+![2D cavity flow FVM](docs/images/cavity_flow_fvm_solution.gif)
+
+### 2D pressure-driven channel flow, finite volume
+
+![2D channel flow FVM](docs/images/channel_flow_fvm_solution.gif)
 
 ## Implemented models
 
@@ -152,7 +160,7 @@ The current solvers model:
 
   d^2p/dx^2 + d^2p/dy^2 = b
 
-  using explicit finite differences for the velocity equations and an iterative pressure Poisson solve.
+  using explicit finite differences for the velocity equations and an iterative pressure Poisson solve. A finite-volume variant is also included, using conservative face fluxes for the convective terms, Green-Gauss gradients for the pressure, and a cell-centred pressure Poisson solve with zero-gradient walls and a Dirichlet lid.
 
 * the 2D incompressible pressure-driven channel flow problem:
 
@@ -162,7 +170,7 @@ The current solvers model:
 
   d^2p/dx^2 + d^2p/dy^2 = b
 
-  using explicit finite differences for the velocity equations, an iterative pressure Poisson solve, periodic boundary conditions in x, and no-slip walls at y = 0 and y = Ly.
+  using explicit finite differences for the velocity equations, an iterative pressure Poisson solve, periodic boundary conditions in x, and no-slip walls at y = 0 and y = Ly. A finite-volume variant is also included, with wrap-around face fluxes on the periodic boundaries and the driving force applied to every cell.
 
 ## Validation and numerical experiments
 
@@ -196,23 +204,31 @@ python run_advection_1d.py
 python run_advection_1d_fvm.py
 python run_advection_1d_scheme_comparison.py
 python run_advection_2d.py
+python run_advection_2d_fvm.py
 python run_convection_1d.py
 python run_convection_1d_fvm.py
 python run_convection_1d_scheme_comparison.py
 python run_inviscid_burgers_scheme_comparison.py
 python run_convection_2d.py
+python run_convection_2d_fvm.py
 python run_diffusion_1d.py
 python run_diffusion_1d_fvm.py
 python run_diffusion_1d_vs_heat.py
 python run_diffusion_1d_fvm_vs_heat.py
 python run_diffusion_2d.py
+python run_diffusion_2d_fvm.py
 python run_burgers_equation_1d.py
 python run_burgers_equation_1d_fvm.py
 python run_burgers_equation_1d_vs_cole_hopf.py
 python run_burgers_equation_1d_fvm_vs_cole_hopf.py
 python run_burgers_equation_2d.py
+python run_burgers_equation_2d_fvm.py
 python run_laplace_2d.py
+python run_laplace_2d_fvm.py
 python run_poisson_2d.py
+python run_poisson_2d_fvm.py
 python run_cavity_flow.py
+python run_cavity_flow_fvm.py
 python run_channel_flow.py
+python run_channel_flow_fvm.py
 ```
