@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from ..config import BurgersEquation1DConfig
+from ..fdm.config import BurgersEquation1DConfig
 
 from ..setup.time_stepping import compute_cole_hopf_dt_1d
 

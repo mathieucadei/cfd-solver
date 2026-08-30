@@ -4,12 +4,12 @@
 
 import numpy as np
 
-from .operators import compute_diffusion_1d_term
-from .boundary_conditions import apply_diffusion_boundary_1d
+from ..operators import compute_diffusion_1d_term
+from ..boundary_conditions import apply_diffusion_boundary_1d
 
 from ..config import Diffusion1DConfig
-from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_diffusive_dt_1d
+from ..grids import compute_dx
+from ..time_stepping import compute_diffusive_dt_1d
 
 
 def solve_diffusion_1d(

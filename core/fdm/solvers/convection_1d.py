@@ -3,11 +3,11 @@
 
 import numpy as np
 
-from .operators import compute_convection_1d_term
+from ..operators import compute_convection_1d_term
 
 from ..config import Convection1DConfig
-from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_convective_dt_1d
+from ..grids import compute_dx
+from ..time_stepping import compute_convective_dt_1d
 
 
 

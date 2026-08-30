@@ -4,8 +4,8 @@
 
 import numpy as np
 
-from .operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
-from .boundary_conditions import apply_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_cavity_flow_boundary_2d
+from ..operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
+from ..boundary_conditions import apply_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_cavity_flow_boundary_2d
 
 from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 

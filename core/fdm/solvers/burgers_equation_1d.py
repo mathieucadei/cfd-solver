@@ -4,12 +4,12 @@
 
 import numpy as np
 
-from .operators import compute_convection_1d_term, compute_diffusion_1d_term
-from .boundary_conditions import apply_burgers_boundary_1d
+from ..operators import compute_convection_1d_term, compute_diffusion_1d_term
+from ..boundary_conditions import apply_burgers_boundary_1d
 
 from ..config import BurgersEquation1DConfig
-from ..setup.grids import compute_cole_hopf_dx, compute_dx
-from ..setup.time_stepping import compute_cole_hopf_dt_1d, compute_diffusive_dt_1d
+from ..grids import compute_cole_hopf_dx, compute_dx
+from ..time_stepping import compute_cole_hopf_dt_1d, compute_diffusive_dt_1d
 
 
 

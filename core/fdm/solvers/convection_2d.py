@@ -4,12 +4,12 @@
 
 import numpy as np
 
-from .operators import compute_convection_2d_term
-from .boundary_conditions import apply_convection_boundary_2d
+from ..operators import compute_convection_2d_term
+from ..boundary_conditions import apply_convection_boundary_2d
 
 from ..config import Convection2DConfig
-from ..setup.grids import compute_dx, compute_dy
-from ..setup.time_stepping import compute_convective_dt_2d
+from ..grids import compute_dx, compute_dy
+from ..time_stepping import compute_convective_dt_2d
 
 
 

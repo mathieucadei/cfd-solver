@@ -4,11 +4,11 @@
 
 import numpy as np
 
-from .operators import compute_advection_1d_term
+from ..operators import compute_advection_1d_term
 
 from ..config import Advection1DConfig
-from ..setup.grids import compute_dx
-from ..setup.time_stepping import compute_advective_dt_1d
+from ..grids import compute_dx
+from ..time_stepping import compute_advective_dt_1d
 
 
 

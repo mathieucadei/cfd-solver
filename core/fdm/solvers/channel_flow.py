@@ -4,11 +4,11 @@
 
 import numpy as np
 
-from .operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
-from .boundary_conditions import apply_periodic_source_boundary_2d, apply_periodic_pressure_poisson_boundary_2d, apply_periodic_channel_flow_boundary_2d
+from ..operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_pressure_poisson_term
+from ..boundary_conditions import apply_periodic_source_boundary_2d, apply_periodic_pressure_poisson_boundary_2d, apply_periodic_channel_flow_boundary_2d
 
 from ..config import ChannelFlowConfig
-from ..setup.grids import compute_dx, compute_dy
+from ..grids import compute_dx, compute_dy
 
 
 

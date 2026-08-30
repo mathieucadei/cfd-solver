@@ -4,7 +4,7 @@
 
 import numpy as np
 
-# from .boundary_conditions import apply_poisson_boundary_2d
+# from ..boundary_conditions import apply_poisson_boundary_2d
 
 from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 

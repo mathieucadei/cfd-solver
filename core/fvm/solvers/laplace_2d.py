@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from .boundary_conditions import apply_laplace_boundary_2d
+from ..boundary_conditions import apply_laplace_boundary_2d
 from ..time_stepping import compute_diffusive_dt_2d
 from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 from ..initial_conditions import hat_initial_condition_2d

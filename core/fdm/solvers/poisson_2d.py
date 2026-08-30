@@ -4,11 +4,11 @@
 
 import numpy as np
 
-from .operators import compute_laplace_2d_term
-from .boundary_conditions import apply_poisson_boundary_2d
+from ..operators import compute_laplace_2d_term
+from ..boundary_conditions import apply_poisson_boundary_2d
 
 from ..config import Laplace2DConfig
-from ..setup.grids import compute_dx, compute_dy
+from ..grids import compute_dx, compute_dy
 
 
 

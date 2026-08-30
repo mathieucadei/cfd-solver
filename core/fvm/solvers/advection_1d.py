@@ -5,7 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .operators import compute_advection_1d_term
+from ..operators import compute_advection_1d_term
 from ..time_stepping import compute_advective_dt_1d
 from ..mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers
 from ..initial_conditions import hat_initial_condition_1d

@@ -4,12 +4,12 @@
 
 import numpy as np
 
-from .operators import compute_advection_2d_term
-from .boundary_conditions import apply_advection_boundary_2d
+from ..operators import compute_advection_2d_term
+from ..boundary_conditions import apply_advection_boundary_2d
 
 from ..config import Advection2DConfig
-from ..setup.grids import compute_dx, compute_dy
-from ..setup.time_stepping import compute_advective_dt_2d
+from ..grids import compute_dx, compute_dy
+from ..time_stepping import compute_advective_dt_2d
 
 
 

@@ -4,8 +4,8 @@
 
 import numpy as np
 
-from .operators import compute_convection_1d_term, compute_diffusion_1d_term
-from .boundary_conditions import apply_burgers_boundary_1d
+from ..operators import compute_convection_1d_term, compute_diffusion_1d_term
+from ..boundary_conditions import apply_burgers_boundary_1d
 
 from ..mesh import (
     build_mesh, 

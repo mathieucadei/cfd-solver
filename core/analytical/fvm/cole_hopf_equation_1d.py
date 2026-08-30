@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from ...config_fvm import BurgersEquation1DFVMConfig
+from ...fvm.config import BurgersEquation1DFVMConfig
 
 from ...setup.fvm.time_stepping import compute_cole_hopf_dt_1d_fvm
 

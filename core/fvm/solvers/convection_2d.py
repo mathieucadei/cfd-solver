@@ -5,8 +5,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .operators import compute_convection_2d_term
-from .boundary_conditions import apply_convection_boundary_2d
+from ..operators import compute_convection_2d_term
+from ..boundary_conditions import apply_convection_boundary_2d
 from ..time_stepping import compute_convective_dt_2d
 from ..mesh import build_mesh, build_h_spacing, build_x_face_positions, build_x_centers, build_face_areas, compute_cell_volumes
 from ..initial_conditions import hat_initial_condition_2d

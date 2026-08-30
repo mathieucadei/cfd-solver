@@ -4,8 +4,8 @@
 
 import numpy as np
 
-from .operators import compute_diffusion_1d_term
-from .boundary_conditions import apply_diffusion_boundary_1d
+from ..operators import compute_diffusion_1d_term
+from ..boundary_conditions import apply_diffusion_boundary_1d
 
 from ..mesh import build_mesh, build_hx_spacing, build_x_face_positions, build_x_centers, build_dist_x
 from ..time_stepping import compute_diffusive_dt_1d
