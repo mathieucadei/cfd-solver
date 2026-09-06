@@ -7,7 +7,6 @@ import numpy as np
 from ..operators import compute_convection_2d_term, compute_diffusion_2d_term
 # from .boundary_conditions import apply_burgers_boundary_2d_fvm
 
-# from ..config import BurgersEquation1DFVMConfig
 from ..mesh import (
     build_mesh, 
     build_h_spacing, 

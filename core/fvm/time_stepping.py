@@ -17,7 +17,7 @@ def compute_advective_dt_1d(config: object) -> float:
     return config.sigma * hx_min / config.wavespeed
 
 
-def compute_convection_dt_1d(config: object) -> float:
+def compute_convective_dt_1d(config: object) -> float:
     """Compute the time step for 1D convection problem."""
 
     hx = build_hx_spacing(config)
