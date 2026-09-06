@@ -4,14 +4,7 @@
 
 import numpy as np
 
-from core import (
-    SourceTerm,
-    Poisson2DConfig,
-    poisson_initial_condition_2d,
-    make_x_grid,
-    make_y_grid,
-    solve_poisson_2d,
-)
+from core import fdm
 
 from post_processing import (
     show_solution_2d_animation,
@@ -33,8 +26,8 @@ num_grid_points_y: int = 31
 max_iterations: int = 100
 pressure_init: float = 0.0
 source_terms=[
-    SourceTerm(x=0.25, y=0.25, value=100.0),
-    SourceTerm(x=0.75, y=0.75, value=-100.0),
+    fdm.SourceTerm(x=0.25, y=0.25, value=100.0),
+    fdm.SourceTerm(x=0.75, y=0.75, value=-100.0),
 ]
 l1_norm_target: float = 1e-4
 
@@ -50,7 +43,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-poisson_2d_config = Poisson2DConfig(
+poisson_2d_config = fdm.Poisson2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -64,19 +57,19 @@ poisson_2d_config = Poisson2DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(poisson_2d_config)
-y_array = make_y_grid(poisson_2d_config)
+x_array = fdm.make_x_grid(poisson_2d_config)
+y_array = fdm.make_y_grid(poisson_2d_config)
 
 
 # Initialize the initial condition
 
-initial_condition = poisson_initial_condition_2d(poisson_2d_config)
+initial_condition = fdm.poisson_initial_condition_2d(poisson_2d_config)
 
 
 
 # Solve the poisson equation
 
-solution_matrix = solve_poisson_2d(initial_condition, config=poisson_2d_config)
+solution_matrix = fdm.solve_poisson_2d(initial_condition, config=poisson_2d_config)
 
 # print(type(solution_matrix))
 

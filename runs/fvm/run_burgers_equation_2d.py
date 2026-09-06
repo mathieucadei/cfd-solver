@@ -5,14 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    BurgersEquation2DFVMConfig,
-    hat_convective_initial_condition_2d_fvm,
-    build_h_spacing,
-    build_face_positions,
-    build_centers,
-    solve_burgers_equation_2d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_uv_2d_animations,
@@ -53,7 +46,7 @@ save = False
 
 # Create the configuration object
 
-burgers_equation_2d_config = BurgersEquation2DFVMConfig(
+burgers_equation_2d_config = fvm.BurgersEquation2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_cells_x=num_cells_x,
@@ -76,20 +69,20 @@ burgers_equation_2d_config = BurgersEquation2DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array, hy_array = build_h_spacing(burgers_equation_2d_config)
-xc_array, yc_array = build_centers(burgers_equation_2d_config)
+hx_array, hy_array = fvm.build_h_spacing(burgers_equation_2d_config)
+xc_array, yc_array = fvm.build_centers(burgers_equation_2d_config)
 time_array = np.arange(0, burgers_equation_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_convective_initial_condition_2d_fvm(burgers_equation_2d_config)
+initial_condition = fvm.hat_convective_initial_condition_2d(burgers_equation_2d_config)
 
 
 
 # Solve the advection equation
 
-u_solution_matrix, v_solution_matrix = solve_burgers_equation_2d_fvm(initial_condition, burgers_equation_2d_config)
+u_solution_matrix, v_solution_matrix = fvm.solve_burgers_equation_2d(initial_condition, burgers_equation_2d_config)
 
 u_solution_final_x, v_solution_final_x = u_solution_matrix[-1, :, :], v_solution_matrix[-1, :, :]
 
@@ -97,7 +90,7 @@ u_solution_final_y, v_solution_final_y = u_solution_final_x.T, v_solution_final_
 
 u_solution_matrix_final, v_solution_matrix_final = u_solution_matrix[-1], v_solution_matrix[-1]
 
-xf, yf = build_face_positions(burgers_equation_2d_config)
+xf, yf = fvm.build_face_positions(burgers_equation_2d_config)
 
 
 

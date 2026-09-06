@@ -8,13 +8,7 @@ from matplotlib.animation import FuncAnimation
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    CavityFlowConfig,
-    cavity_flow_initial_condition,
-    make_x_grid,
-    make_y_grid,
-    solve_cavity_flow,
-)
+from core import fdm
 
 from post_processing import (
     show_cavity_flow_solution,
@@ -49,7 +43,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-cavity_flow_config = CavityFlowConfig(
+cavity_flow_config = fdm.CavityFlowConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -65,19 +59,19 @@ cavity_flow_config = CavityFlowConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(cavity_flow_config)
-y_array = make_y_grid(cavity_flow_config)
+x_array = fdm.make_x_grid(cavity_flow_config)
+y_array = fdm.make_y_grid(cavity_flow_config)
 
 
 # Initialize the initial condition
 
-initial_condition = cavity_flow_initial_condition(cavity_flow_config)
+initial_condition = fdm.cavity_flow_initial_condition(cavity_flow_config)
 
 
 
 # Solve the poisson equation
 
-solution_matrix = solve_cavity_flow(initial_condition, config=cavity_flow_config)
+solution_matrix = fdm.solve_cavity_flow(initial_condition, config=cavity_flow_config)
 
 u_solution_matrix = solution_matrix[0]
 

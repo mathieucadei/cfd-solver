@@ -7,14 +7,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    BurgersEquation1DFVMConfig,
-    hat_initial_condition_1d_fvm,
-    build_hx_spacing,
-    build_x_face_positions,
-    build_x_centers,
-    solve_burgers_equation_1d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_1d_animation,
@@ -51,7 +44,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-burgers_1d_config = BurgersEquation1DFVMConfig(
+burgers_1d_config = fvm.BurgersEquation1DConfig(
     domain_length_x=domain_length_x,
     num_cells_x=num_cells_x,
     expansion_ratio_x=expansion_ratio_x,
@@ -69,23 +62,23 @@ burgers_1d_config = BurgersEquation1DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array = build_hx_spacing(burgers_1d_config)
-xc_array = build_x_centers(burgers_1d_config)
+hx_array = fvm.build_hx_spacing(burgers_1d_config)
+xc_array = fvm.build_x_centers(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d_fvm(hx_array, burgers_1d_config)
+initial_condition = fvm.hat_initial_condition_1d(hx_array, burgers_1d_config)
 
 
 
 # Solve the Burgers equation
 
-solution_history = solve_burgers_equation_1d_fvm(initial_condition, burgers_1d_config)
+solution_history = fvm.solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 solution_final = solution_history[-1]
 
-xf = build_x_face_positions(burgers_1d_config)
+xf = fvm.build_x_face_positions(burgers_1d_config)
 
 
 

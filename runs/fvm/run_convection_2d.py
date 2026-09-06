@@ -5,14 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    Convection2DFVMConfig,
-    hat_convective_initial_condition_2d_fvm,
-    build_h_spacing,
-    build_face_positions,
-    build_centers,
-    solve_convection_2d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_uv_surfaces,
@@ -53,7 +46,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-convection_2d_config = Convection2DFVMConfig(
+convection_2d_config = fvm.Convection2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_cells_x=num_cells_x,
@@ -73,20 +66,20 @@ convection_2d_config = Convection2DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array, hy_array = build_h_spacing(convection_2d_config)
-xc_array, yc_array = build_centers(convection_2d_config)
+hx_array, hy_array = fvm.build_h_spacing(convection_2d_config)
+xc_array, yc_array = fvm.build_centers(convection_2d_config)
 time_array = np.arange(0, convection_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_convective_initial_condition_2d_fvm(convection_2d_config)
+initial_condition = fvm.hat_convective_initial_condition_2d(convection_2d_config)
 
 
 
 # Solve the advection equation
 
-u_solution_matrix, v_solution_matrix = solve_convection_2d_fvm(initial_condition, convection_2d_config)
+u_solution_matrix, v_solution_matrix = fvm.solve_convection_2d(initial_condition, convection_2d_config)
 
 # u_solution_final, v_solution_final = u_solution_matrix[-1, ...], v_solution_matrix[-1, ...]
 
@@ -96,7 +89,7 @@ u_solution_final_y, v_solution_final_y = u_solution_final_x.T, v_solution_final_
 
 u_solution_matrix_final, v_solution_matrix_final = u_solution_matrix[-1], v_solution_matrix[-1]
 
-xf, yf = build_face_positions(convection_2d_config)
+xf, yf = fvm.build_face_positions(convection_2d_config)
 
 
 

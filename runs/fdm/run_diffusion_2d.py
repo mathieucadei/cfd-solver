@@ -4,13 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Diffusion2DConfig,
-    hat_initial_condition_2d,
-    make_x_grid,
-    make_y_grid,
-    solve_diffusion_2d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_2d_animation,
     show_solution_contour_map,
@@ -50,7 +45,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-diffusion_2d_config = Diffusion2DConfig(
+diffusion_2d_config = fdm.Diffusion2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -69,20 +64,20 @@ diffusion_2d_config = Diffusion2DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(diffusion_2d_config)
-y_array = make_y_grid(diffusion_2d_config)
+x_array = fdm.make_x_grid(diffusion_2d_config)
+y_array = fdm.make_y_grid(diffusion_2d_config)
 time_array = np.arange(0, diffusion_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_2d(diffusion_2d_config)
+initial_condition = fdm.hat_initial_condition_2d(diffusion_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_diffusion_2d(initial_condition, diffusion_2d_config)
+solution_matrix = fdm.solve_diffusion_2d(initial_condition, diffusion_2d_config)
 
 solution_final = solution_matrix[-1, ...]
 

@@ -5,14 +5,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    Laplace2DFVMConfig,
-    laplace_initial_condition_2d_fvm,
-    build_h_spacing,
-    build_face_positions,
-    build_centers,
-    solve_laplace_2d_fvm,
-)
+from core import fvm
+
 from post_processing import (
     show_solution_2d_animation,
     show_solution_overview,
@@ -42,7 +36,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-laplace_2d_config = Laplace2DFVMConfig(
+laplace_2d_config = fvm.Laplace2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_cells_x=num_cells_x,
@@ -53,13 +47,13 @@ laplace_2d_config = Laplace2DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array, hy_array = build_h_spacing(laplace_2d_config)
-xc_array, yc_array = build_centers(laplace_2d_config)
+hx_array, hy_array = fvm.build_h_spacing(laplace_2d_config)
+xc_array, yc_array = fvm.build_centers(laplace_2d_config)
 
 
 # Initialize the initial condition
 
-initial_condition = laplace_initial_condition_2d_fvm(laplace_2d_config)
+initial_condition = fvm.laplace_initial_condition_2d(laplace_2d_config)
 bottom_boundary = np.zeros_like(initial_condition[0, :])
 top_boundary = np.zeros_like(initial_condition[-1, :])
 right_boundary = yc_array
@@ -69,7 +63,7 @@ left_boundary = np.zeros_like(initial_condition[:, 0])
 
 # Solve the advection equation
 
-solution_matrix = solve_laplace_2d_fvm(initial_condition, bottom_boundary=bottom_boundary, top_boundary=top_boundary, right_boundary=right_boundary, left_boundary=left_boundary, config=laplace_2d_config)
+solution_matrix = fvm.solve_laplace_2d(initial_condition, bottom_boundary=bottom_boundary, top_boundary=top_boundary, right_boundary=right_boundary, left_boundary=left_boundary, config=laplace_2d_config)
 
 # print(type(solution_matrix))
 

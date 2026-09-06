@@ -5,14 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    Diffusion2DFVMConfig,
-    hat_initial_condition_2d_fvm,
-    build_h_spacing,
-    build_face_positions,
-    build_centers,
-    solve_diffusion_2d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_2d_animation,
@@ -52,7 +45,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-diffusion_2d_config = Diffusion2DFVMConfig(
+diffusion_2d_config = fvm.Diffusion2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_cells_x=num_cells_x,
@@ -73,20 +66,20 @@ diffusion_2d_config = Diffusion2DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array, hy_array = build_h_spacing(diffusion_2d_config)
-xc_array, yc_array = build_centers(diffusion_2d_config)
+hx_array, hy_array = fvm.build_h_spacing(diffusion_2d_config)
+xc_array, yc_array = fvm.build_centers(diffusion_2d_config)
 time_array = np.arange(0, diffusion_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_2d_fvm(diffusion_2d_config)
+initial_condition = fvm.hat_initial_condition_2d(diffusion_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_diffusion_2d_fvm(initial_condition, diffusion_2d_config)
+solution_matrix = fvm.solve_diffusion_2d(initial_condition, diffusion_2d_config)
 
 solution_final = solution_matrix[-1, ...]
 
@@ -94,7 +87,7 @@ solution_final_x = solution_matrix[-1, :, :]
 
 solution_final_y = solution_final_x.T
 
-xf, yf = build_face_positions(diffusion_2d_config)
+xf, yf = fvm.build_face_positions(diffusion_2d_config)
 
 # Post-processing
 

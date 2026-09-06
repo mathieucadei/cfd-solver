@@ -6,12 +6,8 @@ from pathlib import Path
 
 import numpy as np
 
-from core import (
-    BurgersEquation1DConfig,
-    hat_initial_condition_1d,
-    make_x_grid,
-    solve_burgers_equation_1d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,
@@ -49,7 +45,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-burgers_1d_config = BurgersEquation1DConfig(
+burgers_1d_config = fdm.BurgersEquation1DConfig(
     domain_length_x=domain_length_x,
     num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
@@ -66,18 +62,18 @@ burgers_1d_config = BurgersEquation1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(burgers_1d_config)
+x_array = fdm.make_x_grid(burgers_1d_config)
 time_array = np.arange(0, burgers_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d(x_array, burgers_1d_config)
+initial_condition = fdm.hat_initial_condition_1d(x_array, burgers_1d_config)
 
 
 
 # Solve the Burgers equation
 
-solution_history = solve_burgers_equation_1d(initial_condition, burgers_1d_config)
+solution_history = fdm.solve_burgers_equation_1d(initial_condition, burgers_1d_config)
 
 
 

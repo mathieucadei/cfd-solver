@@ -4,13 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Convection2DConfig,
-    hat_convective_initial_condition_2d,
-    make_x_grid,
-    make_y_grid,
-    solve_convection_2d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_uv_2d_animations, 
     show_solution_uv_surfaces,
@@ -48,7 +43,7 @@ save = False
 
 # Create the configuration object
 
-convection_2d_config = Convection2DConfig(
+convection_2d_config = fdm.Convection2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -69,20 +64,20 @@ convection_2d_config = Convection2DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(convection_2d_config)
-y_array = make_y_grid(convection_2d_config)
+x_array = fdm.make_x_grid(convection_2d_config)
+y_array = fdm.make_y_grid(convection_2d_config)
 time_array = np.arange(0, convection_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_convective_initial_condition_2d(convection_2d_config)
+initial_condition = fdm.hat_convective_initial_condition_2d(convection_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_convection_2d(initial_condition, convection_2d_config)
+solution_matrix = fdm.solve_convection_2d(initial_condition, convection_2d_config)
 
 u_solution_matrix = solution_matrix[0]
 

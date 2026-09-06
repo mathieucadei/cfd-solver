@@ -11,13 +11,7 @@ import math
 from matplotlib import cm
 import matplotlib.pyplot as plt
 
-from core import (
-    ChannelFlowConfig,
-    channel_flow_initial_condition,
-    make_x_grid,
-    make_y_grid,
-    solve_channel_flow,
-)
+from core import fdm
 
 from post_processing import (
     show_channel_flow_solution,
@@ -53,7 +47,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-channel_flow_config = ChannelFlowConfig(
+channel_flow_config = fdm.ChannelFlowConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -70,19 +64,19 @@ channel_flow_config = ChannelFlowConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(channel_flow_config)
-y_array = make_y_grid(channel_flow_config)
+x_array = fdm.make_x_grid(channel_flow_config)
+y_array = fdm.make_y_grid(channel_flow_config)
 
 
 # Initialize the initial condition
 
-initial_condition = channel_flow_initial_condition(channel_flow_config)
+initial_condition = fdm.channel_flow_initial_condition(channel_flow_config)
 
 
 
 # Solve the poisson equation
 
-solution_matrix = solve_channel_flow(initial_condition, config=channel_flow_config)
+solution_matrix = fdm.solve_channel_flow(initial_condition, config=channel_flow_config)
 
 u_solution_matrix = solution_matrix[0]
 

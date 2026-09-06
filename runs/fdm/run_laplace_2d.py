@@ -4,13 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Laplace2DConfig,
-    laplace_initial_condition_2d,
-    make_x_grid,
-    make_y_grid,
-    solve_laplace_2d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_2d_animation,
     show_solution_contour_map,
@@ -42,7 +37,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-laplace_2d_config = Laplace2DConfig(
+laplace_2d_config = fdm.Laplace2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -53,13 +48,13 @@ laplace_2d_config = Laplace2DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(laplace_2d_config)
-y_array = make_y_grid(laplace_2d_config)
+x_array = fdm.make_x_grid(laplace_2d_config)
+y_array = fdm.make_y_grid(laplace_2d_config)
 
 
 # Initialize the initial condition
 
-initial_condition = laplace_initial_condition_2d(laplace_2d_config)
+initial_condition = fdm.laplace_initial_condition_2d(laplace_2d_config)
 bottom_boundary = initial_condition[1, :]
 top_boundary = initial_condition[-2, :] 
 right_boundary = y_array
@@ -69,7 +64,7 @@ left_boundary = 0
 
 # Solve the advection equation
 
-solution_matrix = solve_laplace_2d(initial_condition, bottom_boundary=bottom_boundary, top_boundary=top_boundary, right_boundary=right_boundary, left_boundary=left_boundary, config=laplace_2d_config)
+solution_matrix = fdm.solve_laplace_2d(initial_condition, bottom_boundary=bottom_boundary, top_boundary=top_boundary, right_boundary=right_boundary, left_boundary=left_boundary, config=laplace_2d_config)
 
 # print(type(solution_matrix))
 

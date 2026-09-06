@@ -4,12 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Diffusion1DConfig,
-    hat_initial_condition_1d,
-    make_x_grid,
-    solve_diffusion_1d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,
@@ -45,7 +41,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-diffusion_1d_config = Diffusion1DConfig(
+diffusion_1d_config = fdm.Diffusion1DConfig(
     domain_length_x=domain_length_x,
     num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
@@ -60,19 +56,19 @@ diffusion_1d_config = Diffusion1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(diffusion_1d_config)
+x_array = fdm.make_x_grid(diffusion_1d_config)
 time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d(x_array, diffusion_1d_config)
+initial_condition = fdm.hat_initial_condition_1d(x_array, diffusion_1d_config)
 
 
 
 # Solve the diffusion equation
 
-solution_history = solve_diffusion_1d(initial_condition, diffusion_1d_config)
+solution_history = fdm.solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 
 

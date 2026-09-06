@@ -4,13 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Advection2DConfig,
-    hat_initial_condition_2d,
-    make_x_grid,
-    make_y_grid,
-    solve_advection_2d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_2d_animation,
     show_solution_contour_map,
@@ -50,7 +45,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-advection_2d_config = Advection2DConfig(
+advection_2d_config = fdm.Advection2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_grid_points_x=num_grid_points_x,
@@ -69,20 +64,20 @@ advection_2d_config = Advection2DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(advection_2d_config)
-y_array = make_y_grid(advection_2d_config)
+x_array = fdm.make_x_grid(advection_2d_config)
+y_array = fdm.make_y_grid(advection_2d_config)
 time_array = np.arange(0, advection_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_2d(advection_2d_config)
+initial_condition = fdm.hat_initial_condition_2d(advection_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_advection_2d(initial_condition, advection_2d_config)
+solution_matrix = fdm.solve_advection_2d(initial_condition, advection_2d_config)
 
 solution_final = solution_matrix[-1, ...]
 

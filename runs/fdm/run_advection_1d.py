@@ -4,12 +4,8 @@
 
 import numpy as np
 
-from core import (
-    Advection1DConfig,
-    hat_initial_condition_1d,
-    make_x_grid,
-    solve_advection_1d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,
@@ -46,7 +42,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-advection_1d_config = Advection1DConfig(
+advection_1d_config = fdm.Advection1DConfig(
     domain_length_x=domain_length_x,
     num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
@@ -62,19 +58,19 @@ advection_1d_config = Advection1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(advection_1d_config)
+x_array = fdm.make_x_grid(advection_1d_config)
 time_array = np.arange(0, advection_1d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d(x_array, advection_1d_config)
+initial_condition = fdm.hat_initial_condition_1d(x_array, advection_1d_config)
 
 
 
 # Solve the advection equation
 
-solution_history = solve_advection_1d(initial_condition, advection_1d_config)
+solution_history = fdm.solve_advection_1d(initial_condition, advection_1d_config)
 
 
 

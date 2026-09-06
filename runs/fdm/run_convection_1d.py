@@ -6,12 +6,8 @@ from pathlib import Path
 
 import numpy as np
 
-from core import (
-    Convection1DConfig,
-    hat_initial_condition_1d,
-    make_x_grid,
-    solve_convection_1d,
-)
+from core import fdm
+
 from post_processing import (
     show_solution_1d_animation,
     show_solution_contour_map,
@@ -46,7 +42,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-convection_1d_config = Convection1DConfig(
+convection_1d_config = fdm.Convection1DConfig(
     domain_length_x=domain_length_x,
     num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
@@ -60,18 +56,18 @@ convection_1d_config = Convection1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(convection_1d_config)
+x_array = fdm.make_x_grid(convection_1d_config)
 time_array = np.arange(0, convection_1d_config.max_iterations + 1)
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d(x_array, convection_1d_config)
+initial_condition = fdm.hat_initial_condition_1d(x_array, convection_1d_config)
 
 
 
 # Solve the convection equation
 
-solution_history = solve_convection_1d(initial_condition, convection_1d_config)
+solution_history = fdm.solve_convection_1d(initial_condition, convection_1d_config)
 
 
 

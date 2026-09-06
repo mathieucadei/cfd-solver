@@ -5,14 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    Advection1DFVMConfig,
-    hat_initial_condition_1d_fvm,
-    build_hx_spacing,
-    build_x_face_positions,
-    build_x_centers,
-    solve_advection_1d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_1d_animation,
@@ -25,11 +18,10 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 2.0
-num_cells_x = 80
+num_cells_x = 250
 expansion_ratio_x = 0.
-max_iterations = 25
+max_iterations = 100
 sigma = 1
-wavespeed = 1.0
 hat_start = 0.5
 hat_end = 1.0
 u_min = 1.0
@@ -47,13 +39,12 @@ show_individual_plots = False
 
 # Create the configuration object
 
-advection_1d_config = Advection1DFVMConfig(
+convection_1d_config = fvm.Convection1DConfig(
     domain_length_x=domain_length_x,
     num_cells_x=num_cells_x,
     expansion_ratio_x=expansion_ratio_x,
     max_iterations=max_iterations,
     sigma=sigma,
-    wavespeed=wavespeed,
     hat_start=hat_start,
     hat_end=hat_end,
     u_min=u_min,
@@ -63,24 +54,24 @@ advection_1d_config = Advection1DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array = build_hx_spacing(advection_1d_config)
-xc_array = build_x_centers(advection_1d_config)
-time_array = np.arange(0, advection_1d_config.max_iterations + 1)
+hx_array = fvm.build_hx_spacing(convection_1d_config)
+xc_array = fvm.build_x_centers(convection_1d_config)
+time_array = np.arange(0, convection_1d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d_fvm(hx_array, advection_1d_config)
+initial_condition = fvm.hat_initial_condition_1d(hx_array, convection_1d_config)
 
 
 
 # Solve the advection equation
 
-solution_history = solve_advection_1d_fvm(initial_condition, advection_1d_config)
+solution_history = fvm.solve_convection_1d(initial_condition, convection_1d_config)
 
 solution_final = solution_history[-1]
 
-xf = build_x_face_positions(advection_1d_config)
+xf = fvm.build_x_face_positions(convection_1d_config)
 
 
 

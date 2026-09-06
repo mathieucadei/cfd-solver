@@ -5,14 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from core import (
-    Advection2DFVMConfig,
-    hat_initial_condition_2d_fvm,
-    build_h_spacing,
-    build_face_positions,
-    build_centers,
-    solve_advection_2d_fvm,
-)
+from core import fvm
 
 from post_processing import (
     show_solution_2d_animation,
@@ -52,7 +45,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-advection_2d_config = Advection2DFVMConfig(
+advection_2d_config = fvm.Advection2DConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
     num_cells_x=num_cells_x,
@@ -73,20 +66,20 @@ advection_2d_config = Advection2DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array, hy_array = build_h_spacing(advection_2d_config)
-xc_array, yc_array = build_centers(advection_2d_config)
+hx_array, hy_array = fvm.build_h_spacing(advection_2d_config)
+xc_array, yc_array = fvm.build_centers(advection_2d_config)
 time_array = np.arange(0, advection_2d_config.max_iterations + 1)
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_2d_fvm(advection_2d_config)
+initial_condition = fvm.hat_initial_condition_2d(advection_2d_config)
 
 
 
 # Solve the advection equation
 
-solution_matrix = solve_advection_2d_fvm(initial_condition, advection_2d_config)
+solution_matrix = fvm.solve_advection_2d(initial_condition, advection_2d_config)
 
 solution_final_x = solution_matrix[-1, :, :]
 
@@ -94,7 +87,7 @@ solution_final_y = solution_final_x.T
 
 solution_final = solution_matrix[-1]
 
-xf, yf = build_face_positions(advection_2d_config)
+xf, yf = fvm.build_face_positions(advection_2d_config)
 
 
 
