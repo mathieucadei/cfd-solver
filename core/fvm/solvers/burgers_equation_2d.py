@@ -7,7 +7,7 @@ import numpy as np
 from ..operators import compute_convection_2d_term, compute_diffusion_2d_term
 # from .boundary_conditions import apply_burgers_boundary_2d_fvm
 
-from ..config import BurgersEquation1DFVMConfig
+# from ..config import BurgersEquation1DFVMConfig
 from ..mesh import (
     build_mesh, 
     build_h_spacing, 
@@ -21,7 +21,7 @@ from ..time_stepping import compute_diffusive_dt_2d
 
 def solve_burgers_equation_2d(
     initial_condition: np.ndarray,
-    config: BurgersEquation1DFVMConfig,
+    config: object,
 ) -> np.ndarray:
     """Solve the 1D Burgers' equation with an explicit finite-difference scheme."""
 

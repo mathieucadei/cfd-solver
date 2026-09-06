@@ -1,3 +1,19 @@
+from .config import (
+    Advection1DConfig,
+    Advection2DConfig,
+    Convection1DConfig,
+    Convection2DConfig,
+    Diffusion1DConfig,
+    Diffusion2DConfig,
+    BurgersEquation1DConfig,
+    BurgersEquation2DConfig,
+    Laplace2DConfig,
+    SourceTerm,
+    Poisson2DConfig,
+    CavityFlowConfig,
+    ChannelFlowConfig,
+)
+
 from .grids import (
     compute_cole_hopf_dx, 
     compute_dx, 
@@ -26,4 +42,19 @@ from .initial_conditions import (
     poisson_initial_condition_2d,
     cavity_flow_initial_condition,
     channel_flow_initial_condition,
+)
+
+from .solvers import (
+    solve_advection_1d,
+    solve_advection_2d,
+    solve_convection_1d,
+    solve_convection_2d,
+    solve_diffusion_1d,
+    solve_diffusion_2d,
+    solve_burgers_equation_1d,
+    solve_burgers_equation_2d,
+    solve_laplace_2d,
+    solve_poisson_2d,
+    solve_cavity_flow,
+    solve_channel_flow,
 )

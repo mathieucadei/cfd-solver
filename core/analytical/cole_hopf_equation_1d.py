@@ -4,9 +4,9 @@
 
 import numpy as np
 
-from ..fdm.config import BurgersEquation1DConfig
+from ..fdm import compute_cole_hopf_dt_1d
 
-from ..setup.time_stepping import compute_cole_hopf_dt_1d
+# from ..setup.time_stepping import compute_cole_hopf_dt_1d
 
 
 def cole_hopf_1d_ufunc() -> callable:
@@ -28,7 +28,7 @@ def cole_hopf_1d_ufunc() -> callable:
 
 def solve_cole_hopf_1d(
     x_array: np.ndarray,
-    config: BurgersEquation1DConfig,
+    config: object,
 ) -> np.ndarray:
     """Evaluate the analytical Cole-Hopf solution over all time steps defined by the configuration."""
 

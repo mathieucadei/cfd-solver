@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class Advection1DFVMConfig:
+class Advection1DConfig:
     domain_length_x: float = 2.0
     num_cells_x: int = 100
     expansion_ratio_x: float = 1.
@@ -22,7 +22,7 @@ class Advection1DFVMConfig:
 
 
 @dataclass
-class Convection1DFVMConfig:
+class Convection1DConfig:
     domain_length_x: float = 2.0
     num_cells_x: int = 100
     expansion_ratio_x: float = 1.
@@ -35,7 +35,7 @@ class Convection1DFVMConfig:
 
 
 @dataclass
-class Diffusion1DFVMConfig:
+class Diffusion1DConfig:
     """Configuration parameters for the 1D diffusion equation."""
     domain_length_x: float = 2.0
     num_cells_x: int = 41
@@ -50,7 +50,7 @@ class Diffusion1DFVMConfig:
 
 
 @dataclass
-class BurgersEquation1DFVMConfig:
+class BurgersEquation1DConfig:
     """Configuration parameters for the 1D Burgers' equation."""
     domain_length_x: float = 2.0
     num_cells_x: int = 101
@@ -67,7 +67,7 @@ class BurgersEquation1DFVMConfig:
 
 
 @dataclass
-class Advection2DFVMConfig:
+class Advection2DConfig:
     """Configuration parameters for the 2D linear advection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
@@ -87,7 +87,7 @@ class Advection2DFVMConfig:
 
 
 @dataclass
-class Convection2DFVMConfig:
+class Convection2DConfig:
     """Configuration parameters for the 2D linear advection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
@@ -108,7 +108,7 @@ class Convection2DFVMConfig:
 
 
 @dataclass
-class Diffusion2DFVMConfig:
+class Diffusion2DConfig:
     """Configuration parameters for the 2D diffusion equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
@@ -128,7 +128,7 @@ class Diffusion2DFVMConfig:
 
 
 @dataclass
-class BurgersEquation2DFVMConfig:
+class BurgersEquation2DConfig:
     """Configuration parameters for the 2D Burgers equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
@@ -150,7 +150,7 @@ class BurgersEquation2DFVMConfig:
 
 
 @dataclass
-class Laplace2DFVMConfig:
+class Laplace2DConfig:
     """Configuration parameters for the 2D Laplace equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
@@ -162,14 +162,14 @@ class Laplace2DFVMConfig:
 
 
 @dataclass
-class SourceTermFVM:
+class SourceTerm:
     x: float
     y: float
     value: float
 
 
 @dataclass
-class Poisson2DFVMConfig:
+class Poisson2DConfig:
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_cells_x: int = 31
@@ -178,15 +178,15 @@ class Poisson2DFVMConfig:
     expansion_ratio_y: float = 0.
     max_iterations: int = 100
     pressure_init: float = 0.0
-    source_terms: list[SourceTermFVM] = field(default_factory=lambda: [
-        SourceTermFVM(x=0.3, y=0.5, value=10.0),
-        SourceTermFVM(x=0.6, y=0.2, value=-5.0),
+    source_terms: list[SourceTerm] = field(default_factory=lambda: [
+        SourceTerm(x=0.3, y=0.5, value=10.0),
+        SourceTerm(x=0.6, y=0.2, value=-5.0),
     ])
     l1_norm_target: float = 1e-4
 
 
 @dataclass
-class CavityFlowFVMConfig:
+class CavityFlowConfig:
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_cells_x: int = 40
@@ -202,7 +202,7 @@ class CavityFlowFVMConfig:
 
 
 @dataclass
-class ChannelFlowFVMConfig:
+class ChannelFlowConfig:
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_cells_x: int = 40

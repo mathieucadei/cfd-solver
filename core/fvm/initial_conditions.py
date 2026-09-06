@@ -5,6 +5,7 @@
 import numpy as np
 
 from .mesh import build_mesh, build_h_spacing
+from ..analytical.cole_hopf_equation_1d import cole_hopf_1d_ufunc
 
 
 
@@ -15,6 +16,17 @@ def hat_initial_condition_1d(hx_array: np.ndarray, config: object) -> np.ndarray
     initial_condition[int(len(hx_array)*config.hat_start/config.domain_length_x):int(len(hx_array)*config.hat_end/config.domain_length_x)] = config.u_max
 
     return initial_condition
+
+
+def cole_hopf_initial_condition_1d(x_array: np.ndarray, config: object) -> np.ndarray:
+    """Generate the Cole-Hopf analytical initial condition on the provided grid."""
+
+    initial_condition_func = cole_hopf_1d_ufunc()
+
+    initial_condition = initial_condition_func(0.0, x_array, config.viscosity)
+
+    return initial_condition
+
 
 
 def hat_initial_condition_2d(config: object) -> np.ndarray:
