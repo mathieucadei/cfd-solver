@@ -5,15 +5,9 @@
 import numpy as np
 
 from core import (
-    Diffusion1DConfig,
-    compute_coefficients,
-    compute_diffusive_dt_1d,
-    compute_series_terms,
-    generate_mode_indices,
-    hat_initial_condition_1d,
-    make_x_grid,
-    solve_diffusion_1d,
-    solve_heat_equation_1d,
+    fdm,
+    analytical,
+    signal_processing,
 )
 
 
@@ -58,7 +52,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-diffusion_1d_config = Diffusion1DConfig(
+diffusion_1d_config = fdm.Diffusion1DConfig(
     domain_length_x=domain_length_x,
     num_grid_points_x=num_grid_points_x,
     max_iterations=max_iterations,
@@ -73,42 +67,42 @@ diffusion_1d_config = Diffusion1DConfig(
 
 # Generate the grid and time array
 
-x_array = make_x_grid(diffusion_1d_config)
+x_array = fdm.make_x_grid(diffusion_1d_config)
 
-dt = compute_diffusive_dt_1d(diffusion_1d_config)
+dt = fdm.compute_diffusive_dt_1d(diffusion_1d_config)
 
 time_array = np.arange(0, max_iterations + 1) * dt
 
 
 # Initialize the numerical initial condition
 
-initial_condition = hat_initial_condition_1d(x_array, diffusion_1d_config)
+initial_condition = fdm.hat_initial_condition_1d(x_array, diffusion_1d_config)
 
 
 # Fourier-series setup
 
-mode_indices = generate_mode_indices(num_modes)
+mode_indices = signal_processing.generate_mode_indices(num_modes)
 
-mode_coefficients = compute_coefficients(
+mode_coefficients = signal_processing.compute_coefficients(
     initial_condition, 
     x_array, 
     mode_indices, 
     basis=basis,
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
+series_terms = signal_processing.compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
 
 
 
 # Solve
 # Numerical diffusion equation
 
-solution_history_num = solve_diffusion_1d(initial_condition, diffusion_1d_config)
+solution_history_num = fdm.solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 
 # Heat analytical equation
 
-solution_history_ana = solve_heat_equation_1d(
+solution_history_ana = analytical.solve_heat_equation_1d(
     series_terms, 
     mode_indices,
     x_array,

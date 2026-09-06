@@ -6,19 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from core import (
-    Diffusion1DFVMConfig,
-    hat_initial_condition_1d_fvm,
-    build_hx_spacing,
-    build_x_face_positions,
-    build_x_centers,
-    solve_diffusion_1d_fvm,
-    make_x_grid,
-    compute_coefficients,
-    compute_diffusive_dt_1d,
-    compute_series_terms,
-    generate_mode_indices,
-    solve_heat_equation_1d,
-    compute_diffusive_dt_1d_fvm,
+    fvm,
+    analytical,
+    signal_processing,
 )
 
 from post_processing import (
@@ -63,7 +53,7 @@ show_individual_plots = False
 
 # Create the configuration object
 
-diffusion_1d_config = Diffusion1DFVMConfig(
+diffusion_1d_config = fvm.Diffusion1DConfig(
     domain_length_x=domain_length_x,
     num_cells_x=num_cells_x,
     expansion_ratio_x=expansion_ratio_x,
@@ -79,44 +69,44 @@ diffusion_1d_config = Diffusion1DFVMConfig(
 
 # Generate the grid and time array
 
-hx_array = build_hx_spacing(diffusion_1d_config)
-xc_array = build_x_centers(diffusion_1d_config)
+hx_array = fvm.build_hx_spacing(diffusion_1d_config)
+xc_array = fvm.build_x_centers(diffusion_1d_config)
 time_array = np.arange(0, diffusion_1d_config.max_iterations + 1)
 
-dt = compute_diffusive_dt_1d_fvm(diffusion_1d_config)
+dt = fvm.compute_diffusive_dt_1d(diffusion_1d_config)
 time_array = np.arange(0, max_iterations + 1) * dt
 
 
 # Initialize the initial condition
 
-initial_condition = hat_initial_condition_1d_fvm(hx_array, diffusion_1d_config)
+initial_condition = fvm.hat_initial_condition_1d(hx_array, diffusion_1d_config)
 
 
 # Fourier-series setup
 
-mode_indices = generate_mode_indices(num_modes)
+mode_indices = signal_processing.generate_mode_indices(num_modes)
 
-mode_coefficients = compute_coefficients(
+mode_coefficients = signal_processing.compute_coefficients(
     initial_condition, 
     xc_array, 
     mode_indices, 
     basis=basis,
 )
 
-series_terms = compute_series_terms(mode_indices, mode_coefficients, xc_array, basis=basis)
+series_terms = signal_processing.compute_series_terms(mode_indices, mode_coefficients, xc_array, basis=basis)
 
 
 # Solve the diffusion equation
 
-solution_history_num = solve_diffusion_1d_fvm(initial_condition, diffusion_1d_config)
+solution_history_num = fvm.solve_diffusion_1d(initial_condition, diffusion_1d_config)
 
 solution_final = solution_history_num[-1]
 
-xf = build_x_face_positions(diffusion_1d_config)
+xf = fvm.build_x_face_positions(diffusion_1d_config)
 
 # Heat analytical equation
 
-solution_history_ana = solve_heat_equation_1d(
+solution_history_ana = analytical.solve_heat_equation_1d(
     series_terms, 
     mode_indices,
     xc_array,

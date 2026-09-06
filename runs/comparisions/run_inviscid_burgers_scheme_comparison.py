@@ -4,12 +4,7 @@
 
 import matplotlib.pyplot as plt
 
-from core import (
-    Convection1DConfig,
-    heaviside_initial_condition_1d,
-    make_x_grid,
-    solve_convection_1d,
-)
+from core import fdm
 
 
 # Pre-processing
@@ -68,7 +63,7 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
 
         # Create the configuration object
 
-        convection_1d_config = Convection1DConfig(
+        convection_1d_config = fdm.Convection1DConfig(
             domain_length_x=domain_length_x,
             num_grid_points_x=nx,
             max_iterations=n_iter,
@@ -83,17 +78,17 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
 
         # Generate the grid
 
-        x_array = make_x_grid(convection_1d_config)
+        x_array = fdm.make_x_grid(convection_1d_config)
 
 
         # Initialize the initial condition
 
-        initial_condition = heaviside_initial_condition_1d(x_array, convection_1d_config)
+        initial_condition = fdm.heaviside_initial_condition_1d(x_array, convection_1d_config)
 
 
         # Solve the convection equation
 
-        solution_history = solve_convection_1d(initial_condition, convection_1d_config)
+        solution_history = fdm.solve_convection_1d(initial_condition, convection_1d_config)
 
 
         # Post-processing

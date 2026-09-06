@@ -83,7 +83,6 @@ solution_final = solution_history_num[-1]
 xf = fvm.build_cole_hopf_x_face_positions(burgers_1d_config)
 
 # Analytical Cole-Hopf equation
-
 dt = fvm.compute_cole_hopf_dt_1d(burgers_1d_config)
 solution_history_ana = analytical.solve_cole_hopf_1d(xc_array, dt, burgers_1d_config)
 
