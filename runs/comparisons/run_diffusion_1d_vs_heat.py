@@ -1,0 +1,177 @@
+"""Run the 1D diffusion & heat solvers and generate solution & comparision plots."""
+
+
+
+import numpy as np
+
+from core import (
+    fdm,
+    analytical,
+    signal_processing,
+)
+
+
+from post_processing import (
+    show_solution_1d_animation,
+    show_solution_contour_map,
+    show_solution_overview,
+    show_solution_surface,
+    show_solution_traces,
+)
+
+
+
+# Pre-processing
+# Numerical simulation parameters
+
+domain_length_x = 2.0
+num_grid_points_x = 101
+max_iterations = 1001
+sigma = 0.2
+viscosity = 0.3
+hat_start = 0.5
+hat_end = 1.0
+u_min = 1.0
+u_max = 2.0
+
+
+# Analytical simulation parameters
+
+num_modes = 100
+basis = "cosine"  # "periodic" or "cosine"
+
+
+# Visualization parameters
+
+step_stride = 100
+case_name = '1d diffusion vs heat'
+title = True
+save = False
+show_individual_plots = False
+
+
+# Create the configuration object
+
+diffusion_1d_config = fdm.Diffusion1DConfig(
+    domain_length_x=domain_length_x,
+    num_grid_points_x=num_grid_points_x,
+    max_iterations=max_iterations,
+    sigma=sigma,
+    viscosity=viscosity,
+    hat_start=hat_start,
+    hat_end=hat_end,
+    u_min=u_min,
+    u_max=u_max,
+)
+
+
+# Generate the grid and time array
+
+x_array = fdm.make_x_grid(diffusion_1d_config)
+
+dt = fdm.compute_diffusive_dt_1d(diffusion_1d_config)
+
+time_array = np.arange(0, max_iterations + 1) * dt
+
+
+# Initialize the numerical initial condition
+
+initial_condition = fdm.hat_initial_condition_1d(x_array, diffusion_1d_config)
+
+
+# Fourier-series setup
+
+mode_indices = signal_processing.generate_mode_indices(num_modes)
+
+mode_coefficients = signal_processing.compute_coefficients(
+    initial_condition, 
+    x_array, 
+    mode_indices, 
+    basis=basis,
+)
+
+series_terms = signal_processing.compute_series_terms(mode_indices, mode_coefficients, x_array, basis=basis)
+
+
+
+# Solve
+# Numerical diffusion equation
+
+solution_history_num = fdm.solve_diffusion_1d(initial_condition, diffusion_1d_config)
+
+
+# Heat analytical equation
+
+solution_history_ana = analytical.solve_heat_equation_1d(
+    series_terms, 
+    mode_indices,
+    x_array,
+    time_array, 
+    diffusion_1d_config.viscosity,
+    basis=basis)
+
+
+
+# Post-processing
+
+if show_individual_plots:
+    show_solution_traces(
+        x_values=x_array,
+        cut_values=time_array,
+        num_solution_matrix=solution_history_num,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
+
+    show_solution_traces(
+        x_values=time_array,
+        cut_values=x_array,
+        num_solution_matrix=solution_history_num,
+        axis=1,
+        ana_solution_matrix=solution_history_ana,
+        step_stride=step_stride,
+        cut_label='x',
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
+
+    show_solution_contour_map(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
+
+    show_solution_surface(
+        x_values=x_array,
+        y_values=time_array,
+        solution_matrix=solution_history_num,
+        case_name=case_name,
+        title=title,
+        save=save,
+    )
+
+show_solution_overview(
+    x_values=x_array, 
+    y_values=time_array, 
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana, 
+    step_stride=step_stride,
+    case_name=case_name,
+    title=title,
+    save=save,
+)
+
+show_solution_1d_animation(
+    x_values=x_array,
+    num_solution_history=solution_history_num,
+    ana_solution_history=solution_history_ana, 
+    case_name=case_name,
+    save=save,
+)

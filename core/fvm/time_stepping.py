@@ -1,0 +1,88 @@
+"""Time-step utilities for 1D & 2D numerical and analytical solvers."""
+
+
+import numpy as np
+
+from .mesh import build_hx_spacing, build_cole_hopf_hx_spacing, build_x_centers, build_h_spacing
+
+
+
+def compute_advective_dt_1d(config: object) -> float:
+    """Compute the time step for 1D advection problem."""
+
+    hx = build_hx_spacing(config)
+
+    hx_min = np.min(hx)
+    
+    return config.sigma * hx_min / config.wavespeed
+
+
+def compute_convective_dt_1d(config: object) -> float:
+    """Compute the time step for 1D convection problem."""
+
+    hx = build_hx_spacing(config)
+
+    hx_min = np.min(hx)
+    
+    return config.sigma * hx_min / config.u_max
+
+
+def compute_diffusive_dt_1d(config: object) -> float:
+    """Compute the time step for 1D diffusion-dominated problems."""
+
+    hx = build_hx_spacing(config)
+
+    hx_min = np.min(hx)
+    
+    return config.sigma * hx_min**2 / config.viscosity
+
+
+def compute_cole_hopf_dt_1d(config: object) -> float:
+    """Compute the time step for the 1D Cole-Hopf analytical solution."""
+
+    hx = build_cole_hopf_hx_spacing(config)
+    
+    return hx * config.viscosity
+
+
+def compute_cole_hopf_dt_1d(config: object) -> float:
+    """Compute the time step for the 1D Cole-Hopf analytical solution."""
+
+    hx = build_hx_spacing(config)
+
+    hx_min = np.min(hx)
+    
+    return hx_min * config.viscosity
+
+
+def compute_advective_dt_2d(config: object) -> float:
+    """Compute the time step for 2D advection problem."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma * min(hx_min, hy_min) / config.wavespeed
+
+
+def compute_convective_dt_2d(config: object) -> float:
+    """Compute the time step for 2D convection problem."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma / (config.u_max / hx_min + config.v_max / hy_min)
+
+
+def compute_diffusive_dt_2d(config: object) -> float:
+    """Compute the time step for 2D diffusion-dominated problems."""
+
+    hx, hy = build_h_spacing(config)
+
+    hx_min = np.min(hx)
+    hy_min = np.min(hy)
+    
+    return config.sigma * hx_min * hy_min / config.viscosity

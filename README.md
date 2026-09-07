@@ -27,15 +27,15 @@ Currently implemented:
 ## Project structure
 
 ```text
-core/config.py              finite-difference simulation dataclasses
-core/config_fvm.py          finite-volume simulation dataclasses
-core/setup/                 finite-difference grids, time steps, and initial conditions
-core/setup/fvm/             finite-volume mesh, time-stepping, and initial-condition helpers
-core/numerics/              finite-difference solvers
-core/numerics/fvm/          finite-volume 1D and 2D solvers
+core/fdm/                   finite-difference configs, grids, time steps, initial conditions, operators
+core/fdm/solvers/           finite-difference solvers
+core/fvm/                   finite-volume configs, mesh, time steps, initial conditions, operators
+core/fvm/solvers/           finite-volume solvers
 core/analytical/            analytical reference solutions
 post_processing/            contour, surface, quiver, and animation helpers
-run_*.py                    executable examples
+runs/fdm/                   finite-difference examples
+runs/fvm/                   finite-volume examples
+runs/comparisons/           scheme comparisons and analytical validations
 ```
 
 ## Example visualizations
@@ -199,36 +199,46 @@ These comparisons are used to assess solver correctness and visualize agreement 
 
 ## Run
 
+Install the package once, from the repository root:
+
 ```bash
-python run_advection_1d.py
-python run_advection_1d_fvm.py
-python run_advection_1d_scheme_comparison.py
-python run_advection_2d.py
-python run_advection_2d_fvm.py
-python run_convection_1d.py
-python run_convection_1d_fvm.py
-python run_convection_1d_scheme_comparison.py
-python run_inviscid_burgers_scheme_comparison.py
-python run_convection_2d.py
-python run_convection_2d_fvm.py
-python run_diffusion_1d.py
-python run_diffusion_1d_fvm.py
-python run_diffusion_1d_vs_heat.py
-python run_diffusion_1d_fvm_vs_heat.py
-python run_diffusion_2d.py
-python run_diffusion_2d_fvm.py
-python run_burgers_equation_1d.py
-python run_burgers_equation_1d_fvm.py
-python run_burgers_equation_1d_vs_cole_hopf.py
-python run_burgers_equation_1d_fvm_vs_cole_hopf.py
-python run_burgers_equation_2d.py
-python run_burgers_equation_2d_fvm.py
-python run_laplace_2d.py
-python run_laplace_2d_fvm.py
-python run_poisson_2d.py
-python run_poisson_2d_fvm.py
-python run_cavity_flow.py
-python run_cavity_flow_fvm.py
-python run_channel_flow.py
-python run_channel_flow_fvm.py
+pip install -e .
+```
+
+Then run any example:
+
+```bash
+python runs/fdm/run_advection_1d.py
+python runs/fdm/run_advection_2d.py
+python runs/fdm/run_convection_1d.py
+python runs/fdm/run_convection_2d.py
+python runs/fdm/run_diffusion_1d.py
+python runs/fdm/run_diffusion_2d.py
+python runs/fdm/run_burgers_equation_1d.py
+python runs/fdm/run_burgers_equation_2d.py
+python runs/fdm/run_laplace_2d.py
+python runs/fdm/run_poisson_2d.py
+python runs/fdm/run_cavity_flow.py
+python runs/fdm/run_channel_flow.py
+
+python runs/fvm/run_advection_1d.py
+python runs/fvm/run_advection_2d.py
+python runs/fvm/run_convection_1d.py
+python runs/fvm/run_convection_2d.py
+python runs/fvm/run_diffusion_1d.py
+python runs/fvm/run_diffusion_2d.py
+python runs/fvm/run_burgers_equation_1d.py
+python runs/fvm/run_burgers_equation_2d.py
+python runs/fvm/run_laplace_2d.py
+python runs/fvm/run_poisson_2d.py
+python runs/fvm/run_cavity_flow.py
+python runs/fvm/run_channel_flow.py
+
+python runs/comparisons/run_advection_1d_scheme_comparison.py
+python runs/comparisons/run_convection_1d_scheme_comparison.py
+python runs/comparisons/run_inviscid_burgers_scheme_comparison.py
+python runs/comparisons/run_diffusion_1d_vs_heat.py
+python runs/comparisons/run_diffusion_1d_fvm_vs_heat.py
+python runs/comparisons/run_burgers_equation_1d_vs_cole_hopf.py
+python runs/comparisons/run_burgers_equation_1d_fvm_vs_cole_hopf.py
 ```
