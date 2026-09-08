@@ -168,4 +168,6 @@ show_cavity_flow_solution_overview(
     title=title,
     save=save,
     step_stride=step_stride,
+    u_scatter_label='u at x=0.5 - Ghia et al. (1982)',
+    v_scatter_label='v at v=0.5 - Ghia et al. (1982)',
 )

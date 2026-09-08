@@ -686,7 +686,8 @@ def show_cavity_flow_solution_overview(
     v_label: str = 'v',   
     case_name: str = None,
     step_stride: int=5,
-    scatter_label: str = None,
+    u_scatter_label: str = None,
+    v_scatter_label: str = None,
     title: bool = False,
     save: bool = False,     
 ) -> None:
@@ -779,10 +780,10 @@ def show_cavity_flow_solution_overview(
 
     plot_solution_traces(
         ax=ax3,
-        x_values=x_values,
-        cut_values=y_values,
+        x_values=y_values,
+        cut_values=x_values,
         num_solution_matrix=u_solution_matrix,
-        axis=0,
+        axis=1,
         cut_label=x_label,
         x_label=y_label,
         y_label=u_label,
@@ -796,15 +797,15 @@ def show_cavity_flow_solution_overview(
         y_values=ana_u_values,
         x_label=y_label,
         y_label=u_label,
-        label=scatter_label, 
+        label=u_scatter_label, 
     )
 
     plot_solution_traces(
         ax=ax4,
-        x_values=y_values,
-        cut_values=x_values,
+        x_values=x_values,
+        cut_values=y_values,
         num_solution_matrix=v_solution_matrix,
-        axis=1,
+        axis=0,
         cut_label=y_label,
         x_label=x_label,
         y_label=v_label,
@@ -818,7 +819,7 @@ def show_cavity_flow_solution_overview(
         y_values=ana_v_values,
         x_label=x_label,
         y_label=v_label,
-        label=scatter_label, 
+        label=v_scatter_label, 
     )
 
 
