@@ -33,7 +33,7 @@ time_step: float = 0.001
 source: float = 1.0
 density: float = 1.0
 viscosity: float = 0.1
-u_l1_norm_target: float = 1e-6
+u_l1_norm_target: float = 0.001
 
 
 # Visualization parameters
@@ -88,78 +88,23 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 
 # Post-processing
-u_analytical = (
-    source
-    / (2 * viscosity)
-    * y_array
-    * (domain_length_y - y_array)
+
+show_channel_flow_solution(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    case_name=case_name,
+    title=title,
+    save=save,
 )
 
-x_index = num_grid_points_x // 2
-
-u_numerical = u_solution_matrix_final[:, x_index]
-
-l2_error = (
-    np.linalg.norm(u_numerical - u_analytical)
-    / np.linalg.norm(u_analytical)
+show_channel_flow_solution_animation(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_history=u_solution_matrix,
+    v_solution_history=v_solution_matrix,
+    source=source,
+    case_name=case_name,
+    save=save,
 )
-
-print(
-    "Analytical umax:",
-    np.max(u_analytical)
-)
-
-print(
-    "Numerical umax:",
-    np.max(u_numerical)
-)
-
-print(
-    "Maximum |v|:",
-    np.max(np.abs(v_solution_matrix_final))
-)
-
-print(
-    "Relative L2 error:",
-    l2_error
-)
-
-plt.plot(
-    u_numerical,
-    y_array,
-    label="Numerical"
-)
-
-plt.plot(
-    u_analytical,
-    y_array,
-    "--",
-    label="Poiseuille analytical"
-)
-
-plt.xlabel("u")
-plt.ylabel("y")
-plt.legend()
-plt.show()
-
-
-
-# show_channel_flow_solution(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_matrix=u_solution_matrix_final,
-#     v_solution_matrix=v_solution_matrix_final,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_channel_flow_solution_animation(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_history=u_solution_matrix,
-#     v_solution_history=v_solution_matrix,
-#     source=source,
-#     case_name=case_name,
-#     save=save,
-# )
