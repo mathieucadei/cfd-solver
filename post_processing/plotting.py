@@ -183,6 +183,41 @@ def plot_quiver(
 
     return qvr
 
+def plot_streamlines(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    title: bool = False,
+) -> None:
+    """Plot a quiver view of 2D velocity vector fields."""
+
+    X, Y = np.meshgrid(x_values, y_values)
+
+    stream = ax.streamplot(
+        X,
+        Y,
+        u_solution_matrix,
+        v_solution_matrix,
+        color='k',
+        linewidth=0.8,
+    )
+
+    stream.lines.set_alpha(0.5)
+    stream.arrows.set_alpha(0.5)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if title:
+        ax.set_title(f'{case_name.title()} Velocity Field')
+
+    return stream
+
 
 def plot_solution_surface(
     ax: Axes,
@@ -608,6 +643,146 @@ def show_solution_overview(
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='overview')
+
+    plt.show()
+
+
+def show_cavity_flow_solution_overview(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    p_solution_matrix: np.ndarray,
+    step: int = 3,
+    scale: float = 10.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    u_label: str = 'u',
+    v_label: str = 'v',   
+    case_name: str = None,
+    step_stride: int=5,
+    title: bool = False,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+    gs = fig.add_gridspec(1, 2)
+
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax4 = fig.add_subplot(gs[1, 1])
+
+    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+
+
+    contourf = plot_solution_contourf(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        levels=levels,
+        case_name=case_name,
+        title=title,   
+    )
+
+    fig.colorbar(contourf, ax=ax1)
+
+    plot_solution_contour(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=p_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        levels=levels,
+        case_name=case_name,
+        title=title,   
+    )
+
+    plot_streamlines(
+        ax=ax1,       
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title, 
+    )
+
+    ax1.set_xlim(x_values[0], x_values[-1])
+    ax1.set_ylim(y_values[0], y_values[-1])
+
+    U = u_solution_matrix[::step, ::step]
+    V = v_solution_matrix[::step, ::step]
+
+    M = np.sqrt(U**2 + V**2)
+
+    vmin = np.floor(np.min(M))
+    vmax = np.ceil(np.max(M))
+    norm = Normalize(vmin=vmin, vmax=vmax)
+
+    ticks = np.linspace(vmin, vmax, 11)
+
+    qvr = plot_quiver(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        magnitude=M,
+        norm=norm,
+        step=step,
+        cmap='plasma',
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+        title=title,   
+    )
+
+    fig.colorbar(qvr, ax=ax2, ticks=ticks, label='Velocity Magnitude')
+
+    ax2.set_xlim(x_values[0], x_values[-1])
+    ax2.set_ylim(y_values[0], y_values[-1])
+
+    plot_solution_traces(
+        ax=ax3,
+        x_values=x_values,
+        cut_values=y_values,
+        num_solution_matrix=u_solution_matrix,
+        axis=0,
+        # ana_solution_matrix=ana_solution_matrix,
+        cut_label=y_label,
+        x_label=u_label,
+        y_label=y_label,
+        case_name=case_name,
+        step_stride=step_stride,
+    )
+
+    plot_solution_traces(
+        ax=ax4,
+        x_values=y_values,
+        cut_values=x_values,
+        num_solution_matrix=v_solution_matrix,
+        axis=1,
+        # ana_solution_matrix=ana_solution_matrix,
+        cut_label=x_label,
+        x_label=x_label,
+        y_label=v_label,
+        case_name=case_name,
+        step_stride=step_stride,
+    )
+
+
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
 
     plt.show()
 
