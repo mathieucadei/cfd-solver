@@ -44,18 +44,22 @@ def plot_solution_traces(
     num_solution_matrix: np.ndarray,
     axis: int = 0,
     step_stride: int = 5,
+    cut_indices: np.ndarray = None,
     ana_solution_matrix: np.ndarray = None,
     x_label: str = 'x',
     y_label: str = 'u',
     cut_label: str = 't',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot selected numerical and analytical solution traces on an existing axis."""
 
     n_cuts = cut_values.shape[0]
 
-    for n in range(0, n_cuts, step_stride):
+    indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
+
+    for n in indices:
 
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
@@ -69,7 +73,10 @@ def plot_solution_traces(
         ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
     
     if ana_solution_matrix is not None:
-        for n in range(0, n_cuts, step_stride):
+
+        indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
+
+        for n in indices:
 
             if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
@@ -87,8 +94,14 @@ def plot_solution_traces(
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
 
-    if title:
-        ax.set_title(f'{case_name.title()} Solution')
+    if case_name_as_title:
+        ax.set_title(f'{case_name.title()} Solution')        
+
+    elif title:
+        ax.set_title(title)
+
+    else:
+        pass
 
 
 def plot_solution_contour(
@@ -128,6 +141,8 @@ def plot_solution_contourf(
     x_label: str = 'x',
     y_label: str = 't',
     levels: np.ndarray = None,
+    case_name: str = None,
+    case_name_as_title: bool = False,
     title: str = None,
 ):
     """Plot a filled contour view of a 2D solution field."""
@@ -140,8 +155,14 @@ def plot_solution_contourf(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
+    if case_name_as_title:
+        ax.set_title(f'{case_name.title()} Solution')        
+
+    elif title:
         ax.set_title(title)
+
+    else:
+        pass
     
     return contourf
 
@@ -160,6 +181,7 @@ def plot_quiver(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
+    case_name_as_title: bool = False,
     title: str = None,
 ) -> None:
     """Plot a quiver view of 2D velocity vector fields."""
@@ -199,8 +221,14 @@ def plot_quiver(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
+    if case_name_as_title:
+        ax.set_title(f'{case_name.title()} Solution')        
+
+    elif title:
         ax.set_title(title)
+
+    else:
+        pass
 
     return qvr
 
@@ -684,11 +712,13 @@ def show_cavity_flow_solution_overview(
     y_label: str = 'y',
     u_label: str = 'u',
     v_label: str = 'v',   
-    case_name: str = None,
     step_stride: int=5,
+    cut_indices: float | np.ndarray = None,
     u_scatter_label: str = None,
     v_scatter_label: str = None,
-    title: bool = False,
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,     
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
@@ -784,7 +814,8 @@ def show_cavity_flow_solution_overview(
         x_label=y_label,
         y_label=u_label,
         case_name=case_name,
-        step_stride=step_stride,
+        cut_indices=cut_indices,
+        title='u along the vertical centreline'
     )
 
     plot_solution_scatter(
@@ -806,7 +837,8 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=v_label,
         case_name=case_name,
-        step_stride=step_stride,
+        cut_indices=cut_indices,
+        title='v along the horizontal centreline'
     )
 
     plot_solution_scatter(
@@ -818,8 +850,14 @@ def show_cavity_flow_solution_overview(
         label=v_scatter_label, 
     )
 
-    if title:
+    if case_name_as_title:
         fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
+
+    else: 
+        pass    
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
