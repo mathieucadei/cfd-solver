@@ -27,8 +27,8 @@ reynolds_number = 100
 
 domain_length_x: float = 1.0
 domain_length_y: float = 1.0
-num_cells_x: int = 30
-num_cells_y: int = 30
+num_cells_x: int = 40
+num_cells_y: int = 40
 expansion_ratio_x: float = 0.
 expansion_ratio_y: float = 0.
 max_iterations = 10000
