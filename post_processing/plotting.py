@@ -836,8 +836,8 @@ def show_cavity_flow_solution_animation(
         case_name=case_name,   
         )
 
-        ax.set_xlim(0, 2)
-        ax.set_ylim(0, 1)
+        ax.set_xlim(x_values[0], x_values[-1])
+        ax.set_ylim(y_values[0], y_values[-1])
 
         if u_lid is not None:
 
