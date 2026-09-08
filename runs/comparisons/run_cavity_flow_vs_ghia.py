@@ -39,7 +39,7 @@ viscosity: float = 0.01
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow'
+case_name = f'lid-driven cavity flow - Re {u_lid*domain_length_x/viscosity}'
 title = True
 save = False
 show_individual_plots = False
@@ -160,14 +160,14 @@ show_cavity_flow_solution_overview(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
-    ana_x_values=ghia_table_1['y'],
-    ana_y_values=ghia_table_2['x'],
+    ana_u_x_values=ghia_table_1['y'],
+    ana_v_x_values=ghia_table_2['x'],
     ana_u_values=ghia_table_1['100'],
     ana_v_values=ghia_table_2['100'],
     case_name=case_name,
     title=title,
     save=save,
     step_stride=step_stride,
-    u_scatter_label='u at x=0.5 - Ghia et al. (1982)',
-    v_scatter_label='v at v=0.5 - Ghia et al. (1982)',
+    u_scatter_label='x=0.5 - Ghia et al. (1982)',
+    v_scatter_label='y=0.5 - Ghia et al. (1982)',
 )

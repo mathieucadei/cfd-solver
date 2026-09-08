@@ -81,7 +81,8 @@ def plot_solution_traces(
             ana_label = f'Analytical ({cut_label}: {cut_values[n]:.3g})'
         
             ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), linestyle='--', label=ana_label)
-    
+
+    ax.grid(alpha=0.3)
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
@@ -127,8 +128,7 @@ def plot_solution_contourf(
     x_label: str = 'x',
     y_label: str = 't',
     levels: np.ndarray = None,
-    case_name: str = None,
-    title: bool = False,
+    title: str = None,
 ):
     """Plot a filled contour view of a 2D solution field."""
 
@@ -141,7 +141,7 @@ def plot_solution_contourf(
     ax.set_ylabel(y_label, rotation=0)
 
     if title:
-        ax.set_title(f'{case_name.title()} Solution')
+        ax.set_title(title)
     
     return contourf
 
@@ -160,7 +160,7 @@ def plot_quiver(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot a quiver view of 2D velocity vector fields."""
 
@@ -200,7 +200,7 @@ def plot_quiver(
     ax.set_ylabel(y_label, rotation=0)
 
     if title:
-        ax.set_title(f'{case_name.title()} Velocity Field')
+        ax.set_title(title)
 
     return qvr
 
@@ -674,12 +674,12 @@ def show_cavity_flow_solution_overview(
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
     p_solution_matrix: np.ndarray,
-    ana_x_values: np.ndarray = None,
-    ana_y_values: np.ndarray = None,
+    ana_u_x_values: np.ndarray = None,
+    ana_v_x_values: np.ndarray = None,
     ana_u_values: np.ndarray = None,
     ana_v_values: np.ndarray = None,
     step: int = 3,
-    scale: float = 10.0,
+    scale: float = 20.0,
     x_label: str = 'x',
     y_label: str = 'y',
     u_label: str = 'u',
@@ -712,8 +712,7 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        case_name=case_name,
-        title=title,   
+        title='Pressure and Streamines',   
     )
 
     fig.colorbar(contourf, ax=ax1)
@@ -726,8 +725,7 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        case_name=case_name,
-        title=title,   
+        case_name=case_name,  
     )
 
     plot_streamlines(
@@ -739,7 +737,6 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title, 
     )
 
     ax1.set_xlim(x_values[0], x_values[-1])
@@ -769,8 +766,7 @@ def show_cavity_flow_solution_overview(
         scale=scale,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,
-        title=title,   
+        title='Velocity Field',   
     )
 
     fig.colorbar(qvr, ax=ax2, ticks=ticks, label='Velocity Magnitude')
@@ -793,7 +789,7 @@ def show_cavity_flow_solution_overview(
 
     plot_solution_scatter(
         ax=ax3,
-        x_values=ana_y_values,
+        x_values=ana_u_x_values,
         y_values=ana_u_values,
         x_label=y_label,
         y_label=u_label,
@@ -815,14 +811,15 @@ def show_cavity_flow_solution_overview(
 
     plot_solution_scatter(
         ax=ax4,
-        x_values=ana_x_values,
+        x_values=ana_v_x_values,
         y_values=ana_v_values,
         x_label=x_label,
         y_label=v_label,
         label=v_scatter_label, 
     )
 
-
+    if title:
+        fig.suptitle(f"{case_name.title()} Solution Overview")
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
