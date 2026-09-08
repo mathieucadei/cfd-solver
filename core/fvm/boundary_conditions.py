@@ -877,7 +877,7 @@ def apply_cavity_flow_boundary_2d(
     a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
     a_w_top = face_areas_x[-1, 1:-1] / dist_x[:-1]
     a_nb = face_areas_y[-1, 1:-1] / (ly - yc[-1])
-    a_s_top = face_areas_y[-1, 1:-1] / dist_y[-1]
+    a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
 
     ## pressure
 

@@ -32,6 +32,7 @@ core/fdm/solvers/           finite-difference solvers
 core/fvm/                   finite-volume configs, mesh, time steps, initial conditions, operators
 core/fvm/solvers/           finite-volume solvers
 core/analytical/            analytical reference solutions
+data/                       Ghia et al. (1982) reference tables
 post_processing/            contour, surface, quiver, and animation helpers
 runs/fdm/                   finite-difference examples
 runs/fvm/                   finite-volume examples

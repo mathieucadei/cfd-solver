@@ -11,6 +11,8 @@ import math
 from matplotlib import cm
 import matplotlib.pyplot as plt
 
+from pathlib import Path
+
 from core import fdm
 
 from post_processing import (
@@ -122,11 +124,11 @@ norm = Normalize(vmin=np.min(M), vmax=np.max(M))
 fig, ax = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
 
 ax0 = ax[0, 0].quiver(
-    X[::2, ::2], 
-    Y[::2, ::2], 
-    u_solution_matrix_final[::2, ::2], 
-    v_solution_matrix_final[::2, ::2],
-    M[::2, ::2],
+    X[::2,::2], 
+    Y[::2,::2], 
+    u_solution_matrix_final[::2,::2], 
+    v_solution_matrix_final[::2,::2],
+    M[::2,::2],
     scale=20,
     cmap=cm.plasma,
     norm=norm,

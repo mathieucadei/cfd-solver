@@ -26,7 +26,7 @@ def solve_poisson_2d(
 
     history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
 
-    history[0] = initial_condition[1]
+    history[0] = initial_condition[0]
 
     a_w = face_areas_x[1:-1, 1:-1] / dist_x[:-1]
     a_e = face_areas_x[1:-1, 2:] / dist_x[1:]

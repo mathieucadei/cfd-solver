@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+from pathlib import Path
+
 from core import fdm
 
 from post_processing import (
@@ -96,8 +98,9 @@ v = v_solution_matrix_final[num_grid_points_y//2,...]
 M = np.sqrt(u_solution_matrix_final**2+v_solution_matrix_final**2)
 p = p_solution_matrix_final
 
-ghia_table_1 = pd.read_csv('../../data/ghia_table_1.csv')
-ghia_table_2 = pd.read_csv('../../data/ghia_table_2.csv')
+DATA = Path(__file__).resolve().parents[2] / 'data'
+ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
+ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
 
@@ -114,11 +117,11 @@ ax[0, 0].set_title('Pressure and Streamlines')
 fig.colorbar(ax0, label='p')
 
 ax1 = ax[0, 1].quiver(
-    X[::2, ::2], 
-    Y[::2, ::2], 
-    u_solution_matrix_final[::2, ::2], 
-    v_solution_matrix_final[::2, ::2],
-    M[::2, ::2],
+    X[::2,::2], 
+    Y[::2,::2], 
+    u_solution_matrix_final[::2,::2], 
+    v_solution_matrix_final[::2,::2],
+    M[::2,::2],
     scale=20,
     cmap=cm.plasma,
 )

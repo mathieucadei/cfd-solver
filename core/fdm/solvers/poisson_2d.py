@@ -27,7 +27,7 @@ def solve_poisson_2d(
 
     history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
 
-    history[0] = initial_condition[1]
+    history[0] = initial_condition[0]
 
     for n in range(1, config.max_iterations + 1):
 
