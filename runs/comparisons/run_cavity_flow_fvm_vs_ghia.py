@@ -12,7 +12,7 @@ from matplotlib import cm
 
 from pathlib import Path
 
-from core import fdm
+from core import fvm
 
 from post_processing import (
     show_cavity_flow_solution_overview,
@@ -27,8 +27,10 @@ reynolds_number = 100
 
 domain_length_x: float = 1.0
 domain_length_y: float = 1.0
-num_grid_points_x: int = 41
-num_grid_points_y: int = 41
+num_cells_x: int = 30
+num_cells_y: int = 30
+expansion_ratio_x: float = 0.
+expansion_ratio_y: float = 0.
 max_iterations = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
@@ -40,8 +42,8 @@ viscosity: float = u_lid*domain_length_x/reynolds_number
 # Visualization parameters
 
 step_stride = 10
-cut_indices=[num_grid_points_x // 2]
-case_name = f'lid-driven cavity flow - Re {reynolds_number}'
+cut_indices=[(num_cells_x+1) // 2]
+case_name = f'lid-driven cavity flow FVM - Re {reynolds_number}'
 case_name_as_title = True
 save = False
 show_individual_plots = False
@@ -49,11 +51,13 @@ show_individual_plots = False
 
 # Create the configuration object
 
-cavity_flow_config = fdm.CavityFlowConfig(
+cavity_flow_config = fvm.CavityFlowConfig(
     domain_length_x=domain_length_x,
     domain_length_y=domain_length_y,
-    num_grid_points_x=num_grid_points_x,
-    num_grid_points_y=num_grid_points_y,
+    num_cells_x=num_cells_x,
+    num_cells_y=num_cells_y,
+    expansion_ratio_x=expansion_ratio_x,
+    expansion_ratio_y=expansion_ratio_y,
     max_iterations=max_iterations,
     max_pseudo_iterations=max_pseudo_iterations,
     time_step=time_step,
@@ -65,19 +69,19 @@ cavity_flow_config = fdm.CavityFlowConfig(
 
 # Generate the grid and time array
 
-x_array = fdm.make_x_grid(cavity_flow_config)
-y_array = fdm.make_y_grid(cavity_flow_config)
+hx_array, hy_array = fvm.build_h_spacing(cavity_flow_config)
+xc_array, yc_array = fvm.build_centers(cavity_flow_config)
 
 
 # Initialize the initial condition
 
-initial_condition = fdm.cavity_flow_initial_condition(cavity_flow_config)
+initial_condition = fvm.cavity_flow_initial_condition(cavity_flow_config)
 
 
 
 # Solve the poisson equation
 
-solution_matrix = fdm.solve_cavity_flow(initial_condition, config=cavity_flow_config)
+solution_matrix = fvm.solve_cavity_flow(initial_condition, config=cavity_flow_config)
 
 u_solution_matrix = solution_matrix[0]
 
@@ -110,8 +114,8 @@ v_scatter_label='y=0.5 - Ghia et al. (1982)'
 # Post-processing
 
 show_cavity_flow_solution_overview(
-    x_values=x_array,
-    y_values=y_array,
+    x_values=xc_array,
+    y_values=yc_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
