@@ -15,6 +15,27 @@ from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 
 
+def plot_solution_scatter(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    x_label: str = 'x',
+    y_label: str = 'u',
+    label: str = 'Analytical',
+    case_name: str = None,
+    title: bool = False,
+) -> None:
+    """Plot selected numerical and analytical solution traces on an existing axis."""
+        
+    ax.scatter(x_values, y_values, color='r', label=label)
+    
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+    ax.legend()
+
+    if title:
+        ax.set_title(f'{case_name.title()} Solution')
+
 
 def plot_solution_traces(
     ax: Axes,
@@ -653,6 +674,10 @@ def show_cavity_flow_solution_overview(
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
     p_solution_matrix: np.ndarray,
+    ana_x_values: np.ndarray = None,
+    ana_y_values: np.ndarray = None,
+    ana_u_values: np.ndarray = None,
+    ana_v_values: np.ndarray = None,
     step: int = 3,
     scale: float = 10.0,
     x_label: str = 'x',
@@ -661,13 +686,14 @@ def show_cavity_flow_solution_overview(
     v_label: str = 'v',   
     case_name: str = None,
     step_stride: int=5,
+    scatter_label: str = None,
     title: bool = False,
     save: bool = False,     
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
     fig = plt.figure(figsize=(14, 10), constrained_layout=True)
-    gs = fig.add_gridspec(1, 2)
+    gs = fig.add_gridspec(2, 2)
 
     ax1 = fig.add_subplot(gs[0, 0])
     ax2 = fig.add_subplot(gs[0, 1])
@@ -757,12 +783,20 @@ def show_cavity_flow_solution_overview(
         cut_values=y_values,
         num_solution_matrix=u_solution_matrix,
         axis=0,
-        # ana_solution_matrix=ana_solution_matrix,
-        cut_label=y_label,
-        x_label=u_label,
-        y_label=y_label,
+        cut_label=x_label,
+        x_label=y_label,
+        y_label=u_label,
         case_name=case_name,
         step_stride=step_stride,
+    )
+
+    plot_solution_scatter(
+        ax=ax3,
+        x_values=ana_y_values,
+        y_values=ana_u_values,
+        x_label=y_label,
+        y_label=u_label,
+        label=scatter_label, 
     )
 
     plot_solution_traces(
@@ -771,12 +805,20 @@ def show_cavity_flow_solution_overview(
         cut_values=x_values,
         num_solution_matrix=v_solution_matrix,
         axis=1,
-        # ana_solution_matrix=ana_solution_matrix,
-        cut_label=x_label,
+        cut_label=y_label,
         x_label=x_label,
         y_label=v_label,
         case_name=case_name,
         step_stride=step_stride,
+    )
+
+    plot_solution_scatter(
+        ax=ax4,
+        x_values=ana_x_values,
+        y_values=ana_v_values,
+        x_label=x_label,
+        y_label=v_label,
+        label=scatter_label, 
     )
 
 
