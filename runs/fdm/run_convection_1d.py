@@ -35,7 +35,7 @@ u_max = 2.0
 
 step_stride = 20
 case_name = '1d convection'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -80,7 +80,7 @@ if show_individual_plots:
         num_solution_matrix=solution_history,
         step_stride=step_stride,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -92,7 +92,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='x',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -101,7 +101,7 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -110,7 +110,7 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -120,7 +120,7 @@ show_solution_overview(
     num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

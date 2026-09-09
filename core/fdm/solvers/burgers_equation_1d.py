@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D Burgers' equation."""
+"""FDM numerical solver for the 1D Burgers' equation."""
 
 
 

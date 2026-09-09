@@ -36,7 +36,7 @@ v_max: float = 2.0
 
 step_stride = 10
 case_name = '2d burgers'
-title = True
+case_name_as_title = True
 save = False
 
 
@@ -96,7 +96,7 @@ show_solution_uv_surfaces(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     case_name=f'{case_name} final',
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

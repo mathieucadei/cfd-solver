@@ -23,7 +23,8 @@ def plot_solution_scatter(
     y_label: str = 'u',
     label: str = 'Analytical',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot selected numerical and analytical solution traces on an existing axis."""
 
@@ -33,8 +34,11 @@ def plot_solution_scatter(
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
 
-    if title:
+    if case_name_as_title:
         ax.set_title(f'{case_name.title()} Solution')
+
+    elif title:
+        ax.set_title(title)
 
 
 def plot_solution_traces(
@@ -131,9 +135,6 @@ def plot_solution_traces(
     elif title:
         ax.set_title(title)
 
-    else:
-        pass
-
 
 def plot_solution_contour(
     ax: Axes,
@@ -146,7 +147,8 @@ def plot_solution_contour(
     y_label: str = 't',
     levels: np.ndarray = None,
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ):
     """Plot a contour view of a 2D solution field."""
 
@@ -157,8 +159,11 @@ def plot_solution_contour(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
+    if case_name_as_title:
         ax.set_title(f'{case_name.title()} Solution')
+
+    elif title:
+        ax.set_title(title)
 
     return contour
 
@@ -192,8 +197,6 @@ def plot_solution_contourf(
     elif title:
         ax.set_title(title)
 
-    else:
-        pass
 
     return contourf
 
@@ -258,10 +261,9 @@ def plot_quiver(
     elif title:
         ax.set_title(title)
 
-    else:
-        pass
 
     return qvr
+
 
 def plot_streamlines(
     ax: Axes,
@@ -272,7 +274,8 @@ def plot_streamlines(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot a quiver view of 2D velocity vector fields."""
 
@@ -293,8 +296,11 @@ def plot_streamlines(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
-        ax.set_title(f'{case_name.title()} Velocity Field')
+    if case_name_as_title:
+        ax.set_title(f"{case_name.title()} Velocity Field")
+
+    elif title:
+         ax.set_title(title)
 
     return stream
 
@@ -309,7 +315,8 @@ def plot_solution_surface(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot a 3D surface view of a 2D solution field."""
 
@@ -321,8 +328,11 @@ def plot_solution_surface(
     ax.set_ylabel(y_label)
     ax.set_zlabel(z_label)
 
-    if title:
-        ax.set_title(f'{case_name.title()} Solution')
+    if case_name_as_title:
+        ax.set_title(f"{case_name.title()} Solution")
+
+    elif title:
+         ax.set_title(title)
 
 
 def show_solution_traces(
@@ -335,7 +345,8 @@ def show_solution_traces(
     x_label: str = 'x',
     y_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     step_stride: int = 5,
     save: bool = False,
 ) -> None:
@@ -354,6 +365,7 @@ def show_solution_traces(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
         step_stride=step_stride,
     )
@@ -375,7 +387,8 @@ def show_solution_contour_map(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,
 ) -> None:
     """Create and display a standalone contour plot of a 2D solution field."""
@@ -393,6 +406,7 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -405,6 +419,7 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -425,7 +440,8 @@ def show_solution_surface(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,
 ) -> None:
     """Create and display a standalone 3D surface plot of a 2D solution field."""
@@ -443,6 +459,7 @@ def show_solution_surface(
         y_label=y_label,
         z_label=z_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -463,7 +480,8 @@ def show_solution_uv_surfaces(
     z_label_u: str = "u",
     z_label_v: str = "v",
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,
 ) -> None:
     """Create and display side-by-side 3D surface plots for the 2D u and v solution fields."""
@@ -483,6 +501,7 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_u,
         case_name=f'{case_name} u',
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -496,6 +515,7 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_v,
         case_name=f'{case_name} v',
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -515,7 +535,8 @@ def show_cavity_flow_solution(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
@@ -535,6 +556,7 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -549,6 +571,7 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -562,6 +585,7 @@ def show_cavity_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -581,7 +605,8 @@ def show_channel_flow_solution(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
@@ -614,6 +639,7 @@ def show_channel_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
     )
 
@@ -634,9 +660,10 @@ def show_solution_overview(
     x_label: str = 'x',
     y_label: str = 'y',
     z_label: str = 'u',
-    case_name: str = None,
     step_stride: int=5,
-    title: bool = False,
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool=False,
 ) -> None:
     """Create and display a multi-panel overview of a solution and its diagnostics."""
@@ -718,8 +745,11 @@ def show_solution_overview(
         step_stride=step_stride,
     )
 
-    if title:
+    if case_name_as_title:
         fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='overview')
@@ -773,7 +803,7 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        title='Pressure and Streamines',
+        title='Pressure and Streamlines',
     )
 
     fig.colorbar(contourf, ax=ax1)
@@ -917,9 +947,6 @@ def show_cavity_flow_solution_overview(
 
     elif title:
          fig.suptitle(title)
-
-    else:
-        pass
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
@@ -1123,9 +1150,6 @@ def show_channel_flow_solution_overview(
 
     elif title:
          fig.suptitle(title)
-
-    else:
-        pass
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')

@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D diffusion equation."""
+"""FDM numerical solver for the 1D diffusion equation."""
 
 
 

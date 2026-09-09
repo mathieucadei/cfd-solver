@@ -38,7 +38,7 @@ u_max: float = 2.0
 
 step_stride = 10
 case_name = '2d advection'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -108,7 +108,7 @@ show_solution_overview(
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

@@ -46,7 +46,7 @@ basis = "cosine"  # "periodic" or "cosine"
 
 step_stride = 20
 case_name = '1d diffusion vs heat'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -125,7 +125,7 @@ show_solution_overview(
     ana_solution_matrix=solution_history_ana, 
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

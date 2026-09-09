@@ -1,4 +1,4 @@
-"""Numerical solver for the 2D convection equation."""
+"""FDM numerical solver for the 2D convection equation."""
 
 
 

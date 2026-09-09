@@ -1,4 +1,4 @@
-"""Run the 2D advection solver and generate solution plots."""
+"""Run the 2D advection FDM solver and generate solution plots."""
 
 
 
@@ -38,7 +38,7 @@ u_max: float = 2.0
 
 step_stride = 10
 case_name = '2d advection'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -97,7 +97,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='y',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -108,7 +108,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='x',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         x_label='y',
         save=save,
     )
@@ -118,7 +118,7 @@ if show_individual_plots:
         y_values=y_array,
         solution_matrix=solution_final,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         y_label='y',
         save=save,
     )
@@ -128,7 +128,7 @@ if show_individual_plots:
         y_values=y_array,
         solution_matrix=solution_final,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         y_label='y',
         save=save,
     )
@@ -140,7 +140,7 @@ show_solution_overview(
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

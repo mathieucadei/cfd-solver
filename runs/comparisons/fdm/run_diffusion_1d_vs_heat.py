@@ -45,7 +45,7 @@ basis = "cosine"  # "periodic" or "cosine"
 
 step_stride = 100
 case_name = '1d diffusion vs heat'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -122,7 +122,7 @@ if show_individual_plots:
         ana_solution_matrix=solution_history_ana,
         step_stride=step_stride,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -135,7 +135,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='x',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -144,7 +144,7 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history_num,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -153,7 +153,7 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history_num,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -164,7 +164,7 @@ show_solution_overview(
     ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

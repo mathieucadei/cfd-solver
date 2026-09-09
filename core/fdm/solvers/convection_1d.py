@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D convection equation."""
+"""FDM numerical solver for the 1D convection equation."""
 
 
 import numpy as np

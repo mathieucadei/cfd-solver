@@ -37,7 +37,7 @@ u_max = 2.0
 
 step_stride = 20
 case_name = '1d burgers'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -98,7 +98,7 @@ show_solution_overview(
     num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

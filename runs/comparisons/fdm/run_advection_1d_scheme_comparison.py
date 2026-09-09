@@ -39,7 +39,7 @@ schemes = [
 
 step_stride = 20
 case_name = '1d advection'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -91,7 +91,7 @@ for scheme in schemes:
             num_solution_matrix=solution_history,
             step_stride=step_stride,
             case_name=case_name_scheme,
-            title=title,
+            case_name_as_title=case_name_as_title,
             save=save,
         )
 
@@ -103,7 +103,7 @@ for scheme in schemes:
             step_stride=step_stride,
             cut_label='x',
             case_name=case_name_scheme,
-            title=title,
+            case_name_as_title=case_name_as_title,
             save=save,
         )
 
@@ -112,7 +112,7 @@ for scheme in schemes:
             y_values=time_array,
             solution_matrix=solution_history,
             case_name=case_name_scheme,
-            title=title,
+            case_name_as_title=case_name_as_title,
             save=save,
         )
 
@@ -121,7 +121,7 @@ for scheme in schemes:
             y_values=time_array,
             solution_matrix=solution_history,
             case_name=case_name_scheme,
-            title=title,
+            case_name_as_title=case_name_as_title,
             save=save,
         )
 
@@ -131,7 +131,7 @@ for scheme in schemes:
         num_solution_matrix=solution_history,
         step_stride=step_stride,
         case_name=case_name_scheme,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 

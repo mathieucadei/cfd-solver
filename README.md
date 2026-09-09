@@ -36,7 +36,8 @@ data/                       Ghia et al. (1982) reference tables
 post_processing/            contour, surface, quiver, and animation helpers
 runs/fdm/                   finite-difference examples
 runs/fvm/                   finite-volume examples
-runs/comparisons/           scheme comparisons and analytical validations
+runs/comparisons/fdm/       finite-difference scheme comparisons and validations
+runs/comparisons/fvm/       finite-volume scheme comparisons and validations
 ```
 
 ## Example visualizations
