@@ -97,6 +97,7 @@ u_analytical = analytical.compute_poiseuille_flow(
     y_array=y_array,
     config=channel_flow_config,
 )
+
 u_analytical_2d = np.tile(u_analytical[:, None], (1, num_grid_points_x))
 
 # Post-processing
@@ -198,15 +199,15 @@ show_channel_flow_solution_overview(
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
+    ana_u_x_values=y_array,
+    ana_u_values=u_analytical,
     error=error,
     error_2d=error_2d,
-    ana_u_x_values=u_analytical,
-    ana_u_values=y_array,
+    metrics=metrics,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,
     cut_indices=cut_indices,
-    u_scatter_label='analytical',
 )
 
 # show_channel_flow_solution(
