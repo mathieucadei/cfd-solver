@@ -94,14 +94,14 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Ghia et al. (1982)
 
-DATA = Path(__file__).resolve().parents[2] / 'data'
+DATA = Path(__file__).resolve().parents[3] / 'data'
 ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
 ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
 
-ana_u_x_values=ghia_table_1['y']
-ana_v_x_values=ghia_table_2['x']
-ana_u_values=ghia_table_1['100']
-ana_v_values=ghia_table_2['100']
+validation_u_x_values=ghia_table_1['y']
+validation_v_x_values=ghia_table_2['x']
+validation_u_values=ghia_table_1['100']
+validation_v_values=ghia_table_2['100']
 
 u_scatter_label='x=0.5 - Ghia et al. (1982)'
 v_scatter_label='y=0.5 - Ghia et al. (1982)'
@@ -115,10 +115,10 @@ show_cavity_flow_solution_overview(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
-    ana_u_x_values=ana_u_x_values,
-    ana_v_x_values=ana_v_x_values,
-    ana_u_values=ana_u_values,
-    ana_v_values=ana_v_values,
+    validation_u_x_values=validation_u_x_values,
+    validation_v_x_values=validation_v_x_values,
+    validation_u_values=validation_u_values,
+    validation_v_values=validation_v_values,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,

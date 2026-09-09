@@ -733,10 +733,10 @@ def show_cavity_flow_solution_overview(
     u_solution_matrix: np.ndarray,
     v_solution_matrix: np.ndarray,
     p_solution_matrix: np.ndarray,
-    ana_u_x_values: np.ndarray = None,
-    ana_v_x_values: np.ndarray = None,
-    ana_u_values: np.ndarray = None,
-    ana_v_values: np.ndarray = None,
+    validation_u_x_values: np.ndarray = None,
+    validation_v_x_values: np.ndarray = None,
+    validation_u_values: np.ndarray = None,
+    validation_v_values: np.ndarray = None,
     step: int = 2,
     scale: float = 15.0,
     x_label: str = 'x',
@@ -834,7 +834,7 @@ def show_cavity_flow_solution_overview(
     ax2.set_xlim(x_values[0], x_values[-1])
     ax2.set_ylim(y_values[0], y_values[-1])
 
-    if ana_u_values is not None:
+    if validation_u_values is not None:
 
         plot_solution_traces(
             ax=ax3,
@@ -852,8 +852,8 @@ def show_cavity_flow_solution_overview(
 
         plot_solution_scatter(
             ax=ax3,
-            x_values=ana_u_x_values,
-            y_values=ana_u_values,
+            x_values=validation_u_x_values,
+            y_values=validation_u_values,
             x_label=y_label,
             y_label=u_label,
             label=u_scatter_label, 
@@ -875,8 +875,8 @@ def show_cavity_flow_solution_overview(
 
         plot_solution_scatter(
             ax=ax4,
-            x_values=ana_v_x_values,
-            y_values=ana_v_values,
+            x_values=validation_v_x_values,
+            y_values=validation_v_values,
             x_label=x_label,
             y_label=v_label,
             label=v_scatter_label, 
