@@ -98,6 +98,14 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Ghia et al. (1982)
 
+print("FVM p min/max:",
+      p_solution_matrix_final.min(),
+      p_solution_matrix_final.max())
+
+print("FVM top cell row:",
+      p_solution_matrix_final[-1, :].min(),
+      p_solution_matrix_final[-1, :].max())
+
 DATA = Path(__file__).resolve().parents[2] / 'data'
 ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
 ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
