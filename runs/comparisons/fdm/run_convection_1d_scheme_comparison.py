@@ -1,4 +1,4 @@
-"""Run the 1D convection solver and generate solution plots."""
+"""Compare conservative and non-conservative finite-difference schemes for the 1D inviscid Burgers equation."""
 
 
 
