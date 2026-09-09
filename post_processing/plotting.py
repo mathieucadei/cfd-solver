@@ -1055,7 +1055,7 @@ def show_channel_flow_solution_overview(
         ax4.text(
             0.03,
             0.97,
-            metrics=metrics,
+            s=metrics,
             transform=ax4.transAxes,
             verticalalignment='top',
             bbox=dict(facecolor='white', alpha=0.8),

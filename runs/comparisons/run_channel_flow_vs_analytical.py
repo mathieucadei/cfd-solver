@@ -209,23 +209,3 @@ show_channel_flow_solution_overview(
     save=save,
     cut_indices=cut_indices,
 )
-
-# show_channel_flow_solution(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_matrix=u_solution_matrix_final,
-#     v_solution_matrix=v_solution_matrix_final,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_channel_flow_solution_animation(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_history=u_solution_matrix,
-#     v_solution_history=v_solution_matrix,
-#     source=source,
-#     case_name=case_name,
-#     save=save,
-# )
