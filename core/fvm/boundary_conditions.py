@@ -451,7 +451,7 @@ def apply_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_e_u_bottom_left - f_wb_u) / cell_volumes[0, 0] +
-                                            (f_n_v_bottom_left - f_sb_u) / cell_volumes[0, 0]
+                                            (f_n_v_bottom_left - f_sb_v) / cell_volumes[0, 0]
                                         ) -
                                         (
                                             (f_e_u_bottom_left - f_wb_u) / cell_volumes[0, 0])**2 -
@@ -476,7 +476,7 @@ def apply_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_bottom_right) / cell_volumes[0, -1] +
-                                            (f_n_v_bottom_right - f_sb_u) / cell_volumes[0, -1]
+                                            (f_n_v_bottom_right - f_sb_v) / cell_volumes[0, -1]
                                         ) -
                                         (
                                             (f_eb_u - f_w_u_bottom_right) / cell_volumes[0, -1])**2 -
@@ -503,7 +503,7 @@ def apply_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_e_u_top_left - f_wb_u) / cell_volumes[-1, 0] +
-                                            (f_nb_u_left - f_s_u_top_left) / cell_volumes[-1, -1]
+                                            (f_nb_v - f_s_v_top_left) / cell_volumes[-1, 0]
                                         ) -
                                         (
                                             (f_e_u_top_left - f_wb_u) / cell_volumes[-1, 0])**2 -
@@ -530,7 +530,7 @@ def apply_source_term_boundary_2d(
                         rho * 
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_top_right) / cell_volumes[-1, -1] +
-                                            (f_nb_u_right - f_s_u_top_right) / cell_volumes[-1, -1]
+                                            (f_nb_v - f_s_v_top_right) / cell_volumes[-1, -1]
                                         ) -
                                         (
                                             (f_eb_u - f_w_u_top_right) / cell_volumes[-1, -1])**2 -
