@@ -131,10 +131,10 @@ if show_individual_plots:
     )
 
 show_solution_overview(
-    x_values=x_array, 
-    y_values=time_array, 
-    num_solution_matrix=solution_history_num, 
-    ana_solution_matrix=solution_history_ana, 
+    x_values=x_array,
+    y_values=time_array,
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -144,7 +144,7 @@ show_solution_overview(
 show_solution_1d_animation(
     x_values=x_array,
     num_solution_history=solution_history_num,
-    ana_solution_history=solution_history_ana, 
+    ana_solution_history=solution_history_ana,
     case_name=case_name,
     save=save,
 )

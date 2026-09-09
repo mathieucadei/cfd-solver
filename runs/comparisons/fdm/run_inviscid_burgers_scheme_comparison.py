@@ -110,7 +110,7 @@ for current_ax, nx, n_iter, sigma, epsilon in cases:
     current_ax.set_ylabel('u', rotation=0)
 
     final_time = n_iter * sigma * domain_length_x / ((nx - 1) * u_max)
-    
+
     current_ax.set_title(
         f'nx={nx}, σ={sigma}, ε={epsilon} nt={n_iter}, t={final_time:.2f}'
     )

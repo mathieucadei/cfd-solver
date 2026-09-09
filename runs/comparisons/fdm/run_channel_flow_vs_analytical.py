@@ -128,9 +128,9 @@ metrics = (
 # fig, ax = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
 
 # ax0 = ax[0, 0].quiver(
-#     X[::2,::2], 
-#     Y[::2,::2], 
-#     u_solution_matrix_final[::2,::2], 
+#     X[::2,::2],
+#     Y[::2,::2],
+#     u_solution_matrix_final[::2,::2],
 #     v_solution_matrix_final[::2,::2],
 #     M[::2,::2],
 #     scale=20,

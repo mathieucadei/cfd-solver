@@ -84,9 +84,9 @@ initial_condition = fdm.hat_initial_condition_1d(x_array, diffusion_1d_config)
 mode_indices = signal_processing.generate_mode_indices(num_modes)
 
 mode_coefficients = signal_processing.compute_coefficients(
-    initial_condition, 
-    x_array, 
-    mode_indices, 
+    initial_condition,
+    x_array,
+    mode_indices,
     basis=basis,
 )
 
@@ -103,10 +103,10 @@ solution_history_num = fdm.solve_diffusion_1d(initial_condition, diffusion_1d_co
 # Heat analytical equation
 
 solution_history_ana = analytical.solve_heat_equation_1d(
-    series_terms, 
+    series_terms,
     mode_indices,
     x_array,
-    time_array, 
+    time_array,
     diffusion_1d_config.viscosity,
     basis=basis)
 
@@ -158,10 +158,10 @@ if show_individual_plots:
     )
 
 show_solution_overview(
-    x_values=x_array, 
-    y_values=time_array, 
+    x_values=x_array,
+    y_values=time_array,
     num_solution_matrix=solution_history_num,
-    ana_solution_matrix=solution_history_ana, 
+    ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     case_name=case_name,
     title=title,
@@ -171,7 +171,7 @@ show_solution_overview(
 show_solution_1d_animation(
     x_values=x_array,
     num_solution_history=solution_history_num,
-    ana_solution_history=solution_history_ana, 
+    ana_solution_history=solution_history_ana,
     case_name=case_name,
     save=save,
 )

@@ -235,11 +235,16 @@ python runs/fvm/run_poisson_2d.py
 python runs/fvm/run_cavity_flow.py
 python runs/fvm/run_channel_flow.py
 
-python runs/comparisons/run_advection_1d_scheme_comparison.py
-python runs/comparisons/run_convection_1d_scheme_comparison.py
-python runs/comparisons/run_inviscid_burgers_scheme_comparison.py
-python runs/comparisons/run_diffusion_1d_vs_heat.py
-python runs/comparisons/run_diffusion_1d_fvm_vs_heat.py
-python runs/comparisons/run_burgers_equation_1d_vs_cole_hopf.py
-python runs/comparisons/run_burgers_equation_1d_fvm_vs_cole_hopf.py
+python runs/comparisons/fdm/run_advection_1d_scheme_comparison.py
+python runs/comparisons/fdm/run_convection_1d_scheme_comparison.py
+python runs/comparisons/fdm/run_inviscid_burgers_scheme_comparison.py
+python runs/comparisons/fdm/run_diffusion_1d_vs_heat.py
+python runs/comparisons/fdm/run_burgers_equation_1d_vs_cole_hopf.py
+python runs/comparisons/fdm/run_cavity_flow_vs_ghia.py
+python runs/comparisons/fdm/run_channel_flow_vs_analytical.py
+
+python runs/comparisons/fvm/run_diffusion_1d_vs_heat.py
+python runs/comparisons/fvm/run_burgers_equation_1d_vs_cole_hopf.py
+python runs/comparisons/fvm/run_cavity_flow_vs_ghia.py
+python runs/comparisons/fvm/run_channel_flow_vs_analytical.py
 ```

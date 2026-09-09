@@ -26,9 +26,9 @@ def plot_solution_scatter(
     title: bool = False,
 ) -> None:
     """Plot selected numerical and analytical solution traces on an existing axis."""
-        
+
     ax.scatter(x_values, y_values, color='r', label=label)
-    
+
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
@@ -70,9 +70,9 @@ def plot_solution_traces(
             y_cut = num_solution_matrix[:, n]
         else:
             raise ValueError('axis must be 0 or 1')
-        
+
         num_label = f'Numerical ({cut_label}: {cut_values[n]:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.3g}'
-        
+
         if swap_axes:
             ax.plot(
                 y_cut,
@@ -87,7 +87,7 @@ def plot_solution_traces(
                 color=color,
                 label=num_label
             )
-    
+
     if ana_solution_matrix is not None:
 
         indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
@@ -100,9 +100,9 @@ def plot_solution_traces(
                 y_cut = ana_solution_matrix[:, n]
             else:
                 raise ValueError('axis must be 0 or 1')
-        
+
             ana_label = f'Analytical ({cut_label}: {cut_values[n]:.3g})'
-        
+
             if swap_axes:
                 ax.plot(
                     y_cut,
@@ -126,7 +126,7 @@ def plot_solution_traces(
     ax.legend()
 
     if case_name_as_title:
-        ax.set_title(f'{case_name.title()} Solution')        
+        ax.set_title(f'{case_name.title()} Solution')
 
     elif title:
         ax.set_title(title)
@@ -159,7 +159,7 @@ def plot_solution_contour(
 
     if title:
         ax.set_title(f'{case_name.title()} Solution')
-    
+
     return contour
 
 
@@ -187,14 +187,14 @@ def plot_solution_contourf(
     ax.set_ylabel(y_label, rotation=0)
 
     if case_name_as_title:
-        ax.set_title(f'{case_name.title()} Solution')        
+        ax.set_title(f'{case_name.title()} Solution')
 
     elif title:
         ax.set_title(title)
 
     else:
         pass
-    
+
     return contourf
 
 
@@ -207,7 +207,7 @@ def plot_quiver(
     magnitude: np.ndarray = None,
     norm: Normalize = None,
     step: int = 2,
-    cmap: str = None, 
+    cmap: str = None,
     scale: float = 20.0,
     x_label: str = 'x',
     y_label: str = 'y',
@@ -253,7 +253,7 @@ def plot_quiver(
     ax.set_ylabel(y_label, rotation=0)
 
     if case_name_as_title:
-        ax.set_title(f'{case_name.title()} Solution')        
+        ax.set_title(f'{case_name.title()} Solution')
 
     elif title:
         ax.set_title(title)
@@ -337,7 +337,7 @@ def show_solution_traces(
     case_name: str = None,
     title: bool = False,
     step_stride: int = 5,
-    save: bool = False,       
+    save: bool = False,
 ) -> None:
     """Create and display a standalone trace plot for a numerical or analytical solution."""
 
@@ -376,7 +376,7 @@ def show_solution_contour_map(
     z_label: str = 'u',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone contour plot of a 2D solution field."""
 
@@ -393,7 +393,7 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     contourf = plot_solution_contourf(
@@ -405,7 +405,7 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     fig.colorbar(contourf, ax=ax)
@@ -426,7 +426,7 @@ def show_solution_surface(
     z_label: str = 'u',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone 3D surface plot of a 2D solution field."""
 
@@ -443,7 +443,7 @@ def show_solution_surface(
         y_label=y_label,
         z_label=z_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     if save:
@@ -464,7 +464,7 @@ def show_solution_uv_surfaces(
     z_label_v: str = "v",
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side 3D surface plots for the 2D u and v solution fields."""
 
@@ -483,7 +483,7 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_u,
         case_name=f'{case_name} u',
-        title=title,   
+        title=title,
     )
 
     plot_solution_surface(
@@ -496,7 +496,7 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_v,
         case_name=f'{case_name} v',
-        title=title,   
+        title=title,
     )
 
     if save:
@@ -516,7 +516,7 @@ def show_cavity_flow_solution(
     y_label: str = 'y',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -535,7 +535,7 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     fig.colorbar(contourf, ax=ax)
@@ -549,7 +549,7 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     plot_quiver(
@@ -562,7 +562,7 @@ def show_cavity_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     if save:
@@ -582,7 +582,7 @@ def show_channel_flow_solution(
     y_label: str = 'y',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -614,7 +614,7 @@ def show_channel_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
@@ -627,7 +627,7 @@ def show_channel_flow_solution(
 
 def show_solution_overview(
     x_values: np.ndarray,
-    y_values: np.ndarray, 
+    y_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     ana_solution_matrix: np.ndarray = None,
     cmap: Colormap = cm.viridis,
@@ -636,7 +636,7 @@ def show_solution_overview(
     z_label: str = 'u',
     case_name: str = None,
     step_stride: int=5,
-    title: bool = False, 
+    title: bool = False,
     save: bool=False,
 ) -> None:
     """Create and display a multi-panel overview of a solution and its diagnostics."""
@@ -659,7 +659,7 @@ def show_solution_overview(
             x_label=x_label,
             y_label=y_label,
             z_label=z_label,
-            case_name=case_name,  
+            case_name=case_name,
         )
 
     ax1.set_box_aspect((2.0, 2.0, 1.2))
@@ -672,7 +672,7 @@ def show_solution_overview(
         solution_matrix=num_solution_matrix,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
 
 
@@ -684,11 +684,11 @@ def show_solution_overview(
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
 
     fig.colorbar(contourf, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
-    
+
 
     plot_solution_traces(
         ax=ax3,
@@ -742,7 +742,7 @@ def show_cavity_flow_solution_overview(
     x_label: str = 'x',
     y_label: str = 'y',
     u_label: str = 'u',
-    v_label: str = 'v',   
+    v_label: str = 'v',
     step_stride: int=5,
     cut_indices: float | np.ndarray = None,
     u_scatter_label: str = None,
@@ -750,7 +750,7 @@ def show_cavity_flow_solution_overview(
     case_name: str = None,
     case_name_as_title: bool = False,
     title: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -773,7 +773,7 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        title='Pressure and Streamines',   
+        title='Pressure and Streamines',
     )
 
     fig.colorbar(contourf, ax=ax1)
@@ -786,11 +786,11 @@ def show_cavity_flow_solution_overview(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        case_name=case_name,  
+        case_name=case_name,
     )
 
     plot_streamlines(
-        ax=ax1,       
+        ax=ax1,
         x_values=x_values,
         y_values=y_values,
         u_solution_matrix=u_solution_matrix,
@@ -826,7 +826,7 @@ def show_cavity_flow_solution_overview(
         scale=scale,
         x_label=x_label,
         y_label=y_label,
-        title='Velocity Field',   
+        title='Velocity Field',
     )
 
     fig.colorbar(qvr, ax=ax2, label='Velocity Magnitude')
@@ -856,7 +856,7 @@ def show_cavity_flow_solution_overview(
             y_values=validation_u_values,
             x_label=y_label,
             y_label=u_label,
-            label=u_scatter_label, 
+            label=u_scatter_label,
         )
 
         plot_solution_traces(
@@ -879,7 +879,7 @@ def show_cavity_flow_solution_overview(
             y_values=validation_v_values,
             x_label=x_label,
             y_label=v_label,
-            label=v_scatter_label, 
+            label=v_scatter_label,
         )
 
     else:
@@ -918,8 +918,8 @@ def show_cavity_flow_solution_overview(
     elif title:
          fig.suptitle(title)
 
-    else: 
-        pass    
+    else:
+        pass
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
@@ -950,7 +950,7 @@ def show_channel_flow_solution_overview(
     case_name: str = None,
     case_name_as_title: bool = False,
     title: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -988,7 +988,7 @@ def show_channel_flow_solution_overview(
             scale=scale,
             x_label=x_label,
             y_label=y_label,
-            title='Velocity Field',   
+            title='Velocity Field',
         )
 
         fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
@@ -1004,7 +1004,7 @@ def show_channel_flow_solution_overview(
             x_label=x_label,
             y_label=y_label,
             cmap='plasma',
-            title='Velocity Error Field',   
+            title='Velocity Error Field',
         )
 
         fig.colorbar(contourf, ax=ax2, label='u numerical - u analytical')
@@ -1029,7 +1029,7 @@ def show_channel_flow_solution_overview(
             y_label=y_label,
             case_name=case_name,
             cut_indices=cut_indices,
-            swap_axes=True,        
+            swap_axes=True,
             title='Velocity Profile'
         )
 
@@ -1049,7 +1049,7 @@ def show_channel_flow_solution_overview(
             y_label=y_label,
             case_name=case_name,
             cut_indices=cut_indices,
-            swap_axes=True,        
+            swap_axes=True,
             title='Numerical - Analytical Error'
         )
 
@@ -1068,21 +1068,21 @@ def show_channel_flow_solution_overview(
             fig = plt.figure(figsize=(12, 4), constrained_layout=True)
 
             gs = fig.add_gridspec(1, 2)
-        
+
             ax1 = fig.add_subplot(gs[0, 0])
             ax2 = fig.add_subplot(gs[0, 1])
-    
+
             U = u_solution_matrix[::step, ::step]
             V = v_solution_matrix[::step, ::step]
-    
+
             M = np.sqrt(U**2 + V**2)
-    
+
             # vmin = np.floor(np.min(M))
             # vmax = np.ceil(np.max(M))
             # norm = Normalize(vmin=vmin, vmax=vmax)
-    
+
             # ticks = np.linspace(vmin, vmax, 11)
-    
+
             qvr = plot_quiver(
                 ax=ax1,
                 x_values=x_values,
@@ -1095,14 +1095,14 @@ def show_channel_flow_solution_overview(
                 scale=scale,
                 x_label=x_label,
                 y_label=y_label,
-                title='Velocity Field',   
+                title='Velocity Field',
             )
-    
+
             fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
-    
+
             ax1.set_xlim(x_values[0], x_values[-1])
             ax1.set_ylim(y_values[0], y_values[-1])
-    
+
             plot_solution_traces(
                 ax=ax2,
                 x_values=y_values,
@@ -1114,7 +1114,7 @@ def show_channel_flow_solution_overview(
                 y_label=y_label,
                 case_name=case_name,
                 cut_indices=cut_indices,
-                swap_axes=True,        
+                swap_axes=True,
                 title='Velocity Profile'
             )
 
@@ -1124,8 +1124,8 @@ def show_channel_flow_solution_overview(
     elif title:
          fig.suptitle(title)
 
-    else: 
-        pass    
+    else:
+        pass
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
@@ -1141,7 +1141,7 @@ def show_solution_1d_animation(
     save: bool = False
 ) -> None:
     """Create and display an animation of a 1D numerical or analytical solution."""
-    
+
     fig, ax = plt.subplots()
     num_line, = ax.plot(x_values, num_solution_history [0], lw=2,  label='Numerical')
 
@@ -1154,7 +1154,7 @@ def show_solution_1d_animation(
 
     if ana_solution_history is not None:
         ax.legend()
-    
+
     ax.set_title(f'{case_name.title()} Solution Animation')
 
     def update(frame):
@@ -1192,10 +1192,10 @@ def show_solution_2d_animation(
     y_label: str = 'y',
     z_label: str = 'u',
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display an animation of a 2D numerical or analytical solution."""
-    
+
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
 
@@ -1212,9 +1212,9 @@ def show_solution_2d_animation(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
-        
+
         if z_limits is not None:
             ax.set_zlim(z_limits)
 
@@ -1239,10 +1239,10 @@ def show_solution_uv_2d_animations(
     z_label_u: str = "u",
     z_label_v: str = "v",
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig = plt.figure()
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
     ax2 = fig.add_subplot(1, 2, 2, projection='3d')
@@ -1260,7 +1260,7 @@ def show_solution_uv_2d_animations(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label_u,
-        case_name=case_name,  
+        case_name=case_name,
     )
         ax1.set_title(f'U Solution Animation (Time step: {frame})')
 
@@ -1275,9 +1275,9 @@ def show_solution_uv_2d_animations(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label_v,
-        case_name=case_name,  
+        case_name=case_name,
     )
-        ax2.set_title(f'V Solution Animation (Time step: {frame})')       
+        ax2.set_title(f'V Solution Animation (Time step: {frame})')
 
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
@@ -1298,10 +1298,10 @@ def show_cavity_flow_solution_animation(
     y_label: str = 'y',
     u_lid: float = None,
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
@@ -1314,11 +1314,11 @@ def show_cavity_flow_solution_animation(
     p_solution_history[0],
     levels=levels,
 )
-    
+
 
     fig.colorbar(initial_contourf, ax=ax, label='Pressure')
 
-    
+
     def update(frame):
 
         ax.clear()
@@ -1331,7 +1331,7 @@ def show_cavity_flow_solution_animation(
             x_label=x_label,
             y_label=y_label,
             levels=levels,
-            case_name=case_name,   
+            case_name=case_name,
             )
 
         plot_solution_contour(
@@ -1342,7 +1342,7 @@ def show_cavity_flow_solution_animation(
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        case_name=case_name, 
+        case_name=case_name,
         )
 
         plot_quiver(
@@ -1354,7 +1354,7 @@ def show_cavity_flow_solution_animation(
         scale=scale,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,   
+        case_name=case_name,
         )
 
         ax.set_xlim(x_values[0], x_values[-1])
@@ -1364,7 +1364,7 @@ def show_cavity_flow_solution_animation(
 
             lid_velocity = u_lid
 
-        else: 
+        else:
 
             lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
 
@@ -1379,7 +1379,7 @@ def show_cavity_flow_solution_animation(
             va="bottom",
         )
 
-    
+
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
     if save:
@@ -1400,10 +1400,10 @@ def show_channel_flow_solution_animation(
     y_label: str = 'y',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig, ax = plt.subplots(figsize=(8, 4))
 
     U = u_solution_history[:, ::step, ::step]
@@ -1431,7 +1431,7 @@ def show_channel_flow_solution_animation(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
@@ -1445,16 +1445,16 @@ def show_channel_flow_solution_animation(
             ha="center",
             va="bottom",
         )
-    
+
     def update(frame):
 
         qvr.set_UVC(U[frame], V[frame], M[frame])
 
         if source is not None:
-            
+
             ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})", pad=24)
-        
-        else: 
+
+        else:
 
             ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})")
 
@@ -1465,7 +1465,7 @@ def show_channel_flow_solution_animation(
     if save:
         _save_ani(ani=ani, case_name=case_name, fig_type='channel_flow')
 
-    plt.show()  
+    plt.show()
 
 
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:

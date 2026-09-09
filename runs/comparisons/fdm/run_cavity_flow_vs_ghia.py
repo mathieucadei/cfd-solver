@@ -150,9 +150,9 @@ show_cavity_flow_solution_overview(
 # fig.colorbar(ax0, label='p')
 
 # ax1 = ax[0, 1].quiver(
-#     X[::2,::2], 
-#     Y[::2,::2], 
-#     u_solution_matrix_final[::2,::2], 
+#     X[::2,::2],
+#     Y[::2,::2],
+#     u_solution_matrix_final[::2,::2],
 #     v_solution_matrix_final[::2,::2],
 #     M[::2,::2],
 #     scale=20,
