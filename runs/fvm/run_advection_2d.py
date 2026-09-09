@@ -1,4 +1,4 @@
-"""Run the 2D advection solver and generate solution plots."""
+"""Run the 2D advection equation FVM solver and generate solution plots."""
 
 
 

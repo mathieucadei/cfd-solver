@@ -1,4 +1,4 @@
-"""Run the 1D diffusion & heat solvers and generate solution & comparision plots."""
+"""Run the 1D diffusion equation FDM solver & heat analytical solution and generate solution & comparision plots."""
 
 
 

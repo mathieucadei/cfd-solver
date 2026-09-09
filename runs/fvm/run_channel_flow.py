@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D channel flow FVM solver and generate solution plots."""
 
 
 

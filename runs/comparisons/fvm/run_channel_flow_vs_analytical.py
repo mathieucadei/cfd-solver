@@ -1,4 +1,4 @@
-"""Run the 2D channel flow solver and compare with Poiseuille flow."""
+"""Run the 2D channel flow FVM solver and compare with Poiseuille flow."""
 
 
 

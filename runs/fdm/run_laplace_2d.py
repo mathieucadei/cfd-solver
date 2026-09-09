@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D Laplace equation FDM solver and generate solution plots."""
 
 
 

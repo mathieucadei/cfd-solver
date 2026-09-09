@@ -1,4 +1,4 @@
-"""Run the 2D Burgers' equation solver and generate solution plots."""
+"""Run the 2D Burgers' equation FDM solver and generate solution plots."""
 
 
 

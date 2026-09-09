@@ -1,4 +1,4 @@
-"""Run the 1D Burgers' & Cole-Hopf solvers and generate solution & comparision plots."""
+"""Run the 1D Burgers' equation FDM solver & Cole-Hopf analytical solution and generate solution & comparision plots."""
 
 
 

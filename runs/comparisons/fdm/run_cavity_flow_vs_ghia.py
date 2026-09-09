@@ -1,5 +1,4 @@
-"""Run the 2D lid-driven cavity flow solver and generate solution plots."""
-
+"""Run the 2D lid-driven cavity flow FDM solver and compare with Ghia et al. (1982)."""
 
 
 import os

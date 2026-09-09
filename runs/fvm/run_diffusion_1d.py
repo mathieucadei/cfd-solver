@@ -1,4 +1,4 @@
-"""Run the 1D diffusion solver and generate solution plots."""
+"""Run the 1D diffusion equation FVM solver and generate solution plots."""
 
 
 

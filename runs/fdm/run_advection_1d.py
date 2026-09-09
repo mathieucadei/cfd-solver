@@ -1,4 +1,4 @@
-"""Run the 1D advection FDM solver and generate solution plots."""
+"""Run the 1D advection equation FDM solver and generate solution plots."""
 
 
 
