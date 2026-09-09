@@ -17,6 +17,7 @@ from core import fdm, analytical
 
 from post_processing import (
     show_channel_flow_solution,
+    show_channel_flow_solution_overview,
     show_channel_flow_solution_animation,
 )
 
@@ -41,8 +42,9 @@ u_l1_norm_target: float = 1e-6
 # Visualization parameters
 
 step_stride = 10
+cut_indices=[num_grid_points_x // 2]
 case_name = 'channel flow'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -177,7 +179,7 @@ ax[1, 1].grid(alpha=0.3)
 ax[1, 1].set_xlabel('Error')
 ax[1, 1].set_ylabel('y', rotation=0)
 ax[1, 1].legend()
-ax[1, 1].set_title('Numerical − Analytical Error')
+ax[1, 1].set_title('Numerical - Analytical Error')
 ax[1, 1].text(
     0.03,
     0.97,
@@ -191,6 +193,21 @@ fig.suptitle('Plane Poiseuille Flow — Numerical vs Analytical')
 plt.show()
 
 
+show_channel_flow_solution_overview(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    error=error,
+    error_2d=error_2d,
+    ana_u_x_values=u_analytical,
+    ana_u_values=y_array,
+    case_name=case_name,
+    case_name_as_title=case_name_as_title,
+    save=save,
+    cut_indices=cut_indices,
+    u_scatter_label='analytical',
+)
 
 # show_channel_flow_solution(
 #     x_values=x_array,

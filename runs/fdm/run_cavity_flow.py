@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from core import fdm
 
 from post_processing import (
-    show_cavity_flow_solution,
+    show_cavity_flow_solution_overview,
     show_cavity_flow_solution_animation,
 )
 
@@ -36,7 +36,7 @@ viscosity: float = 0.1
 
 step_stride = 10
 case_name = 'cavity flow'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -88,15 +88,16 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_cavity_flow_solution(
+show_cavity_flow_solution_overview(
     x_values=x_array,
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
+    step_stride=step_stride,
 )
 
 

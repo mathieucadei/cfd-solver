@@ -11,6 +11,7 @@ from .plotting import (
     show_solution_uv_surfaces, 
     show_solution_overview,
     show_cavity_flow_solution_overview,
+    show_channel_flow_solution_overview,
     show_solution_1d_animation,
     show_solution_2d_animation,
     show_cavity_flow_solution_animation,

@@ -804,12 +804,190 @@ def show_cavity_flow_solution_overview(
     ax2.set_xlim(x_values[0], x_values[-1])
     ax2.set_ylim(y_values[0], y_values[-1])
 
+    if ana_u_values:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax3,
+            x_values=ana_u_x_values,
+            y_values=ana_u_values,
+            x_label=y_label,
+            y_label=u_label,
+            label=u_scatter_label, 
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            axis=0,
+            cut_label=y_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='v along the horizontal centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax4,
+            x_values=ana_v_x_values,
+            y_values=ana_v_values,
+            x_label=x_label,
+            y_label=v_label,
+            label=v_scatter_label, 
+        )
+
+    else:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=y_label,
+            y_label=u_label,
+            step_stride=step_stride,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            axis=0,
+            cut_label=y_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='v along the horizontal centreline'
+        )
+
+    if case_name_as_title:
+        fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
+
+    else: 
+        pass    
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
+
+    plt.show()
+
+
+def show_channel_flow_solution_overview(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    error: np.ndarray,
+    error_2d: np.ndarray,
+    ana_u_x_values: np.ndarray = None,
+    ana_v_x_values: np.ndarray = None,
+    ana_u_values: np.ndarray = None,
+    ana_v_values: np.ndarray = None,
+    step: int = 3,
+    scale: float = 20.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    u_label: str = 'u',
+    v_label: str = 'v', 
+    error_label: str = 'error',
+    step_stride: int=5,
+    cut_indices: float | np.ndarray = None,
+    u_scatter_label: str = None,
+    v_scatter_label: str = None,
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,     
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+    gs = fig.add_gridspec(2, 2)
+
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, 0])
+    # ax4 = fig.add_subplot(gs[1, 1])
+
+    U = u_solution_matrix[::step, ::step]
+    V = v_solution_matrix[::step, ::step]
+
+    M = np.sqrt(U**2 + V**2)
+
+    vmin = np.floor(np.min(M))
+    vmax = np.ceil(np.max(M))
+    norm = Normalize(vmin=vmin, vmax=vmax)
+
+    ticks = np.linspace(vmin, vmax, 11)
+
+    qvr = plot_quiver(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        magnitude=M,
+        norm=norm,
+        step=step,
+        cmap='plasma',
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        title='Velocity Field',   
+    )
+
+    fig.colorbar(qvr, ax=ax2, ticks=ticks, label='Velocity Magnitude')
+
+    ax1.set_xlim(x_values[0], x_values[-1])
+    ax1.set_ylim(y_values[0], y_values[-1])
+
+    contourf = plot_solution_contourf(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        solution_matrix=error_2d,
+        x_label=x_label,
+        y_label=y_label,
+        cmap='plasma',
+        title='u numerical - u analytical',   
+    )
+
+    fig.colorbar(contourf, ax=ax1)
+
+    ax1.set_xlim(x_values[0], x_values[-1])
+    ax1.set_ylim(y_values[0], y_values[-1])
+
     plot_solution_traces(
         ax=ax3,
-        x_values=y_values,
+        x_values=u_solution_matrix,
         cut_values=x_values,
-        num_solution_matrix=u_solution_matrix,
-        axis=1,
+        num_solution_matrix=y_values,
+        axis=0,
         cut_label=x_label,
         x_label=y_label,
         y_label=u_label,
@@ -818,37 +996,28 @@ def show_cavity_flow_solution_overview(
         title='u along the vertical centreline'
     )
 
-    plot_solution_scatter(
-        ax=ax3,
-        x_values=ana_u_x_values,
-        y_values=ana_u_values,
-        x_label=y_label,
-        y_label=u_label,
-        label=u_scatter_label, 
-    )
+    # plot_solution_scatter(
+    #     ax=ax3,
+    #     x_values=ana_u_values,
+    #     y_values=ana_u_x_values,
+    #     x_label=y_label,
+    #     y_label=u_label,
+    #     label=u_scatter_label, 
+    # )
 
-    plot_solution_traces(
-        ax=ax4,
-        x_values=x_values,
-        cut_values=y_values,
-        num_solution_matrix=v_solution_matrix,
-        axis=0,
-        cut_label=y_label,
-        x_label=x_label,
-        y_label=v_label,
-        case_name=case_name,
-        cut_indices=cut_indices,
-        title='v along the horizontal centreline'
-    )
-
-    plot_solution_scatter(
-        ax=ax4,
-        x_values=ana_v_x_values,
-        y_values=ana_v_values,
-        x_label=x_label,
-        y_label=v_label,
-        label=v_scatter_label, 
-    )
+    # plot_solution_traces(
+    #     ax=ax4,
+    #     x_values=error,
+    #     cut_values=y_values,
+    #     num_solution_matrix=v_solution_matrix,
+    #     axis=0,
+    #     cut_label=y_label,
+    #     x_label=error_label,
+    #     y_label=y_label,
+    #     case_name=case_name,
+    #     cut_indices=cut_indices,
+    #     title='Numerical - Analytical Error'
+    # )
 
     if case_name_as_title:
         fig.suptitle(f"{case_name.title()} Solution Overview")
