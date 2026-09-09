@@ -73,9 +73,17 @@ solution_final_x = solution_matrix[-1, :, :]
 
 solution_final_y = solution_final_x.T
 
-
+xf, yf = fvm.build_face_positions(laplace_2d_config)
 
 # Post-processing
+
+fig, ax = plt.subplots(figsize=(12,6))
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Laplace Solution')
+fig.colorbar(pc, label='p')
+plt.show()
 
 show_solution_overview(
     x_values=xc_array, 

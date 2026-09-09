@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from core import fvm
 
 from post_processing import (
-    show_channel_flow_solution,
+    show_channel_flow_solution_overview,
     show_channel_flow_solution_animation,
 )
 
@@ -41,8 +41,9 @@ u_l1_norm_target: float = 0.001
 # Visualization parameters
 
 step_stride = 10
-case_name = 'channel flow FVM'
-title = True
+cut_indices=[num_cells_x // 2]
+case_name = 'channel flow'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -93,14 +94,15 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_channel_flow_solution(
+show_channel_flow_solution_overview(
     x_values=xc_array,
     y_values=yc_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
+    cut_indices=cut_indices,
 )
 
 show_channel_flow_solution_animation(

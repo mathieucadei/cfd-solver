@@ -118,12 +118,6 @@ solution_history_ana = analytical.solve_heat_equation_1d(
 
 # Post-processing
 
-fig, ax = plt.subplots(figsize=(10,3))
-pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(pc, label='u')
-plt.show()
-
-
 show_solution_overview(
     x_values=xc_array, 
     y_values=time_array, 

@@ -95,6 +95,9 @@ xf, yf = fvm.build_face_positions(advection_2d_config)
 
 fig, ax = plt.subplots(figsize=(10,3))
 pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Advection Solution')
 fig.colorbar(pc, label='u')
 plt.show()
 

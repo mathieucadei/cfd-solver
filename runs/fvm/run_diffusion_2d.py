@@ -92,10 +92,11 @@ xf, yf = fvm.build_face_positions(diffusion_2d_config)
 # Post-processing
 
 fig, ax = plt.subplots(figsize=(12,6))
-
-ax = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(ax, label='u')
-
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Diffusion Solution')
+fig.colorbar(pc, label='u')
 plt.show()
 
 show_solution_overview(

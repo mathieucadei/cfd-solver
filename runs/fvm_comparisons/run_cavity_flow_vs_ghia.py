@@ -98,65 +98,6 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Ghia et al. (1982)
 
-# print("FVM p min/max:",
-#       p_solution_matrix_final.min(),
-#       p_solution_matrix_final.max())
-
-# print("FVM top cell row:",
-#       p_solution_matrix_final[-1, :].min(),
-#       p_solution_matrix_final[-1, :].max())
-
-# p_min_idx = np.unravel_index(
-#     np.argmin(p_solution_matrix_final),
-#     p_solution_matrix_final.shape
-# )
-
-# p_max_idx = np.unravel_index(
-#     np.argmax(p_solution_matrix_final),
-#     p_solution_matrix_final.shape
-# )
-
-# print("p min location:",
-#       xc_array[p_min_idx[1]],
-#       yc_array[p_min_idx[0]])
-
-# print("p max location:",
-#       xc_array[p_max_idx[1]],
-#       yc_array[p_max_idx[0]])
-
-# print(
-#     "FVM excluding top row:",
-#     p_solution_matrix_final[:-1, :].min(),
-#     p_solution_matrix_final[:-1, :].max()
-# )
-
-# print(
-#     "FVM top row excluding corners:",
-#     p_solution_matrix_final[-1, 1:-1].min(),
-#     p_solution_matrix_final[-1, 1:-1].max()
-# )
-
-# p_fvm_mid = 0.5 * (
-#     p_solution_matrix_final[19, :] +
-#     p_solution_matrix_final[20, :]
-# )
-
-# plt.figure()
-
-# plt.plot(
-#     xc_array,
-#     p_fvm_mid,
-#     label='FVM'
-# )
-
-# plt.xlabel('x')
-# plt.ylabel('p')
-# plt.title('Pressure along y = 0.5')
-# plt.grid(alpha=0.3)
-# plt.legend()
-
-# plt.show()
-
 DATA = Path(__file__).resolve().parents[2] / 'data'
 ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
 ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')

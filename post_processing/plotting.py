@@ -59,9 +59,10 @@ def plot_solution_traces(
     n_cuts = cut_values.shape[0]
 
     indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
-    color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
 
     for n in indices:
+
+        color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
 
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
@@ -953,9 +954,10 @@ def show_channel_flow_solution_overview(
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
-    fig = plt.figure(figsize=(14, 10), constrained_layout=True)
-
     if ana_u_values is not None:
+
+        fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+
         gs = fig.add_gridspec(2, 2)
 
         ax1 = fig.add_subplot(gs[0, 0])
@@ -1062,6 +1064,9 @@ def show_channel_flow_solution_overview(
         )
 
     else:
+
+            fig = plt.figure(figsize=(12, 4), constrained_layout=True)
+
             gs = fig.add_gridspec(1, 2)
         
             ax1 = fig.add_subplot(gs[0, 0])
@@ -1097,11 +1102,6 @@ def show_channel_flow_solution_overview(
     
             ax1.set_xlim(x_values[0], x_values[-1])
             ax1.set_ylim(y_values[0], y_values[-1])
-    
-            ana_u_solution_matrix = np.tile(
-                ana_u_values[:, None],
-                (1, len(x_values))
-            )
     
             plot_solution_traces(
                 ax=ax2,

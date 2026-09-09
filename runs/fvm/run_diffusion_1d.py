@@ -86,6 +86,9 @@ xf = fvm.build_x_face_positions(diffusion_1d_config)
 
 fig, ax = plt.subplots(figsize=(10,3))
 pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('1D Diffusion Solution')
 fig.colorbar(pc, label='u')
 plt.show()
 

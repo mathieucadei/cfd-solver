@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from core import fdm
 
 from post_processing import (
-    show_channel_flow_solution,
+    show_channel_flow_solution_overview,
     show_channel_flow_solution_animation,
 )
 
@@ -39,8 +39,9 @@ u_l1_norm_target: float = 0.001
 # Visualization parameters
 
 step_stride = 10
+cut_indices=[num_grid_points_x // 2]
 case_name = 'channel flow'
-title = True
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -89,14 +90,15 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_channel_flow_solution(
+show_channel_flow_solution_overview(
     x_values=x_array,
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
+    cut_indices=cut_indices,
 )
 
 show_channel_flow_solution_animation(

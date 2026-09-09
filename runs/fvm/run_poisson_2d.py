@@ -85,10 +85,11 @@ xf, yf = fvm.build_face_positions(poisson_2d_config)
 # Post-processing
 
 fig, ax = plt.subplots(figsize=(12,6))
-
-ax = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(ax, label='p')
-
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Poisson Solution')
+fig.colorbar(pc, label='p')
 plt.show()
 
 
