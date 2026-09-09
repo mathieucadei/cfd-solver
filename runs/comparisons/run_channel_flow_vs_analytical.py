@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 
-from core import fdm
+from core import fdm, analytical
 
 from post_processing import (
     show_channel_flow_solution,
@@ -89,13 +89,22 @@ u_solution_matrix_final = u_solution_matrix[-1, ...]
 v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 
-# Post-processing
-u_analytical = (
-    source
-    / (2 * viscosity)
-    * y_array
-    * (domain_length_y - y_array)
+# Poiseulle flow
+
+u_analytical = analytical.compute_poiseuille_flow(
+    y_array=y_array,
+    config=channel_flow_config,
 )
+
+
+# Post-processing
+# u_analytical = (
+#     source
+#     / (2 * viscosity)
+#     * y_array
+#     * (domain_length_y - y_array)
+# )
+
 u_analytical_2d = np.tile(u_analytical[:, None], (1, num_grid_points_x))
 
 x_index = num_grid_points_x // 2

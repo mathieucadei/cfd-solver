@@ -109,6 +109,7 @@ v_scatter_label='y=0.5 - Ghia et al. (1982)'
 
 # Post-processing
 
+
 show_cavity_flow_solution_overview(
     x_values=x_array,
     y_values=y_array,
