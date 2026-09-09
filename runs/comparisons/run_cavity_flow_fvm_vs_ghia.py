@@ -98,13 +98,64 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Ghia et al. (1982)
 
-print("FVM p min/max:",
-      p_solution_matrix_final.min(),
-      p_solution_matrix_final.max())
+# print("FVM p min/max:",
+#       p_solution_matrix_final.min(),
+#       p_solution_matrix_final.max())
 
-print("FVM top cell row:",
-      p_solution_matrix_final[-1, :].min(),
-      p_solution_matrix_final[-1, :].max())
+# print("FVM top cell row:",
+#       p_solution_matrix_final[-1, :].min(),
+#       p_solution_matrix_final[-1, :].max())
+
+# p_min_idx = np.unravel_index(
+#     np.argmin(p_solution_matrix_final),
+#     p_solution_matrix_final.shape
+# )
+
+# p_max_idx = np.unravel_index(
+#     np.argmax(p_solution_matrix_final),
+#     p_solution_matrix_final.shape
+# )
+
+# print("p min location:",
+#       xc_array[p_min_idx[1]],
+#       yc_array[p_min_idx[0]])
+
+# print("p max location:",
+#       xc_array[p_max_idx[1]],
+#       yc_array[p_max_idx[0]])
+
+# print(
+#     "FVM excluding top row:",
+#     p_solution_matrix_final[:-1, :].min(),
+#     p_solution_matrix_final[:-1, :].max()
+# )
+
+# print(
+#     "FVM top row excluding corners:",
+#     p_solution_matrix_final[-1, 1:-1].min(),
+#     p_solution_matrix_final[-1, 1:-1].max()
+# )
+
+# p_fvm_mid = 0.5 * (
+#     p_solution_matrix_final[19, :] +
+#     p_solution_matrix_final[20, :]
+# )
+
+# plt.figure()
+
+# plt.plot(
+#     xc_array,
+#     p_fvm_mid,
+#     label='FVM'
+# )
+
+# plt.xlabel('x')
+# plt.ylabel('p')
+# plt.title('Pressure along y = 0.5')
+# plt.grid(alpha=0.3)
+# plt.legend()
+
+# plt.show()
 
 DATA = Path(__file__).resolve().parents[2] / 'data'
 ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
@@ -139,63 +190,3 @@ show_cavity_flow_solution_overview(
     u_scatter_label=u_scatter_label,
     v_scatter_label=v_scatter_label,
 )
-
-
-# X, Y = np.meshgrid(x_array, y_array)
-
-# u = u_solution_matrix_final[...,num_grid_points_x//2]
-# v = v_solution_matrix_final[num_grid_points_y//2,...]
-# M = np.sqrt(u_solution_matrix_final**2+v_solution_matrix_final**2)
-# p = p_solution_matrix_final
-
-# fig, ax = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
-
-# ax0 = ax[0, 0].contourf(X, Y, p, alpha=0.5)
-# ax[0, 0].contour(X, Y, p, cmap=cm.viridis)
-# stream = ax[0, 0].streamplot(X, Y, u_solution_matrix_final, v_solution_matrix_final, color='k', linewidth=0.8)
-# stream.lines.set_alpha(0.5)
-# stream.arrows.set_alpha(0.5)
-# ax[0, 0].set_xlim(0, 1)
-# ax[0, 0].set_ylim(0, 1)
-# ax[0, 0].set_xlabel('x')
-# ax[0, 0].set_ylabel('y', rotation=0)
-# ax[0, 0].set_title('Pressure and Streamlines')
-# fig.colorbar(ax0, label='p')
-
-# ax1 = ax[0, 1].quiver(
-#     X[::2,::2], 
-#     Y[::2,::2], 
-#     u_solution_matrix_final[::2,::2], 
-#     v_solution_matrix_final[::2,::2],
-#     M[::2,::2],
-#     scale=20,
-#     cmap=cm.plasma,
-# )
-# ax[0, 1].set_xlim(0, 1)
-# ax[0, 1].set_ylim(0, 1)
-# ax[0, 1].set_xlabel('x')
-# ax[0, 1].set_ylabel('y', rotation=0)
-# ax[0, 1].set_title('Velocity Field')
-# fig.colorbar(ax1, label='Velocity magnitude')
-
-# ax[1, 0].scatter(ghia_table_1['y'], ghia_table_1['100'], color='r', label='Ghia et al. (1982)')
-# ax[1, 0].plot(y_array, u, label='FDM')
-# ax[1, 0].grid(alpha=0.3)
-# ax[1, 0].set_xlim(0, 1)
-# ax[1, 0].set_xlabel('y')
-# ax[1, 0].set_ylabel('u', rotation=0)
-# ax[1, 0].legend()
-# ax[1, 0].set_title('u at x=0.5')
-
-# ax[1, 1].scatter(ghia_table_2['x'], ghia_table_2['100'], color='r', label='Ghia et al. (1982)')
-# ax[1, 1].plot(x_array, v, label='FDM')
-# ax[1, 1].grid(alpha=0.3)
-# ax[1, 1].set_xlim(0, 1)
-# ax[1, 1].set_xlabel('x')
-# ax[1, 1].set_ylabel('v', rotation=0)
-# ax[1, 1].legend()
-# ax[1, 1].set_title('v at y=0.5')
-
-# fig.suptitle('Lid-Driven Cavity Flow — Re = 100')
-
-# plt.show()

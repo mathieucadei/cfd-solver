@@ -109,6 +109,26 @@ v_scatter_label='y=0.5 - Ghia et al. (1982)'
 
 # Post-processing
 
+# p_fdm_mid = p_solution_matrix_final[
+#     num_grid_points_y // 2,
+#     :
+# ]
+
+# plt.figure()
+
+# plt.plot(
+#     x_array,
+#     p_fdm_mid,
+#     label='FDM'
+# )
+
+# plt.xlabel('x')
+# plt.ylabel('p')
+# plt.title('Pressure along y = 0.5')
+# plt.grid(alpha=0.3)
+# plt.legend()
+
+# plt.show()
 
 show_cavity_flow_solution_overview(
     x_values=x_array,

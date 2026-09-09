@@ -888,12 +888,12 @@ def apply_cavity_flow_boundary_2d(
 
     ## update
 
-    u[-1, 1:-1] = un[-1, 1:-1] + dt / cell_volumes[0, 1:-1] * (
+    u[-1, 1:-1] = un[-1, 1:-1] + dt / cell_volumes[-1, 1:-1] * (
         -(f_e_top * u_e_top - f_w_top * u_w_top + f_nb * u_nb - f_s_top * u_s_top) +
         nu * (a_e_top * (u[-1, 2:] - u[-1, 1:-1]) - a_w_top * (u[-1, 1:-1] - u[-1, :-2]) + a_nb * (u_nb - u[-1, 1:-1]) - a_s_top * (u[-1, 1:-1] - u[-2, 1:-1]))
         ) - (dt / rho * (pf_e_p_top - pf_w_p_top) / cell_volumes[-1, 1:-1])
 
-    v[-1, 1:-1] = vn[-1, 1:-1] + dt / cell_volumes[0, 1:-1] * (
+    v[-1, 1:-1] = vn[-1, 1:-1] + dt / cell_volumes[-1, 1:-1] * (
         -(f_e_top * v_e_top - f_w_top * v_w_top + f_nb * v_nb - f_s_top * v_s_top) +
         nu * (a_e_top * (v[-1, 2:] - v[-1, 1:-1]) - a_w_top * (v[-1, 1:-1] - v[-1, :-2]) + a_nb * (v_nb - v[-1, 1:-1]) - a_s_top * (v[-1, 1:-1] - v[-2, 1:-1]))
         ) - (dt / rho * (pf_nb_p - pf_s_p_top) / cell_volumes[-1, 1:-1])

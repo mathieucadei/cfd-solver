@@ -95,17 +95,9 @@ u_analytical = analytical.compute_poiseuille_flow(
     y_array=y_array,
     config=channel_flow_config,
 )
-
+u_analytical_2d = np.tile(u_analytical[:, None], (1, num_grid_points_x))
 
 # Post-processing
-# u_analytical = (
-#     source
-#     / (2 * viscosity)
-#     * y_array
-#     * (domain_length_y - y_array)
-# )
-
-u_analytical_2d = np.tile(u_analytical[:, None], (1, num_grid_points_x))
 
 x_index = num_grid_points_x // 2
 
