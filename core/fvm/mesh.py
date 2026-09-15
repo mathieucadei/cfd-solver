@@ -6,12 +6,21 @@ from dataclasses import dataclass, field
 
 def build_hx_spacing(config: object):
 
+    half_x = config.num_cells_x // 2
+
     rx = 1.0 + config.expansion_ratio_x
 
-    raw_hx = rx**np.arange(config.num_cells_x//2)
-    raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * 0.5 * config.domain_length_x
-    hx = np.append(hx, hx[::-1])
+    raw_hx_half = rx**np.arange(half_x)
+
+    if config.num_cells_x % 2 == 0:
+
+        raw_hx = np.concatenate([raw_hx_half, raw_hx_half[::-1]])
+
+    else:
+
+        raw_hx = np.concatenate([raw_hx_half, [rx**half_x], raw_hx_half[::-1]])
+
+    hx = raw_hx / raw_hx.sum() * config.domain_length_x
 
     return hx
 
@@ -44,12 +53,21 @@ def build_dist_x(config: object):
 def build_cole_hopf_hx_spacing(config: object) -> float:
     """Compute the uniform grid spacing in the x-direction for the Cole-Hopf periodic domain."""
 
+    half_x = config.num_cells_x // 2
+
     rx = 1.0 + config.expansion_ratio_x
 
-    raw_hx = rx**np.arange(config.num_cells_x//2)
-    raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * np.pi
-    hx = np.append(hx, hx[::-1])
+    raw_hx_half = rx**np.arange(half_x)
+
+    if config.num_cells_x % 2 == 0:
+
+        raw_hx = np.concatenate([raw_hx_half, raw_hx_half[::-1]])
+
+    else:
+
+        raw_hx = np.concatenate([raw_hx_half, [rx**half_x], raw_hx_half[::-1]])
+
+    hx = raw_hx / raw_hx.sum() * 2 * np.pi
 
     return hx
 
@@ -83,19 +101,38 @@ def build_cole_hopf_dist_x(config: object):
 
 def build_h_spacing(config: object):
 
+    half_x = config.num_cells_x // 2
+
     rx = 1.0 + config.expansion_ratio_x
 
-    raw_hx = rx**np.arange(config.num_cells_x//2)
-    raw_hx_sum = np.sum(raw_hx)
-    hx = raw_hx / raw_hx_sum * 0.5 * config.domain_length_x
-    hx = np.append(hx, hx[::-1])
+    raw_hx_half = rx**np.arange(half_x)
+
+    if config.num_cells_x % 2 == 0:
+
+        raw_hx = np.concatenate([raw_hx_half, raw_hx_half[::-1]])
+
+    else:
+
+        raw_hx = np.concatenate([raw_hx_half, [rx**half_x], raw_hx_half[::-1]])
+
+    hx = raw_hx / raw_hx.sum() * config.domain_length_x
+
+
+    half_y = config.num_cells_y // 2
 
     ry = 1.0 + config.expansion_ratio_y
 
-    raw_hy = ry**np.arange(config.num_cells_y//2)
-    raw_hy_sum = np.sum(raw_hy)
-    hy = raw_hy / raw_hy_sum * 0.5 * config.domain_length_y
-    hy = np.append(hy, hy[::-1])
+    raw_hy_half = ry**np.arange(half_y)
+
+    if config.num_cells_y % 2 == 0:
+
+        raw_hy = np.concatenate([raw_hy_half, raw_hy_half[::-1]])
+
+    else:
+
+        raw_hy = np.concatenate([raw_hy_half, [ry**half_y], raw_hy_half[::-1]])
+
+    hy = raw_hy / raw_hy.sum() * config.domain_length_y
 
     return hx, hy
 

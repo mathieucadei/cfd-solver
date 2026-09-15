@@ -1,4 +1,4 @@
-"""FDM numerical solver for the 2D diffusion equation."""
+"""FDM numerical solver for the 2D cavity flow."""
 
 
 
@@ -16,7 +16,7 @@ def solve_cavity_flow(
     initial_condition: np.ndarray,
     config: CavityFlowConfig,
 ) -> np.ndarray:
-    """Solve the 2D cavity flow equation with an explicit central finite-difference scheme."""
+    """Solve the 2D cavity flow with an explicit central finite-difference scheme."""
 
     nu = config.viscosity
     rho = config.density

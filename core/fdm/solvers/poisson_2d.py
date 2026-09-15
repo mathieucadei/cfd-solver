@@ -1,4 +1,4 @@
-"""FDM numerical solver for the 2D diffusion equation."""
+"""FDM numerical solver for the 2D Poisson equation."""
 
 
 
@@ -16,7 +16,7 @@ def solve_poisson_2d(
     initial_condition: np.ndarray,
     config: Laplace2DConfig,
 ) -> np.ndarray:
-    """Solve the 2D Laplace equation with an explicit central finite-difference scheme."""
+    """Solve the 2D Poisson equation with an explicit central finite-difference scheme."""
 
     dx = compute_dx(config)
     dy = compute_dy(config)
