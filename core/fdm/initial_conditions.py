@@ -1,4 +1,4 @@
-"""Initial condition utilities for 1D & 2D numerical and analytical solvers."""
+"""Initial condition utilities for 1D & 2D FDM numerical and analytical solvers."""
 
 
 

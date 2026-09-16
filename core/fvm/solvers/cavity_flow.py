@@ -38,6 +38,8 @@ def solve_cavity_flow(
     v_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
     p_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
     b_history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
+    # u_residual_history = np.zeros(config.max_iterations)
+    # v_residual_history = np.zeros(config.max_iterations)
 
     u_history[0], v_history[0], p_history[0], b_history[0] = initial_condition
 
@@ -158,9 +160,20 @@ def solve_cavity_flow(
             xc=xc,
             yc=yc,
         )
+
+        # u_residual = np.sqrt(np.mean((u - un)**2))
+        # v_residual = np.sqrt(np.mean((v - vn)**2))
         
         u_history[n] = u
         v_history[n] = v
         p_history[n] = p
+        # u_residual_history[n - 1] = u_residual
+        # v_residual_history[n - 1] = v_residual
+
+        # print(
+        #     f"Time = {n}\n"
+        #     f"\nCourant Number mean: {np.mean(u[1:, 1:]*dt/dist_x):.3g}, max: {max(np.max(u[1:, 1:]*dt/dist_x), np.max(v[1:, 1:]*dt/dist_y)):.3g}\n"
+        # )
+
     
-    return u_history, v_history, p_history
+    return u_history, v_history, p_history, # u_residual_history, v_residual_history

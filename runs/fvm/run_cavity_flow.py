@@ -89,6 +89,15 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 p_solution_matrix_final = p_solution_matrix[-1, ...]
 
+# u_residual_history = solution_matrix[3]
+# v_residual_history = solution_matrix[4]
+
+# plt.plot(u_residual_history)
+# plt.plot(v_residual_history)
+# plt.xlabel("Iteration")
+# plt.ylabel("Residual")
+# plt.show()
+
 
 # Post-processing
 

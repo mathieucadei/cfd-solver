@@ -15,7 +15,9 @@ def solve_convection_1d(
     initial_condition: np.ndarray,
     config: Convection1DConfig,
 ) -> np.ndarray:
-    """Solve the 1D convection equation with an explicit upwind finite-difference scheme."""
+    """Solve the 1D convection equation with an explicit conservative & non-conservative 
+    upwind, leapfrog, Lax-Friedrichs, 1-step & 2-step Lax-Wendroff, Richtmyer and Mac-Cormack and 
+    implicit conservative damped & undamped Beam-Warming finite-difference schemes."""
 
     dx = compute_dx(config)
     dt = compute_convective_dt_1d(config)

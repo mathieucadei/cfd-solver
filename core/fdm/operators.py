@@ -1,4 +1,4 @@
-"""Reusable finite-difference operators for 1D & 2D transport equations."""
+"""Reusable FDM operators for 1D & 2D transport equations."""
 
 
 
@@ -13,7 +13,8 @@ def compute_advection_1d_term(
     dt: float,
     scheme: str = 'upwind',
 ) -> np.ndarray:
-    """Compute the 1D upwind advection term for a constant wave speed."""
+    """Compute the 1D advection term for a constant wave speed with 
+    upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff finite-difference schemes."""
 
     term = np.zeros_like(u)
 
@@ -47,7 +48,10 @@ def compute_convection_1d_term(
     scheme: str = 'upwind',
     un_half: np.ndarray = None,
 ) -> np.ndarray:
-    """Compute the 1D upwind convection term."""
+    """Compute the 1D advection term with an explicit conservative & non-conservative 
+    upwind, leapfrog, Lax-Friedrichs, 1-step & 2-step Lax-Wendroff, Richtmyer and Mac-Cormack and 
+    implicit conservative damped & undamped Beam-Warming finite-difference schemes."""
+
     term = np.zeros_like(u)
 
     if scheme == 'upwind':
@@ -135,6 +139,7 @@ def compute_diffusion_1d_term(
     nu: float,
 ) -> np.ndarray:
     """Compute the 1D central-difference diffusion term."""
+    
     term = np.zeros_like(u)
 
     term[1:-1] = nu * dt / dx**2 * (u[2:] - 2 * u[1:-1] + u[:-2])
