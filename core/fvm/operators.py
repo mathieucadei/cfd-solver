@@ -128,8 +128,8 @@ def compute_convection_2d_term(
     u_term = np.zeros_like(u)
     v_term = np.zeros_like(v)
 
-    u_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_u_e - f_u_w + f_u_n - f_u_s)
-    v_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_v_e - f_v_w + f_v_n - f_v_s)
+    u_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_u_e - f_u_w + v[1:-1, 1:-1] * (f_u_n - f_u_s))
+    v_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (u[1:-1, 1:-1] * (f_v_e - f_v_w) + f_v_n - f_v_s)
 
     return u_term, v_term
 
