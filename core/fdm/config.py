@@ -68,7 +68,7 @@ class BurgersEquation1DConfig:
 
 @dataclass
 class Advection2DConfig:
-    """Configuration parameters for the 2D linear advection equation."""
+    """Configuration parameters for the 2D advection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
     num_grid_points_x: int = 81
@@ -154,6 +154,7 @@ class Laplace2DConfig:
 
 @dataclass
 class SourceTerm:
+    """Configuration parameters 2D source term for the 2D Poisson equation."""
     x: float
     y: float
     value: float
@@ -161,6 +162,7 @@ class SourceTerm:
 
 @dataclass
 class Poisson2DConfig:
+    """Configuration parameters for the 2D Poisson equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 31
