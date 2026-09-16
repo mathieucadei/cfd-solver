@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from ..operators import compute_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_periodic_pressure_poisson_term
+from ..operators import compute_momentum_convection_2d_term, compute_diffusion_2d_term, compute_source_term_2d, compute_periodic_pressure_poisson_term
 from ..boundary_conditions import apply_periodic_source_term_boundary_2d, apply_pressure_poisson_term_boundary, apply_channel_flow_boundary_2d
 
 from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
@@ -48,7 +48,7 @@ def solve_channel_flow(
         bn = b.copy()
 
 
-        convection_u_term, convection_v_term = compute_convection_2d_term(
+        convection_u_term, convection_v_term = compute_momentum_convection_2d_term(
                                                     un, 
                                                     vn, 
                                                     face_areas_x, 

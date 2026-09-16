@@ -105,6 +105,101 @@ def compute_convection_2d_term(
     v_s = (v[:-2, 1:-1] + v[1:-1, 1:-1]) / 2
     v_n = (v[1:-1 , 1:-1] + v[2:, 1:-1]) / 2   
 
+    # if u_w > 0:
+    #     e_u_w = u[1:-1, :-2]**2 / 2
+    #     v_w = v[1:-1, :-2]
+    # else:
+    #     e_u_w = u[1:-1, 1:-1]**2 / 2
+    #     v_w = v[1:-1, 1:-1]    
+
+    # if u_e > 0:
+    #     e_u_e = u[1:-1, 1:-1]**2 / 2
+    #     v_e = v[1:-1, 2:]
+    # else:
+    #     e_u_e = u[1:-1, 2:]**2 / 2
+    #     v_e = v[1:-1, 1:-1]
+
+    # if v_s > 0:
+    #     e_v_s = v[:-2, 1:-1]**2 / 2
+    #     u_s = u[:-2, 1:-1]
+    # else:
+    #     e_v_s = v[1:-1, 1:-1]**2 / 2
+    #     u_s = u[1:-1, 1:-1]
+
+    # if v_n > 0:
+    #     e_v_n = v[1:-1 , 1:-1]**2 / 2
+    #     u_n = u[1:-1, 1:-1]
+    # else:
+    #     e_v_n = v[2:, 1:-1]**2 / 2
+    #     u_n = u[2:, 1:-1]
+
+    e_u_w = np.where(u_w>0, u[1:-1, :-2]**2 / 2, u[1:-1, 1:-1]**2 / 2)
+    e_u_e = np.where(u_e>0, u[1:-1, 1:-1]**2 / 2, u[1:-1, 2:]**2 / 2)
+    u_s = np.where(v_s>0, u[:-2, 1:-1], u[1:-1, 1:-1])
+    u_n = np.where(v_n>0, u[1:-1, 1:-1], u[2:, 1:-1])
+
+    v_w = np.where(u_w>0, v[1:-1, :-2], v[1:-1, 1:-1])
+    v_e = np.where(u_e>0, v[1:-1, 1:-1], v[1:-1, 2:])
+    e_v_s = np.where(v_s>0, v[:-2, 1:-1]**2 / 2, v[1:-1, 1:-1]**2 / 2)
+    e_v_n = np.where(v_n>0, v[1:-1, 1:-1]**2 / 2, v[2:, 1:-1]**2 / 2)
+
+    f_u_w = e_u_w * face_areas_x[1:-1, 1:-1]
+    f_u_e = e_u_e * face_areas_x[1:-1, 2:]
+    f_u_s = u_s * face_areas_y[1:-1, 1:-1]
+    f_u_n = u_n * face_areas_y[2:, 1:-1] 
+
+    f_v_w = v_w * face_areas_x[1:-1, 1:-1]
+    f_v_e = v_e * face_areas_x[1:-1, 2:]
+    f_v_s = e_v_s * face_areas_y[1:-1, 1:-1]
+    f_v_n = e_v_n * face_areas_y[2:, 1:-1] 
+
+    # e_u = u**2 / 2
+    # e_v = v**2 / 2
+
+    u_term = np.zeros_like(u)
+    v_term = np.zeros_like(v)
+
+    u_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_u_e - f_u_w + f_u_n - f_u_n)
+    v_term[1:-1, 1:-1] = dt / cell_volumes[1:-1, 1:-1] * (f_v_e - f_v_w + f_v_n - f_v_n)
+
+    # f_w_u = e_u[1:, :-1] * face_areas_x[1:, :-1]
+
+    # f_e_u = e_u[1:, 1:] * face_areas_x[1:, 1:]
+
+    # f_s_u = v[:-1, 1:] * u[:-1, 1:] * face_areas_y[:-1, 1:]
+
+    # f_n_u = v[1:, 1:] * u[1:, 1:] * face_areas_y[1:, 1:]
+
+    # f_w_v = u[1:, :-1] * v[1:, :-1] * face_areas_x[1:, :-1]
+
+    # f_e_v = u[1:, 1:] * v[1:, 1:] * face_areas_x[1:, 1:]
+
+    # f_s_v = e_v[:-1, 1:] * face_areas_y[:-1, 1:]
+
+    # f_n_v = e_v[1:, 1:] * face_areas_y[1:, 1:]
+
+    # u_term[1:, 1:] = dt * (f_e_u - f_w_u) / cell_volumes[1:, 1:] + dt * (f_n_u - f_s_u) / cell_volumes[1:, 1:]
+
+    # v_term[1:, 1:] = dt * (f_e_v - f_w_v) / cell_volumes[1:, 1:] + dt * (f_n_v - f_s_v) / cell_volumes[1:, 1:]
+
+    return u_term, v_term
+
+
+def compute_momentum_convection_2d_term(
+    u: np.ndarray,
+    v: np.ndarray,      
+    face_areas_x: np.ndarray,
+    face_areas_y: np.ndarray,
+    cell_volumes: np.ndarray,
+    dt: float,
+) -> np.ndarray:
+    """Compute the 2D upwind convection u & v terms"""
+
+    u_w = (u[1:-1, :-2] + u[1:-1, 1:-1]) / 2
+    u_e = (u[1:-1, 1:-1] + u[1:-1, 2:]) / 2
+    v_s = (v[:-2, 1:-1] + v[1:-1, 1:-1]) / 2
+    v_n = (v[1:-1 , 1:-1] + v[2:, 1:-1]) / 2   
+
     f_w = u_w * face_areas_x[1:-1, 1:-1]
     f_e = u_e * face_areas_x[1:-1, 2:]
     f_s = v_s * face_areas_y[1:-1, 1:-1]
