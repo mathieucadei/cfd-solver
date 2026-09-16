@@ -1,4 +1,4 @@
-"""Boundary condition updates for finite-difference solvers."""
+"""Boundary condition updates for FDM solvers."""
 
 
 
@@ -97,7 +97,7 @@ def apply_laplace_boundary_2d(
 def apply_poisson_boundary_2d(
     p: np.ndarray,
 ) -> None:
-    """Apply boundary updates for the 2D Laplace equation."""
+    """Apply boundary updates for the 2D Poisson equation."""
 
     p[0, :] = 0
     p[1, :] = 0
@@ -132,7 +132,7 @@ def apply_periodic_source_boundary_2d(
     dx: float,
     dy: float,
 ) -> np.ndarray:
-    """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
+    """Apply boundary updates for the periodic 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
 
     # Periodic BC Pressure @ x = outlet
     b[1:-1, -1] = (rho * (1 / dt * ((u[1:-1, 0] - u[1:-1,-2]) / (2 * dx) +
@@ -160,7 +160,7 @@ def apply_periodic_pressure_poisson_boundary_2d(
     dx: float,
     dy: float,
 ) -> np.ndarray:
-    """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
+    """Apply boundary updates for the periodic 2D pressure term in the 2D Navier-Stokes solver."""
 
     # Periodic BC Pressure @ x = outlet
     p[1:-1, -1] = (((pn[1:-1, 0] + pn[1:-1, -2])* dy**2 +
@@ -194,6 +194,7 @@ def apply_periodic_channel_flow_boundary_2d(
         dy: np.ndarray,
         dt: np.ndarray,
 ) -> np.ndarray:
+    """Apply boundary updates for the 2D channel flow equation."""
     
     # Periodic BC u @ x = 2     
     u[1:-1, -1] = (un[1:-1, -1] - un[1:-1, -1] * dt / dx * 
