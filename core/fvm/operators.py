@@ -1,4 +1,4 @@
-"""Reusable finite-difference operators for 1D & 2D transport equations."""
+"""Reusable finite-volume operators for 1D & 2D transport equations."""
 
 
 
