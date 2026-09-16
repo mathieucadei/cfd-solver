@@ -1,4 +1,4 @@
-"""Configuration dataclasses for 1D & 2D numerical and analytical simulations."""
+"""Configuration dataclasses for FDM 1D & 2D numerical and analytical simulations."""
 
 
 import numpy as np
@@ -35,6 +35,7 @@ class Convection1DConfig:
     u_min: float = 1.0
     u_max: float = 2.0
     scheme: str = 'upwind'
+
 
 @dataclass
 class Diffusion1DConfig:
@@ -178,6 +179,7 @@ class Poisson2DConfig:
 
 @dataclass
 class CavityFlowConfig:
+    """Configuration parameters for the 2D cavity flow."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 41
@@ -192,6 +194,7 @@ class CavityFlowConfig:
 
 @dataclass
 class ChannelFlowConfig:
+    """Configuration parameters for the 2D channel flow."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 41
