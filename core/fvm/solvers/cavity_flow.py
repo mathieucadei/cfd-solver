@@ -65,7 +65,7 @@ def solve_cavity_flow(
                                 face_areas_y, 
                                 cell_volumes,                             
                                 dt, 
-                                config.viscosity
+                                nu
                             )
 
         diffusion_v_term = compute_diffusion_2d_term(
@@ -76,12 +76,12 @@ def solve_cavity_flow(
                                 face_areas_y, 
                                 cell_volumes,                             
                                 dt, 
-                                config.viscosity
+                                nu
                             )
         
         b = compute_source_term_2d(
                 bn, 
-                config.density, 
+                rho, 
                 config.time_step, 
                 un, 
                 vn,
@@ -94,7 +94,7 @@ def solve_cavity_flow(
 
         apply_source_term_boundary_2d(
                 b,
-                config.density, 
+                rho, 
                 config.time_step, 
                 un, 
                 vn,
@@ -146,8 +146,8 @@ def solve_cavity_flow(
             p, 
             config.u_lid,
             config.time_step,
-            config.density,
-            config.viscosity,            
+            rho,
+            nu,            
             dist_x=dist_x,
             dist_y=dist_y,
             face_areas_x=face_areas_x, 
