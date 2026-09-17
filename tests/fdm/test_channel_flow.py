@@ -19,10 +19,10 @@ def test_channel_matches_poiseuille():
         fdm.channel_flow_initial_condition(config), config=config
     )[0][-1]
 
-    yc_array = fdm.build_centers(config)[1]
+    y_array = fdm.make_y_grid(config)
 
     u_analytical = analytical.compute_poiseuille_flow(
-        y_array=yc_array,
+        y_array=y_array,
         config=config,
     )
 
