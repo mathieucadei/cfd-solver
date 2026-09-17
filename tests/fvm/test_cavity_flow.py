@@ -30,7 +30,7 @@ def test_cavity_matches_ghia():
         fvm.cavity_flow_initial_condition(config), config=config
     )[0][-1]
 
-    DATA = Path(__file__).resolve().parents[1] / 'data'
+    DATA = Path(__file__).resolve().parents[2] / 'data'
     ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
 
     validation_u_values=ghia_table_1['100']
