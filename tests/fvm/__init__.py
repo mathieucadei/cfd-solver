@@ -1,0 +1,2 @@
+from .test_cavity_flow import test_cavity_matches_ghia
+from .test_channel_flow import test_channel_matches_poiseuille
