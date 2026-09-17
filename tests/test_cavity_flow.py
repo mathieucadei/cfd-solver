@@ -35,7 +35,7 @@ def test_cavity_matches_ghia():
 
     validation_u_values=ghia_table_1['100']
 
-    peak = u_numerical.max()
-    exact = validation_u_values.max()
+    peak = u_numerical.min()
+    exact = validation_u_values.min()
 
     assert abs(peak - exact) < 0.05
