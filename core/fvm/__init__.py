@@ -23,8 +23,11 @@ from .mesh import (
     build_cole_hopf_x_centers,
     build_cole_hopf_dist_x,
     build_h_spacing,
-    build_face_positions,
     build_centers,
+    build_dist,
+    build_face_positions,
+    build_face_areas,
+    compute_cell_volumes,
 )
 
 from .time_stepping import (
