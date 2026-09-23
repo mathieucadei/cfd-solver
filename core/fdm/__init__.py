@@ -17,6 +17,7 @@ from .config import (
 from .grids import (
     compute_cole_hopf_dx, 
     compute_dx, 
+    compute_dy, 
     make_cole_hopf_x_grid, 
     make_x_grid,
     make_y_grid,  

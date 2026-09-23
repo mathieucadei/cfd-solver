@@ -4,15 +4,12 @@ import matplotlib.pyplot as plt
 
 from core import fvm
 
-from pathlib import Path
-
 def direct_solve(config, bottom, top, left, right):
 
     n = config.num_cells_x
 
     dist_x, dist_y = fvm.build_dist(config)
-    face_areas_x, face_areas_y = fvm.build_face_areas(config)
-    cell_volumes = fvm.compute_cell_volumes(config)   
+    face_areas_x, face_areas_y = fvm.build_face_areas(config)  
     xc, yc = fvm.build_centers(config)
 
     A = np.zeros((n*n, n*n))
@@ -80,11 +77,11 @@ def test_laplace_matches_direct_solve():
         l1_norm_target=1e-10,
     )
 
-    xc_array, yc_array = fvm.build_centers(config)
+    yc_array = fvm.build_centers(config)[1]
 
     initial_condition = fvm.laplace_initial_condition_2d(config)
-    bottom_boundary = np.zeros_like(initial_condition[0, :])
-    top_boundary = np.zeros_like(initial_condition[-1, :])
+    bottom_boundary = 'zero_gradient'
+    top_boundary = 'zero_gradient'
     right_boundary = yc_array
     left_boundary = np.zeros_like(initial_condition[:, 0])
 
@@ -138,4 +135,3 @@ def test_laplace_matches_direct_solve():
 #     ax = fig.add_subplot(projection='3d')
 #     ax.plot_surface(X, Y, Z, cmap='plasma')
 #     plt.show()
-

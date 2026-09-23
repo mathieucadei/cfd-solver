@@ -54,8 +54,8 @@ xc_array, yc_array = fvm.build_centers(laplace_2d_config)
 # Initialize the initial condition
 
 initial_condition = fvm.laplace_initial_condition_2d(laplace_2d_config)
-bottom_boundary = np.zeros_like(initial_condition[0, :])
-top_boundary = np.zeros_like(initial_condition[-1, :])
+bottom_boundary = 'zero_gradient'
+top_boundary = 'zero_gradient'
 right_boundary = yc_array
 left_boundary = np.zeros_like(initial_condition[:, 0])
 
