@@ -21,7 +21,7 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 6.0
-num_cells_x = 200
+num_cells_x = 425
 expansion_ratio_x = 0.
 max_iterations = 100
 time_step = 0.0025
@@ -36,7 +36,7 @@ u_max = 2.0
 
 # Visualization parameters
 
-step_stride = 20
+step_stride = 40
 case_name = '1d burgers vs cole-hopf'
 case_name_as_title = True
 save = False

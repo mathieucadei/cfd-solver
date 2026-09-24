@@ -23,7 +23,7 @@ from post_processing import (
 # Simulation parameters
 
 domain_length_x = 6.0
-num_grid_points_x = 101
+num_grid_points_x = 401
 max_iterations = 100
 time_step = 0.0025
 grid_type: str = "cole_hopf"
@@ -37,7 +37,7 @@ u_max = 2.0
 
 # Visualization parameters
 
-step_stride = 20
+step_stride = 40
 case_name = '1d burgers vs cole-hopf'
 case_name_as_title = True
 save = False
