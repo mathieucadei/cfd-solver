@@ -26,7 +26,7 @@ from post_processing import (
 
 domain_length_x = 2.0
 num_grid_points_x = 101
-max_iterations = 1001
+max_iterations = 501
 sigma = 0.2
 viscosity = 0.3
 hat_start = 0.5
