@@ -100,7 +100,7 @@ def apply_poisson_boundary_2d(
     """Apply boundary updates for the 2D Poisson equation."""
 
     p[0, :] = 0
-    p[1, :] = 0
+    p[-1, :] = 0
     p[:, 0] = 0
     p[:, -1] = 0
 
