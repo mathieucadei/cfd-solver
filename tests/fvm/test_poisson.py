@@ -4,21 +4,30 @@ import matplotlib.pyplot as plt
 
 from core import fvm
 
-def direct_solve(config, bottom, top, left, right):
+def direct_solve(
+        config,
+        initial_condition, 
+        bottom, 
+        top, 
+        left, 
+        right):
 
     nx = config.num_cells_x
     ny = config.num_cells_y
 
     dist_x, dist_y = fvm.build_dist(config)
     face_areas_x, face_areas_y = fvm.build_face_areas(config)  
+    cell_volumes = fvm.compute_cell_volumes(config).flatten()   
     xc, yc = fvm.build_centers(config)
 
     A = np.zeros((ny*nx, ny*nx))
-    b = np.zeros(ny*nx)
+    b = initial_condition[1].flatten()
     k = np.arange(ny*nx).reshape(ny, nx)
 
     for j in np.arange(ny):
         for i in np.arange(nx):
+
+            b[k[j, i]] = -b[k[j, i]] * cell_volumes[k[j, i]]
 
             if i > 0:
                 a_w = face_areas_x[j, i] / dist_x[i-1]
@@ -62,40 +71,42 @@ def direct_solve(config, bottom, top, left, right):
                     A[k[j, i], k[j, i]] += a_n # north
                     b[k[j, i]] += top[i] * a_n
 
+
     phi = np.linalg.solve(A, b)
 
     return phi.reshape(ny, nx)
 
 def test_laplace_matches_direct_solve():
 
-    config = fvm.Laplace2DConfig(
+    config = fvm.Poisson2DConfig(
         domain_length_x=2.0,
         domain_length_y=1.0,
         num_cells_x=30,
         num_cells_y=30,
-        expansion_ratio_x=0.0,
-        expansion_ratio_y=0.0,
+        expansion_ratio_x=0.,
+        expansion_ratio_y=0.,
+        max_iterations = 10000,
+        pressure_init = 0.0,
+        source_terms=[
+            fvm.SourceTerm(x=0.25, y=0.25, value=100.0),
+            fvm.SourceTerm(x=0.75, y=0.75, value=-100.0),
+        ],
         l1_norm_target=1e-10,
     )
 
-    yc_array = fvm.build_centers(config)[1]
+    initial_condition = fvm.poisson_initial_condition_2d(config)
+    bottom_boundary = np.zeros_like(initial_condition[1][0, :])
+    top_boundary = np.zeros_like(initial_condition[1][-1, :])
+    left_boundary = np.zeros_like(initial_condition[1][:, 0])
+    right_boundary = np.zeros_like(initial_condition[1][:, -1])
 
-    initial_condition = fvm.laplace_initial_condition_2d(config)
-    bottom_boundary = 'zero_gradient'
-    top_boundary = 'zero_gradient'
-    right_boundary = yc_array
-    left_boundary = np.zeros_like(initial_condition[:, 0])
-
-    numerical_solution = fvm.solve_laplace_2d(
+    numerical_solution = fvm.solve_poisson_2d(
         initial_condition, 
-        bottom_boundary=bottom_boundary, 
-        top_boundary=top_boundary, 
-        right_boundary=right_boundary, 
-        left_boundary=left_boundary, 
         config=config)[-1]
 
     direct_solve_solution = direct_solve(
         config=config,
+        initial_condition=initial_condition,
         bottom=bottom_boundary,
         top=top_boundary, 
         right=right_boundary, 
@@ -104,15 +115,22 @@ def test_laplace_matches_direct_solve():
 
     assert abs(numerical_solution - direct_solve_solution).max() < 1e-6
 
+
 if __name__ == '__main__':
 
-    config = fvm.Laplace2DConfig(
+    config = fvm.Poisson2DConfig(
         domain_length_x=2.0,
         domain_length_y=1.0,
         num_cells_x=30,
         num_cells_y=30,
-        expansion_ratio_x=0.0,
-        expansion_ratio_y=0.0,
+        expansion_ratio_x=0.,
+        expansion_ratio_y=0.,
+        max_iterations = 10000,
+        pressure_init = 0.0,
+        source_terms=[
+            fvm.SourceTerm(x=0.25, y=0.25, value=100.0),
+            fvm.SourceTerm(x=0.75, y=0.75, value=-100.0),
+        ],
         l1_norm_target=1e-10,
     )
 
@@ -121,13 +139,14 @@ if __name__ == '__main__':
     nx = config.num_cells_x
     ny = config.num_cells_y
     
-    initial_condition = fvm.laplace_initial_condition_2d(config)
+    initial_condition = fvm.poisson_initial_condition_2d(config)
     phi = direct_solve(
         config,
-        bottom='zero_gradient',
-        top='zero_gradient',
-        right = y,
-        left = np.zeros_like(initial_condition[:, 0]),
+        initial_condition,
+        bottom=np.zeros_like(initial_condition[1][0, :]),
+        top=np.zeros_like(initial_condition[1][-1, :]),
+        right=np.zeros_like(initial_condition[1][:, 0]),
+        left=np.zeros_like(initial_condition[1][:, -1]),
     )
 
     X, Y = np.meshgrid(x, y)
@@ -135,5 +154,5 @@ if __name__ == '__main__':
 
     fig = plt.figure(figsize=(11, 7), dpi=100)
     ax = fig.add_subplot(projection='3d')
-    ax.plot_surface(X, Y, Z, cmap='plasma')
+    ax.plot_surface(X, Y, Z, cmap='viridis')
     plt.show()
