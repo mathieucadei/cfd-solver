@@ -100,4 +100,4 @@ def test_diffusion_2d_matches_heat():
     peak = u_numerical.max()
     exact = u_analytical.max()
 
-    assert abs(peak - exact) < 0.01
+    assert abs(peak - exact) < 1e-3

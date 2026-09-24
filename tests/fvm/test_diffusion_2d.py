@@ -9,8 +9,8 @@ def test_diffusion_2d_matches_heat():
     config = fvm.Diffusion2DConfig(
         domain_length_x=2.0,
         domain_length_y=2.0,
-        num_cells_x=30,
-        num_cells_y=30,
+        num_cells_x=100,
+        num_cells_y=100,
         expansion_ratio_x=0.,
         expansion_ratio_y=0.,
         max_iterations=50,
@@ -105,7 +105,7 @@ def test_diffusion_2d_matches_heat():
     peak = u_numerical.max()
     exact = u_analytical.max()
 
-    assert abs(peak - exact) < 0.01
+    assert abs(peak - exact) < 1e-3
 
 
 # if __name__ == '__main__':
