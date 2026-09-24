@@ -4,7 +4,12 @@ import matplotlib.pyplot as plt
 
 from core import fdm
 
-def direct_solve(config, bottom, top, left, right):
+def direct_solve(
+        config, 
+        bottom, 
+        top, 
+        left, 
+        right):
 
     nx = config.num_grid_points_x
     ny = config.num_grid_points_y
@@ -22,41 +27,42 @@ def direct_solve(config, bottom, top, left, right):
     k = np.arange(ny*nx).reshape(ny, nx)
 
     for j in np.arange(ny):
-        for i in np.arange(nx):
+            for i in np.arange(nx):
 
-            A[k[j, i], k[j, i]] = a_w + a_e + a_s + a_n      # current cell
+                if j == 0 or j == ny-1 or i == 0 or i == nx-1:
+                    A[k[j, i], k[j, i]] = 1
 
-            if i > 0:
-                A[k[j, i], k[j, i - 1]] = -a_w  # west
-            else:
-                if type(left) == str and left == 'zero_gradient':
-                    A[k[j, i], k[j, i]] -= a_w  # west
+                    if j == 0:
+                        if type(bottom) == str and bottom == 'zero_gradient':
+                            A[k[j, i], k[j + 1, i]] = -1
+                        else:
+                            b[k[j, i]] = bottom[i]
+
+                    elif j == ny-1:
+                        if type(top) == str and top == 'zero_gradient':
+                            A[k[j, i], k[j - 1, i]] = -1
+                        else:
+                            b[k[j, i]] = top[i]
+
+                    elif i == 0:
+                        if type(left) == str and left == 'zero_gradient':
+                            A[k[j, i], k[j, i + 1]] = -1
+                        else:
+                            b[k[j, i]] = left[j]
+
+                    else:
+                        if type(right) == str and right == 'zero_gradient':
+                            A[k[j, i], k[j, i - 1]] = -1
+                        else:
+                            b[k[j, i]] = right[j]
+                        
                 else:
-                    b[k[j, i]] += left * a_w
 
-            if i < nx-1:
-                A[k[j, i], k[j, i + 1]] = -a_e  # east
-            else:
-                if type(right) == str and right == 'zero_gradient':
-                    A[k[j, i], k[j, i]] -= a_e  # east
-                else:
-                    b[k[j, i]] += right[j] * a_e
-
-            if j > 0:
-                A[k[j, i], k[j - 1, i]] = -a_s # south
-            else:
-                if type(bottom) == str and bottom == 'zero_gradient':
-                    A[k[j, i], k[j, i]] -= a_s # south
-                else:
-                    b[k[j, i]] += bottom[i] * a_s
-
-            if j < ny-1:
-                A[k[j, i], k[j + 1, i]] = -a_n # north
-            else:
-                if type(top) == str and top == 'zero_gradient':
-                    A[k[j, i], k[j, i]] -= a_n # north
-                else:
-                    b[k[j, i]] += top[i] * a_n
+                    A[k[j, i], k[j, i]] = a_w + a_e + a_s + a_n      # current cell
+                    A[k[j, i], k[j, i - 1]] = -a_w  # west
+                    A[k[j, i], k[j, i + 1]] = -a_e  # east
+                    A[k[j, i], k[j - 1, i]] = -a_s # south
+                    A[k[j, i], k[j + 1, i]] = -a_n # north
 
 
     phi = np.linalg.solve(A, b)
@@ -79,7 +85,7 @@ def test_laplace_matches_direct_solve():
     bottom_boundary = initial_condition[1, :]
     top_boundary = initial_condition[-2, :] 
     right_boundary = y_array
-    left_boundary = 0
+    left_boundary = np.zeros_like(initial_condition[:, 0])
 
     numerical_solution = fdm.solve_laplace_2d(
         initial_condition, 
@@ -120,7 +126,7 @@ if __name__ == '__main__':
         bottom='zero_gradient',
         top='zero_gradient',
         right = y,
-        left = 0,
+        left = np.zeros_like(initial_condition[:, 0]),
     )
 
     X, Y = np.meshgrid(np.linspace(0, 1, config.num_grid_points_x), y)

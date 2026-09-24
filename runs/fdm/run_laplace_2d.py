@@ -58,7 +58,7 @@ initial_condition = fdm.laplace_initial_condition_2d(laplace_2d_config)
 bottom_boundary = initial_condition[1, :]
 top_boundary = initial_condition[-2, :] 
 right_boundary = y_array
-left_boundary = 0
+left_boundary = np.zeros_like(initial_condition[:, 0])
 
 
 
