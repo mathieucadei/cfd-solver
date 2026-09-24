@@ -98,6 +98,8 @@ def plot_solution_traces(
 
         for n in indices:
 
+            color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
+
             if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
             elif axis == 1:
