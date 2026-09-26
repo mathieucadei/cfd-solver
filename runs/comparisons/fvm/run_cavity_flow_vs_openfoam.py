@@ -1,4 +1,4 @@
-"""Run the 2D cavity flow FVM solver and generate solution plots."""
+"""Run the 2D lid-driven cavity flow FVM solver and compare with Ghia et al. (1982)."""
 
 
 
@@ -6,13 +6,16 @@ import os
 
 from matplotlib.animation import FuncAnimation
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import cm
+
+from pathlib import Path
 
 from core import fvm
 
 from post_processing import (
     show_cavity_flow_solution_overview,
-    show_cavity_flow_solution_animation,
 )
 
 
@@ -39,7 +42,8 @@ viscosity: float = u_lid*domain_length_x/reynolds_number
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow'
+cut_indices=[(num_cells_x+1) // 2]
+case_name = f'lid-driven cavity flow FVM - Re {reynolds_number}'
 case_name_as_title = True
 save = False
 show_individual_plots = False
@@ -91,17 +95,24 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 p_solution_matrix_final = p_solution_matrix[-1, ...]
 
-# u_residual_history = solution_matrix[3]
-# v_residual_history = solution_matrix[4]
 
-# plt.plot(u_residual_history)
-# plt.plot(v_residual_history)
-# plt.xlabel("Iteration")
-# plt.ylabel("Residual")
-# plt.show()
+# Ghia et al. (1982)
+
+DATA = Path(__file__).resolve().parents[3] / 'data'
+openfoam_table_1 = pd.read_csv(DATA / 'openfoam_table_1.csv')
+openfoam_table_2 = pd.read_csv(DATA / 'openfoam_table_2.csv')
+
+validation_u_x_values=openfoam_table_1['arc_length']
+validation_v_x_values=openfoam_table_2['arc_length']
+validation_u_values=openfoam_table_1['U:0']
+validation_v_values=openfoam_table_2['U:1']
+
+u_scatter_label='openfoam'
+v_scatter_label='openfoam'
 
 
 # Post-processing
+
 
 show_cavity_flow_solution_overview(
     x_values=xc_array,
@@ -109,20 +120,14 @@ show_cavity_flow_solution_overview(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
+    validation_u_x_values=validation_u_x_values,
+    validation_v_x_values=validation_v_x_values,
+    validation_u_values=validation_u_values,
+    validation_v_values=validation_v_values,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,
-    step_stride=step_stride,
-)
-
-
-show_cavity_flow_solution_animation(
-    x_values=xc_array,
-    y_values=yc_array,
-    u_solution_history=u_solution_matrix,
-    v_solution_history=v_solution_matrix,
-    p_solution_history=p_solution_matrix,
-    u_lid=u_lid,
-    case_name=case_name,
-    save=save,
+    cut_indices=cut_indices,
+    u_scatter_label=u_scatter_label,
+    v_scatter_label=v_scatter_label,
 )

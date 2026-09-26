@@ -546,7 +546,11 @@ def show_cavity_flow_solution(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+    p_min = np.floor(p_solution_matrix.min() * 100) / 100
+    p_max = np.ceil(p_solution_matrix.max() * 100) / 100
+    levels = np.linspace(p_min, p_max, 30)
+
+    # levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
@@ -794,7 +798,11 @@ def show_cavity_flow_solution_overview(
     ax3 = fig.add_subplot(gs[1, 0])
     ax4 = fig.add_subplot(gs[1, 1])
 
-    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+    p_min = np.floor(p_solution_matrix.min() * 100) / 100
+    p_max = np.ceil(p_solution_matrix.max() * 100) / 100
+    levels = np.linspace(p_min, p_max, 30)
+
+    # levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
