@@ -187,8 +187,7 @@ def plot_solution_contourf(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels)
-
+    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels, extend='both')
 
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
@@ -546,11 +545,7 @@ def show_cavity_flow_solution(
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    p_min = np.floor(p_solution_matrix.min() * 100) / 100
-    p_max = np.ceil(p_solution_matrix.max() * 100) / 100
-    levels = np.linspace(p_min, p_max, 30)
-
-    # levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
@@ -798,11 +793,7 @@ def show_cavity_flow_solution_overview(
     ax3 = fig.add_subplot(gs[1, 0])
     ax4 = fig.add_subplot(gs[1, 1])
 
-    p_min = np.floor(p_solution_matrix.min() * 100) / 100
-    p_max = np.ceil(p_solution_matrix.max() * 100) / 100
-    levels = np.linspace(p_min, p_max, 30)
-
-    # levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
@@ -816,8 +807,7 @@ def show_cavity_flow_solution_overview(
         title='Pressure and Streamlines',
     )
 
-    cbar = fig.colorbar(contourf, ax=ax1, format='%.2f', ticks=np.linspace(p_min, p_max, 5))
-    cbar.set_label(f'p  (min {p_solution_matrix.min():.2f}, max {p_solution_matrix.max():.2f})')
+    fig.colorbar(contourf, ax=ax1, label='Pressure')
 
     plot_solution_contour(
         ax=ax1,
@@ -1348,7 +1338,7 @@ def show_cavity_flow_solution_animation(
     y_values,
     p_solution_history[0],
     levels=levels,
-)
+    )
 
 
     fig.colorbar(initial_contourf, ax=ax, label='Pressure')
