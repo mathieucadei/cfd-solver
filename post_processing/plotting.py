@@ -187,7 +187,7 @@ def plot_solution_contourf(
 
     x_grid, y_grid = np.meshgrid(x_values, y_values)
 
-    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels, extend='both')
+    contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels)
 
 
     ax.set_xlabel(x_label)
@@ -816,7 +816,8 @@ def show_cavity_flow_solution_overview(
         title='Pressure and Streamlines',
     )
 
-    fig.colorbar(contourf, ax=ax1)
+    cbar = fig.colorbar(contourf, ax=ax1, format='%.2f', ticks=np.linspace(p_min, p_max, 5))
+    cbar.set_label(f'p  (min {p_solution_matrix.min():.2f}, max {p_solution_matrix.max():.2f})')
 
     plot_solution_contour(
         ax=ax1,
