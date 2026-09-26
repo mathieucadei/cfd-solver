@@ -769,6 +769,7 @@ def show_cavity_flow_solution_overview(
     validation_u_values: np.ndarray = None,
     validation_v_values: np.ndarray = None,
     step: int = 2,
+    num_ticks: int = 6,
     scale: float = 15.0,
     x_label: str = 'x',
     y_label: str = 'y',
@@ -793,7 +794,7 @@ def show_cavity_flow_solution_overview(
     ax3 = fig.add_subplot(gs[1, 0])
     ax4 = fig.add_subplot(gs[1, 1])
 
-    levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+    p_levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
 
     contourf = plot_solution_contourf(
@@ -803,11 +804,11 @@ def show_cavity_flow_solution_overview(
         solution_matrix=p_solution_matrix,
         x_label=x_label,
         y_label=y_label,
-        levels=levels,
+        levels=p_levels,
         title='Pressure and Streamlines',
     )
 
-    fig.colorbar(contourf, ax=ax1, label='Pressure')
+    fig.colorbar(contourf, cax=ax1.inset_axes([1.05, 0, 0.05, 1]), label='Pressure', extendfrac=0, ticks=np.linspace(p_levels[0], p_levels[-1], num_ticks), format='%.2f')
 
     plot_solution_contour(
         ax=ax1,
@@ -816,7 +817,7 @@ def show_cavity_flow_solution_overview(
         solution_matrix=p_solution_matrix,
         x_label=x_label,
         y_label=y_label,
-        levels=levels,
+        levels=p_levels,
         case_name=case_name,
     )
 
@@ -832,12 +833,15 @@ def show_cavity_flow_solution_overview(
     )
 
     ax1.set_xlim(x_values[0], x_values[-1])
+    ax1.set_aspect('equal')
     ax1.set_ylim(y_values[0], y_values[-1])
 
     U = u_solution_matrix[::step, ::step]
     V = v_solution_matrix[::step, ::step]
 
     M = np.sqrt(U**2 + V**2)
+
+    velocity_levels = np.linspace(np.percentile(M, 1), np.percentile(M, 99), 30)
 
     # vmin = np.floor(np.min(M))
     # vmax = np.ceil(np.max(M))
@@ -860,9 +864,10 @@ def show_cavity_flow_solution_overview(
         title='Velocity Field',
     )
 
-    fig.colorbar(qvr, ax=ax2, label='Velocity Magnitude')
+    fig.colorbar(qvr, cax=ax2.inset_axes([1.05, 0, 0.05, 1]), label='Velocity Magnitude', extendfrac=0, ticks=np.linspace(velocity_levels[0], velocity_levels[-1], num_ticks), format='%.2f')
 
     ax2.set_xlim(x_values[0], x_values[-1])
+    ax2.set_aspect('equal')
     ax2.set_ylim(y_values[0], y_values[-1])
 
     if validation_u_values is not None:
@@ -1322,6 +1327,7 @@ def show_cavity_flow_solution_animation(
     x_label: str = 'x',
     y_label: str = 'y',
     u_lid: float = None,
+    num_ticks: int = 6,
     case_name: str = None,
     save: bool = False,
 ) -> None:
@@ -1340,8 +1346,8 @@ def show_cavity_flow_solution_animation(
     levels=levels,
     )
 
-
-    fig.colorbar(initial_contourf, ax=ax, label='Pressure')
+    fig.colorbar(initial_contourf, ax=ax, label='Pressure', extendfrac=0, ticks=np.linspace(levels[0], levels[-1], num_ticks), format='%.2f')
+    # fig.colorbar(initial_contourf, ax=ax, label='Pressure')
 
 
     def update(frame):
