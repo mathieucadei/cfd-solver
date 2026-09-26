@@ -52,7 +52,9 @@ def plot_solution_traces(
     ana_solution_matrix: np.ndarray = None,
     x_label: str = 'x',
     y_label: str = 'u',
+    series_label: str = 'Numerical',
     cut_label: str = 't',
+    comp_label: str = 'Analytical',
     swap_axes: bool = False,
     case_name: str = None,
     case_name_as_title: bool = False,
@@ -67,6 +69,7 @@ def plot_solution_traces(
     for n in indices:
 
         color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
+        decimal = 1 if len(indices) == 1 else 3
 
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
@@ -75,7 +78,7 @@ def plot_solution_traces(
         else:
             raise ValueError('axis must be 0 or 1')
 
-        num_label = f'Numerical ({cut_label}: {cut_values[n]:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.3g}'
+        num_label = f'{series_label} ({cut_label}: {cut_values[n]:.{decimal}f})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.{decimal}f}'
 
         if swap_axes:
             ax.plot(
@@ -107,7 +110,7 @@ def plot_solution_traces(
             else:
                 raise ValueError('axis must be 0 or 1')
 
-            ana_label = f'Analytical ({cut_label}: {cut_values[n]:.3g})'
+            ana_label = f'{comp_label} ({cut_label}: {cut_values[n]:.{decimal}f})'
 
             if swap_axes:
                 ax.plot(
@@ -768,6 +771,10 @@ def show_cavity_flow_solution_overview(
     validation_v_x_values: np.ndarray = None,
     validation_u_values: np.ndarray = None,
     validation_v_values: np.ndarray = None,
+    comp_u_x_values: np.ndarray = None,
+    comp_v_x_values: np.ndarray = None,
+    comp_u_values: np.ndarray = None,
+    comp_v_values: np.ndarray = None,
     step: int = 2,
     num_ticks: int = 6,
     scale: float = 15.0,
@@ -779,6 +786,7 @@ def show_cavity_flow_solution_overview(
     cut_indices: float | np.ndarray = None,
     u_scatter_label: str = None,
     v_scatter_label: str = None,
+    comp_label: str = None,
     case_name: str = None,
     case_name_as_title: bool = False,
     title: str = None,
@@ -799,7 +807,6 @@ def show_cavity_flow_solution_overview(
     x_plot = np.concatenate(([0], x_values, [x_values[0] + x_values[-1]]))
     y_plot = np.concatenate(([0], y_values, [y_values[0] + y_values[-1]]))
     p_plot = np.pad(p_solution_matrix, 1, mode='edge')
-    p_plot[-1, :] = 0
 
     contourf = plot_solution_contourf(
         ax=ax1,
@@ -838,14 +845,12 @@ def show_cavity_flow_solution_overview(
 
     ax1.set_xlim(0, x_values[0] + x_values[-1])
     ax1.set_aspect('equal')
-    ax1.set_xlim(0, y_values[0] + y_values[-1])
+    ax1.set_ylim(0, y_values[0] + y_values[-1])
 
     U = u_solution_matrix[::step, ::step]
     V = v_solution_matrix[::step, ::step]
 
     M = np.sqrt(U**2 + V**2)
-
-    velocity_levels = np.linspace(np.percentile(M, 1), np.percentile(M, 99), 30)
 
     # vmin = np.floor(np.min(M))
     # vmax = np.ceil(np.max(M))
@@ -872,9 +877,9 @@ def show_cavity_flow_solution_overview(
 
     ax2.set_xlim(0, x_values[0] + x_values[-1])
     ax2.set_aspect('equal')
-    ax2.set_xlim(0, y_values[0] + y_values[-1])
+    ax2.set_ylim(0, y_values[0] + y_values[-1])
 
-    if validation_u_values is not None:
+    if validation_u_values is not None and comp_u_values is None:
 
         plot_solution_traces(
             ax=ax3,
@@ -921,6 +926,99 @@ def show_cavity_flow_solution_overview(
             y_label=v_label,
             label=v_scatter_label,
         )
+
+    elif comp_u_values is not None and validation_u_values is None:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            ana_solution_matrix=comp_u_values,
+            axis=1,
+            cut_label=x_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='u along the vertical centreline'
+        )
+
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            ana_solution_matrix=comp_v_values,
+            axis=0,
+            cut_label=y_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='v along the horizontal centreline'
+        )
+
+
+    elif comp_u_values is not None and validation_u_values is not None:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            ana_solution_matrix=comp_u_values,
+            axis=1,
+            cut_label=x_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax3,
+            x_values=validation_u_x_values,
+            y_values=validation_u_values,
+            x_label=y_label,
+            y_label=u_label,
+            label=u_scatter_label,
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            ana_solution_matrix=comp_v_values,
+            axis=0,
+            cut_label=y_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='v along the horizontal centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax4,
+            x_values=validation_v_x_values,
+            y_values=validation_v_values,
+            x_label=x_label,
+            y_label=v_label,
+            label=v_scatter_label,
+        )
+
 
     else:
 
@@ -1343,10 +1441,14 @@ def show_cavity_flow_solution_animation(
 
     levels = np.linspace(np.percentile(p_solution_matrix_final, 1), np.percentile(p_solution_matrix_final, 99), 30)
 
+    x_plot = np.concatenate(([0], x_values, [x_values[0] + x_values[-1]]))
+    y_plot = np.concatenate(([0], y_values, [y_values[0] + y_values[-1]]))
+    p_plot = np.pad(p_solution_history, 1, mode='edge')
+
     initial_contourf = ax.contourf(
-    x_values,
-    y_values,
-    p_solution_history[0],
+    x_plot,
+    y_plot,
+    p_plot[0],
     levels=levels,
     )
 
@@ -1360,9 +1462,9 @@ def show_cavity_flow_solution_animation(
 
         contourf = plot_solution_contourf(
             ax=ax,
-            x_values=x_values,
-            y_values=y_values,
-            solution_matrix=p_solution_history[frame],
+            x_values=x_plot,
+            y_values=y_plot,
+            solution_matrix=p_plot[frame],
             x_label=x_label,
             y_label=y_label,
             levels=levels,
@@ -1371,9 +1473,9 @@ def show_cavity_flow_solution_animation(
 
         plot_solution_contour(
         ax=ax,
-        x_values=x_values,
-        y_values=y_values,
-        solution_matrix=p_solution_history[frame],
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot[frame],
         x_label=x_label,
         y_label=y_label,
         levels=levels,
@@ -1394,7 +1496,7 @@ def show_cavity_flow_solution_animation(
 
         ax.set_xlim(0, x_values[0] + x_values[-1])
         ax.set_aspect('equal')
-        ax.set_xlim(0, y_values[0] + y_values[-1])
+        ax.set_ylim(0, y_values[0] + y_values[-1])
 
         if u_lid is not None:
 

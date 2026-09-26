@@ -42,7 +42,7 @@ viscosity: float = u_lid*domain_length_x/reynolds_number
 # Visualization parameters
 
 step_stride = 10
-# cut_indices=[(num_cells_x+1) // 2]
+cut_indices=[(num_cells_x+1) // 2]
 case_name = f'lid-driven cavity flow FVM - Re {reynolds_number}'
 case_name_as_title = True
 save = False
@@ -111,6 +111,17 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 # v_scatter_label='openfoam'
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
+ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
+ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
+
+validation_u_x_values=ghia_table_1['y']
+validation_v_x_values=ghia_table_2['x']
+validation_u_values=ghia_table_1['100']
+validation_v_values=ghia_table_2['100']
+
+u_scatter_label='x=0.5 - Ghia et al. (1982)'
+v_scatter_label='y=0.5 - Ghia et al. (1982)'
+
 openfoam_field = pd.read_csv(DATA / 'openfoam_field.csv')
 
 comp_u_values=openfoam_field['U:0'].to_numpy().reshape(num_cells_y, num_cells_x)
@@ -127,11 +138,17 @@ show_cavity_flow_solution_overview(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
+    validation_u_x_values=validation_u_x_values,
+    validation_v_x_values=validation_v_x_values,
+    validation_u_values=validation_u_values,
+    validation_v_values=validation_v_values,
     comp_u_values=comp_u_values,
     comp_v_values=comp_v_values,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,
-    step_stride=step_stride,
+    cut_indices=cut_indices,
     comp_label=comp_label,
+    u_scatter_label=u_scatter_label,
+    v_scatter_label=v_scatter_label,
 )

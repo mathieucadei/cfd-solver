@@ -1037,7 +1037,7 @@ def apply_cavity_flow_boundary_2d(
     """Apply boundary updates for the 2D cavity flow equation."""
 
     bottom = p[0, :]
-    top = top = p[-1, :]
+    top = p[-1, :]
     right = p[:, -1]
     left = p[:, 0]
 
