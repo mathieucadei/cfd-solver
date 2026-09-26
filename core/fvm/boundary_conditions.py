@@ -908,7 +908,7 @@ def apply_pressure_poisson_term_boundary(
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
 
     bottom = p[0, :]
-    top = 0
+    top = p[-1, :]
     right = p[:, -1]
     left = p[:, 0]
 
@@ -933,7 +933,7 @@ def apply_pressure_poisson_term_boundary(
     f_w_top = a_w_top * p[-1, :-2]
     f_e_top = a_e_top * p[-1, 2:]
     f_s_top = a_s_top * p[-2, 1:-1]
-    f_nb = a_nb * top
+    f_nb = a_nb * top[1:-1]
 
     p[-1, 1:-1] =(f_e_top + f_w_top + f_nb + f_s_top - b[-1, 1:-1] * cell_volumes[-1, 1:-1]) / (a_w_top + a_e_top + a_s_top + a_nb)
 
@@ -983,7 +983,7 @@ def apply_pressure_poisson_term_boundary(
     f_wb_top = a_wb_top * left[-1]
     f_e_top_left = a_e_top_left * p[-1, 1]
     f_s_top_left = a_s_top_left * p[-2, 0]
-    f_nb_left = a_nb_left * top
+    f_nb_left = a_nb_left * top[0]
 
     p[-1, 0] =(f_e_top_left + f_wb_top + f_nb_left + f_s_top_left - b[-1, 0] * cell_volumes[-1, 0]) / (a_wb_top + a_e_top_left + a_s_top_left + a_nb_left)
 
@@ -1009,7 +1009,7 @@ def apply_pressure_poisson_term_boundary(
     f_w_top_right = a_w_top_right * p[-1, -2]
     f_eb_top = a_eb_top * right[-1]
     f_s_top_right = a_s_top_right * p[-2, -1]
-    f_nb_right = a_nb_right * top
+    f_nb_right = a_nb_right * top[-1]
 
     p[-1, -1] =(f_eb_top + f_w_top_right + f_nb_right + f_s_top_right - b[-1, -1] * cell_volumes[-1, -1]) / (a_w_top_right + a_eb_top + a_s_top_right + a_nb_right)
 
@@ -1037,7 +1037,7 @@ def apply_cavity_flow_boundary_2d(
     """Apply boundary updates for the 2D cavity flow equation."""
 
     bottom = p[0, :]
-    top = 0
+    top = top = p[-1, :]
     right = p[:, -1]
     left = p[:, 0]
 
@@ -1231,7 +1231,7 @@ def apply_cavity_flow_boundary_2d(
     pf_w_p_top = face_areas_x[-1, 1:-1] * (p[-1, :-2] + p[-1, 1:-1]) / 2 
     pf_e_p_top = face_areas_x[-1, 2:] * (p[-1, 1:-1] + p[-1, 2:]) / 2 
     pf_s_p_top = face_areas_y[-2, 1:-1] * (p[-2, 1:-1] + p[-1, 1:-1]) / 2
-    pf_nb_p = face_areas_y[-1, 1:-1] * top
+    pf_nb_p = face_areas_y[-1, 1:-1] * top[1:-1]
 
     ## update
 
@@ -1367,7 +1367,7 @@ def apply_cavity_flow_boundary_2d(
 
     pf_e_p_top_left = face_areas_x[-1, 1] * (p[-1, 0] + p[-1, 1]) / 2
     pf_wb_p_top = face_areas_x[-1, 0] * left[-1]
-    pf_nb_p_left = face_areas_y[-1, 0] * top
+    pf_nb_p_left = face_areas_y[-1, 0] * top[0]
     pf_s_p_top_left = face_areas_y[-2, 0] * (p[-2, 0] + p[-1, 0]) / 2
 
 
@@ -1412,7 +1412,7 @@ def apply_cavity_flow_boundary_2d(
 
     pf_eb_p_top = face_areas_x[-1, -1] * right[-1]
     pf_w_p_top_right = face_areas_x[-1, -2] * (p[-1, -2] + p[-1, -1]) / 2
-    pf_nb_p_right = face_areas_y[-1, -1] * top
+    pf_nb_p_right = face_areas_y[-1, -1] * top[-1]
     pf_s_p_top_right = face_areas_y[-2, -1] * (p[-2, -1] + p[-1, -1]) / 2
 
 

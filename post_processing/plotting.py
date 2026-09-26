@@ -796,12 +796,16 @@ def show_cavity_flow_solution_overview(
 
     p_levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
 
+    x_plot = np.concatenate(([0], x_values, [x_values[0] + x_values[-1]]))
+    y_plot = np.concatenate(([0], y_values, [y_values[0] + y_values[-1]]))
+    p_plot = np.pad(p_solution_matrix, 1, mode='edge')
+    p_plot[-1, :] = 0
 
     contourf = plot_solution_contourf(
         ax=ax1,
-        x_values=x_values,
-        y_values=y_values,
-        solution_matrix=p_solution_matrix,
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot,
         x_label=x_label,
         y_label=y_label,
         levels=p_levels,
@@ -812,9 +816,9 @@ def show_cavity_flow_solution_overview(
 
     plot_solution_contour(
         ax=ax1,
-        x_values=x_values,
-        y_values=y_values,
-        solution_matrix=p_solution_matrix,
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot,
         x_label=x_label,
         y_label=y_label,
         levels=p_levels,
@@ -832,9 +836,9 @@ def show_cavity_flow_solution_overview(
         case_name=case_name,
     )
 
-    ax1.set_xlim(x_values[0], x_values[-1])
+    ax1.set_xlim(0, x_values[0] + x_values[-1])
     ax1.set_aspect('equal')
-    ax1.set_ylim(y_values[0], y_values[-1])
+    ax1.set_xlim(0, y_values[0] + y_values[-1])
 
     U = u_solution_matrix[::step, ::step]
     V = v_solution_matrix[::step, ::step]
@@ -864,11 +868,11 @@ def show_cavity_flow_solution_overview(
         title='Velocity Field',
     )
 
-    fig.colorbar(qvr, cax=ax2.inset_axes([1.05, 0, 0.05, 1]), label='Velocity Magnitude', extendfrac=0, ticks=np.linspace(velocity_levels[0], velocity_levels[-1], num_ticks), format='%.2f')
+    fig.colorbar(qvr, cax=ax2.inset_axes([1.05, 0, 0.05, 1]), label='Velocity Magnitude', extend='both', extendfrac=0, ticks=np.linspace(M.min(), M.max(), num_ticks), format='%.2f')
 
-    ax2.set_xlim(x_values[0], x_values[-1])
+    ax2.set_xlim(0, x_values[0] + x_values[-1])
     ax2.set_aspect('equal')
-    ax2.set_ylim(y_values[0], y_values[-1])
+    ax2.set_xlim(0, y_values[0] + y_values[-1])
 
     if validation_u_values is not None:
 
@@ -1388,8 +1392,9 @@ def show_cavity_flow_solution_animation(
         case_name=case_name,
         )
 
-        ax.set_xlim(x_values[0], x_values[-1])
-        ax.set_ylim(y_values[0], y_values[-1])
+        ax.set_xlim(0, x_values[0] + x_values[-1])
+        ax.set_aspect('equal')
+        ax.set_xlim(0, y_values[0] + y_values[-1])
 
         if u_lid is not None:
 
