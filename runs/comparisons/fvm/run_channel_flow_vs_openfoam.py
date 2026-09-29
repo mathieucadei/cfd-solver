@@ -1,4 +1,4 @@
-"""Run the 2D channel flow FVM solver and generate solution plots."""
+"""Run the 2D channel flow FVM solver and compare with Poiseuille flow."""
 
 
 
@@ -7,13 +7,17 @@ import os
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import Normalize
 import numpy as np
+import pandas as pd
 import math
 from matplotlib import cm
 import matplotlib.pyplot as plt
 
-from core import fvm
+from pathlib import Path
+
+from core import fvm, analytical
 
 from post_processing import (
+    show_channel_flow_solution,
     show_channel_flow_solution_overview,
     show_channel_flow_solution_animation,
 )
@@ -92,25 +96,54 @@ u_solution_matrix_final = u_solution_matrix[-1, ...]
 v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 
+# OpenFOAM
+
+# u_analytical = analytical.compute_poiseuille_flow(
+#     y_array=yc_array,
+#     config=channel_flow_config,
+# )
+
+# u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
+
+DATA = Path(__file__).resolve().parents[3] / 'data'
+openfoam = pd.read_csv(DATA / 'openfoam_channel_flow_2d_u_profile.csv')
+u_analytical=openfoam['U:0'].to_numpy()
+u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
+
 # Post-processing
+
+x_index = num_cells_x // 2
+
+u_numerical = u_solution_matrix_final[:, x_index]
+
+error = u_numerical - u_analytical
+error_2d = u_solution_matrix_final - u_analytical_2d
+
+l2_error = (
+    np.linalg.norm(u_numerical - u_analytical)
+    / np.linalg.norm(u_analytical)
+)
+
+metrics = (
+    f"Analytical umax = {np.max(u_analytical):.6f}\n"
+    f"Numerical umax = {np.max(u_numerical):.6f}\n"
+    f"Maximum |v| = {np.max(np.abs(v_solution_matrix_final)):.2e}\n"
+    f"Relative L2 error = {l2_error:.2e}"
+)
+
 
 show_channel_flow_solution_overview(
     x_values=xc_array,
     y_values=yc_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
+    ana_u_x_values=yc_array,
+    ana_u_values=u_analytical,
+    error=error,
+    error_2d=error_2d,
+    metrics=metrics,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,
     cut_indices=cut_indices,
-)
-
-show_channel_flow_solution_animation(
-    x_values=xc_array,
-    y_values=yc_array,
-    u_solution_history=u_solution_matrix,
-    v_solution_history=v_solution_matrix,
-    source=source,
-    case_name=case_name,
-    save=save,
 )
