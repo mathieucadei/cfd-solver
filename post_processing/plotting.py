@@ -1114,6 +1114,7 @@ def show_channel_flow_solution_overview(
     x_label: str = 'x',
     y_label: str = 'y',
     u_label: str = 'u',
+    comp_label: str = 'OpenFOAM',
     error_label: str = 'error',
     step_stride: int=5,
     cut_indices: float | np.ndarray = None,
@@ -1286,7 +1287,7 @@ def show_channel_flow_solution_overview(
             title='Velocity Error Field',
         )
 
-        fig.colorbar(contourf, ax=ax2, label='u numerical - u analytical')
+        fig.colorbar(contourf, ax=ax2, label=f'u numerical - u {comp_label}')
 
         ax2.set_xlim(x_values[0], x_values[-1])
         ax2.set_ylim(y_values[0], y_values[-1])
@@ -1306,6 +1307,7 @@ def show_channel_flow_solution_overview(
             cut_label=x_label,
             x_label=u_label,
             y_label=y_label,
+            comp_label=comp_label,
             case_name=case_name,
             cut_indices=cut_indices,
             swap_axes=True,
@@ -1329,7 +1331,7 @@ def show_channel_flow_solution_overview(
             case_name=case_name,
             cut_indices=cut_indices,
             swap_axes=True,
-            title='Numerical - Analytical Error'
+            title=f'Numerical - {comp_label} Error'
         )
 
         ax4.axvline(0, color='k', linewidth=0.8)
@@ -1403,6 +1405,7 @@ def show_channel_flow_solution_overview(
             cut_label=x_label,
             x_label=u_label,
             y_label=y_label,
+            comp_label=comp_label,
             case_name=case_name,
             cut_indices=cut_indices,
             swap_axes=True,
