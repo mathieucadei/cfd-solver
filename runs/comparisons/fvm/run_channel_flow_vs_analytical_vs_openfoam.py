@@ -98,12 +98,12 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 # OpenFOAM
 
-# u_analytical = analytical.compute_poiseuille_flow(
-#     y_array=yc_array,
-#     config=channel_flow_config,
-# )
+u_analytical = analytical.compute_poiseuille_flow(
+    y_array=yc_array,
+    config=channel_flow_config,
+)
 
-# u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
+u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
 openfoam = pd.read_csv(DATA / 'openfoam_channel_flow_2d_u_profile.csv')
@@ -116,31 +116,13 @@ x_index = num_cells_x // 2
 
 u_numerical = u_solution_matrix_final[:, x_index]
 
-error = u_numerical - u_openfoam
-error_2d = u_solution_matrix_final - u_openfoam_2d
-
-l2_error = (
-    np.linalg.norm(u_numerical - u_openfoam)
-    / np.linalg.norm(u_openfoam)
-)
-
-metrics = (
-    f"OpenFOAM umax = {np.max(u_openfoam):.6f}\n"
-    f"Numerical umax = {np.max(u_numerical):.6f}\n"
-    f"Maximum |v| = {np.max(np.abs(v_solution_matrix_final)):.2e}\n"
-    f"Relative L2 error = {l2_error:.2e}"
-)
-
-
 show_channel_flow_solution_overview(
     x_values=xc_array,
     y_values=yc_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
+    ana_u_values=u_analytical,
     comp_u_values=u_openfoam,
-    error=error,
-    error_2d=error_2d,
-    metrics=metrics,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
     save=save,
