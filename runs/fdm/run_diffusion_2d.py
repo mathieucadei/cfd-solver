@@ -37,7 +37,7 @@ u_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d diffusion'
+case_name = '2d diffusion fdm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

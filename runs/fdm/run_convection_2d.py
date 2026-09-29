@@ -36,7 +36,7 @@ v_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d convection'
+case_name = '2d convection fdm'
 case_name_as_title = True
 save = False
 

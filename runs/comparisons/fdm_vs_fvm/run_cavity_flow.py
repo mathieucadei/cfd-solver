@@ -46,7 +46,7 @@ expansion_ratio_y: float = 0.
 
 step_stride = 10
 # cut_indices=[(num_cells_x+1) // 2]
-case_name = f'lid-driven cavity flow FDM - Re {reynolds_number} FDM vs FVM'
+case_name = f'lid-driven cavity flow FDM - Re {reynolds_number} vs FVM'
 case_name_as_title = True
 save = False
 show_individual_plots = False

@@ -34,7 +34,7 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d convection'
+case_name = '1d convection fdm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

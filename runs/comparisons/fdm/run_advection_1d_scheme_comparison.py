@@ -38,7 +38,7 @@ schemes = [
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d advection'
+case_name = '1d advection fdm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

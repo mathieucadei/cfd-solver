@@ -35,7 +35,7 @@ viscosity: float = 0.1
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow'
+case_name = 'cavity flow fdm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

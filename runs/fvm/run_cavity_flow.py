@@ -39,7 +39,7 @@ viscosity: float = u_lid*domain_length_x/reynolds_number
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow'
+case_name = 'cavity flow fvm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

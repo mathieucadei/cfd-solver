@@ -39,7 +39,7 @@ v_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d burgers'
+case_name = '2d burgers fvm'
 case_name_as_title = True
 save = False
 

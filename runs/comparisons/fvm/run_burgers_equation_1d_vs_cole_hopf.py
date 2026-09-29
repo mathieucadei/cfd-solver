@@ -37,7 +37,7 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 40
-case_name = '1d burgers vs cole-hopf'
+case_name = '1d burgers fvm vs cole-hopf'
 case_name_as_title = True
 save = False
 show_individual_plots = False

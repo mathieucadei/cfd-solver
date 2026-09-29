@@ -3,6 +3,7 @@
 
 
 import os
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import math
@@ -14,6 +15,7 @@ from matplotlib.axes import Axes
 from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 
+RESULTS = Path(__file__).resolve().parents[1] / 'results'
 
 def plot_solution_scatter(
     ax: Axes,
@@ -1823,16 +1825,16 @@ def show_channel_flow_solution_animation(
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
     equation_filename  = case_name.lower().replace(" ", "_")
-    directory = 'results/figures' if fig_type == 'figure' else f'results/figures/{fig_type}'
+    directory = RESULTS / 'figures' / fig_type
 
     os.makedirs(directory, exist_ok=True)
-    fig.savefig(f'{directory}/{equation_filename }_solution_{fig_type}.png')
+    fig.savefig(directory / f'{equation_filename}.png')
 
 
 def _save_ani(ani: FuncAnimation, case_name: str, fig_type: str = 'animations') -> None:
 
     equation_filename  = case_name.lower().replace(' ', '_')
-    directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
+    directory = RESULTS / 'animations' / fig_type
 
     os.makedirs(directory, exist_ok=True)
-    ani.save(f'{directory}/{equation_filename }_solution.mp4', writer='ffmpeg')
+    ani.save(directory / f'{equation_filename}.mp4', writer='ffmpeg')

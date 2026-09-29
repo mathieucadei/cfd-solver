@@ -35,7 +35,7 @@ l1_norm_target: float = 1e-4
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d poisson'
+case_name = '2d poisson fdm'
 case_name_as_title = True
 save = False
 show_individual_plots = False

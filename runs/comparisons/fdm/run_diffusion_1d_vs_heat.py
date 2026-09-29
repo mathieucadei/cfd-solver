@@ -44,7 +44,7 @@ basis = "cosine"  # "periodic" or "cosine"
 # Visualization parameters
 
 step_stride = 100
-case_name = '1d diffusion vs heat'
+case_name = '1d diffusion fdm vs heat'
 case_name_as_title = True
 save = False
 show_individual_plots = False

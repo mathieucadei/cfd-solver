@@ -42,7 +42,7 @@ u_l1_norm_target: float = 1e-6
 
 step_stride = 10
 cut_indices=[num_cells_x // 2]
-case_name = 'channel flow'
+case_name = 'channel flow fvm'
 case_name_as_title = True
 save = False
 show_individual_plots = False
