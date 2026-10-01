@@ -4,7 +4,7 @@
 
 import numpy as np
 
-# from ..boundary_conditions import apply_poisson_boundary_2d
+from ..boundary_conditions import apply_poisson_boundary_2d
 
 from ..mesh import build_mesh, build_h_spacing, build_dist, build_face_positions, build_centers, build_face_areas, compute_cell_volumes
 
@@ -18,7 +18,7 @@ def solve_poisson_2d(
 
     dist_x, dist_y = build_dist(config)
     face_areas_x, face_areas_y = build_face_areas(config)
-    cell_volumes = compute_cell_volumes(config)   
+    cell_volumes = compute_cell_volumes(config)
     xc, yc = build_centers(config)
 
     p, b = initial_condition
@@ -26,7 +26,7 @@ def solve_poisson_2d(
 
     history = np.zeros((config.max_iterations + 1, config.num_cells_y, config.num_cells_x))
 
-    history[0] = initial_condition[1]
+    history[0] = initial_condition[0]
 
     a_w = face_areas_x[1:-1, 1:-1] / dist_x[:-1]
     a_e = face_areas_x[1:-1, 2:] / dist_x[1:]
@@ -42,10 +42,20 @@ def solve_poisson_2d(
         f_s = a_s * pn[:-2, 1:-1]
         f_n = a_n * pn[2:, 1:-1]
 
-        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
+        p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1] * cell_volumes[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
 
-        # apply_poisson_boundary_2d(p)
-        
+        apply_poisson_boundary_2d(
+            p,
+            dist_x=dist_x,
+            dist_y=dist_y,
+            face_areas_x=face_areas_x,
+            face_areas_y=face_areas_y,
+            lx=config.domain_length_x,
+            ly=config.domain_length_y,
+            xc=xc,
+            yc=yc,
+            )
+
         history[n] = p
-    
+
     return history

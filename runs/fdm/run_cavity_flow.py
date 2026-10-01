@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D cavity flow FDM solver and generate solution plots."""
 
 
 
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from core import fdm
 
 from post_processing import (
-    show_cavity_flow_solution,
+    show_cavity_flow_solution_overview,
     show_cavity_flow_solution_animation,
 )
 
@@ -20,23 +20,25 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x: float = 2.0
+reynolds_number = 100
+
+domain_length_x: float = 1.0
 domain_length_y: float = 1.0
-num_grid_points_x: int = 41
-num_grid_points_y: int = 41
-max_iterations: int = 500
+num_grid_points_x: int = 40
+num_grid_points_y: int = 40
+max_iterations: int = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
 u_lid: float = 1.0
 density: float = 1.0
-viscosity: float = 0.1
+viscosity: float = u_lid*domain_length_x/reynolds_number
 
 
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow'
-title = True
+case_name = 'cavity flow fdm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -88,15 +90,16 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 
 # Post-processing
 
-show_cavity_flow_solution(
+show_cavity_flow_solution_overview(
     x_values=x_array,
     y_values=y_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
+    step_stride=step_stride,
 )
 
 

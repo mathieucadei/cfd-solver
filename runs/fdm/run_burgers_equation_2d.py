@@ -1,4 +1,4 @@
-"""Run the 2D Burgers' equation solver and generate solution plots."""
+"""Run the 2D Burgers' equation FDM solver and generate solution plots."""
 
 
 
@@ -35,8 +35,8 @@ v_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d burgers'
-title = True
+case_name = '2d burgers fdm'
+case_name_as_title = True
 save = False
 
 
@@ -57,7 +57,7 @@ burgers_equation_2d_config = fdm.BurgersEquation2DConfig(
     u_min=u_min,
     u_max=u_max,
     v_min=v_min,
-    v_max=v_max,   
+    v_max=v_max,
 )
 
 
@@ -96,13 +96,13 @@ show_solution_uv_surfaces(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     case_name=f'{case_name} final',
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_uv_2d_animations(
     x_values=x_array,
-    y_values=y_array, 
+    y_values=y_array,
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
     case_name=case_name,

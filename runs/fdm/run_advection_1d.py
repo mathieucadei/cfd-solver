@@ -1,4 +1,4 @@
-"""Run the 1D advection solver and generate solution plots."""
+"""Run the 1D advection equation FDM solver and generate solution plots."""
 
 
 
@@ -34,9 +34,9 @@ scheme = 'upwind'
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d advection'
-title = True
-save = False
+case_name = '1d advection fdm'
+case_name_as_title = True
+save = True
 show_individual_plots = False
 
 
@@ -83,7 +83,7 @@ if show_individual_plots:
         num_solution_matrix=solution_history,
         step_stride=step_stride,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -95,7 +95,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='x',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -104,7 +104,7 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -113,17 +113,17 @@ if show_individual_plots:
         y_values=time_array,
         solution_matrix=solution_history,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
 show_solution_overview(
-    x_values=x_array, 
-    y_values=time_array, 
-    num_solution_matrix=solution_history, 
+    x_values=x_array,
+    y_values=time_array,
+    num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

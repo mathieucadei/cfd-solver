@@ -1,4 +1,4 @@
-"""Numerical solver for the 2D diffusion equation."""
+"""FDM numerical solver for the 2D channel flow."""
 
 
 
@@ -16,7 +16,7 @@ def solve_channel_flow(
     initial_condition: np.ndarray,
     config: ChannelFlowConfig,
 ) -> np.ndarray:
-    """Solve the 2D channel flow equation with an explicit central finite-difference scheme."""
+    """Solve the 2D channel flow with an explicit central finite-difference scheme."""
 
     nu = config.viscosity
     rho = config.density
@@ -58,33 +58,33 @@ def solve_channel_flow(
         b = apply_periodic_source_boundary_2d(b_term, rho, dt, un, vn, dx, dy)
         p = apply_periodic_pressure_poisson_boundary_2d(b, p_term, pn_term, dx, dy)
 
-        u[1:-1, 1:-1] = (un[1:-1, 1:-1] - 
+        u[1:-1, 1:-1] = (un[1:-1, 1:-1] -
                         convection_u_term[1:-1, 1:-1] -
                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) +
-                        diffusion_u_term[1:-1, 1:-1] + 
+                        diffusion_u_term[1:-1, 1:-1] +
                         config.source * dt)
 
-        v[1:-1,1:-1] = (vn[1:-1, 1:-1] - 
-                        convection_v_term[1:-1, 1:-1] - 
-                        dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) + 
+        v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
+                        convection_v_term[1:-1, 1:-1] -
+                        dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
                         diffusion_v_term[1:-1, 1:-1])
-        
+
         apply_periodic_channel_flow_boundary_2d(u, v, p, un, vn, nu, rho, config.source, dx, dy, dt)
 
         denominator = np.sum(np.abs(un))
 
         if denominator == 0:
             u_l1norm = np.sum(np.abs(u - un))
-        
+
         else:
             u_l1norm = np.sum(np.abs(u - un)) / denominator
-        
+
         u_history.append(u.copy())
         v_history.append(v.copy())
         p_history.append(p.copy())
-    
+
     u_history_array = np.stack(u_history, axis=0)
     v_history_array = np.stack(v_history, axis=0)
     p_history_array = np.stack(p_history, axis=0)
-    
+
     return u_history_array, v_history_array, p_history_array

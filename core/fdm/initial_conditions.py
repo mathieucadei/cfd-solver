@@ -1,4 +1,4 @@
-"""Initial condition utilities for 1D & 2D numerical and analytical solvers."""
+"""Initial condition utilities for 1D & 2D FDM numerical and analytical solvers."""
 
 
 
@@ -46,7 +46,7 @@ def hat_initial_condition_2d(config: object) -> np.ndarray:
     initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.u_min))
 
     initial_condition[
-        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
+        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1),
         int(config.hat_start_x / dx):int(config.hat_end_x / dx + 1)
     ] = config.u_max
 
@@ -63,11 +63,11 @@ def hat_convective_initial_condition_2d(config: object) -> np.ndarray:
     v_initial_condition = np.full((config.num_grid_points_y, config.num_grid_points_x), float(config.v_min))
 
     u_initial_condition[
-        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
+        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1),
         int(config.hat_start_x / dx):int(config.hat_end_x / dx + 1)
     ] = config.u_max
     v_initial_condition[
-        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1), 
+        int(config.hat_start_y / dy):int(config.hat_end_y / dy + 1),
         int(config.hat_start_x / dx):int(config.hat_end_x / dx + 1)
     ] = config.v_max
 

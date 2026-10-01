@@ -3,6 +3,7 @@
 
 
 import os
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import math
@@ -14,6 +15,32 @@ from matplotlib.axes import Axes
 from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 
+RESULTS = Path(__file__).resolve().parents[1] / 'results'
+
+def plot_solution_scatter(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    x_label: str = 'x',
+    y_label: str = 'u',
+    label: str = 'Analytical',
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
+) -> None:
+    """Plot selected numerical and analytical solution traces on an existing axis."""
+
+    ax.scatter(x_values, y_values, color='r', label=label)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+    ax.legend()
+
+    if case_name_as_title:
+        ax.set_title(f'{case_name.title()} Solution')
+
+    elif title:
+        ax.set_title(title)
 
 
 def plot_solution_traces(
@@ -23,18 +50,30 @@ def plot_solution_traces(
     num_solution_matrix: np.ndarray,
     axis: int = 0,
     step_stride: int = 5,
+    cut_indices: np.ndarray = None,
     ana_solution_matrix: np.ndarray = None,
+    comp_solution_matrix: np.ndarray = None,
     x_label: str = 'x',
     y_label: str = 'u',
+    series_label: str = 'Numerical',
     cut_label: str = 't',
+    ana_label: str = 'Analytical',
+    comp_label: str = 'OpenFOAM',
+    swap_axes: bool = False,
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot selected numerical and analytical solution traces on an existing axis."""
 
     n_cuts = cut_values.shape[0]
 
-    for n in range(0, n_cuts, step_stride):
+    indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
+
+    for n in indices:
+
+        color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
+        decimal = 1 if len(indices) == 1 else 3
 
         if axis == 0:
             y_cut = num_solution_matrix[n, :]
@@ -42,13 +81,31 @@ def plot_solution_traces(
             y_cut = num_solution_matrix[:, n]
         else:
             raise ValueError('axis must be 0 or 1')
-        
-        num_label = f'Numerical ({cut_label}: {cut_values[n]:.3g})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.3g}'
-        
-        ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), label=num_label)
-    
+
+        num_label = f'{series_label} ({cut_label}: {cut_values[n]:.{decimal}f})' if ana_solution_matrix is not None else f'{cut_label}: {cut_values[n]:.{decimal}f}'
+
+        if swap_axes:
+            ax.plot(
+                y_cut,
+                x_values,
+                color=color,
+                label=num_label
+            )
+        else:
+            ax.plot(
+                x_values,
+                y_cut,
+                color=color,
+                label=num_label
+            )
+
     if ana_solution_matrix is not None:
-        for n in range(0, n_cuts, step_stride):
+
+        indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
+
+        for n in indices:
+
+            color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
 
             if axis == 0:
                 y_cut = ana_solution_matrix[n, :]
@@ -56,17 +113,70 @@ def plot_solution_traces(
                 y_cut = ana_solution_matrix[:, n]
             else:
                 raise ValueError('axis must be 0 or 1')
-        
-            ana_label = f'Analytical ({cut_label}: {cut_values[n]:.3g})'
-        
-            ax.plot(x_values, y_cut, color=cm.viridis(n/(n_cuts - 1)), linestyle='--', label=ana_label)
-    
+
+            label = f'{ana_label} ({cut_label}: {cut_values[n]:.{decimal}f})'
+
+            if swap_axes:
+                ax.plot(
+                    y_cut,
+                    x_values,
+                    color=color,
+                    linestyle=':',
+                    label=label
+                )
+            else:
+                ax.plot(
+                    x_values,
+                    y_cut,
+                    color=color,
+                    linestyle=':',
+                    label=label
+                )
+
+    if comp_solution_matrix is not None:
+
+        indices = range(0, n_cuts, step_stride) if cut_indices is None else cut_indices
+
+        for n in indices:
+
+            color = None if len(indices) == 1 else cm.viridis(n/(n_cuts - 1))
+
+            if axis == 0:
+                y_cut = comp_solution_matrix[n, :]
+            elif axis == 1:
+                y_cut = comp_solution_matrix[:, n]
+            else:
+                raise ValueError('axis must be 0 or 1')
+
+            label = f'{comp_label} ({cut_label}: {cut_values[n]:.{decimal}f})'
+
+            if swap_axes:
+                ax.plot(
+                    y_cut,
+                    x_values,
+                    color=color,
+                    linestyle='--',
+                    label=label
+                )
+            else:
+                ax.plot(
+                    x_values,
+                    y_cut,
+                    color=color,
+                    linestyle='--',
+                    label=label
+                )
+
+    ax.grid(alpha=0.3)
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
     ax.legend()
 
-    if title:
+    if case_name_as_title:
         ax.set_title(f'{case_name.title()} Solution')
+
+    elif title:
+        ax.set_title(title)
 
 
 def plot_solution_contour(
@@ -80,7 +190,8 @@ def plot_solution_contour(
     y_label: str = 't',
     levels: np.ndarray = None,
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ):
     """Plot a contour view of a 2D solution field."""
 
@@ -91,9 +202,12 @@ def plot_solution_contour(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
+    if case_name_as_title:
         ax.set_title(f'{case_name.title()} Solution')
-    
+
+    elif title:
+        ax.set_title(title)
+
     return contour
 
 
@@ -107,7 +221,8 @@ def plot_solution_contourf(
     y_label: str = 't',
     levels: np.ndarray = None,
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ):
     """Plot a filled contour view of a 2D solution field."""
 
@@ -115,13 +230,16 @@ def plot_solution_contourf(
 
     contourf = ax.contourf(x_grid, y_grid, solution_matrix, cmap=cmap, levels=levels, extend='both')
 
-
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
+    if case_name_as_title:
         ax.set_title(f'{case_name.title()} Solution')
-    
+
+    elif title:
+        ax.set_title(title)
+
+
     return contourf
 
 
@@ -134,12 +252,13 @@ def plot_quiver(
     magnitude: np.ndarray = None,
     norm: Normalize = None,
     step: int = 2,
-    cmap: str = None, 
+    cmap: str = None,
     scale: float = 20.0,
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot a quiver view of 2D velocity vector fields."""
 
@@ -178,10 +297,54 @@ def plot_quiver(
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label, rotation=0)
 
-    if title:
-        ax.set_title(f'{case_name.title()} Velocity Field')
+    if case_name_as_title:
+        ax.set_title(f'{case_name.title()} Solution')
+
+    elif title:
+        ax.set_title(title)
+
 
     return qvr
+
+
+def plot_streamlines(
+    ax: Axes,
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
+) -> None:
+    """Plot a quiver view of 2D velocity vector fields."""
+
+    X, Y = np.meshgrid(x_values, y_values)
+
+    stream = ax.streamplot(
+        X,
+        Y,
+        u_solution_matrix,
+        v_solution_matrix,
+        color='k',
+        linewidth=0.8,
+    )
+
+    stream.lines.set_alpha(0.5)
+    stream.arrows.set_alpha(0.5)
+
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label, rotation=0)
+
+    if case_name_as_title:
+        ax.set_title(f"{case_name.title()} Velocity Field")
+
+    elif title:
+         ax.set_title(title)
+
+    return stream
 
 
 def plot_solution_surface(
@@ -194,7 +357,8 @@ def plot_solution_surface(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
 ) -> None:
     """Plot a 3D surface view of a 2D solution field."""
 
@@ -206,8 +370,11 @@ def plot_solution_surface(
     ax.set_ylabel(y_label)
     ax.set_zlabel(z_label)
 
-    if title:
-        ax.set_title(f'{case_name.title()} Solution')
+    if case_name_as_title:
+        ax.set_title(f"{case_name.title()} Solution")
+
+    elif title:
+         ax.set_title(title)
 
 
 def show_solution_traces(
@@ -220,9 +387,10 @@ def show_solution_traces(
     x_label: str = 'x',
     y_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
+    case_name_as_title: bool = False,
+    title: str = None,
     step_stride: int = 5,
-    save: bool = False,       
+    save: bool = False,
 ) -> None:
     """Create and display a standalone trace plot for a numerical or analytical solution."""
 
@@ -239,6 +407,7 @@ def show_solution_traces(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
+        case_name_as_title=case_name_as_title,
         title=title,
         step_stride=step_stride,
     )
@@ -260,8 +429,9 @@ def show_solution_contour_map(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
-    save: bool = False,     
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
 ) -> None:
     """Create and display a standalone contour plot of a 2D solution field."""
 
@@ -278,7 +448,8 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     contourf = plot_solution_contourf(
@@ -290,7 +461,8 @@ def show_solution_contour_map(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     fig.colorbar(contourf, ax=ax)
@@ -310,8 +482,9 @@ def show_solution_surface(
     y_label: str = 't',
     z_label: str = 'u',
     case_name: str = None,
-    title: bool = False,
-    save: bool = False,     
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
 ) -> None:
     """Create and display a standalone 3D surface plot of a 2D solution field."""
 
@@ -328,7 +501,8 @@ def show_solution_surface(
         y_label=y_label,
         z_label=z_label,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     if save:
@@ -348,8 +522,9 @@ def show_solution_uv_surfaces(
     z_label_u: str = "u",
     z_label_v: str = "v",
     case_name: str = None,
-    title: bool = False,
-    save: bool = False,     
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side 3D surface plots for the 2D u and v solution fields."""
 
@@ -368,7 +543,8 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_u,
         case_name=f'{case_name} u',
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     plot_solution_surface(
@@ -381,7 +557,8 @@ def show_solution_uv_surfaces(
         y_label=y_label,
         z_label=z_label_v,
         case_name=f'{case_name} v',
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     if save:
@@ -400,8 +577,9 @@ def show_cavity_flow_solution(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
-    save: bool = False,     
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -420,7 +598,8 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     fig.colorbar(contourf, ax=ax)
@@ -434,7 +613,8 @@ def show_cavity_flow_solution(
         y_label=y_label,
         levels=levels,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     plot_quiver(
@@ -447,7 +627,8 @@ def show_cavity_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     if save:
@@ -466,8 +647,9 @@ def show_channel_flow_solution(
     x_label: str = 'x',
     y_label: str = 'y',
     case_name: str = None,
-    title: bool = False,
-    save: bool = False,     
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
 ) -> None:
     """Create and display a standalone quiver plot of 2D velocity vector fields."""
 
@@ -499,7 +681,8 @@ def show_channel_flow_solution(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        case_name_as_title=case_name_as_title,
+        title=title,
     )
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
@@ -512,16 +695,17 @@ def show_channel_flow_solution(
 
 def show_solution_overview(
     x_values: np.ndarray,
-    y_values: np.ndarray, 
+    y_values: np.ndarray,
     num_solution_matrix: np.ndarray,
     ana_solution_matrix: np.ndarray = None,
     cmap: Colormap = cm.viridis,
     x_label: str = 'x',
     y_label: str = 'y',
     z_label: str = 'u',
-    case_name: str = None,
     step_stride: int=5,
-    title: bool = False, 
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
     save: bool=False,
 ) -> None:
     """Create and display a multi-panel overview of a solution and its diagnostics."""
@@ -544,7 +728,7 @@ def show_solution_overview(
             x_label=x_label,
             y_label=y_label,
             z_label=z_label,
-            case_name=case_name,  
+            case_name=case_name,
         )
 
     ax1.set_box_aspect((2.0, 2.0, 1.2))
@@ -557,7 +741,7 @@ def show_solution_overview(
         solution_matrix=num_solution_matrix,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
 
 
@@ -569,11 +753,11 @@ def show_solution_overview(
         cmap=cmap,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
 
     fig.colorbar(contourf, ax=ax2, label=z_label, fraction=0.046, pad=0.04)
-    
+
 
     plot_solution_traces(
         ax=ax3,
@@ -603,11 +787,696 @@ def show_solution_overview(
         step_stride=step_stride,
     )
 
-    if title:
+    if case_name_as_title:
         fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
 
     if save:
         _save_fig(fig=fig, case_name=case_name, fig_type='overview')
+
+    plt.show()
+
+
+def show_cavity_flow_solution_overview(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    p_solution_matrix: np.ndarray,
+    validation_u_x_values: np.ndarray = None,
+    validation_v_x_values: np.ndarray = None,
+    validation_u_values: np.ndarray = None,
+    validation_v_values: np.ndarray = None,
+    comp_u_values: np.ndarray = None,
+    comp_v_values: np.ndarray = None,
+    step: int = 2,
+    num_ticks: int = 6,
+    scale: float = 15.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    u_label: str = 'u',
+    v_label: str = 'v',
+    step_stride: int=5,
+    cut_indices: float | np.ndarray = None,
+    u_scatter_label: str = None,
+    v_scatter_label: str = None,
+    comp_label: str = None,
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+    gs = fig.add_gridspec(2, 2)
+
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax3 = fig.add_subplot(gs[1, 0])
+    ax4 = fig.add_subplot(gs[1, 1])
+
+    p_levels = np.linspace(np.percentile(p_solution_matrix, 1), np.percentile(p_solution_matrix, 99), 30)
+
+    x_plot = np.concatenate(([0], x_values, [x_values[0] + x_values[-1]]))
+    y_plot = np.concatenate(([0], y_values, [y_values[0] + y_values[-1]]))
+    p_plot = np.pad(p_solution_matrix, 1, mode='edge')
+
+    contourf = plot_solution_contourf(
+        ax=ax1,
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot,
+        x_label=x_label,
+        y_label=y_label,
+        levels=p_levels,
+        title='Pressure and Streamlines',
+    )
+
+    fig.colorbar(contourf, cax=ax1.inset_axes([1.05, 0, 0.05, 1]), label='Pressure', extendfrac=0, ticks=np.linspace(p_levels[0], p_levels[-1], num_ticks), format='%.2f')
+
+    plot_solution_contour(
+        ax=ax1,
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot,
+        x_label=x_label,
+        y_label=y_label,
+        levels=p_levels,
+        case_name=case_name,
+    )
+
+    plot_streamlines(
+        ax=ax1,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        x_label=x_label,
+        y_label=y_label,
+        case_name=case_name,
+    )
+
+    ax1.set_xlim(0, x_values[0] + x_values[-1])
+    ax1.set_aspect('equal')
+    ax1.set_ylim(0, y_values[0] + y_values[-1])
+
+    U = u_solution_matrix[::step, ::step]
+    V = v_solution_matrix[::step, ::step]
+
+    M = np.sqrt(U**2 + V**2)
+
+    # vmin = np.floor(np.min(M))
+    # vmax = np.ceil(np.max(M))
+    # norm = Normalize(vmin=vmin, vmax=vmax)
+
+    # ticks = np.linspace(vmin, vmax, 11)
+
+    qvr = plot_quiver(
+        ax=ax2,
+        x_values=x_values,
+        y_values=y_values,
+        u_solution_matrix=u_solution_matrix,
+        v_solution_matrix=v_solution_matrix,
+        magnitude=M,
+        step=step,
+        cmap='plasma',
+        scale=scale,
+        x_label=x_label,
+        y_label=y_label,
+        title='Velocity Field',
+    )
+
+    fig.colorbar(qvr, cax=ax2.inset_axes([1.05, 0, 0.05, 1]), label='Velocity Magnitude', extend='both', extendfrac=0, ticks=np.linspace(M.min(), M.max(), num_ticks), format='%.2f')
+
+    ax2.set_xlim(0, x_values[0] + x_values[-1])
+    ax2.set_aspect('equal')
+    ax2.set_ylim(0, y_values[0] + y_values[-1])
+
+    if validation_u_values is not None and comp_u_values is None:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax3,
+            x_values=validation_u_x_values,
+            y_values=validation_u_values,
+            x_label=y_label,
+            y_label=u_label,
+            label=u_scatter_label,
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            axis=0,
+            cut_label=y_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='v along the horizontal centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax4,
+            x_values=validation_v_x_values,
+            y_values=validation_v_values,
+            x_label=x_label,
+            y_label=v_label,
+            label=v_scatter_label,
+        )
+
+    elif comp_u_values is not None and validation_u_values is None:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            comp_solution_matrix=comp_u_values,
+            axis=1,
+            cut_label=x_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='u along the vertical centreline'
+        )
+
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            comp_solution_matrix=comp_v_values,
+            axis=0,
+            cut_label=y_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='v along the horizontal centreline'
+        )
+
+
+    elif comp_u_values is not None and validation_u_values is not None:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            comp_solution_matrix=comp_u_values,
+            axis=1,
+            cut_label=x_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=y_label,
+            y_label=u_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax3,
+            x_values=validation_u_x_values,
+            y_values=validation_u_values,
+            x_label=y_label,
+            y_label=u_label,
+            label=u_scatter_label,
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            comp_solution_matrix=comp_v_values,
+            axis=0,
+            cut_label=y_label,
+            series_label='cfd-solver',
+            comp_label=comp_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            title='v along the horizontal centreline'
+        )
+
+        plot_solution_scatter(
+            ax=ax4,
+            x_values=validation_v_x_values,
+            y_values=validation_v_values,
+            x_label=x_label,
+            y_label=v_label,
+            label=v_scatter_label,
+        )
+
+
+    else:
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=y_label,
+            y_label=u_label,
+            step_stride=step_stride,
+            cut_indices=cut_indices,
+            title='u along the vertical centreline'
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=x_values,
+            cut_values=y_values,
+            num_solution_matrix=v_solution_matrix,
+            axis=0,
+            cut_label=y_label,
+            x_label=x_label,
+            y_label=v_label,
+            case_name=case_name,
+            step_stride=step_stride,
+            title='v along the horizontal centreline'
+        )
+
+    if case_name_as_title:
+        fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
+
+    plt.show()
+
+
+def show_channel_flow_solution_overview(
+    x_values: np.ndarray,
+    y_values: np.ndarray,
+    u_solution_matrix: np.ndarray,
+    v_solution_matrix: np.ndarray,
+    ana_u_x_values: np.ndarray = None,
+    ana_v_x_values: np.ndarray = None,
+    ana_u_values: np.ndarray = None,
+    ana_v_values: np.ndarray = None,
+    comp_u_values: np.ndarray = None,
+    error: np.ndarray = None,
+    error_2d: np.ndarray = None,
+    metrics: np.ndarray = None,
+    step: int = 2,
+    scale: float = 15.0,
+    x_label: str = 'x',
+    y_label: str = 'y',
+    u_label: str = 'u',
+    comp_label: str = 'OpenFOAM',
+    error_label: str = 'error',
+    step_stride: int=5,
+    cut_indices: float | np.ndarray = None,
+    case_name: str = None,
+    case_name_as_title: bool = False,
+    title: str = None,
+    save: bool = False,
+) -> None:
+    """Create and display a standalone quiver plot of 2D velocity vector fields."""
+
+    if ana_u_values is not None and comp_u_values is None:
+
+        fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+
+        gs = fig.add_gridspec(2, 2)
+
+        ax1 = fig.add_subplot(gs[0, 0])
+        ax2 = fig.add_subplot(gs[0, 1])
+        ax3 = fig.add_subplot(gs[1, 0])
+        ax4 = fig.add_subplot(gs[1, 1])
+
+        U = u_solution_matrix[::step, ::step]
+        V = v_solution_matrix[::step, ::step]
+
+        M = np.sqrt(U**2 + V**2)
+
+        # vmin = np.floor(np.min(M))
+        # vmax = np.ceil(np.max(M))
+        # norm = Normalize(vmin=vmin, vmax=vmax)
+
+        # ticks = np.linspace(vmin, vmax, 11)
+
+        qvr = plot_quiver(
+            ax=ax1,
+            x_values=x_values,
+            y_values=y_values,
+            u_solution_matrix=u_solution_matrix,
+            v_solution_matrix=v_solution_matrix,
+            magnitude=M,
+            step=step,
+            cmap='plasma',
+            scale=scale,
+            x_label=x_label,
+            y_label=y_label,
+            title='Velocity Field',
+        )
+
+        fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
+
+        ax1.set_xlim(x_values[0], x_values[-1])
+        ax1.set_ylim(y_values[0], y_values[-1])
+
+        contourf = plot_solution_contourf(
+            ax=ax2,
+            x_values=x_values,
+            y_values=y_values,
+            solution_matrix=error_2d,
+            x_label=x_label,
+            y_label=y_label,
+            cmap='plasma',
+            title='Velocity Error Field',
+        )
+
+        fig.colorbar(contourf, ax=ax2, label='u numerical - u analytical')
+
+        ax2.set_xlim(x_values[0], x_values[-1])
+        ax2.set_ylim(y_values[0], y_values[-1])
+
+        ana_u_solution_matrix = np.tile(
+            ana_u_values[:, None],
+            (1, len(x_values))
+        )
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            ana_solution_matrix=ana_u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=u_label,
+            y_label=y_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            swap_axes=True,
+            title='Velocity Profile'
+        )
+
+        error_matrix = np.tile(
+            error[:, None],
+            (1, len(x_values))
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=error_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=error_label,
+            y_label=y_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            swap_axes=True,
+            title='Numerical - Analytical Error'
+        )
+
+        ax4.axvline(0, color='k', linewidth=0.8)
+        ax4.text(
+            0.03,
+            0.97,
+            s=metrics,
+            transform=ax4.transAxes,
+            verticalalignment='top',
+            bbox=dict(facecolor='white', alpha=0.8),
+        )
+
+    elif ana_u_values is None and comp_u_values is not None:
+
+        fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+
+        gs = fig.add_gridspec(2, 2)
+
+        ax1 = fig.add_subplot(gs[0, 0])
+        ax2 = fig.add_subplot(gs[0, 1])
+        ax3 = fig.add_subplot(gs[1, 0])
+        ax4 = fig.add_subplot(gs[1, 1])
+
+        U = u_solution_matrix[::step, ::step]
+        V = v_solution_matrix[::step, ::step]
+
+        M = np.sqrt(U**2 + V**2)
+
+        # vmin = np.floor(np.min(M))
+        # vmax = np.ceil(np.max(M))
+        # norm = Normalize(vmin=vmin, vmax=vmax)
+
+        # ticks = np.linspace(vmin, vmax, 11)
+
+        qvr = plot_quiver(
+            ax=ax1,
+            x_values=x_values,
+            y_values=y_values,
+            u_solution_matrix=u_solution_matrix,
+            v_solution_matrix=v_solution_matrix,
+            magnitude=M,
+            step=step,
+            cmap='plasma',
+            scale=scale,
+            x_label=x_label,
+            y_label=y_label,
+            title='Velocity Field',
+        )
+
+        fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
+
+        ax1.set_xlim(x_values[0], x_values[-1])
+        ax1.set_ylim(y_values[0], y_values[-1])
+
+        contourf = plot_solution_contourf(
+            ax=ax2,
+            x_values=x_values,
+            y_values=y_values,
+            solution_matrix=error_2d,
+            x_label=x_label,
+            y_label=y_label,
+            cmap='plasma',
+            title='Velocity Error Field',
+        )
+
+        fig.colorbar(contourf, ax=ax2, label=f'u numerical - u {comp_label}')
+
+        ax2.set_xlim(x_values[0], x_values[-1])
+        ax2.set_ylim(y_values[0], y_values[-1])
+
+        comp_u_solution_matrix = np.tile(
+            comp_u_values[:, None],
+            (1, len(x_values))
+        )
+
+        plot_solution_traces(
+            ax=ax3,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            comp_solution_matrix=comp_u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=u_label,
+            y_label=y_label,
+            comp_label=comp_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            swap_axes=True,
+            title='Velocity Profile'
+        )
+
+        error_matrix = np.tile(
+            error[:, None],
+            (1, len(x_values))
+        )
+
+        plot_solution_traces(
+            ax=ax4,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=error_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=error_label,
+            y_label=y_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            swap_axes=True,
+            title=f'Numerical - {comp_label} Error'
+        )
+
+        ax4.axvline(0, color='k', linewidth=0.8)
+        ax4.text(
+            0.03,
+            0.97,
+            s=metrics,
+            transform=ax4.transAxes,
+            verticalalignment='top',
+            bbox=dict(facecolor='white', alpha=0.8),
+        )
+
+    elif ana_u_values is not None and comp_u_values is not None:
+
+        fig = plt.figure(figsize=(12, 4), constrained_layout=True)
+
+        gs = fig.add_gridspec(1, 2)
+
+        ax1 = fig.add_subplot(gs[0, 0])
+        ax2 = fig.add_subplot(gs[0, 1])
+
+        U = u_solution_matrix[::step, ::step]
+        V = v_solution_matrix[::step, ::step]
+
+        M = np.sqrt(U**2 + V**2)
+
+        # vmin = np.floor(np.min(M))
+        # vmax = np.ceil(np.max(M))
+        # norm = Normalize(vmin=vmin, vmax=vmax)
+
+        # ticks = np.linspace(vmin, vmax, 11)
+
+        qvr = plot_quiver(
+            ax=ax1,
+            x_values=x_values,
+            y_values=y_values,
+            u_solution_matrix=u_solution_matrix,
+            v_solution_matrix=v_solution_matrix,
+            magnitude=M,
+            step=step,
+            cmap='plasma',
+            scale=scale,
+            x_label=x_label,
+            y_label=y_label,
+            title='Velocity Field',
+        )
+
+        fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
+
+        ax1.set_xlim(x_values[0], x_values[-1])
+        ax1.set_ylim(y_values[0], y_values[-1])
+
+        ana_u_solution_matrix = np.tile(
+            ana_u_values[:, None],
+            (1, len(x_values))
+        )
+
+        comp_u_solution_matrix = np.tile(
+            comp_u_values[:, None],
+            (1, len(x_values))
+        )
+
+        plot_solution_traces(
+            ax=ax2,
+            x_values=y_values,
+            cut_values=x_values,
+            num_solution_matrix=u_solution_matrix,
+            ana_solution_matrix=ana_u_solution_matrix,
+            comp_solution_matrix=comp_u_solution_matrix,
+            axis=1,
+            cut_label=x_label,
+            x_label=u_label,
+            y_label=y_label,
+            comp_label=comp_label,
+            case_name=case_name,
+            cut_indices=cut_indices,
+            swap_axes=True,
+            title='Velocity Profile'
+        )
+
+    else:
+
+            fig = plt.figure(figsize=(12, 4), constrained_layout=True)
+
+            gs = fig.add_gridspec(1, 2)
+
+            ax1 = fig.add_subplot(gs[0, 0])
+            ax2 = fig.add_subplot(gs[0, 1])
+
+            U = u_solution_matrix[::step, ::step]
+            V = v_solution_matrix[::step, ::step]
+
+            M = np.sqrt(U**2 + V**2)
+
+            # vmin = np.floor(np.min(M))
+            # vmax = np.ceil(np.max(M))
+            # norm = Normalize(vmin=vmin, vmax=vmax)
+
+            # ticks = np.linspace(vmin, vmax, 11)
+
+            qvr = plot_quiver(
+                ax=ax1,
+                x_values=x_values,
+                y_values=y_values,
+                u_solution_matrix=u_solution_matrix,
+                v_solution_matrix=v_solution_matrix,
+                magnitude=M,
+                step=step,
+                cmap='plasma',
+                scale=scale,
+                x_label=x_label,
+                y_label=y_label,
+                title='Velocity Field',
+            )
+
+            fig.colorbar(qvr, ax=ax1, label='Velocity Magnitude')
+
+            ax1.set_xlim(x_values[0], x_values[-1])
+            ax1.set_ylim(y_values[0], y_values[-1])
+
+            plot_solution_traces(
+                ax=ax2,
+                x_values=y_values,
+                cut_values=x_values,
+                num_solution_matrix=u_solution_matrix,
+                axis=1,
+                cut_label=x_label,
+                x_label=u_label,
+                y_label=y_label,
+                case_name=case_name,
+                cut_indices=cut_indices,
+                swap_axes=True,
+                title='Velocity Profile'
+            )
+
+    if case_name_as_title:
+        fig.suptitle(f"{case_name.title()} Solution Overview")
+
+    elif title:
+         fig.suptitle(title)
+
+    if save:
+        _save_fig(fig=fig, case_name=case_name, fig_type='cavity_flow')
 
     plt.show()
 
@@ -620,7 +1489,7 @@ def show_solution_1d_animation(
     save: bool = False
 ) -> None:
     """Create and display an animation of a 1D numerical or analytical solution."""
-    
+
     fig, ax = plt.subplots()
     num_line, = ax.plot(x_values, num_solution_history [0], lw=2,  label='Numerical')
 
@@ -633,7 +1502,7 @@ def show_solution_1d_animation(
 
     if ana_solution_history is not None:
         ax.legend()
-    
+
     ax.set_title(f'{case_name.title()} Solution Animation')
 
     def update(frame):
@@ -671,10 +1540,10 @@ def show_solution_2d_animation(
     y_label: str = 'y',
     z_label: str = 'u',
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display an animation of a 2D numerical or analytical solution."""
-    
+
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
 
@@ -691,9 +1560,9 @@ def show_solution_2d_animation(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label,
-        case_name=case_name,  
+        case_name=case_name,
     )
-        
+
         if z_limits is not None:
             ax.set_zlim(z_limits)
 
@@ -718,10 +1587,10 @@ def show_solution_uv_2d_animations(
     z_label_u: str = "u",
     z_label_v: str = "v",
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig = plt.figure()
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
     ax2 = fig.add_subplot(1, 2, 2, projection='3d')
@@ -739,7 +1608,7 @@ def show_solution_uv_2d_animations(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label_u,
-        case_name=case_name,  
+        case_name=case_name,
     )
         ax1.set_title(f'U Solution Animation (Time step: {frame})')
 
@@ -754,9 +1623,9 @@ def show_solution_uv_2d_animations(
         x_label=x_label,
         y_label=y_label,
         z_label=z_label_v,
-        case_name=case_name,  
+        case_name=case_name,
     )
-        ax2.set_title(f'V Solution Animation (Time step: {frame})')       
+        ax2.set_title(f'V Solution Animation (Time step: {frame})')
 
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
@@ -776,52 +1645,57 @@ def show_cavity_flow_solution_animation(
     x_label: str = 'x',
     y_label: str = 'y',
     u_lid: float = None,
+    num_ticks: int = 6,
     case_name: str = None,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig, ax = plt.subplots(figsize=(8, 4))
 
     p_solution_matrix_final = p_solution_history
 
     levels = np.linspace(np.percentile(p_solution_matrix_final, 1), np.percentile(p_solution_matrix_final, 99), 30)
 
+    x_plot = np.concatenate(([0], x_values, [x_values[0] + x_values[-1]]))
+    y_plot = np.concatenate(([0], y_values, [y_values[0] + y_values[-1]]))
+    p_plot = np.pad(p_solution_history, 1, mode='edge')
+
     initial_contourf = ax.contourf(
-    x_values,
-    y_values,
-    p_solution_history[0],
+    x_plot,
+    y_plot,
+    p_plot[0],
     levels=levels,
-)
-    
+    )
 
-    fig.colorbar(initial_contourf, ax=ax, label='Pressure')
+    fig.colorbar(initial_contourf, ax=ax, label='Pressure', extendfrac=0, ticks=np.linspace(levels[0], levels[-1], num_ticks), format='%.2f')
+    # fig.colorbar(initial_contourf, ax=ax, label='Pressure')
 
-    
+
     def update(frame):
 
         ax.clear()
 
         contourf = plot_solution_contourf(
             ax=ax,
-            x_values=x_values,
-            y_values=y_values,
-            solution_matrix=p_solution_history[frame],
+            x_values=x_plot,
+            y_values=y_plot,
+            solution_matrix=p_plot[frame],
             x_label=x_label,
             y_label=y_label,
             levels=levels,
-            case_name=case_name,   
+            case_name=case_name,
             )
 
         plot_solution_contour(
         ax=ax,
-        x_values=x_values,
-        y_values=y_values,
-        solution_matrix=p_solution_history[frame],
+        x_values=x_plot,
+        y_values=y_plot,
+        solution_matrix=p_plot[frame],
         x_label=x_label,
         y_label=y_label,
         levels=levels,
-        case_name=case_name, 
+        case_name=case_name,
         )
 
         plot_quiver(
@@ -833,17 +1707,18 @@ def show_cavity_flow_solution_animation(
         scale=scale,
         x_label=x_label,
         y_label=y_label,
-        case_name=case_name,   
+        case_name=case_name,
         )
 
-        ax.set_xlim(0, 2)
-        ax.set_ylim(0, 1)
+        ax.set_xlim(0, x_values[0] + x_values[-1])
+        ax.set_aspect('equal')
+        ax.set_ylim(0, y_values[0] + y_values[-1])
 
         if u_lid is not None:
 
             lid_velocity = u_lid
 
-        else: 
+        else:
 
             lid_velocity = u_solution_history[frame, -1, u_solution_history.shape[2] // 2]
 
@@ -858,7 +1733,7 @@ def show_cavity_flow_solution_animation(
             va="bottom",
         )
 
-    
+
     ani = FuncAnimation(fig, update, frames=u_solution_history.shape[0], interval=100, blit=False)
 
     if save:
@@ -879,10 +1754,10 @@ def show_channel_flow_solution_animation(
     y_label: str = 'y',
     case_name: str = None,
     title: bool = False,
-    save: bool = False,     
+    save: bool = False,
 ) -> None:
     """Create and display side-by-side animations of the 2D u and v solution fields."""
-    
+
     fig, ax = plt.subplots(figsize=(8, 4))
 
     U = u_solution_history[:, ::step, ::step]
@@ -910,7 +1785,7 @@ def show_channel_flow_solution_animation(
         x_label=x_label,
         y_label=y_label,
         case_name=case_name,
-        title=title,   
+        title=title,
     )
 
     fig.colorbar(qvr, ax=ax, ticks=ticks, label='Velocity Magnitude')
@@ -924,16 +1799,16 @@ def show_channel_flow_solution_animation(
             ha="center",
             va="bottom",
         )
-    
+
     def update(frame):
 
         qvr.set_UVC(U[frame], V[frame], M[frame])
 
         if source is not None:
-            
+
             ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})", pad=24)
-        
-        else: 
+
+        else:
 
             ax.set_title(f"Channel Flow Solution Animation (Time step: {frame})")
 
@@ -944,22 +1819,22 @@ def show_channel_flow_solution_animation(
     if save:
         _save_ani(ani=ani, case_name=case_name, fig_type='channel_flow')
 
-    plt.show()  
+    plt.show()
 
 
 def _save_fig(fig: Figure, case_name: str, fig_type: str = 'figure') -> None:
 
     equation_filename  = case_name.lower().replace(" ", "_")
-    directory = 'results/figures' if fig_type == 'figure' else f'results/figures/{fig_type}'
+    directory = RESULTS / 'figures' / fig_type
 
     os.makedirs(directory, exist_ok=True)
-    fig.savefig(f'{directory}/{equation_filename }_solution_{fig_type}.png')
+    fig.savefig(directory / f'{equation_filename}.png')
 
 
 def _save_ani(ani: FuncAnimation, case_name: str, fig_type: str = 'animations') -> None:
 
     equation_filename  = case_name.lower().replace(' ', '_')
-    directory = 'results/animations' if fig_type == 'animations' else f'results/animations/{fig_type}'
+    directory = RESULTS / 'animations' / fig_type
 
     os.makedirs(directory, exist_ok=True)
-    ani.save(f'{directory}/{equation_filename }_solution.mp4', writer='ffmpeg')
+    ani.save(directory / f'{equation_filename}.mp4', writer='ffmpeg')

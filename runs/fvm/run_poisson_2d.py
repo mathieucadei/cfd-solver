@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D Poisson equation FVM solver and generate solution plots."""
 
 
 
@@ -35,8 +35,8 @@ l1_norm_target: float = 1e-4
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d poisson'
-title = True
+case_name = '2d poisson fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -85,27 +85,28 @@ xf, yf = fvm.build_face_positions(poisson_2d_config)
 # Post-processing
 
 fig, ax = plt.subplots(figsize=(12,6))
-
-ax = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(ax, label='p')
-
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Poisson Solution')
+fig.colorbar(pc, label='p')
 plt.show()
 
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=yc_array,  
+    x_values=xc_array,
+    y_values=yc_array,
     num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_2d_animation(
-    x_values=xc_array, 
-    y_values=yc_array,  
+    x_values=xc_array,
+    y_values=yc_array,
     solution_history=solution_matrix,
     z_limits=(np.min(solution_final), np.max(solution_final)),
     case_name=case_name,

@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D channel flow FDM solver and generate solution plots."""
 
 
 
@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from core import fdm
 
 from post_processing import (
-    show_channel_flow_solution,
+    show_channel_flow_solution_overview,
     show_channel_flow_solution_animation,
 )
 
@@ -25,9 +25,9 @@ from post_processing import (
 
 domain_length_x: float = 2
 domain_length_y: float = 1
-num_grid_points_x: int = 41
-num_grid_points_y: int = 41
-max_iterations: int = 10
+num_grid_points_x: int = 40
+num_grid_points_y: int = 40
+max_iterations: int = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
 source: float = 1.0
@@ -39,8 +39,9 @@ u_l1_norm_target: float = 1e-6
 # Visualization parameters
 
 step_stride = 10
-case_name = 'channel flow'
-title = True
+cut_indices=[num_grid_points_x // 2]
+case_name = 'channel flow fdm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -88,78 +89,24 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 
 # Post-processing
-u_analytical = (
-    source
-    / (2 * viscosity)
-    * y_array
-    * (domain_length_y - y_array)
+
+show_channel_flow_solution_overview(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_matrix=u_solution_matrix_final,
+    v_solution_matrix=v_solution_matrix_final,
+    case_name=case_name,
+    case_name_as_title=case_name_as_title,
+    save=save,
+    cut_indices=cut_indices,
 )
 
-x_index = num_grid_points_x // 2
-
-u_numerical = u_solution_matrix_final[:, x_index]
-
-l2_error = (
-    np.linalg.norm(u_numerical - u_analytical)
-    / np.linalg.norm(u_analytical)
+show_channel_flow_solution_animation(
+    x_values=x_array,
+    y_values=y_array,
+    u_solution_history=u_solution_matrix,
+    v_solution_history=v_solution_matrix,
+    source=source,
+    case_name=case_name,
+    save=save,
 )
-
-print(
-    "Analytical umax:",
-    np.max(u_analytical)
-)
-
-print(
-    "Numerical umax:",
-    np.max(u_numerical)
-)
-
-print(
-    "Maximum |v|:",
-    np.max(np.abs(v_solution_matrix_final))
-)
-
-print(
-    "Relative L2 error:",
-    l2_error
-)
-
-plt.plot(
-    u_numerical,
-    y_array,
-    label="Numerical"
-)
-
-plt.plot(
-    u_analytical,
-    y_array,
-    "--",
-    label="Poiseuille analytical"
-)
-
-plt.xlabel("u")
-plt.ylabel("y")
-plt.legend()
-plt.show()
-
-
-
-# show_channel_flow_solution(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_matrix=u_solution_matrix_final,
-#     v_solution_matrix=v_solution_matrix_final,
-#     case_name=case_name,
-#     title=title,
-#     save=save,
-# )
-
-# show_channel_flow_solution_animation(
-#     x_values=x_array,
-#     y_values=y_array,
-#     u_solution_history=u_solution_matrix,
-#     v_solution_history=v_solution_matrix,
-#     source=source,
-#     case_name=case_name,
-#     save=save,
-# )

@@ -1,4 +1,4 @@
-"""Run the 2D advection solver and generate solution plots."""
+"""Run the 2D convection equation FVM solver and generate solution plots."""
 
 
 
@@ -38,8 +38,8 @@ v_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d advection'
-title = True
+case_name = '2d advection fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -91,30 +91,37 @@ u_solution_matrix_final, v_solution_matrix_final = u_solution_matrix[-1], v_solu
 
 xf, yf = fvm.build_face_positions(convection_2d_config)
 
-
+X, Y = np.meshgrid(xc_array, xc_array)
 
 # Post-processing
 
-fig, ax = plt.subplots(2, 1, figsize=(12,6))
+fig, ax = plt.subplots(2, 2, figsize=(12, 6), constrained_layout=True)
 
-ax0 = ax[0].pcolormesh(xf, yf, u_solution_matrix_final[:, :], edgecolors='k', linewidth=0.3)
+ax0 = ax[0, 0].pcolormesh(xf, yf, u_solution_matrix_final[:, :], edgecolors='k', linewidth=0.3)
+ax[0, 0].set_xlabel('x')
+ax[0, 0].set_ylabel('y', rotation=0)
+ax[0, 0].set_title('u Solution')
 fig.colorbar(ax0, label='u')
 
-ax1 = ax[1].pcolormesh(xf, yf, v_solution_matrix_final[:, :], edgecolors='k', linewidth=0.3)
+ax1 = ax[0, 1].pcolormesh(xf, yf, v_solution_matrix_final[:, :], edgecolors='k', linewidth=0.3)
+ax[0, 1].set_xlabel('x')
+ax[0, 1].set_ylabel('y', rotation=0)
+ax[0, 1].set_title('v Solution')
 fig.colorbar(ax1, label='v')
 
-plt.show()
-
-
-X, Y = np.meshgrid(xc_array, xc_array)
-
-fig, ax = plt.subplots(1, 2, figsize=(12,6))
-
-ax[0].quiver(X[::3, ::3], Y[::3, ::3], u_solution_matrix_final[::3, ::3], v_solution_matrix_final[::3, ::3])
+ax[1, 0].quiver(X[::6, ::6], Y[::6, ::6], u_solution_matrix_final[::6, ::6], v_solution_matrix_final[::6, ::6], scale=30)
+ax[1, 0].set_xlabel('x')
+ax[1, 0].set_ylabel('y', rotation=0)
+ax[1, 0].set_title('Velocity Field')
 
 div = np.gradient(u_solution_matrix_final, xc_array, axis=1) + np.gradient(v_solution_matrix_final, yc_array, axis=0)
-pc = ax[1].pcolormesh(X, Y, div)   # or contourf
-fig.colorbar(pc, label='v')
+pc = ax[1, 1].pcolormesh(X, Y, div)
+ax[1, 1].set_xlabel('x')
+ax[1, 1].set_ylabel('y', rotation=0)
+ax[1, 1].set_title('U Divergence')
+fig.colorbar(pc, label='div(U)')
+
+fig.suptitle('2D Convection Solution')
 
 plt.show()
 
@@ -124,13 +131,13 @@ show_solution_uv_surfaces(
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     case_name=f'{case_name} final',
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_uv_2d_animations(
     x_values=xc_array,
-    y_values=yc_array, 
+    y_values=yc_array,
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
     case_name=case_name,

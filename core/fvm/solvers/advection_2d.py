@@ -36,11 +36,11 @@ def solve_advection_2d(
         un = u.copy()
 
         advection_term = compute_advection_2d_term(
-                            un, 
-                            config.wavespeed, 
-                            face_areas_x, 
-                            face_areas_y, 
-                            cell_volumes, 
+                            un,
+                            config.wavespeed,
+                            face_areas_x,
+                            face_areas_y,
+                            cell_volumes,
                             dt)
 
         u[1:, 1:] = un[1:, 1:] - advection_term[1:, 1:]
@@ -51,9 +51,9 @@ def solve_advection_2d(
             c=config.wavespeed,
             u_min=config.u_min,
             dt=dt,
-            face_areas_x=face_areas_x, 
-            face_areas_y=face_areas_y, 
-            cell_volumes=cell_volumes, 
+            face_areas_x=face_areas_x,
+            face_areas_y=face_areas_y,
+            cell_volumes=cell_volumes,
         )
 
         history[n] = u

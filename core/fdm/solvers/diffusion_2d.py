@@ -1,4 +1,4 @@
-"""Numerical solver for the 2D diffusion equation."""
+"""FDM numerical solver for the 2D diffusion equation."""
 
 
 
@@ -24,7 +24,7 @@ def solve_diffusion_2d(
     dt = compute_diffusive_dt_2d(config)
 
     u = initial_condition.copy()
-    
+
     history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
 
     history[0] = initial_condition
@@ -40,5 +40,5 @@ def solve_diffusion_2d(
         apply_diffusion_boundary_2d(u, config.u_min)
 
         history[n] = u
-    
+
     return history

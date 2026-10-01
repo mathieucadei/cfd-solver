@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D diffusion equation FVM solver and generate solution plots."""
 
 
 
@@ -37,8 +37,8 @@ u_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d diffusion'
-title = True
+case_name = '2d diffusion fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -92,26 +92,27 @@ xf, yf = fvm.build_face_positions(diffusion_2d_config)
 # Post-processing
 
 fig, ax = plt.subplots(figsize=(12,6))
-
-ax = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
-fig.colorbar(ax, label='u')
-
+pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Diffusion Solution')
+fig.colorbar(pc, label='u')
 plt.show()
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=yc_array, 
+    x_values=xc_array,
+    y_values=yc_array,
     num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_2d_animation(
     x_values=xc_array,
-    y_values=yc_array, 
+    y_values=yc_array,
     solution_history=solution_matrix,
     z_limits=(u_min, u_max),
     case_name=case_name,

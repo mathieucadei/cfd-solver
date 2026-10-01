@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D cavity flow FVM solver and generate solution plots."""
 
 
 
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from core import fvm
 
 from post_processing import (
-    show_cavity_flow_solution,
+    show_cavity_flow_solution_overview,
     show_cavity_flow_solution_animation,
 )
 
@@ -20,25 +20,27 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x: float = 2.0
+reynolds_number = 100
+
+domain_length_x: float = 1.0
 domain_length_y: float = 1.0
-num_cells_x: int = 30
-num_cells_y: int = 30
+num_cells_x: int = 40
+num_cells_y: int = 40
 expansion_ratio_x: float = 0.
 expansion_ratio_y: float = 0.
-max_iterations: int = 500
+max_iterations = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
 u_lid: float = 1.0
 density: float = 1.0
-viscosity: float = 0.1
+viscosity: float = u_lid*domain_length_x/reynolds_number
 
 
 # Visualization parameters
 
 step_stride = 10
-case_name = 'cavity flow FVM'
-title = True
+case_name = 'cavity flow fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -89,18 +91,28 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 
 p_solution_matrix_final = p_solution_matrix[-1, ...]
 
+# u_residual_history = solution_matrix[3]
+# v_residual_history = solution_matrix[4]
+
+# plt.plot(u_residual_history)
+# plt.plot(v_residual_history)
+# plt.xlabel("Iteration")
+# plt.ylabel("Residual")
+# plt.show()
+
 
 # Post-processing
 
-show_cavity_flow_solution(
+show_cavity_flow_solution_overview(
     x_values=xc_array,
     y_values=yc_array,
     u_solution_matrix=u_solution_matrix_final,
     v_solution_matrix=v_solution_matrix_final,
     p_solution_matrix=p_solution_matrix_final,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
+    step_stride=step_stride,
 )
 
 

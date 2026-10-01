@@ -23,7 +23,7 @@ def solve_laplace_2d(
 
     dist_x, dist_y = build_dist(config)
     face_areas_x, face_areas_y = build_face_areas(config)
-    cell_volumes = compute_cell_volumes(config)   
+    cell_volumes = compute_cell_volumes(config)
     xc, yc = build_centers(config)
 
     l1norm = 1
@@ -51,15 +51,15 @@ def solve_laplace_2d(
         p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s) / (a_w + a_e + a_s + a_n)
 
         apply_laplace_boundary_2d(
-            p, 
-            bottom=bottom_boundary, 
-            top=top_boundary, 
-            right=right_boundary, 
+            p,
+            bottom=bottom_boundary,
+            top=top_boundary,
+            right=right_boundary,
             left=left_boundary,
             dist_x=dist_x,
             dist_y=dist_y,
-            face_areas_x=face_areas_x, 
-            face_areas_y=face_areas_y, 
+            face_areas_x=face_areas_x,
+            face_areas_y=face_areas_y,
             cell_volumes=cell_volumes,
             lx=config.domain_length_x,
             ly=config.domain_length_y,
@@ -71,12 +71,12 @@ def solve_laplace_2d(
 
         if denominator == 0:
             l1norm = np.sum(np.abs(p - pn))
-        
+
         else:
             l1norm = np.sum(np.abs(p - pn)) / denominator
 
-        history.append(p.copy())        
-    
+        history.append(p.copy())
+
     history_array = np.stack(history, axis=0)
 
     return history_array

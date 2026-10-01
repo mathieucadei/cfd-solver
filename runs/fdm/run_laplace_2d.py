@@ -1,4 +1,4 @@
-"""Run the 2D diffusion solver and generate solution plots."""
+"""Run the 2D Laplace equation FDM solver and generate solution plots."""
 
 
 
@@ -29,8 +29,8 @@ l1_norm_target: float = 1e-4
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d laplace'
-title = True
+case_name = '2d laplace fdm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -56,9 +56,9 @@ y_array = fdm.make_y_grid(laplace_2d_config)
 
 initial_condition = fdm.laplace_initial_condition_2d(laplace_2d_config)
 bottom_boundary = initial_condition[1, :]
-top_boundary = initial_condition[-2, :] 
+top_boundary = initial_condition[-2, :]
 right_boundary = y_array
-left_boundary = 0
+left_boundary = np.zeros_like(initial_condition[:, 0])
 
 
 
@@ -86,7 +86,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='y',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         save=save,
     )
 
@@ -97,7 +97,7 @@ if show_individual_plots:
         step_stride=step_stride,
         cut_label='x',
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         x_label='y',
         save=save,
     )
@@ -107,7 +107,7 @@ if show_individual_plots:
         y_values=y_array,
         solution_matrix=solution_final,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         y_label='y',
         save=save,
     )
@@ -117,25 +117,25 @@ if show_individual_plots:
         y_values=y_array,
         solution_matrix=solution_final,
         case_name=case_name,
-        title=title,
+        case_name_as_title=case_name_as_title,
         y_label='y',
         save=save,
     )
 
 show_solution_overview(
-    x_values=x_array, 
-    y_values=y_array, 
+    x_values=x_array,
+    y_values=y_array,
     num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_2d_animation(
     x_values=x_array,
-    y_values=y_array, 
+    y_values=y_array,
     solution_history=solution_matrix,
     z_limits=(np.min(solution_final), np.max(solution_final)),
     case_name=case_name,

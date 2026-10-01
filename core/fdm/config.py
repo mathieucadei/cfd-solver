@@ -1,4 +1,4 @@
-"""Configuration dataclasses for 1D & 2D numerical and analytical simulations."""
+"""Configuration dataclasses for FDM 1D & 2D numerical and analytical simulations."""
 
 
 import numpy as np
@@ -36,6 +36,7 @@ class Convection1DConfig:
     u_max: float = 2.0
     scheme: str = 'upwind'
 
+
 @dataclass
 class Diffusion1DConfig:
     """Configuration parameters for the 1D diffusion equation."""
@@ -68,7 +69,7 @@ class BurgersEquation1DConfig:
 
 @dataclass
 class Advection2DConfig:
-    """Configuration parameters for the 2D linear advection equation."""
+    """Configuration parameters for the 2D advection equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 2.0
     num_grid_points_x: int = 81
@@ -154,6 +155,7 @@ class Laplace2DConfig:
 
 @dataclass
 class SourceTerm:
+    """Configuration parameters 2D source term for the 2D Poisson equation."""
     x: float
     y: float
     value: float
@@ -161,6 +163,7 @@ class SourceTerm:
 
 @dataclass
 class Poisson2DConfig:
+    """Configuration parameters for the 2D Poisson equation."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 31
@@ -176,6 +179,7 @@ class Poisson2DConfig:
 
 @dataclass
 class CavityFlowConfig:
+    """Configuration parameters for the 2D cavity flow."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 41
@@ -190,6 +194,7 @@ class CavityFlowConfig:
 
 @dataclass
 class ChannelFlowConfig:
+    """Configuration parameters for the 2D channel flow."""
     domain_length_x: float = 2.0
     domain_length_y: float = 1.0
     num_grid_points_x: int = 41

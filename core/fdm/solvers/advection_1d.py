@@ -1,4 +1,4 @@
-"""Numerical solver for the 1D advection equation."""
+"""FDM numerical solver for the 1D advection equation."""
 
 
 
@@ -16,7 +16,7 @@ def solve_advection_1d(
     initial_condition: np.ndarray,
     config: Advection1DConfig,
 ) -> np.ndarray:
-    """Solve the 1D advection equation with an explicit upwind finite-difference scheme."""
+    """Solve the 1D advection equation with upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff finite-difference schemes."""
 
     dx = compute_dx(config)
     dt = compute_advective_dt_1d(config)
@@ -24,7 +24,7 @@ def solve_advection_1d(
     if config.scheme == 'upwind':
 
         u = initial_condition.copy()
-    
+
         history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
         history[0] = initial_condition
@@ -38,11 +38,11 @@ def solve_advection_1d(
             u[1:] = un[1:] - advection_term[1:]
 
             history[n] = u
-        
+
     elif config.scheme == 'leapfrog':
 
         uo = initial_condition.copy()
-    
+
         history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
         init_advection_term = compute_advection_1d_term(uo, config.wavespeed, dx, dt, 'upwind')
@@ -66,11 +66,11 @@ def solve_advection_1d(
 
             uo = un
             un = u
-    
+
     elif config.scheme == 'lax-friedrichs':
 
         u = initial_condition.copy()
-    
+
         history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
         history[0] = initial_condition
@@ -88,7 +88,7 @@ def solve_advection_1d(
     elif config.scheme == 'lax-wendroff':
 
         u = initial_condition.copy()
-    
+
         history = np.zeros((config.max_iterations + 1, config.num_grid_points_x))
 
         history[0] = initial_condition
@@ -102,9 +102,9 @@ def solve_advection_1d(
             u[1:-1] = un[1:-1] - advection_term[1:-1]
 
             history[n] = u
-    
+
     else:
-        
+
         raise ValueError("basis must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
 
     return history

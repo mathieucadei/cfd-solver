@@ -1,4 +1,4 @@
-"""Run the 1D advection solver and generate solution plots."""
+"""Run the 1D convection equation FVM solver and generate solution plots."""
 
 
 
@@ -31,8 +31,8 @@ u_max = 2.0
 # Visualization parameters
 
 step_stride = 20
-case_name = '1d advection'
-title = True
+case_name = '1d advection fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -79,16 +79,19 @@ xf = fvm.build_x_face_positions(convection_1d_config)
 
 fig, ax = plt.subplots(figsize=(10,3))
 pc = ax.pcolormesh(xf, [0, 1], solution_final[None, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('1D Convection Solution')
 fig.colorbar(pc, label='u')
 plt.show()
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=time_array, 
-    num_solution_matrix=solution_history, 
+    x_values=xc_array,
+    y_values=time_array,
+    num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 

@@ -1,4 +1,4 @@
-"""Run the 2D advection solver and generate solution plots."""
+"""Run the 2D advection equation FVM solver and generate solution plots."""
 
 
 
@@ -37,8 +37,8 @@ u_max: float = 2.0
 # Visualization parameters
 
 step_stride = 10
-case_name = '2d advection'
-title = True
+case_name = '2d advection fvm'
+case_name_as_title = True
 save = False
 show_individual_plots = False
 
@@ -95,23 +95,26 @@ xf, yf = fvm.build_face_positions(advection_2d_config)
 
 fig, ax = plt.subplots(figsize=(10,3))
 pc = ax.pcolormesh(xf, yf, solution_final[:, :], edgecolors='k', linewidth=0.3)
+ax.set_xlabel('x')
+ax.set_ylabel('y', rotation=0)
+ax.set_title('2D Advection Solution')
 fig.colorbar(pc, label='u')
 plt.show()
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=yc_array, 
+    x_values=xc_array,
+    y_values=yc_array,
     num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
     case_name=case_name,
-    title=title,
+    case_name_as_title=case_name_as_title,
     save=save,
 )
 
 show_solution_2d_animation(
     x_values=xc_array,
-    y_values=yc_array, 
+    y_values=yc_array,
     solution_history=solution_matrix,
     case_name=case_name,
     save=save,

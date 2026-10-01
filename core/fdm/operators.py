@@ -1,4 +1,4 @@
-"""Reusable finite-difference operators for 1D & 2D transport equations."""
+"""Reusable FDM operators for 1D & 2D transport equations."""
 
 
 
@@ -13,7 +13,8 @@ def compute_advection_1d_term(
     dt: float,
     scheme: str = 'upwind',
 ) -> np.ndarray:
-    """Compute the 1D upwind advection term for a constant wave speed."""
+    """Compute the 1D advection term for a constant wave speed with
+    upwind, leapfrog, Lax-Friedrichs, and Lax-Wendroff finite-difference schemes."""
 
     term = np.zeros_like(u)
 
@@ -27,16 +28,16 @@ def compute_advection_1d_term(
 
     elif scheme == 'lax-friedrichs':
 
-        term[1:-1] = c * dt / dx * (u[2:] - u[:-2]) / 2 
-    
+        term[1:-1] = c * dt / dx * (u[2:] - u[:-2]) / 2
+
     elif scheme == 'lax-wendroff':
 
         term[1:-1] = c * dt / dx * (u[2:] - u[:-2]) / 2 - (c * dt / dx)**2 * (u[2:] - 2 * u[1:-1] + u[:-2]) / 2
 
     else:
-        
+
         raise ValueError("scheme must be 'upwind', 'leapfrog', 'lax-friedrichs', or 'lax-wendroff'")
-    
+
     return term
 
 
@@ -47,7 +48,10 @@ def compute_convection_1d_term(
     scheme: str = 'upwind',
     un_half: np.ndarray = None,
 ) -> np.ndarray:
-    """Compute the 1D upwind convection term."""
+    """Compute the 1D advection term with an explicit conservative & non-conservative
+    upwind, leapfrog, Lax-Friedrichs, 1-step & 2-step Lax-Wendroff, Richtmyer and Mac-Cormack and
+    implicit conservative damped & undamped Beam-Warming finite-difference schemes."""
+
     term = np.zeros_like(u)
 
     if scheme == 'upwind':
@@ -72,12 +76,12 @@ def compute_convection_1d_term(
 
     elif scheme == 'lax-friedrichs-half':
 
-        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 4 
+        term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 4
 
     elif scheme == 'conservative-lax-friedrichs':
 
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
-    
+
     elif scheme == 'conservative-lax-friedrichs-half':
 
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 4
@@ -85,29 +89,29 @@ def compute_convection_1d_term(
     elif scheme == 'lax-friedrichs-lw':
 
         term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1]) / 2
-    
+
     elif scheme == 'conservative-lax-friedrichs-lw':
 
         term[1:] = dt / dx * (u[1:] - u[:-1]) / 2
 
     elif scheme == 'leapfrog':
-    
+
         term[1:-1] = u[1:-1] * dt / dx * (u[2:] - u[:-2]) / 2
-    
+
     elif scheme == 'conservative-leapfrog':
-    
+
         term[1:-1] = dt / dx * (u[2:] - u[:-2]) / 2
 
     elif scheme == 'leapfrog-lw':
-    
+
         term[1:] = u[1:] * dt / dx * (u[1:] - u[:-1])
 
     elif scheme == 'conservative-leapfrog-lw':
-    
+
         term[1:] = dt / dx * (u[1:] - u[:-1])
 
     else:
-        
+
         raise ValueError(
         "scheme must be " \
         "'upwind', " \
@@ -123,8 +127,8 @@ def compute_convection_1d_term(
         "'conservative-leapfrog', " \
         "'leapfrog-lw', " \
         "'conservative-leapfrog-lw', "
-        )    
-    
+        )
+
     return term
 
 
@@ -135,6 +139,7 @@ def compute_diffusion_1d_term(
     nu: float,
 ) -> np.ndarray:
     """Compute the 1D central-difference diffusion term."""
+
     term = np.zeros_like(u)
 
     term[1:-1] = nu * dt / dx**2 * (u[2:] - 2 * u[1:-1] + u[:-2])
@@ -217,8 +222,8 @@ def compute_source_term_2d(
 ) -> np.ndarray:
     """Compute the 2D source term for the Poisson equation in the 2D Navier-Stokes solver."""
 
-    b[1:-1, 1:-1] = (rho * (1 / dt * 
-                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) / 
+    b[1:-1, 1:-1] = (rho * (1 / dt *
+                    ((u[1:-1, 2:] - u[1:-1, 0:-2]) /
                      (2 * dx) + (v[2:, 1:-1] - v[0:-2, 1:-1]) / (2 * dy)) -
                     ((u[1:-1, 2:] - u[1:-1, 0:-2]) / (2 * dx))**2 -
                       2 * ((u[2:, 1:-1] - u[0:-2, 1:-1]) / (2 * dy) *
@@ -231,25 +236,25 @@ def compute_source_term_2d(
 def compute_pressure_poisson_term(
         p: np.ndarray,
         b: np.ndarray,
-        nit: int, 
-        dx: float, 
-        dy: float, 
+        nit: int,
+        dx: float,
+        dy: float,
 ) -> np.ndarray:
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
 
     pn = p.copy()
-    
+
     for q in range(nit):
         pn = p.copy()
-        p[1:-1, 1:-1] = (((pn[1:-1, 2:] + pn[1:-1, 0:-2]) * dy**2 + 
+        p[1:-1, 1:-1] = (((pn[1:-1, 2:] + pn[1:-1, 0:-2]) * dy**2 +
                           (pn[2:, 1:-1] + pn[0:-2, 1:-1]) * dx**2) /
                           (2 * (dx**2 + dy**2)) -
-                          dx**2 * dy**2 / (2 * (dx**2 + dy**2)) * 
+                          dx**2 * dy**2 / (2 * (dx**2 + dy**2)) *
                           b[1:-1,1:-1])
 
         p[:, -1] = p[:, -2] # dp/dx = 0 at x = 2
         p[0, :] = p[1, :]   # dp/dy = 0 at y = 0
         p[:, 0] = p[:, 1]   # dp/dx = 0 at x = 0
         p[-1, :] = 0        # p = 0 at y = 2
-        
+
     return p, pn
