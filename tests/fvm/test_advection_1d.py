@@ -15,7 +15,7 @@ def test_advection_1d_translates_exactly():
         hat_start=0.5,
         hat_end=1.0,
         u_min=1.0,
-        u_max=2.0,  
+        u_max=2.0,
     )
 
     xc_array = fvm.build_x_centers(config)

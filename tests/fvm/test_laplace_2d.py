@@ -10,7 +10,7 @@ def direct_solve(config, bottom, top, left, right):
     ny = config.num_cells_y
 
     dist_x, dist_y = fvm.build_dist(config)
-    face_areas_x, face_areas_y = fvm.build_face_areas(config)  
+    face_areas_x, face_areas_y = fvm.build_face_areas(config)
     xc, yc = fvm.build_centers(config)
 
     A = np.zeros((ny*nx, ny*nx))
@@ -87,19 +87,19 @@ def test_laplace_matches_direct_solve():
     left_boundary = np.zeros_like(initial_condition[:, 0])
 
     numerical_solution = fvm.solve_laplace_2d(
-        initial_condition, 
-        bottom_boundary=bottom_boundary, 
-        top_boundary=top_boundary, 
-        right_boundary=right_boundary, 
-        left_boundary=left_boundary, 
+        initial_condition,
+        bottom_boundary=bottom_boundary,
+        top_boundary=top_boundary,
+        right_boundary=right_boundary,
+        left_boundary=left_boundary,
         config=config)[-1]
 
     direct_solve_solution = direct_solve(
         config=config,
         bottom=bottom_boundary,
-        top=top_boundary, 
-        right=right_boundary, 
-        left=left_boundary,         
+        top=top_boundary,
+        right=right_boundary,
+        left=left_boundary,
     )
 
     assert abs(numerical_solution - direct_solve_solution).max() < 1e-6
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     y = np.linspace(0, config.domain_length_y, config.num_cells_y)
     nx = config.num_cells_x
     ny = config.num_cells_y
-    
+
     initial_condition = fvm.laplace_initial_condition_2d(config)
     phi = direct_solve(
         config,

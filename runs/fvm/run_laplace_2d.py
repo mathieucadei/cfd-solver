@@ -86,8 +86,8 @@ fig.colorbar(pc, label='p')
 plt.show()
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=yc_array, 
+    x_values=xc_array,
+    y_values=yc_array,
     num_solution_matrix=solution_final,
     y_label='y',
     step_stride=step_stride,
@@ -98,7 +98,7 @@ show_solution_overview(
 
 show_solution_2d_animation(
     x_values=xc_array,
-    y_values=yc_array, 
+    y_values=yc_array,
     solution_history=solution_matrix,
     z_limits=(np.min(solution_final), np.max(solution_final)),
     case_name=case_name,

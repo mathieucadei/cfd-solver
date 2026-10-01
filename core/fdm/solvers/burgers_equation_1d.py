@@ -22,12 +22,12 @@ def solve_burgers_equation_1d(
     if config.grid_type == "hat":
         dx = compute_dx(config)
         dt = compute_diffusive_dt_1d(config)
-    
+
     elif config.grid_type == "cole_hopf":
 
         dx = compute_cole_hopf_dx(config)
         dt = compute_cole_hopf_dt_1d(config)
-    
+
     else:
         raise ValueError("grid_type must be 'hat' or 'cole_hopf'")
 
@@ -46,7 +46,7 @@ def solve_burgers_equation_1d(
 
         u[1:-1] = un[1:-1] - convection_term[1:-1] \
             + diffusion_term[1:-1]
-        
+
         apply_burgers_boundary_1d(
             u=u,
             un=un,
@@ -54,7 +54,7 @@ def solve_burgers_equation_1d(
             dx=dx,
             nu=config.viscosity,
         )
-        
+
         history[n] = u
-    
+
     return history

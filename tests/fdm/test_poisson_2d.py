@@ -6,10 +6,10 @@ from core import fdm
 
 def direct_solve(
         config,
-        initial_condition, 
-        bottom, 
-        top, 
-        left, 
+        initial_condition,
+        bottom,
+        top,
+        left,
         right):
 
     nx = config.num_grid_points_x
@@ -56,7 +56,7 @@ def direct_solve(
                             A[k[j, i], k[j, i - 1]] = -1
                         else:
                             b[k[j, i]] = right[j]
-                        
+
                 else:
 
                     A[k[j, i], k[j, i]] = a_w + a_e + a_s + a_n      # current cell
@@ -96,16 +96,16 @@ def test_laplace_matches_direct_solve():
     right_boundary = np.zeros_like(initial_condition[1][:, -1])
 
     numerical_solution = fdm.solve_poisson_2d(
-        initial_condition, 
+        initial_condition,
         config=config)[-1]
 
     direct_solve_solution = direct_solve(
         config=config,
         initial_condition=initial_condition,
         bottom=bottom_boundary,
-        top=top_boundary, 
-        right=right_boundary, 
-        left=left_boundary,         
+        top=top_boundary,
+        right=right_boundary,
+        left=left_boundary,
     )
 
     assert abs(numerical_solution - direct_solve_solution).max() < 1e-6
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     x = np.linspace(0, config.domain_length_x, config.num_grid_points_x)
     y = np.linspace(0, config.domain_length_y, config.num_grid_points_y)
     n = config.num_grid_points_x
-    
+
     initial_condition = fdm.poisson_initial_condition_2d(config)
     phi = direct_solve(
         config,

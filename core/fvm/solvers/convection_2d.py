@@ -38,11 +38,11 @@ def solve_convection_2d(
         vn = v.copy()
 
         convection_u_term, convection_v_term = compute_convection_2d_term(
-                                                    un, 
-                                                    vn, 
-                                                    face_areas_x, 
-                                                    face_areas_y, 
-                                                    cell_volumes, 
+                                                    un,
+                                                    vn,
+                                                    face_areas_x,
+                                                    face_areas_y,
+                                                    cell_volumes,
                                                     dt
                                                 )
 
@@ -57,9 +57,9 @@ def solve_convection_2d(
             u_min=config.u_min,
             v_min=config.v_min,
             dt=dt,
-            face_areas_x=face_areas_x, 
-            face_areas_y=face_areas_y, 
-            cell_volumes=cell_volumes, 
+            face_areas_x=face_areas_x,
+            face_areas_y=face_areas_y,
+            cell_volumes=cell_volumes,
         )
 
         u_history[n], v_history[n] = u, v

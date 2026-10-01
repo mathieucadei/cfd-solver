@@ -20,7 +20,7 @@ def test_advection_2d_translates_exactly():
         hat_end_x=1.0,
         hat_end_y=1.0,
         u_min=1.0,
-        u_max=2.0,   
+        u_max=2.0,
     )
 
     initial_condition = fvm.hat_initial_condition_2d(config)

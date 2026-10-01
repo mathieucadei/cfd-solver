@@ -26,7 +26,7 @@ def build_hx_spacing(config: object):
 
 def build_x_face_positions(config: object):
 
-    hx = build_hx_spacing(config)  
+    hx = build_hx_spacing(config)
 
     xf = np.cumsum(hx)
     xf =  np.concatenate([[0.0], xf])
@@ -74,7 +74,7 @@ def build_cole_hopf_hx_spacing(config: object) -> float:
 
 def build_cole_hopf_x_face_positions(config: object):
 
-    hx = build_cole_hopf_hx_spacing(config)  
+    hx = build_cole_hopf_hx_spacing(config)
 
     xf = np.cumsum(hx)
     xf =  np.concatenate([[0.0], xf])
@@ -139,7 +139,7 @@ def build_h_spacing(config: object):
 
 def build_face_positions(config: object):
 
-    hx, hy = build_h_spacing(config)  
+    hx, hy = build_h_spacing(config)
 
     xf = np.cumsum(hx)
     xf =  np.concatenate([[0.0], xf])
@@ -162,7 +162,7 @@ def build_centers(config: object):
 
 def build_face_areas(config: object):
 
-    hx, hy = build_h_spacing(config)  
+    hx, hy = build_h_spacing(config)
 
     area_x = np.array([hy[:]] * (config.num_cells_x)).T
     area_y = np.array([hx[:]] * (config.num_cells_y))
@@ -172,7 +172,7 @@ def build_face_areas(config: object):
 
 def compute_cell_volumes(config: object):
 
-    hx, hy = build_h_spacing(config)  
+    hx, hy = build_h_spacing(config)
 
     V  = hy[:,None] * hx[None,:]
 
@@ -200,7 +200,7 @@ def build_faces(config: object):
 
     hx, hy = build_h_spacing(config)
     xc, yc = build_centers(config)
-    
+
     owner_x = ids[:, :-1]
     neigh_x = ids[:, 1:]
 
@@ -270,7 +270,7 @@ if __name__ == '__main__':
     #     u_max: float = 2.0
 
     # config = BurgersEquation1DFVMConfig()
-    
+
     # hx = build_hx_spacing(config)
 
     # print(hx[0])

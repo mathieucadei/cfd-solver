@@ -19,7 +19,7 @@ def solve_diffusion_2d(
 
     dist_x, dist_y = build_dist(config)
     face_areas_x, face_areas_y = build_face_areas(config)
-    cell_volumes = compute_cell_volumes(config)   
+    cell_volumes = compute_cell_volumes(config)
     xc, yc = build_centers(config)
     dt = compute_diffusive_dt_2d(config)
 
@@ -37,13 +37,13 @@ def solve_diffusion_2d(
                             un,
                             dist_x,
                             dist_y,
-                            face_areas_x, 
-                            face_areas_y, 
-                            cell_volumes,                             
-                            dt, 
+                            face_areas_x,
+                            face_areas_y,
+                            cell_volumes,
+                            dt,
                             config.viscosity
                         )
-        
+
         u[1:-1, 1:-1] = un[1:-1, 1:-1] + diffusion_term[1:-1, 1:-1]
 
         # apply_diffusion_boundary_2d(
@@ -52,8 +52,8 @@ def solve_diffusion_2d(
         #     dt=dt,
         #     dist_x=dist_x,
         #     dist_y=dist_y,
-        #     face_areas_x=face_areas_x, 
-        #     face_areas_y=face_areas_y, 
+        #     face_areas_x=face_areas_x,
+        #     face_areas_y=face_areas_y,
         #     cell_volumes=cell_volumes,
         #     xc=xc,
         #     yc=yc,
@@ -63,5 +63,5 @@ def solve_diffusion_2d(
         # )
 
         history[n] = u
-    
+
     return history

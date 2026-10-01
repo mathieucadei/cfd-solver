@@ -24,7 +24,7 @@ def solve_advection_2d(
     dt = compute_advective_dt_2d(config)
 
     u = initial_condition.copy()
-    
+
     history = np.zeros((config.max_iterations + 1, config.num_grid_points_y, config.num_grid_points_x))
 
     history[0] = initial_condition
@@ -40,5 +40,5 @@ def solve_advection_2d(
         apply_advection_boundary_2d(u, config.u_min)
 
         history[n] = u
-    
+
     return history

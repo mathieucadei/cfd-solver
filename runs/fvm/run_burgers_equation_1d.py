@@ -93,8 +93,8 @@ fig.colorbar(pc, label='u')
 plt.show()
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=time_array, 
+    x_values=xc_array,
+    y_values=time_array,
     num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,

@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 from core import fdm
 
 def direct_solve(
-        config, 
-        bottom, 
-        top, 
-        left, 
+        config,
+        bottom,
+        top,
+        left,
         right):
 
     nx = config.num_grid_points_x
@@ -55,7 +55,7 @@ def direct_solve(
                             A[k[j, i], k[j, i - 1]] = -1
                         else:
                             b[k[j, i]] = right[j]
-                        
+
                 else:
 
                     A[k[j, i], k[j, i]] = a_w + a_e + a_s + a_n      # current cell
@@ -83,24 +83,24 @@ def test_laplace_matches_direct_solve():
 
     initial_condition = fdm.laplace_initial_condition_2d(config)
     bottom_boundary = initial_condition[1, :]
-    top_boundary = initial_condition[-2, :] 
+    top_boundary = initial_condition[-2, :]
     right_boundary = y_array
     left_boundary = np.zeros_like(initial_condition[:, 0])
 
     numerical_solution = fdm.solve_laplace_2d(
-        initial_condition, 
-        bottom_boundary=bottom_boundary, 
-        top_boundary=top_boundary, 
-        right_boundary=right_boundary, 
-        left_boundary=left_boundary, 
+        initial_condition,
+        bottom_boundary=bottom_boundary,
+        top_boundary=top_boundary,
+        right_boundary=right_boundary,
+        left_boundary=left_boundary,
         config=config)[-1]
 
     direct_solve_solution = direct_solve(
         config=config,
         bottom='zero_gradient',
-        top='zero_gradient', 
-        right=right_boundary, 
-        left=left_boundary,         
+        top='zero_gradient',
+        right=right_boundary,
+        left=left_boundary,
     )
 
     assert abs(numerical_solution - direct_solve_solution).max() < 1e-6
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     x = np.linspace(0, 1, config.num_grid_points_x)
     y = np.linspace(0, 1, config.num_grid_points_y)
     n = config.num_grid_points_x
-    
+
     initial_condition = fdm.laplace_initial_condition_2d(config)
     phi = direct_solve(
         config,

@@ -121,8 +121,8 @@ if show_individual_plots:
     )
 
 show_solution_overview(
-    x_values=x_array, 
-    y_values=time_array, 
+    x_values=x_array,
+    y_values=time_array,
     num_solution_matrix=solution_history,
     step_stride=step_stride,
     case_name=case_name,

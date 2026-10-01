@@ -22,7 +22,7 @@ def solve_channel_flow(
 
     dist_x, dist_y = build_dist(config)
     face_areas_x, face_areas_y = build_face_areas(config)
-    cell_volumes = compute_cell_volumes(config)   
+    cell_volumes = compute_cell_volumes(config)
     xc, yc = build_centers(config)
 
     dt = config.time_step
@@ -49,22 +49,22 @@ def solve_channel_flow(
 
 
         convection_u_term, convection_v_term = compute_momentum_convection_2d_term(
-                                                    un, 
-                                                    vn, 
-                                                    face_areas_x, 
-                                                    face_areas_y, 
-                                                    cell_volumes, 
+                                                    un,
+                                                    vn,
+                                                    face_areas_x,
+                                                    face_areas_y,
+                                                    cell_volumes,
                                                     dt
                                                 )
-        
+
         diffusion_u_term = compute_diffusion_2d_term(
                                 un,
                                 dist_x,
                                 dist_y,
-                                face_areas_x, 
-                                face_areas_y, 
-                                cell_volumes,                             
-                                dt, 
+                                face_areas_x,
+                                face_areas_y,
+                                cell_volumes,
+                                dt,
                                 config.viscosity
                             )
 
@@ -72,43 +72,43 @@ def solve_channel_flow(
                                 vn,
                                 dist_x,
                                 dist_y,
-                                face_areas_x, 
-                                face_areas_y, 
-                                cell_volumes,                             
-                                dt, 
+                                face_areas_x,
+                                face_areas_y,
+                                cell_volumes,
+                                dt,
                                 config.viscosity
                             )
-        
+
         b = compute_source_term_2d(
-                bn, 
-                config.density, 
-                config.time_step, 
-                un, 
+                bn,
+                config.density,
+                config.time_step,
+                un,
                 vn,
                 dist_x,
-                dist_y,                           
+                dist_y,
                 face_areas_x,
-                face_areas_y, 
-                cell_volumes, 
+                face_areas_y,
+                cell_volumes,
             )
 
         apply_periodic_source_term_boundary_2d(
                 b,
-                config.density, 
-                config.time_step, 
-                un, 
+                config.density,
+                config.time_step,
+                un,
                 vn,
                 face_areas_x,
-                face_areas_y, 
-                cell_volumes, 
+                face_areas_y,
+                cell_volumes,
         )
-        
+
         p = compute_periodic_pressure_poisson_term(
-                pn, 
-                b, 
-                config.max_pseudo_iterations, 
+                pn,
+                b,
+                config.max_pseudo_iterations,
                 dist_x,
-                dist_y,                           
+                dist_y,
                 face_areas_x,
                 face_areas_y,
                 cell_volumes,
@@ -125,30 +125,30 @@ def solve_channel_flow(
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
                          convection_u_term[1:-1, 1:-1] -
-                         dt / rho * (f_e_p[:-1, :] - f_w_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] + 
-                         diffusion_u_term[1:-1, 1:-1] + 
+                         dt / rho * (f_e_p[:-1, :] - f_w_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +
+                         diffusion_u_term[1:-1, 1:-1] +
                         config.source * dt)
 
         v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
                         convection_v_term[1:-1, 1:-1] -
                         dt / rho * (f_n_p[:, :-1] - f_s_p[:-1, :-1]) / cell_volumes[1:-1, 1:-1] +
                          diffusion_v_term[1:-1, 1:-1])
-        
+
         apply_channel_flow_boundary_2d(
-            u, 
+            u,
             v,
             un,
             vn,
-            p, 
+            p,
             config.source,
             config.time_step,
             config.density,
-            config.viscosity,            
+            config.viscosity,
             dist_x=dist_x,
             dist_y=dist_y,
-            face_areas_x=face_areas_x, 
+            face_areas_x=face_areas_x,
             face_areas_y=face_areas_y,
-            cell_volumes=cell_volumes, 
+            cell_volumes=cell_volumes,
             lx=config.domain_length_x,
             ly=config.domain_length_y,
             xc=xc,
@@ -159,16 +159,16 @@ def solve_channel_flow(
 
         if denominator == 0:
             u_l1norm = np.sum(np.abs(u - un))
-        
+
         else:
             u_l1norm = np.sum(np.abs(u - un)) / denominator
-        
+
         u_history.append(u.copy())
         v_history.append(v.copy())
         p_history.append(p.copy())
-    
+
     u_history_array = np.stack(u_history, axis=0)
     v_history_array = np.stack(v_history, axis=0)
     p_history_array = np.stack(p_history, axis=0)
-    
+
     return u_history_array, v_history_array, p_history_array

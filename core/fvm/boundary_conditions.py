@@ -51,7 +51,7 @@ def apply_burgers_boundary_1d(
 
     conv_f_w = e[-2]
 
-    conv_f_eb = conv_f_wb    
+    conv_f_eb = conv_f_wb
 
     diff_f_e = nu * (un[1] - un[0]) / dist_x[0]
 
@@ -93,7 +93,7 @@ def apply_advection_boundary_2d(
     f_n_left  = c * u[1:, 0] * face_areas_y[1:, 0]
 
     u[0, 1:] = un[0, 1:] - dt * (f_e_bottom - f_w_bottom) / cell_volumes[0, 1:] - dt * (f_n_bottom - f_sb) / cell_volumes[0, 1:]
-    u[1:, 0] = un[1:, 0] - dt * (f_e_left - f_wb) / cell_volumes[1:, 0]  - dt * (f_n_left - f_s_left) / cell_volumes[1:, 0] 
+    u[1:, 0] = un[1:, 0] - dt * (f_e_left - f_wb) / cell_volumes[1:, 0]  - dt * (f_n_left - f_s_left) / cell_volumes[1:, 0]
     u[0,0] = u_min
 
 def apply_convection_boundary_2d(
@@ -201,7 +201,7 @@ def apply_laplace_boundary_2d(
     cell_volumes: np.ndarray,
     lx: float,
     ly: float,
-    xc: np.ndarray, 
+    xc: np.ndarray,
     yc: np.ndarray,
 ) -> None:
     """Apply boundary updates for the 2D Laplace equation."""
@@ -210,20 +210,20 @@ def apply_laplace_boundary_2d(
 
         a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
         a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
-        a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]   
+        a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]
 
         f_w_bottom = a_w_bottom * p[0, :-2]
         f_e_bottom = a_e_bottom * p[0, 2:]
         f_n_bottom = a_n_bottom * p[1, 1:-1]
 
         p[0, 1:-1] =(f_e_bottom + f_w_bottom + f_n_bottom) / (a_w_bottom + a_e_bottom + a_n_bottom)
-    
 
-    else: 
+
+    else:
         a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
         a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
         a_sb = face_areas_y[0, 1:-1] / yc[0]
-        a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]   
+        a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]
 
         f_w_bottom = a_w_bottom * p[0, :-2]
         f_e_bottom = a_e_bottom * p[0, 2:]
@@ -239,7 +239,7 @@ def apply_laplace_boundary_2d(
         a_w_top = face_areas_x[-1, 1:-1] / dist_x[:-1]
         a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
         a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
-    
+
         f_w_top = a_w_top * p[-1, :-2]
         f_e_top = a_e_top * p[-1, 2:]
         f_s_top = a_s_top * p[-2, 1:-1]
@@ -252,7 +252,7 @@ def apply_laplace_boundary_2d(
         a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
         a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
         a_nb = face_areas_y[-1, 1:-1] / (ly - yc[-1])
-    
+
         f_w_top = a_w_top * p[-1, :-2]
         f_e_top = a_e_top * p[-1, 2:]
         f_s_top = a_s_top * p[-2, 1:-1]
@@ -265,7 +265,7 @@ def apply_laplace_boundary_2d(
         a_e_left = face_areas_x[1:-1, 1] / dist_x[0]
         a_s_left = face_areas_y[1:-1, 0] / dist_y[:-1]
         a_n_left = face_areas_y[2:, 0] / dist_y[1:]
-    
+
         f_e_left= a_e_left * p[1:-1, 1]
         f_s_left = a_s_left * p[:-2, 0]
         f_n_left = a_n_left * p[2:, 0]
@@ -278,7 +278,7 @@ def apply_laplace_boundary_2d(
         a_e_left = face_areas_x[1:-1, 1] / dist_x[0]
         a_s_left = face_areas_y[1:-1, 0] / dist_y[:-1]
         a_n_left = face_areas_y[2:, 0] / dist_y[1:]
-    
+
         f_wb = a_wb * left[1:-1]
         f_e_left= a_e_left * p[1:-1, 1]
         f_s_left = a_s_left * p[:-2, 0]
@@ -292,7 +292,7 @@ def apply_laplace_boundary_2d(
         a_w_right = face_areas_x[1:-1, -2] / dist_x[-1]
         a_s_right = face_areas_y[1:-1, -1] / dist_y[:-1]
         a_n_right = face_areas_y[2:, -1] / dist_y[1:]
-    
+
         f_w_right = a_w_right * p[1:-1, -2]
         f_s_right = a_s_right * p[:-2, -1]
         f_n_right = a_n_right * p[2:, -1]
@@ -305,7 +305,7 @@ def apply_laplace_boundary_2d(
         a_eb = face_areas_x[1:-1, -1] / (lx - xc[-1])
         a_s_right = face_areas_y[1:-1, -1] / dist_y[:-1]
         a_n_right = face_areas_y[2:, -1] / dist_y[1:]
-    
+
         f_w_right = a_w_right * p[1:-1, -2]
         f_eb = a_eb * right[1:-1]
         f_s_right = a_s_right * p[:-2, -1]
@@ -314,14 +314,14 @@ def apply_laplace_boundary_2d(
         p[1:-1, -1] =(f_eb + f_w_right + f_n_right + f_s_right) / (a_w_right + a_eb + a_s_right + a_n_right)
 
     if (
-        type(bottom) == str 
+        type(bottom) == str
         and  bottom == 'zero_gradient'
-        and type(left) == str 
+        and type(left) == str
         and left == 'zero_gradient'
     ):
 
         a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
-        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
         f_e_bottom_left = a_e_bottom_left * p[0, 1]
         f_n_bottom_left = a_n_bottom_left * p[1, 0]
@@ -329,14 +329,14 @@ def apply_laplace_boundary_2d(
         p[0, 0] =(f_e_bottom_left + f_n_bottom_left) / (a_e_bottom_left + a_n_bottom_left)
 
     elif (
-        type(bottom) == str 
+        type(bottom) == str
         and  bottom == 'zero_gradient'
         and type(left) == np.ndarray
     ):
 
         a_wb_bottom = face_areas_x[0, 0] / xc[0]
         a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
-        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
         f_wb_bottom = a_wb_bottom * left[0]
         f_e_bottom_left = a_e_bottom_left * p[0, 1]
@@ -345,14 +345,14 @@ def apply_laplace_boundary_2d(
         p[0, 0] =(f_e_bottom_left + f_wb_bottom + f_n_bottom_left) / (a_wb_bottom + a_e_bottom_left + a_n_bottom_left)
 
     elif (
-        type(left) == str 
+        type(left) == str
         and  left == 'zero_gradient'
         and type(bottom) == np.ndarray
     ):
 
         a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
         a_sb_left = face_areas_y[0, 0] / yc[0]
-        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
         f_wb_bottom = a_wb_bottom * left[0]
         f_e_bottom_left = a_e_bottom_left * p[0, 1]
@@ -365,7 +365,7 @@ def apply_laplace_boundary_2d(
         a_wb_bottom = face_areas_x[0, 0] / xc[0]
         a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
         a_sb_left = face_areas_y[0, 0] / yc[0]
-        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+        a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
         f_wb_bottom = a_wb_bottom * left[0]
         f_e_bottom_left = a_e_bottom_left * p[0, 1]
@@ -376,9 +376,9 @@ def apply_laplace_boundary_2d(
 
 
     if (
-        type(top) == str 
+        type(top) == str
         and  top == 'zero_gradient'
-        and type(left) == str 
+        and type(left) == str
         and left == 'zero_gradient'
     ):
 
@@ -391,7 +391,7 @@ def apply_laplace_boundary_2d(
         p[-1, 0] =(f_e_top_left + f_s_top_left) / (a_e_top_left + a_s_top_left)
 
     elif (
-        type(top) == str 
+        type(top) == str
         and  top == 'zero_gradient'
         and type(left) == np.ndarray
     ):
@@ -407,14 +407,14 @@ def apply_laplace_boundary_2d(
         p[-1, 0] =(f_e_top_left + f_wb_top + f_s_top_left) / (a_wb_top + a_e_top_left + a_s_top_left)
 
     elif (
-        type(left) == str 
+        type(left) == str
         and  left == 'zero_gradient'
         and type(top) == np.ndarray
     ):
 
         a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
         a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-        a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
+        a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1])
 
         f_e_top_left = a_e_top_left * p[-1, 1]
         f_s_top_left = a_s_top_left * p[-2, 0]
@@ -427,7 +427,7 @@ def apply_laplace_boundary_2d(
         a_wb_top= face_areas_x[-1, 0] / xc[0]
         a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
         a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-        a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
+        a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1])
 
         f_wb_top = a_wb_top * left[-1]
         f_e_top_left = a_e_top_left * p[-1, 1]
@@ -437,14 +437,14 @@ def apply_laplace_boundary_2d(
         p[-1, 0] =(f_e_top_left + f_wb_top + f_nb_left + f_s_top_left) / (a_wb_top + a_e_top_left + a_s_top_left + a_nb_left)
 
     if (
-        type(bottom) == str 
+        type(bottom) == str
         and  bottom == 'zero_gradient'
-        and type(right) == str 
+        and type(right) == str
         and right == 'zero_gradient'
     ):
 
         a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
-        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
         f_w_bottom_right = a_w_bottom_right * p[0, -2]
         f_n_bottom_right = a_n_bottom_right * p[1, -1]
@@ -452,14 +452,14 @@ def apply_laplace_boundary_2d(
         p[0, -1] =(f_w_bottom_right + f_n_bottom_right) / (a_w_bottom_right + a_n_bottom_right)
 
     elif (
-        type(bottom) == str 
+        type(bottom) == str
         and  bottom == 'zero_gradient'
         and type(right) == np.ndarray
     ):
 
         a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
         a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
-        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
         f_w_bottom_right = a_w_bottom_right * p[0, -2]
         f_eb_bottom = a_eb_bottom * right[0]
@@ -468,26 +468,26 @@ def apply_laplace_boundary_2d(
         p[0, -1] =(f_eb_bottom + f_w_bottom_right + f_n_bottom_right) / (a_w_bottom_right + a_eb_bottom + a_n_bottom_right)
 
     elif (
-        type(right) == str 
+        type(right) == str
         and  right == 'zero_gradient'
         and type(bottom) == np.ndarray
     ):
 
         a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
         a_sb_right = face_areas_y[0, -1] / yc[0]
-        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
         f_w_bottom_right = a_w_bottom_right * p[0, -2]
         f_sb_right = a_sb_right * bottom[-1]
         f_n_bottom_right = a_n_bottom_right * p[1, -1]
 
         p[0, -1] =(f_w_bottom_right + f_n_bottom_right + f_sb_right) / (a_w_bottom_right + a_sb_right + a_n_bottom_right)
-        
+
     else:
         a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
         a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
         a_sb_right = face_areas_y[0, -1] / yc[0]
-        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+        a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
         f_w_bottom_right = a_w_bottom_right * p[0, -2]
         f_eb_bottom = a_eb_bottom * right[0]
@@ -497,12 +497,12 @@ def apply_laplace_boundary_2d(
         p[0, -1] =(f_eb_bottom + f_w_bottom_right + f_n_bottom_right + f_sb_right) / (a_w_bottom_right + a_eb_bottom + a_sb_right + a_n_bottom_right)
 
     if (
-        type(top) == str 
+        type(top) == str
         and  top == 'zero_gradient'
-        and type(right) == str 
+        and type(right) == str
         and right == 'zero_gradient'
     ):
-        
+
         a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
         a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
 
@@ -512,14 +512,14 @@ def apply_laplace_boundary_2d(
         p[-1, -1] =(f_w_top_right + f_s_top_right) / (a_w_top_right + a_s_top_right)
 
     elif (
-        type(top) == str 
+        type(top) == str
         and  top == 'zero_gradient'
         and type(right) == np.ndarray
     ):
 
         a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
         a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
-        a_s_top_right = face_areas_y[-2, -1] / dist_y[-1] 
+        a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
 
         f_w_top_right = a_w_top_right * p[-1, -2]
         f_eb_top = a_eb_top * right[-1]
@@ -528,26 +528,26 @@ def apply_laplace_boundary_2d(
         p[-1, -1] =(f_eb_top + f_w_top_right + f_s_top_right) / (a_w_top_right + a_eb_top + a_s_top_right)
 
     elif (
-        type(right) == str 
+        type(right) == str
         and  right == 'zero_gradient'
         and type(top) == np.ndarray
     ):
 
         a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
         a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
-        a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])  
+        a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])
 
         f_w_top_right = a_w_top_right * p[-1, -2]
         f_s_top_right = a_s_top_right * p[-2, -1]
         f_nb_right = a_nb_right * top[-1]
 
         p[-1, -1] = (f_w_top_right + f_nb_right + f_s_top_right) / (a_w_top_right + a_s_top_right + a_nb_right)
-        
-    else: 
+
+    else:
         a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
         a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
         a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
-        a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])  
+        a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])
 
         f_w_top_right = a_w_top_right * p[-1, -2]
         f_eb_top = a_eb_top * right[-1]
@@ -565,7 +565,7 @@ def apply_poisson_boundary_2d(
     face_areas_y: np.ndarray,
     lx: float,
     ly: float,
-    xc: np.ndarray, 
+    xc: np.ndarray,
     yc: np.ndarray,
 ) -> None:
     """Apply boundary updates for the 2D Laplace equation."""
@@ -573,7 +573,7 @@ def apply_poisson_boundary_2d(
     a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
     a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
     a_sb = face_areas_y[0, 1:-1] / yc[0]
-    a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]   
+    a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]
 
     f_w_bottom = a_w_bottom * p[0, :-2]
     f_e_bottom = a_e_bottom * p[0, 2:]
@@ -617,7 +617,7 @@ def apply_poisson_boundary_2d(
     a_wb_bottom = face_areas_x[0, 0] / xc[0]
     a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
     a_sb_left = face_areas_y[0, 0] / yc[0]
-    a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+    a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
     f_e_bottom_left = a_e_bottom_left * p[0, 1]
     f_n_bottom_left = a_n_bottom_left * p[1, 0]
@@ -627,7 +627,7 @@ def apply_poisson_boundary_2d(
     a_wb_top= face_areas_x[-1, 0] / xc[0]
     a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
     a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
+    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1])
 
     f_e_top_left = a_e_top_left * p[-1, 1]
     f_s_top_left = a_s_top_left * p[-2, 0]
@@ -637,17 +637,17 @@ def apply_poisson_boundary_2d(
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
     a_sb_right = face_areas_y[0, -1] / yc[0]
-    a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+    a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
     f_w_bottom_right = a_w_bottom_right * p[0, -2]
     f_n_bottom_right = a_n_bottom_right * p[1, -1]
 
     p[0, -1] =(f_w_bottom_right + f_n_bottom_right) / (a_w_bottom_right + a_eb_bottom + a_sb_right + a_n_bottom_right)
-    
+
     a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
     a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
     a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
-    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])  
+    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])
 
     f_w_top_right = a_w_top_right * p[-1, -2]
     f_s_top_right = a_s_top_right * p[-2, -1]
@@ -681,7 +681,7 @@ def apply_source_term_boundary_2d(
     f_n_v_left = face_areas_y[2:, 0] * (v[1:-1, 0] + v[2:, 0]) / 2
 
     b[1:-1, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_left - f_wb_u) / cell_volumes[1:-1, 0] +
                                             (f_n_v_left - f_s_v_left) / cell_volumes[1:-1, 0]
@@ -710,7 +710,7 @@ def apply_source_term_boundary_2d(
     f_n_v_right = face_areas_y[2:, 0] * (v[1:-1, -1] + v[2:, -1]) / 2
 
     b[1:-1, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_right) / cell_volumes[1:-1, -1] +
                                             (f_n_v_right - f_s_v_right) / cell_volumes[1:-1, -1]
@@ -740,7 +740,7 @@ def apply_source_term_boundary_2d(
     f_n_v_bottom = face_areas_y[1, 1:-1] * (v[0, 1:-1] + v[1, 1:-1]) / 2
 
     b[0, 1:-1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_bottom - f_w_u_bottom) / cell_volumes[0, 1:-1] +
                                             (f_n_v_bottom - f_sb_v) / cell_volumes[0, 1:-1]
@@ -769,7 +769,7 @@ def apply_source_term_boundary_2d(
     f_nb_v = 0
 
     b[-1, 1:-1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_top - f_w_u_top) / cell_volumes[-1, 1:-1] +
                                             (f_nb_v - f_s_v_top) / cell_volumes[-1, 1:-1]
@@ -795,7 +795,7 @@ def apply_source_term_boundary_2d(
     f_n_v_bottom_left = face_areas_y[1, 0] * (v[0, 0] + v[1, 0]) / 2
 
     b[0, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_bottom_left - f_wb_u) / cell_volumes[0, 0] +
                                             (f_n_v_bottom_left - f_sb_v) / cell_volumes[0, 0]
@@ -820,7 +820,7 @@ def apply_source_term_boundary_2d(
     f_n_v_bottom_right = face_areas_y[1, -1] * (v[0, -1] + v[1, -1]) / 2
 
     b[0, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_bottom_right) / cell_volumes[0, -1] +
                                             (f_n_v_bottom_right - f_sb_v) / cell_volumes[0, -1]
@@ -847,7 +847,7 @@ def apply_source_term_boundary_2d(
     f_s_v_top_left = face_areas_y[-2, 0] * (v[-2, 0] + v[-1, 0]) / 2
 
     b[-1, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_top_left - f_wb_u) / cell_volumes[-1, 0] +
                                             (f_nb_v - f_s_v_top_left) / cell_volumes[-1, 0]
@@ -874,7 +874,7 @@ def apply_source_term_boundary_2d(
     f_s_v_top_right = face_areas_y[-2, -1] * (v[-2, -1] + v[-1, -1]) / 2
 
     b[-1, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_top_right) / cell_volumes[-1, -1] +
                                             (f_nb_v - f_s_v_top_right) / cell_volumes[-1, -1]
@@ -902,7 +902,7 @@ def apply_pressure_poisson_term_boundary(
     cell_volumes: np.ndarray,
     lx: float,
     ly: float,
-    xc: np.ndarray, 
+    xc: np.ndarray,
     yc: np.ndarray,
 ) -> np.ndarray:
     """Iteratively solve the Poisson equation for pressure correction in the 2D Navier-Stokes solver."""
@@ -915,7 +915,7 @@ def apply_pressure_poisson_term_boundary(
     a_w_bottom = face_areas_x[0, 1:-1] / dist_x[:-1]
     a_e_bottom = face_areas_x[0, 2:] / dist_x[1:]
     a_sb = face_areas_y[0, 1:-1] / yc[0]
-    a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]   
+    a_n_bottom = face_areas_y[1, 1:-1] / dist_y[0]
 
     f_w_bottom = a_w_bottom * p[0, :-2]
     f_e_bottom = a_e_bottom * p[0, 2:]
@@ -929,7 +929,7 @@ def apply_pressure_poisson_term_boundary(
     a_e_top = face_areas_x[-1, 2:] / dist_x[1:]
     a_s_top = face_areas_y[-2, 1:-1] / dist_y[-1]
     a_nb = face_areas_y[-1, 1:-1] / (ly - yc[-1])
-  
+
     f_w_top = a_w_top * p[-1, :-2]
     f_e_top = a_e_top * p[-1, 2:]
     f_s_top = a_s_top * p[-2, 1:-1]
@@ -942,7 +942,7 @@ def apply_pressure_poisson_term_boundary(
     a_e_left = face_areas_x[1:-1, 1] / dist_x[0]
     a_s_left = face_areas_y[1:-1, 0] / dist_y[:-1]
     a_n_left = face_areas_y[2:, 0] / dist_y[1:]
-  
+
     f_wb = a_wb * left[1:-1]
     f_e_left= a_e_left * p[1:-1, 1]
     f_s_left = a_s_left * p[:-2, 0]
@@ -955,7 +955,7 @@ def apply_pressure_poisson_term_boundary(
     a_eb = face_areas_x[1:-1, -1] / (lx - xc[-1])
     a_s_right = face_areas_y[1:-1, -1] / dist_y[:-1]
     a_n_right = face_areas_y[2:, -1] / dist_y[1:]
-  
+
     f_w_right = a_w_right * p[1:-1, -2]
     f_eb = a_eb * right[1:-1]
     f_s_right = a_s_right * p[:-2, -1]
@@ -966,7 +966,7 @@ def apply_pressure_poisson_term_boundary(
     a_wb_bottom = face_areas_x[0, 0] / xc[0]
     a_e_bottom_left = face_areas_x[0, 1] / dist_x[0]
     a_sb_left = face_areas_y[0, 0] / yc[0]
-    a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]   
+    a_n_bottom_left = face_areas_y[1, 0] / dist_y[0]
 
     f_wb_bottom = a_wb_bottom * left[0]
     f_e_bottom_left = a_e_bottom_left * p[0, 1]
@@ -978,7 +978,7 @@ def apply_pressure_poisson_term_boundary(
     a_wb_top= face_areas_x[-1, 0] / xc[0]
     a_e_top_left = face_areas_x[-1, 1] / dist_x[0]
     a_s_top_left = face_areas_y[-2, 0] / dist_y[-1]
-    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1]) 
+    a_nb_left = face_areas_y[-1, 0] / (ly - yc[-1])
 
     f_wb_top = a_wb_top * left[-1]
     f_e_top_left = a_e_top_left * p[-1, 1]
@@ -991,7 +991,7 @@ def apply_pressure_poisson_term_boundary(
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
     a_sb_right = face_areas_y[0, -1] / yc[0]
-    a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]   
+    a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
 
     f_w_bottom_right = a_w_bottom_right * p[0, -2]
     f_eb_bottom = a_eb_bottom * right[0]
@@ -1004,7 +1004,7 @@ def apply_pressure_poisson_term_boundary(
     a_w_top_right = face_areas_x[-1, -2] / dist_x[-1]
     a_eb_top = face_areas_x[-1, -1] / (lx - xc[-1])
     a_s_top_right = face_areas_y[-2, -1] / dist_y[-1]
-    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])  
+    a_nb_right = face_areas_y[-1, -1] / (ly - yc[-1])
 
     f_w_top_right = a_w_top_right * p[-1, -2]
     f_eb_top = a_eb_top * right[-1]
@@ -1031,7 +1031,7 @@ def apply_cavity_flow_boundary_2d(
     cell_volumes: np.ndarray,
     lx: float,
     ly: float,
-    xc: np.ndarray, 
+    xc: np.ndarray,
     yc: np.ndarray,
 ) -> None:
     """Apply boundary updates for the 2D cavity flow equation."""
@@ -1044,16 +1044,16 @@ def apply_cavity_flow_boundary_2d(
     # left wall
 
     ## convection
-    
+
     u_wb = 0
     u_e_left = (u[1:-1, 0] + u[1:-1, 1]) / 2
     v_s_left = (v[:-2, 0] + v[1:-1, 0]) / 2
-    v_n_left = (v[1:-1, 0] + v[2:, 0]) / 2   
+    v_n_left = (v[1:-1, 0] + v[2:, 0]) / 2
 
     f_wb = u_wb * face_areas_x[1:-1, 0]
     f_e_left = u_e_left * face_areas_x[1:-1, 1]
     f_s_left = v_s_left * face_areas_y[1:-1, 0]
-    f_n_left = v_n_left * face_areas_y[2:, 0] 
+    f_n_left = v_n_left * face_areas_y[2:, 0]
 
     u_wb = 0
     u_e_left = np.where(f_e_left>0, u[1:-1, 0], u[1:-1, 1])
@@ -1083,12 +1083,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[1:-1, 0] = un[1:-1, 0] + dt / cell_volumes[1:-1, 0] * (
-        -(f_e_left * u_e_left - f_wb * u_wb + f_n_left * u_n_left - f_s_left * u_s_left) + 
+        -(f_e_left * u_e_left - f_wb * u_wb + f_n_left * u_n_left - f_s_left * u_s_left) +
         nu * (a_e_left * (u[1:-1, 1] - u[1:-1, 0]) - a_wb * (u[1:-1, 0] - u_wb) + a_n_left * (u[2:, 0] - u[1:-1, 0]) - a_s_left * (u[1:-1, 0] - u[:-2, 0]))
         ) - (dt / rho * (pf_e_p_left - pf_wb_p) / cell_volumes[1:-1, 0])
-    
+
     v[1:-1, 0] = vn[1:-1, 0] + dt / cell_volumes[1:-1, 0] * (
-        -(f_e_left * v_e_left - f_wb * v_wb + f_n_left * v_n_left - f_s_left * v_s_left) + 
+        -(f_e_left * v_e_left - f_wb * v_wb + f_n_left * v_n_left - f_s_left * v_s_left) +
         nu * (a_e_left * (v[1:-1, 1] - v[1:-1, 0]) - a_wb * (v[1:-1, 0] - v_wb) + a_n_left * (v[2:, 0] - v[1:-1, 0]) - a_s_left * (v[1:-1, 0] - v[:-2, 0]))
         ) - (dt / rho * (pf_n_p_left - pf_s_p_left) / cell_volumes[1:-1, 0])
 
@@ -1099,12 +1099,12 @@ def apply_cavity_flow_boundary_2d(
     u_w_right = (u[1:-1, -2] + u[1:-1, -1]) / 2
     u_eb = 0
     v_s_right = (v[:-2, -1] + v[1:-1, -1]) / 2
-    v_n_right = (v[1:-1, -1] + v[2:, -1]) / 2   
+    v_n_right = (v[1:-1, -1] + v[2:, -1]) / 2
 
     f_w_right = u_w_right * face_areas_x[1:-1, -2]
     f_eb = u_eb * face_areas_x[1:-1, -1]
     f_s_right = v_s_right * face_areas_y[1:-1, -1]
-    f_n_right = v_n_right * face_areas_y[2:, -1] 
+    f_n_right = v_n_right * face_areas_y[2:, -1]
 
     u_w_right = np.where(f_w_right>0, u[1:-1, -2], u[1:-1, -1])
     u_eb = 0
@@ -1125,7 +1125,7 @@ def apply_cavity_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_right = face_areas_x[1:-1, -2] * (p[1:-1, -2] + p[1:-1, -1]) / 2 
+    pf_w_p_right = face_areas_x[1:-1, -2] * (p[1:-1, -2] + p[1:-1, -1]) / 2
     pf_eb_p = face_areas_x[1:-1, -1] * right[1:-1]
     pf_s_p_right = face_areas_y[1:-1, -1] * (p[:-2, -1] + p[1:-1, -1]) / 2
     pf_n_p_right = face_areas_y[2:, -1] * (p[1:-1, -1] + p[2:, -1]) / 2
@@ -1151,12 +1151,12 @@ def apply_cavity_flow_boundary_2d(
     u_w_bottom = (u[0, :-2] + u[0, 1:-1]) / 2
     u_e_bottom = (u[0, 1:-1] + u[0, 2:]) / 2
     v_sb = 0
-    v_n_bottom = (v[0, 1:-1] + v[1, 1:-1]) / 2   
+    v_n_bottom = (v[0, 1:-1] + v[1, 1:-1]) / 2
 
     f_w_bottom = u_w_bottom * face_areas_x[0, 1:-1]
     f_e_bottom = u_e_bottom * face_areas_x[0, 2:]
     f_sb = v_sb * face_areas_y[0, 1:-1]
-    f_n_bottom = v_n_bottom * face_areas_y[1, 1:-1] 
+    f_n_bottom = v_n_bottom * face_areas_y[1, 1:-1]
 
     u_w_bottom = np.where(f_w_bottom>0, u[0, :-2], u[0, 1:-1])
     u_e_bottom = np.where(f_e_bottom>0, u[0, 1:-1], u[0, 2:])
@@ -1177,8 +1177,8 @@ def apply_cavity_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_bottom = face_areas_x[0, 1:-1] * (p[0, :-2] + p[0, 1:-1]) / 2 
-    pf_e_p_bottom = face_areas_x[0, 2:] * (p[0, 1:-1] + p[0, 2:]) / 2 
+    pf_w_p_bottom = face_areas_x[0, 1:-1] * (p[0, :-2] + p[0, 1:-1]) / 2
+    pf_e_p_bottom = face_areas_x[0, 2:] * (p[0, 1:-1] + p[0, 2:]) / 2
     pf_sb_p = face_areas_y[0, 1:-1] * bottom[1:-1]
     pf_n_p_bottom = face_areas_y[1, 1:-1] * (p[0, 1:-1] + p[1, 1:-1]) / 2
 
@@ -1201,13 +1201,13 @@ def apply_cavity_flow_boundary_2d(
 
     u_w_top = (u[-1, :-2] + u[-1, 1:-1]) / 2
     u_e_top = (u[-1, 1:-1] + u[-1, 2:]) / 2
-    v_s_top = (v[-2, 1:-1] + v[-1, 1:-1]) / 2 
-    v_nb = 0 
+    v_s_top = (v[-2, 1:-1] + v[-1, 1:-1]) / 2
+    v_nb = 0
 
     f_w_top = u_w_top * face_areas_x[-1, 1:-1]
     f_e_top = u_e_top * face_areas_x[-1, 2:]
     f_s_top = v_s_top * face_areas_y[-2, 1:-1]
-    f_nb = v_nb * face_areas_y[-1, 1:-1] 
+    f_nb = v_nb * face_areas_y[-1, 1:-1]
 
     u_w_top = np.where(f_w_top>0, u[-1, :-2], u[-1, 1:-1])
     u_e_top = np.where(f_e_top>0, u[-1, 1:-1], u[-1, 2:])
@@ -1228,8 +1228,8 @@ def apply_cavity_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_top = face_areas_x[-1, 1:-1] * (p[-1, :-2] + p[-1, 1:-1]) / 2 
-    pf_e_p_top = face_areas_x[-1, 2:] * (p[-1, 1:-1] + p[-1, 2:]) / 2 
+    pf_w_p_top = face_areas_x[-1, 1:-1] * (p[-1, :-2] + p[-1, 1:-1]) / 2
+    pf_e_p_top = face_areas_x[-1, 2:] * (p[-1, 1:-1] + p[-1, 2:]) / 2
     pf_s_p_top = face_areas_y[-2, 1:-1] * (p[-2, 1:-1] + p[-1, 1:-1]) / 2
     pf_nb_p = face_areas_y[-1, 1:-1] * top[1:-1]
 
@@ -1249,9 +1249,9 @@ def apply_cavity_flow_boundary_2d(
     # bottom left wall
 
     ## convection
-    
+
     u_e_bottom_left = (u[0, 0] + u[0, 1]) / 2
-    v_n_bottom_left = (v[0, 0] + v[1, 0]) / 2   
+    v_n_bottom_left = (v[0, 0] + v[1, 0]) / 2
 
     f_e_bottom_left = u_e_bottom_left * face_areas_x[0, 1]
     f_wb_bottom = u_wb * face_areas_x[0, 0]
@@ -1282,12 +1282,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[0, 0] = un[0, 0] + dt / cell_volumes[0, 0] * (
-        -(f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_wb + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) + 
+        -(f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_wb + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) +
         nu * (a_e_bottom_left * (u[0, 1] - u[0, 0]) - a_wb_bottom * (u[0, 0] - u_wb) + a_n_bottom_left * (u[1, 0] - u[0, 0]) - a_sb_left * (u[0, 0] - u_sb))
         ) - (dt / rho * (pf_e_p_bottom_left - pf_wb_p_bottom) / cell_volumes[0, 0])
-    
+
     v[0, 0] = vn[0, 0] + dt / cell_volumes[0, 0] * (
-        -(f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_wb + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) + 
+        -(f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_wb + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) +
         nu * (a_e_bottom_left * (v[0, 1] - v[0, 0]) - a_wb_bottom * (v[0, 0] - v_wb) + a_n_bottom_left * (v[1, 0] - v[0, 0]) - a_sb_left * (v[0, 0] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_left - pf_sb_p_left) / cell_volumes[0, 0])
 
@@ -1295,13 +1295,13 @@ def apply_cavity_flow_boundary_2d(
     # bottom right wall
 
     ## convection
-    
+
     u_w_bottom_right = (u[0, -2] + u[0, -1]) / 2
-    v_n_bottom_right = (v[0, -1] + v[1, -1]) / 2   
+    v_n_bottom_right = (v[0, -1] + v[1, -1]) / 2
 
     f_eb_bottom = u_eb * face_areas_x[0, -1]
     f_w_bottom_right = u_w_bottom_right * face_areas_x[0, -2]
-    f_n_bottom_right = v_n_bottom_right * face_areas_y[1, -1] 
+    f_n_bottom_right = v_n_bottom_right * face_areas_y[1, -1]
     f_sb_right = v_sb * face_areas_y[0, -1]
 
     u_w_bottom_right = np.where(f_w_bottom_right>0, u[0, -2], u[0, -1])
@@ -1311,7 +1311,7 @@ def apply_cavity_flow_boundary_2d(
     v_n_bottom_right = np.where(f_n_bottom_right>0, v[0, -1], v[1, -1])
 
     ## diffusion
-    
+
     a_eb_bottom = face_areas_x[0, -1] / (lx - xc[-1])
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
@@ -1328,12 +1328,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[0, -1] = un[0, -1] + dt / cell_volumes[0, -1] * (
-        -(f_eb_bottom * u_eb - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) + 
+        -(f_eb_bottom * u_eb - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) +
         nu * (a_eb_bottom * (u_eb - u[0, -1]) - a_w_bottom_right * (u[0, -1] - u[0, -2]) + a_n_bottom_right * (u[1, -1] - u[0, -1]) - a_sb_right * (u[0, -1] - u_sb))
         ) - (dt / rho * (pf_eb_p_bottom - pf_w_p_bottom_right) / cell_volumes[0, -1])
-    
+
     v[0, -1] = vn[0, -1] + dt / cell_volumes[0, -1] * (
-        -(f_eb_bottom * v_eb - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) + 
+        -(f_eb_bottom * v_eb - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) +
         nu * (a_eb_bottom * (v_eb - v[0, -1]) - a_w_bottom_right * (v[0, -1] - v[0, -2]) + a_n_bottom_right * (v[1, -1] - v[0, -1]) - a_sb_right * (v[0, -1] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_right - pf_sb_p_right) / cell_volumes[0, -1])
 
@@ -1341,14 +1341,14 @@ def apply_cavity_flow_boundary_2d(
     # top left wall
 
     ## convection
-    
+
     u_e_top_left = (u[-1, 0] + u[-1, 1]) / 2
-    v_s_top_left = (v[-2, 0] + v[-1, 0]) / 2   
+    v_s_top_left = (v[-2, 0] + v[-1, 0]) / 2
 
     f_e_top_left = u_e_top_left * face_areas_x[-1, 1]
     f_wb_top = u_wb * face_areas_x[-1, 0]
-    f_nb_left = v_nb * face_areas_y[-1, 0] 
-    f_s_top_left = v_s_top_left * face_areas_y[-2, 0] 
+    f_nb_left = v_nb * face_areas_y[-1, 0]
+    f_s_top_left = v_s_top_left * face_areas_y[-2, 0]
 
     u_e_top_left = np.where(f_e_top_left>0, u[-1, 0], u[-1, 1])
     u_s_top_left = np.where(f_s_top_left>0, u[-2, 0], u[-1, 0])
@@ -1374,12 +1374,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[-1, 0] = un[-1, 0] + dt / cell_volumes[-1, 0] * (
-        -(f_e_top_left * u_e_top_left - f_wb_top * u_wb + f_nb_left * u_nb - f_s_top_left * u_s_top_left) + 
+        -(f_e_top_left * u_e_top_left - f_wb_top * u_wb + f_nb_left * u_nb - f_s_top_left * u_s_top_left) +
         nu * (a_e_top_left * (u[-1, 1] - u[-1, 0]) - a_wb_top * (u[-1, 0] - u_wb) + a_nb_left * (u_nb - u[-1, 0]) - a_s_top_left * (u[-1, 0] - u[-2, 0]))
         ) - (dt / rho * (pf_e_p_top_left - pf_wb_p_top) / cell_volumes[-1, 0])
-    
+
     v[-1, 0] = vn[-1, 0] + dt / cell_volumes[-1, 0] * (
-        -(f_e_top_left * v_e_top_left - f_wb_top * v_wb + f_nb_left * v_nb - f_s_top_left * v_s_top_left) + 
+        -(f_e_top_left * v_e_top_left - f_wb_top * v_wb + f_nb_left * v_nb - f_s_top_left * v_s_top_left) +
         nu * (a_e_top_left * (v[-1, 1] - v[-1, 0]) - a_wb_top * (v[-1, 0] - v_wb) + a_nb_left * (v_nb - v[-1, 0]) - a_s_top_left * (v[-1, 0] - v[-2, 0]))
         ) - (dt / rho * (pf_nb_p_left - pf_s_p_top_left) / cell_volumes[-1, 0])
 
@@ -1387,14 +1387,14 @@ def apply_cavity_flow_boundary_2d(
     # top right wall
 
     ## convection
-    
+
     u_w_top_right = (u[-1, -2] + u[-1, -1]) / 2
-    v_s_top_right = (v[-2, -1] + v[-1, -1]) / 2   
+    v_s_top_right = (v[-2, -1] + v[-1, -1]) / 2
 
     f_eb_top = u_eb * face_areas_x[-1, -1]
     f_w_top_right = u_w_top_right * face_areas_x[-1, -2]
-    f_nb_right = v_nb * face_areas_y[-1, -1] 
-    f_s_top_right = v_s_top_right * face_areas_y[-2, -1] 
+    f_nb_right = v_nb * face_areas_y[-1, -1]
+    f_s_top_right = v_s_top_right * face_areas_y[-2, -1]
 
     u_w_top_right = np.where(f_w_top_right>0, u[-1, -2], u[-1, -1])
     u_s_top_right = np.where(f_s_top_right>0, u[-2, -1], u[-1, -1])
@@ -1419,12 +1419,12 @@ def apply_cavity_flow_boundary_2d(
     ## update
 
     u[-1, -1] = un[-1, -1] + dt / cell_volumes[-1, -1] * (
-        -(f_eb_top * u_eb - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) + 
+        -(f_eb_top * u_eb - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) +
         nu * (a_eb_top * (u_eb - u[-1, -1]) - a_w_top_right * (u[-1, -1] - u[-1, -2]) + a_nb_right * (u_nb - u[-1, -1]) - a_s_top_right * (u[-1, -1] - u[-2, -1]))
         ) - (dt / rho * (pf_eb_p_top - pf_w_p_top_right) / cell_volumes[-1, -1])
-    
+
     v[-1, -1] = vn[-1, -1] + dt / cell_volumes[-1, -1] * (
-        -(f_eb_top * v_eb - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) + 
+        -(f_eb_top * v_eb - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) +
         nu * (a_eb_top * (v_eb - v[-1, -1]) - a_w_top_right * (v[-1, -1] - v[-1, -2]) + a_nb_right * (v_nb - v[-1, -1]) - a_s_top_right * (v[-1, -1] - v[-2, -1]))
         ) - (dt / rho * (pf_nb_p_right - pf_s_p_top_right) / cell_volumes[-1, -1])
 
@@ -1454,7 +1454,7 @@ def apply_periodic_source_term_boundary_2d(
     f_n_v_left = face_areas_y[2:, 0] * (v[1:-1, 0] + v[2:, 0]) / 2
 
     b[1:-1, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_left - f_wb_u) / cell_volumes[1:-1, 0] +
                                             (f_n_v_left - f_s_v_left) / cell_volumes[1:-1, 0]
@@ -1483,7 +1483,7 @@ def apply_periodic_source_term_boundary_2d(
     f_n_v_right = face_areas_y[2:, 0] * (v[1:-1, -1] + v[2:, -1]) / 2
 
     b[1:-1, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u - f_w_u_right) / cell_volumes[1:-1, -1] +
                                             (f_n_v_right - f_s_v_right) / cell_volumes[1:-1, -1]
@@ -1513,7 +1513,7 @@ def apply_periodic_source_term_boundary_2d(
     f_n_v_bottom = face_areas_y[1, 1:-1] * (v[0, 1:-1] + v[1, 1:-1]) / 2
 
     b[0, 1:-1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_bottom - f_w_u_bottom) / cell_volumes[0, 1:-1] +
                                             (f_n_v_bottom - f_sb_v) / cell_volumes[0, 1:-1]
@@ -1542,7 +1542,7 @@ def apply_periodic_source_term_boundary_2d(
     f_nb_v = 0
 
     b[-1, 1:-1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_top - f_w_u_top) / cell_volumes[-1, 1:-1] +
                                             (f_nb_v - f_s_v_top) / cell_volumes[-1, 1:-1]
@@ -1570,7 +1570,7 @@ def apply_periodic_source_term_boundary_2d(
     f_n_v_bottom_left = face_areas_y[1, 0] * (v[0, 0] + v[1, 0]) / 2
 
     b[0, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_bottom_left - f_wb_u_bottom) / cell_volumes[0, 0] +
                                             (f_n_v_bottom_left - f_sb_v) / cell_volumes[0, 0]
@@ -1597,7 +1597,7 @@ def apply_periodic_source_term_boundary_2d(
     f_n_v_bottom_right = face_areas_y[1, -1] * (v[0, -1] + v[1, -1]) / 2
 
     b[0, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u_bottom - f_w_u_bottom_right) / cell_volumes[0, -1] +
                                             (f_n_v_bottom_right - f_sb_v) / cell_volumes[0, -1]
@@ -1627,7 +1627,7 @@ def apply_periodic_source_term_boundary_2d(
     f_nb_v_left = 0
 
     b[-1, 0] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_e_u_top_left - f_wb_u_top) / cell_volumes[-1, 0] +
                                             (f_nb_v_left - f_s_v_top_left) / cell_volumes[-1, 0]
@@ -1657,7 +1657,7 @@ def apply_periodic_source_term_boundary_2d(
     f_nb_v_right = 0
 
     b[-1, -1] = (
-                        rho * 
+                        rho *
                             (1 / dt *   (
                                             (f_eb_u_top - f_w_u_top_right) / cell_volumes[-1, -1] +
                                             (f_nb_v_right - f_s_v_top_right) / cell_volumes[-1, -1]
@@ -1691,7 +1691,7 @@ def apply_channel_flow_boundary_2d(
     cell_volumes: np.ndarray,
     lx: float,
     ly: float,
-    xc: np.ndarray, 
+    xc: np.ndarray,
     yc: np.ndarray,
 ) -> None:
     """Apply boundary updates for the 2D cavity flow equation."""
@@ -1704,16 +1704,16 @@ def apply_channel_flow_boundary_2d(
     # left wall
 
     ## convection
-    
+
     u_wb = (u[1:-1, -1] + u[1:-1, 0]) / 2
     u_e_left = (u[1:-1, 0] + u[1:-1, 1]) / 2
     v_s_left = (v[:-2, 0] + v[1:-1, 0]) / 2
-    v_n_left = (v[1:-1, 0] + v[2:, 0]) / 2   
+    v_n_left = (v[1:-1, 0] + v[2:, 0]) / 2
 
     f_wb = u_wb * face_areas_x[1:-1, 0]
     f_e_left = u_e_left * face_areas_x[1:-1, 1]
     f_s_left = v_s_left * face_areas_y[1:-1, 0]
-    f_n_left = v_n_left * face_areas_y[2:, 0] 
+    f_n_left = v_n_left * face_areas_y[2:, 0]
 
     u_wb = np.where(f_wb>0, u[1:-1, -1], u[1:-1, 0])
     u_e_left = np.where(f_e_left>0, u[1:-1, 0], u[1:-1, 1])
@@ -1743,12 +1743,12 @@ def apply_channel_flow_boundary_2d(
     ## update
 
     u[1:-1, 0] = un[1:-1, 0] + dt / cell_volumes[1:-1, 0] * (
-        -(f_e_left * u_e_left - f_wb * u_wb + f_n_left * u_n_left - f_s_left * u_s_left) + 
+        -(f_e_left * u_e_left - f_wb * u_wb + f_n_left * u_n_left - f_s_left * u_s_left) +
         nu * (a_e_left * (u[1:-1, 1] - u[1:-1, 0]) - a_wb * (u[1:-1, 0] - u[1:-1, -1]) + a_n_left * (u[2:, 0] - u[1:-1, 0]) - a_s_left * (u[1:-1, 0] - u[:-2, 0]))
         ) - (dt / rho * (pf_e_p_left - pf_wb_p) / cell_volumes[1:-1, 0]) + (source * dt)
-    
+
     v[1:-1, 0] = vn[1:-1, 0] + dt / cell_volumes[1:-1, 0] * (
-        -(f_e_left * v_e_left - f_wb * v_wb + f_n_left * v_n_left - f_s_left * v_s_left) + 
+        -(f_e_left * v_e_left - f_wb * v_wb + f_n_left * v_n_left - f_s_left * v_s_left) +
         nu * (a_e_left * (v[1:-1, 1] - v[1:-1, 0]) - a_wb * (v[1:-1, 0] - v[1:-1, -1]) + a_n_left * (v[2:, 0] - v[1:-1, 0]) - a_s_left * (v[1:-1, 0] - v[:-2, 0]))
         ) - (dt / rho * (pf_n_p_left - pf_s_p_left) / cell_volumes[1:-1, 0])
 
@@ -1759,12 +1759,12 @@ def apply_channel_flow_boundary_2d(
     u_w_right = (u[1:-1, -2] + u[1:-1, -1]) / 2
     u_eb = (u[1:-1, -1] + u[1:-1, 0]) / 2
     v_s_right = (v[:-2, -1] + v[1:-1, -1]) / 2
-    v_n_right = (v[1:-1, -1] + v[2:, -1]) / 2   
+    v_n_right = (v[1:-1, -1] + v[2:, -1]) / 2
 
     f_w_right = u_w_right * face_areas_x[1:-1, -2]
     f_eb = u_eb * face_areas_x[1:-1, -1]
     f_s_right = v_s_right * face_areas_y[1:-1, -1]
-    f_n_right = v_n_right * face_areas_y[2:, -1] 
+    f_n_right = v_n_right * face_areas_y[2:, -1]
 
     u_w_right = np.where(f_w_right>0, u[1:-1, -2], u[1:-1, -1])
     u_eb = np.where(f_eb>0, u[1:-1, -1], u[1:-1, 0])
@@ -1785,8 +1785,8 @@ def apply_channel_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_right = face_areas_x[1:-1, -2] * (p[1:-1, -2] + p[1:-1, -1]) / 2 
-    pf_eb_p = face_areas_x[1:-1, -1] * (p[1:-1, -1] + p[1:-1, 0]) / 2 
+    pf_w_p_right = face_areas_x[1:-1, -2] * (p[1:-1, -2] + p[1:-1, -1]) / 2
+    pf_eb_p = face_areas_x[1:-1, -1] * (p[1:-1, -1] + p[1:-1, 0]) / 2
     pf_s_p_right = face_areas_y[1:-1, -1] * (p[:-2, -1] + p[1:-1, -1]) / 2
     pf_n_p_right = face_areas_y[2:, -1] * (p[1:-1, -1] + p[2:, -1]) / 2
 
@@ -1811,12 +1811,12 @@ def apply_channel_flow_boundary_2d(
     u_w_bottom = (u[0, :-2] + u[0, 1:-1]) / 2
     u_e_bottom = (u[0, 1:-1] + u[0, 2:]) / 2
     v_sb = 0
-    v_n_bottom = (v[0, 1:-1] + v[1, 1:-1]) / 2   
+    v_n_bottom = (v[0, 1:-1] + v[1, 1:-1]) / 2
 
     f_w_bottom = u_w_bottom * face_areas_x[0, 1:-1]
     f_e_bottom = u_e_bottom * face_areas_x[0, 2:]
     f_sb = v_sb * face_areas_y[0, 1:-1]
-    f_n_bottom = v_n_bottom * face_areas_y[1, 1:-1] 
+    f_n_bottom = v_n_bottom * face_areas_y[1, 1:-1]
 
     u_w_bottom = np.where(f_w_bottom>0, u[0, :-2], u[0, 1:-1])
     u_e_bottom = np.where(f_e_bottom>0, u[0, 1:-1], u[0, 2:])
@@ -1837,8 +1837,8 @@ def apply_channel_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_bottom = face_areas_x[0, 1:-1] * (p[0, :-2] + p[0, 1:-1]) / 2 
-    pf_e_p_bottom = face_areas_x[0, 2:] * (p[0, 1:-1] + p[0, 2:]) / 2 
+    pf_w_p_bottom = face_areas_x[0, 1:-1] * (p[0, :-2] + p[0, 1:-1]) / 2
+    pf_e_p_bottom = face_areas_x[0, 2:] * (p[0, 1:-1] + p[0, 2:]) / 2
     pf_sb_p = face_areas_y[0, 1:-1] * bottom[1:-1]
     pf_n_p_bottom = face_areas_y[1, 1:-1] * (p[0, 1:-1] + p[1, 1:-1]) / 2
 
@@ -1861,13 +1861,13 @@ def apply_channel_flow_boundary_2d(
 
     u_w_top = (u[-1, :-2] + u[-1, 1:-1]) / 2
     u_e_top = (u[-1, 1:-1] + u[-1, 2:]) / 2
-    v_s_top = (v[-2, 1:-1] + v[-1, 1:-1]) / 2 
-    v_nb = 0 
+    v_s_top = (v[-2, 1:-1] + v[-1, 1:-1]) / 2
+    v_nb = 0
 
     f_w_top = u_w_top * face_areas_x[-1, 1:-1]
     f_e_top = u_e_top * face_areas_x[-1, 2:]
     f_s_top = v_s_top * face_areas_y[-2, 1:-1]
-    f_nb = v_nb * face_areas_y[-1, 1:-1] 
+    f_nb = v_nb * face_areas_y[-1, 1:-1]
 
     u_w_top = np.where(f_w_top>0, u[-1, :-2], u[-1, 1:-1])
     u_e_top = np.where(f_e_top>0, u[-1, 1:-1], u[-1, 2:])
@@ -1888,8 +1888,8 @@ def apply_channel_flow_boundary_2d(
 
     ## pressure
 
-    pf_w_p_top = face_areas_x[-1, 1:-1] * (p[-1, :-2] + p[-1, 1:-1]) / 2 
-    pf_e_p_top = face_areas_x[-1, 2:] * (p[-1, 1:-1] + p[-1, 2:]) / 2 
+    pf_w_p_top = face_areas_x[-1, 1:-1] * (p[-1, :-2] + p[-1, 1:-1]) / 2
+    pf_e_p_top = face_areas_x[-1, 2:] * (p[-1, 1:-1] + p[-1, 2:]) / 2
     pf_s_p_top = face_areas_y[-2, 1:-1] * (p[-2, 1:-1] + p[-1, 1:-1]) / 2
     pf_nb_p = face_areas_y[-1, 1:-1] * top[1:-1]
 
@@ -1909,10 +1909,10 @@ def apply_channel_flow_boundary_2d(
     # bottom left wall
 
     ## convection
-    
+
     u_e_bottom_left = (u[0, 0] + u[0, 1]) / 2
     u_wb_bottom = (u[0, -1] + u[0, 0]) / 2
-    v_n_bottom_left = (v[0, 0] + v[1, 0]) / 2   
+    v_n_bottom_left = (v[0, 0] + v[1, 0]) / 2
 
     f_e_bottom_left = u_e_bottom_left * face_areas_x[0, 1]
     f_wb_bottom = u_wb_bottom * face_areas_x[0, 0]
@@ -1945,12 +1945,12 @@ def apply_channel_flow_boundary_2d(
     ## update
 
     u[0, 0] = un[0, 0] + dt / cell_volumes[0, 0] * (
-        -(f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_w_bottom + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) + 
+        -(f_e_bottom_left * u_e_bottom_left - f_wb_bottom * u_w_bottom + f_n_bottom_left * u_n_bottom_left - f_sb_left * u_sb) +
         nu * (a_e_bottom_left * (u[0, 1] - u[0, 0]) - a_wb_bottom * (u[0, 0] - u[0, -1]) + a_n_bottom_left * (u[1, 0] - u[0, 0]) - a_sb_left * (u[0, 0] - u_sb))
         ) - (dt / rho * (pf_e_p_bottom_left - pf_wb_p_bottom) / cell_volumes[0, 0]) + (source * dt)
-    
+
     v[0, 0] = vn[0, 0] + dt / cell_volumes[0, 0] * (
-        -(f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_w_bottom + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) + 
+        -(f_e_bottom_left * v_e_bottom_left - f_wb_bottom * v_w_bottom + f_n_bottom_left * v_n_bottom_left - f_sb_left * v_sb) +
         nu * (a_e_bottom_left * (v[0, 1] - v[0, 0]) - a_wb_bottom * (v[0, 0] - v[0, -1]) + a_n_bottom_left * (v[1, 0] - v[0, 0]) - a_sb_left * (v[0, 0] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_left - pf_sb_p_left) / cell_volumes[0, 0])
 
@@ -1961,11 +1961,11 @@ def apply_channel_flow_boundary_2d(
 
     u_eb_bottom = (u[0, 0] + u[0, -1]) / 2
     u_w_bottom_right = (u[0, -2] + u[0, -1]) / 2
-    v_n_bottom_right = (v[0, -1] + v[1, -1]) / 2   
+    v_n_bottom_right = (v[0, -1] + v[1, -1]) / 2
 
     f_eb_bottom = u_eb_bottom * face_areas_x[0, -1]
     f_w_bottom_right = u_w_bottom_right * face_areas_x[0, -2]
-    f_n_bottom_right = v_n_bottom_right * face_areas_y[1, -1] 
+    f_n_bottom_right = v_n_bottom_right * face_areas_y[1, -1]
     f_sb_right = v_sb * face_areas_y[0, -1]
 
     u_eb_bottom = np.where(f_eb_bottom>0, u[0, -1], u[0, 0])
@@ -1977,7 +1977,7 @@ def apply_channel_flow_boundary_2d(
     v_n_bottom_right = np.where(f_n_bottom_right>0, v[0, -1], v[1, -1])
 
     ## diffusion
-    
+
     a_eb_bottom = face_areas_x[0, -1] / (xc[0] + lx - xc[-1])
     a_w_bottom_right = face_areas_x[0, -2] / dist_x[-1]
     a_n_bottom_right = face_areas_y[1, -1] / dist_y[0]
@@ -1994,12 +1994,12 @@ def apply_channel_flow_boundary_2d(
     ## update
 
     u[0, -1] = un[0, -1] + dt / cell_volumes[0, -1] * (
-        -(f_eb_bottom * u_eb_bottom - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) + 
+        -(f_eb_bottom * u_eb_bottom - f_w_bottom_right * u_w_bottom_right + f_n_bottom_right * u_n_bottom_right - f_sb_right * u_sb) +
         nu * (a_eb_bottom * (u[0, 0] - u[0, -1]) - a_w_bottom_right * (u[0, -1] - u[0, -2]) + a_n_bottom_right * (u[1, -1] - u[0, -1]) - a_sb_right * (u[0, -1] - u_sb))
         ) - (dt / rho * (pf_eb_p_bottom - pf_w_p_bottom_right) / cell_volumes[0, -1]) + (source * dt)
-    
+
     v[0, -1] = vn[0, -1] + dt / cell_volumes[0, -1] * (
-        -(f_eb_bottom * v_eb_bottom - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) + 
+        -(f_eb_bottom * v_eb_bottom - f_w_bottom_right * v_w_bottom_right + f_n_bottom_right * v_n_bottom_right - f_sb_right * v_sb) +
         nu * (a_eb_bottom * (v[0, 0] - v[0, -1]) - a_w_bottom_right * (v[0, -1] - v[0, -2]) + a_n_bottom_right * (v[1, -1] - v[0, -1]) - a_sb_right * (v[0, -1] - v_sb))
         ) - (dt / rho * (pf_n_p_bottom_right - pf_sb_p_right) / cell_volumes[0, -1])
 
@@ -2007,15 +2007,15 @@ def apply_channel_flow_boundary_2d(
     # top left wall
 
     ## convection
-    
+
     u_e_top_left = (u[-1, 0] + u[-1, 1]) / 2
     u_wb_top = (u[-1, -1] + u[-1, 0]) / 2
-    v_s_top_left = (v[-2, 0] + v[-1, 0]) / 2   
+    v_s_top_left = (v[-2, 0] + v[-1, 0]) / 2
 
     f_e_top_left = u_e_top_left * face_areas_x[-1, 1]
     f_wb_top = u_wb_top * face_areas_x[-1, 0]
-    f_nb_left = v_nb * face_areas_y[-1, 0] 
-    f_s_top_left = v_s_top_left * face_areas_y[-2, 0] 
+    f_nb_left = v_nb * face_areas_y[-1, 0]
+    f_s_top_left = v_s_top_left * face_areas_y[-2, 0]
 
     u_e_top_left = np.where(f_e_top_left>0, u[-1, 0], u[-1, 1])
     u_wb_top = np.where(f_wb_top>0, u[-1, -1], u[-1, 0])
@@ -2043,12 +2043,12 @@ def apply_channel_flow_boundary_2d(
     ## update
 
     u[-1, 0] = un[-1, 0] + dt / cell_volumes[-1, 0] * (
-        -(f_e_top_left * u_e_top_left - f_wb_top * u_wb_top + f_nb_left * u_nb - f_s_top_left * u_s_top_left) + 
+        -(f_e_top_left * u_e_top_left - f_wb_top * u_wb_top + f_nb_left * u_nb - f_s_top_left * u_s_top_left) +
         nu * (a_e_top_left * (u[-1, 1] - u[-1, 0]) - a_wb_top * (u[-1, 0] - u[-1, -1]) + a_nb_left * (u_nb - u[-1, 0]) - a_s_top_left * (u[-1, 0] - u[-2, 0]))
         ) - (dt / rho * (pf_e_p_top_left - pf_wb_p_top) / cell_volumes[-1, 0]) + (source * dt)
-    
+
     v[-1, 0] = vn[-1, 0] + dt / cell_volumes[-1, 0] * (
-        -(f_e_top_left * v_e_top_left - f_wb_top * v_wb_top + f_nb_left * v_nb - f_s_top_left * v_s_top_left) + 
+        -(f_e_top_left * v_e_top_left - f_wb_top * v_wb_top + f_nb_left * v_nb - f_s_top_left * v_s_top_left) +
         nu * (a_e_top_left * (v[-1, 1] - v[-1, 0]) - a_wb_top * (v[-1, 0] - v[-1, -1]) + a_nb_left * (v_nb - v[-1, 0]) - a_s_top_left * (v[-1, 0] - v[-2, 0]))
         ) - (dt / rho * (pf_nb_p_left - pf_s_p_top_left) / cell_volumes[-1, 0])
 
@@ -2056,15 +2056,15 @@ def apply_channel_flow_boundary_2d(
     # top right wall
 
     ## convection
-    
+
     u_eb_top = (u[-1, 0] + u[-1, -1]) / 2
     u_w_top_right = (u[-1, -2] + u[-1, -1]) / 2
-    v_s_top_right = (v[-2, -1] + v[-1, -1]) / 2   
+    v_s_top_right = (v[-2, -1] + v[-1, -1]) / 2
 
     f_eb_top = u_eb_top * face_areas_x[-1, -1]
     f_w_top_right = u_w_top_right * face_areas_x[-1, -2]
-    f_nb_right = v_nb * face_areas_y[-1, -1] 
-    f_s_top_right = v_s_top_right * face_areas_y[-2, -1] 
+    f_nb_right = v_nb * face_areas_y[-1, -1]
+    f_s_top_right = v_s_top_right * face_areas_y[-2, -1]
 
     u_eb_top = np.where(f_eb_top>0, u[-1, -1], u[-1, 0])
     u_w_top_right = np.where(f_w_top_right>0, u[-1, -2], u[-1, -1])
@@ -2091,11 +2091,11 @@ def apply_channel_flow_boundary_2d(
     ## update
 
     u[-1, -1] = un[-1, -1] + dt / cell_volumes[-1, -1] * (
-        -(f_eb_top * u_eb_top - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) + 
+        -(f_eb_top * u_eb_top - f_w_top_right * u_w_top_right + f_nb_right * u_nb - f_s_top_right * u_s_top_right) +
         nu * (a_eb_top * (u[-1, 0] - u[-1, -1]) - a_w_top_right * (u[-1, -1] - u[-1, -2]) + a_nb_right * (u_nb - u[-1, -1]) - a_s_top_right * (u[-1, -1] - u[-2, -1]))
         ) - (dt / rho * (pf_eb_p_top - pf_w_p_top_right) / cell_volumes[-1, -1]) + (source * dt)
-    
+
     v[-1, -1] = vn[-1, -1] + dt / cell_volumes[-1, -1] * (
-        -(f_eb_top * v_eb_top - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) + 
+        -(f_eb_top * v_eb_top - f_w_top_right * v_w_top_right + f_nb_right * v_nb - f_s_top_right * v_s_top_right) +
         nu * (a_eb_top * (v[-1, 0] - v[-1, -1]) - a_w_top_right * (v[-1, -1] - v[-1, -2]) + a_nb_right * (v_nb - v[-1, -1]) - a_s_top_right * (v[-1, -1] - v[-2, -1]))
         ) - (dt / rho * (pf_nb_p_right - pf_s_p_top_right) / cell_volumes[-1, -1])

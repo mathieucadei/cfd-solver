@@ -33,13 +33,13 @@ def solve_poisson_2d(
 
         pn = p.copy()
 
-        p[1:-1, 1:-1] = ((dy**2 * (pn[1:-1, 2:] + pn[1:-1, 0:-2]) + 
-                          dx**2 * (pn[2:, 1:-1] + pn[0:-2, 1:-1])) - 
+        p[1:-1, 1:-1] = ((dy**2 * (pn[1:-1, 2:] + pn[1:-1, 0:-2]) +
+                          dx**2 * (pn[2:, 1:-1] + pn[0:-2, 1:-1])) -
                           b[1:-1, 1:-1] * dx**2 * dy**2) / \
                         (2 * (dx**2 + dy**2))
 
         apply_poisson_boundary_2d(p)
-        
+
         history[n] = p
-    
+
     return history

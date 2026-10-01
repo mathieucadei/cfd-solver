@@ -18,7 +18,7 @@ def solve_poisson_2d(
 
     dist_x, dist_y = build_dist(config)
     face_areas_x, face_areas_y = build_face_areas(config)
-    cell_volumes = compute_cell_volumes(config)   
+    cell_volumes = compute_cell_volumes(config)
     xc, yc = build_centers(config)
 
     p, b = initial_condition
@@ -45,17 +45,17 @@ def solve_poisson_2d(
         p[1:-1, 1:-1] =(f_e + f_w + f_n + f_s - b[1:-1, 1:-1] * cell_volumes[1:-1, 1:-1]) / (a_w + a_e + a_s + a_n)
 
         apply_poisson_boundary_2d(
-            p, 
+            p,
             dist_x=dist_x,
             dist_y=dist_y,
-            face_areas_x=face_areas_x, 
-            face_areas_y=face_areas_y, 
+            face_areas_x=face_areas_x,
+            face_areas_y=face_areas_y,
             lx=config.domain_length_x,
             ly=config.domain_length_y,
             xc=xc,
             yc=yc,
             )
-        
+
         history[n] = p
-    
+
     return history

@@ -32,7 +32,7 @@ def solve_diffusion_1d(
         un = u.copy()
 
         diffusion_term = compute_diffusion_1d_term(un, dx, dt, config.viscosity)
-        
+
         u[1:-1] = un[1:-1] + diffusion_term[1:-1]
 
         apply_diffusion_boundary_1d(
@@ -44,5 +44,5 @@ def solve_diffusion_1d(
         )
 
         history[n] = u
-    
+
     return history

@@ -91,10 +91,10 @@ solution_history_ana = analytical.solve_cole_hopf_1d(xc_array, dt, burgers_1d_co
 # Post-processing
 
 show_solution_overview(
-    x_values=xc_array, 
-    y_values=time_array, 
-    num_solution_matrix=solution_history_num, 
-    ana_solution_matrix=solution_history_ana, 
+    x_values=xc_array,
+    y_values=time_array,
+    num_solution_matrix=solution_history_num,
+    ana_solution_matrix=solution_history_ana,
     step_stride=step_stride,
     case_name=case_name,
     case_name_as_title=case_name_as_title,
@@ -104,7 +104,7 @@ show_solution_overview(
 show_solution_1d_animation(
     x_values=xc_array,
     num_solution_history=solution_history_num,
-    ana_solution_history=solution_history_ana, 
+    ana_solution_history=solution_history_ana,
     case_name=case_name,
     save=save,
 )

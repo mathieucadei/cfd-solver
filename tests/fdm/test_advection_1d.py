@@ -15,7 +15,7 @@ def test_advection_1d_translates_exactly():
         hat_end=1.0,
         u_min=1.0,
         u_max=2.0,
-        scheme='upwind',    
+        scheme='upwind',
     )
 
     x_array = fdm.make_x_grid(config)

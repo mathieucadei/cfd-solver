@@ -137,7 +137,7 @@ show_solution_uv_surfaces(
 
 show_solution_uv_2d_animations(
     x_values=xc_array,
-    y_values=yc_array, 
+    y_values=yc_array,
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
     case_name=case_name,

@@ -7,7 +7,7 @@ import numpy as np
 from core import fdm
 
 from post_processing import (
-    show_solution_uv_2d_animations, 
+    show_solution_uv_2d_animations,
     show_solution_uv_surfaces,
 )
 
@@ -58,7 +58,7 @@ convection_2d_config = fdm.Convection2DConfig(
     u_min=u_min,
     u_max=u_max,
     v_min=v_min,
-    v_max=v_max,   
+    v_max=v_max,
 )
 
 
@@ -103,7 +103,7 @@ show_solution_uv_surfaces(
 
 show_solution_uv_2d_animations(
     x_values=x_array,
-    y_values=y_array, 
+    y_values=y_array,
     u_solution_history=u_solution_matrix,
     v_solution_history=v_solution_matrix,
     case_name=case_name,

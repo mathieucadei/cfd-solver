@@ -11,7 +11,7 @@ def generate_mode_indices(num_modes: int) -> np.ndarray:
 
     mode_indices = np.empty(2 * num_modes + 1, dtype=int)
     mode_indices[0] = 0
-    
+
     positive_indices = np.arange(1, num_modes + 1)
 
     mode_indices[1::2] = positive_indices
@@ -21,9 +21,9 @@ def generate_mode_indices(num_modes: int) -> np.ndarray:
 
 
 def compute_coefficients(
-    signal_values: np.ndarray, 
-    x_array: np.ndarray, 
-    mode_indices: np.ndarray, 
+    signal_values: np.ndarray,
+    x_array: np.ndarray,
+    mode_indices: np.ndarray,
     basis: str="periodic",
 ) -> np.ndarray:
     """Compute Fourier-series coefficients from sampled 1D signal values."""
@@ -40,7 +40,7 @@ def compute_coefficients(
         coefficients = (signal_values * basis_matrix).sum(axis=1) * dx
         coefficients= coefficients / domain_length
         return coefficients
-     
+
     elif basis == "cosine":
         basis_matrix = np.cos(np.pi / domain_length * mode_column * x_row)
         coefficients = (signal_values * basis_matrix).sum(axis=1) * dx
@@ -52,9 +52,9 @@ def compute_coefficients(
 
 
 def compute_series_terms(
-    mode_indices: np.ndarray, 
-    coefficients: np.ndarray, 
-    x_array: np.ndarray, 
+    mode_indices: np.ndarray,
+    coefficients: np.ndarray,
+    x_array: np.ndarray,
     basis: str="periodic",
 ) -> np.ndarray:
     """Compute cumulative partial sums of the Fourier series."""
@@ -65,7 +65,7 @@ def compute_series_terms(
 
     if basis == "periodic":
         return coefficients * np.exp(mode_indices * 2j * np.pi / domain_length * x_column)
-    
+
     elif basis == "cosine":
         return coefficients * np.cos(np.pi / domain_length * mode_indices * x_column)
 

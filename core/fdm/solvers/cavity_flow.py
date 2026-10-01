@@ -59,18 +59,18 @@ def solve_cavity_flow(
 
         u[1:-1, 1:-1] = (un[1:-1, 1:-1]-
                          convection_u_term[1:-1, 1:-1] -
-                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) + 
+                         dt / (2 * rho * dx) * (p[1:-1, 2:] - p[1:-1, 0:-2]) +
                          diffusion_u_term[1:-1, 1:-1])
 
         v[1:-1,1:-1] = (vn[1:-1, 1:-1] -
                         convection_v_term[1:-1, 1:-1] -
                         dt / (2 * rho * dy) * (p[2:, 1:-1] - p[0:-2, 1:-1]) +
                          diffusion_v_term[1:-1, 1:-1])
-        
+
         apply_cavity_flow_boundary_2d(u, v, config.u_lid)
-        
+
         u_history[n] = u
         v_history[n] = v
         p_history[n] = p
-    
+
     return u_history, v_history, p_history

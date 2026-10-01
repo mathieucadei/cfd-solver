@@ -12,16 +12,16 @@ import numpy as np
 def cole_hopf_1d_ufunc() -> callable:
     """Return the analytical Cole-Hopf solution as a callable function of time and space."""
 
-    def func(time_step: float, x_array: np.ndarray, viscosity: float) -> np.ndarray:  
+    def func(time_step: float, x_array: np.ndarray, viscosity: float) -> np.ndarray:
         """Evaluate the Cole-Hopf analytical solution at the given time and spatial coordinates."""
 
         phi = (np.exp(-(x_array - 4 * time_step)**2 / (4 * viscosity * (time_step + 1))) \
             + np.exp(-(x_array - 4 * time_step - 2 * np.pi)**2 / (4 * viscosity * (time_step + 1))))
-        
+
         phiprime = -(-8*time_step + 2*x_array)*np.exp(-(-4*time_step + x_array)**2/(4*viscosity*(time_step + 1)))/(4*viscosity*(time_step + 1)) \
-            - (-8*time_step + 2*x_array - 4*np.pi)*np.exp(-(-4*time_step + x_array - 2*np.pi)**2/(4*viscosity*(time_step + 1)))/(4*viscosity*(time_step + 1)) 
-        
-        return -2 * viscosity * (phiprime / phi) + 4  
+            - (-8*time_step + 2*x_array - 4*np.pi)*np.exp(-(-4*time_step + x_array - 2*np.pi)**2/(4*viscosity*(time_step + 1)))/(4*viscosity*(time_step + 1))
+
+        return -2 * viscosity * (phiprime / phi) + 4
 
     return func
 
