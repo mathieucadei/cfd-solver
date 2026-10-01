@@ -8,3 +8,5 @@ cfd_solver.egg-info/
 results/figures/
 results/animations/
 COMMENTING_GUIDE.md
+.pytest_cache/
+*.egg-info/
