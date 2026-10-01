@@ -29,7 +29,7 @@ def test_cavity_matches_ghia():
     )[0][-1]
 
     DATA = Path(__file__).resolve().parents[2] / 'data'
-    ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
+    ghia_table_1 = pd.read_csv(DATA / 'ghia/ghia_table_1.csv')
 
     validation_u_values=ghia_table_1['100']
 

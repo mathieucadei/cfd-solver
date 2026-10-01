@@ -102,7 +102,7 @@ v_solution_matrix_final = v_solution_matrix[-1, ...]
 # u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
-openfoam = pd.read_csv(DATA / 'openfoam_channel_flow_2d_u_profile.csv')
+openfoam = pd.read_csv(DATA / 'openfoam/channel_flow/openfoam_channel_flow_2d_u_profile.csv')
 u_openfoam=openfoam['U:0'].to_numpy()
 u_openfoam_2d = np.tile(u_openfoam[:, None], (1, num_grid_points_x))
 

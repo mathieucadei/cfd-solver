@@ -108,7 +108,7 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 # v_scatter_label='openfoam'
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
-openfoam_field = pd.read_csv(DATA / 'openfoam_field.csv')
+openfoam_field = pd.read_csv(DATA / 'openfoam/cavity_flow/openfoam_field.csv')
 
 comp_u_values=openfoam_field['U:0'].to_numpy().reshape(num_grid_points_y, num_grid_points_x)
 comp_v_values=openfoam_field['U:1'].to_numpy().reshape(num_grid_points_y, num_grid_points_x)

@@ -99,8 +99,8 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 # Ghia et al. (1982)
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
-ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
-ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
+ghia_table_1 = pd.read_csv(DATA / 'ghia/ghia_table_1.csv')
+ghia_table_2 = pd.read_csv(DATA / 'ghia/ghia_table_2.csv')
 
 validation_u_x_values=ghia_table_1['y']
 validation_v_x_values=ghia_table_2['x']

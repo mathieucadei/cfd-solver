@@ -111,8 +111,8 @@ p_solution_matrix_final = p_solution_matrix[-1, ...]
 # v_scatter_label='openfoam'
 
 DATA = Path(__file__).resolve().parents[3] / 'data'
-ghia_table_1 = pd.read_csv(DATA / 'ghia_table_1.csv')
-ghia_table_2 = pd.read_csv(DATA / 'ghia_table_2.csv')
+ghia_table_1 = pd.read_csv(DATA / 'ghia/ghia_table_1.csv')
+ghia_table_2 = pd.read_csv(DATA / 'ghia/ghia_table_2.csv')
 
 validation_u_x_values=ghia_table_1['y']
 validation_v_x_values=ghia_table_2['x']
@@ -122,7 +122,7 @@ validation_v_values=ghia_table_2['100']
 u_scatter_label='x=0.5 - Ghia et al. (1982)'
 v_scatter_label='y=0.5 - Ghia et al. (1982)'
 
-openfoam_field = pd.read_csv(DATA / 'openfoam_field.csv')
+openfoam_field = pd.read_csv(DATA / 'openfoam/cavity_flow/openfoam_field.csv')
 
 comp_u_values=openfoam_field['U:0'].to_numpy().reshape(num_cells_y, num_cells_x)
 comp_v_values=openfoam_field['U:1'].to_numpy().reshape(num_cells_y, num_cells_x)

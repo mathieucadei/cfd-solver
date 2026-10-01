@@ -29,13 +29,13 @@ domain_length_x: float = 2
 domain_length_y: float = 1
 num_grid_points_x: int = 40
 num_grid_points_y: int = 40
-max_iterations: int = 10
+max_iterations: int = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
 source: float = 1.0
 density: float = 1.0
 viscosity: float = 0.1
-u_l1_norm_target: float = 0.1
+u_l1_norm_target: float = 1e-6
 
 num_cells_x: int = 40
 num_cells_y: int = 40
@@ -126,19 +126,6 @@ fvm_u_solution_matrix_final = fvm_u_solution_matrix[-1, ...]
 
 fvm_v_solution_matrix_final = fvm_v_solution_matrix[-1, ...]
 
-
-# OpenFOAM
-
-# u_analytical = analytical.compute_poiseuille_flow(
-#     y_array=yc_array,
-#     config=channel_flow_config,
-# )
-
-# u_analytical_2d = np.tile(u_analytical[:, None], (1, num_cells_x))
-
-DATA = Path(__file__).resolve().parents[3] / 'data'
-openfoam = pd.read_csv(DATA / 'openfoam_channel_flow_2d_u_profile.csv')
-u_openfoam=openfoam['U:0'].to_numpy()
 
 # Post-processing
 

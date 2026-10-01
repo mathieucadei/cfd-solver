@@ -1348,7 +1348,7 @@ def show_channel_flow_solution_overview(
 
     elif ana_u_values is not None and comp_u_values is not None:
 
-        fig = plt.figure(figsize=(14, 10), constrained_layout=True)
+        fig = plt.figure(figsize=(12, 4), constrained_layout=True)
 
         gs = fig.add_gridspec(1, 2)
 
