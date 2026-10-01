@@ -58,7 +58,7 @@ tests/fvm/                  finite-volume regression tests
 
 #### 2D lid-driven cavity flow, finite difference
 
-![2D cavity flow FDM](docs/images/lid_driven_cavity_flow_solution.gif)
+![2D cavity flow FDM](docs/images/cavity_flow_fdm_solution.gif)
 
 #### 2D lid-driven cavity flow, finite volume
 
@@ -66,7 +66,7 @@ tests/fvm/                  finite-volume regression tests
 
 #### 2D pressure-driven channel flow, finite difference
 
-![2D channel flow FDM](docs/images/channel_flow_solution.gif)
+![2D channel flow FDM](docs/images/channel_flow_fdm_solution.gif)
 
 #### 2D pressure-driven channel flow, finite volume
 

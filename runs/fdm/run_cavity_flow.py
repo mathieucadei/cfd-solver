@@ -20,16 +20,18 @@ from post_processing import (
 # Pre-processing
 # Simulation parameters
 
-domain_length_x: float = 2.0
+reynolds_number = 100
+
+domain_length_x: float = 1.0
 domain_length_y: float = 1.0
-num_grid_points_x: int = 41
-num_grid_points_y: int = 41
-max_iterations: int = 500
+num_grid_points_x: int = 40
+num_grid_points_y: int = 40
+max_iterations: int = 10000
 max_pseudo_iterations: int = 50
 time_step: float = 0.001
 u_lid: float = 1.0
 density: float = 1.0
-viscosity: float = 0.1
+viscosity: float = u_lid*domain_length_x/reynolds_number
 
 
 # Visualization parameters
