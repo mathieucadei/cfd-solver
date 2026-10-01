@@ -33,46 +33,84 @@ core/fvm/                   finite-volume configs, mesh, time steps, initial con
 core/fvm/solvers/           finite-volume solvers
 core/analytical/            analytical reference solutions
 data/                       Ghia et al. (1982) reference tables
+data/openfoam/              OpenFOAM case setups and extracted reference data
 post_processing/            contour, surface, quiver, and animation helpers
 runs/fdm/                   finite-difference examples
 runs/fvm/                   finite-volume examples
-runs/comparisons/fdm/       finite-difference scheme comparisons and validations
-runs/comparisons/fvm/       finite-volume scheme comparisons and validations
+runs/comparisons/fdm/       finite-difference validations
+runs/comparisons/fvm/       finite-volume validations
+runs/comparisons/fdm_vs_fvm/  finite-difference against finite-volume
+tests/fdm/                  finite-difference regression tests
+tests/fvm/                  finite-volume regression tests
 ```
 
 ## Example visualizations
 
-### 1D nonlinear convection scheme comparison
+### Solver output
 
-![1D convection scheme comparison](docs/images/convection_1d_scheme_comparison.png)
-
-### 1D inviscid Burgers scheme comparison
-
-![1D inviscid Burgers scheme comparison](docs/images/inviscid_burgers_scheme_comparison.png)
-
-### 2D diffusion
+#### 2D diffusion
 
 ![2D diffusion](docs/images/diffusion_2d.gif)
 
-### Validation: 1D diffusion vs heat equation
+#### 2D Poisson equation
 
-![1D diffusion vs heat equation](docs/images/diffusion_1d_vs_heat_solution.png)
+![2D Poisson](docs/images/poisson_2d_solution.png)
 
-### 2D lid-driven cavity flow
+#### 2D lid-driven cavity flow, finite difference
 
-![2D cavity flow](docs/images/lid_driven_cavity_flow_solution.gif)
+![2D cavity flow FDM](docs/images/lid_driven_cavity_flow_solution.gif)
 
-### 2D pressure-driven channel flow
-
-![2D channel flow](docs/images/channel_flow_solution.gif)
-
-### 2D lid-driven cavity flow, finite volume
+#### 2D lid-driven cavity flow, finite volume
 
 ![2D cavity flow FVM](docs/images/cavity_flow_fvm_solution.gif)
 
-### 2D pressure-driven channel flow, finite volume
+#### 2D pressure-driven channel flow, finite difference
+
+![2D channel flow FDM](docs/images/channel_flow_solution.gif)
+
+#### 2D pressure-driven channel flow, finite volume
 
 ![2D channel flow FVM](docs/images/channel_flow_fvm_solution.gif)
+
+### Scheme studies
+
+#### 1D nonlinear convection scheme comparison
+
+![1D convection scheme comparison](docs/images/convection_1d_scheme_comparison.png)
+
+#### 1D inviscid Burgers scheme comparison
+
+![1D inviscid Burgers scheme comparison](docs/images/inviscid_burgers_scheme_comparison.png)
+
+### Validation
+
+#### 1D diffusion against the heat equation
+
+![1D diffusion vs heat equation](docs/images/diffusion_1d_vs_heat_solution.png)
+
+#### 2D lid-driven cavity against Ghia et al. (1982)
+
+![Cavity flow vs Ghia](docs/images/cavity_flow_vs_ghia.png)
+
+#### 2D channel flow against the analytical Poiseuille profile
+
+![Channel flow vs analytical](docs/images/channel_flow_vs_analytical.png)
+
+#### Finite difference against finite volume, 2D cavity
+
+![FDM vs FVM cavity](docs/images/cavity_flow_fdm_vs_fvm.png)
+
+#### OpenFOAM reference, 2D lid-driven cavity
+
+![OpenFOAM cavity](docs/images/openfoam_cavity_flow_overview.png)
+
+![OpenFOAM cavity animation](docs/images/openfoam_cavity_flow.gif)
+
+#### OpenFOAM reference, 2D channel flow
+
+![OpenFOAM channel](docs/images/openfoam_channel_flow_overview.png)
+
+![OpenFOAM channel animation](docs/images/openfoam_channel_flow.gif)
 
 ## Implemented models
 
@@ -188,15 +226,43 @@ The inviscid Burgers scheme comparison script studies conservative shock-capturi
 
 These comparisons are used to assess solver correctness and visualize agreement between numerical and analytical results.
 
+The 2D lid-driven cavity is validated against Ghia, Ghia and Shin (1982) at
+Re = 100, comparing u along the vertical centreline and v along the horizontal
+centreline against Tables I and II. The 2D channel flow is validated against
+the analytical Poiseuille profile.
+
+Both solvers are also compared against OpenFOAM for the same two cases. The
+case setups are in `data/openfoam/` and the extracted reference data in
+`data/openfoam_*.csv`.
+
+The cavity case is a unit square on a 40 x 40 mesh, one cell thick with
+`empty` front and back patches, solved with `icoFoam`. The lid is a
+`fixedValue` of (1 0 0), the other three walls are `noSlip`, and the
+kinematic viscosity is 0.01, giving Re = 100.
+
+The channel case is a 2 x 1 domain on a 40 x 40 mesh, also one cell thick and
+solved with the `incompressibleFluid` solver. The inlet and outlet are
+`cyclic`, the top and bottom walls are `noSlip`, and the flow is driven by a
+`semiImplicitSource` momentum source of (1 0 0) applied to all cells. The
+kinematic viscosity is 0.1, matching the analytical peak velocity of 1.25.
+
+Both cases run to t = 10 with a time step of 0.001.
+
+| case | this solver | reference |
+|---|---|---|
+| Lid-driven cavity, Re=100, 40x40 | peak reverse u -0.217 | Ghia et al. -0.211 |
+| Laminar channel, 40x40 | peak u 1.249 | analytical 1.250 |
+| 2D Laplace and Poisson | 3e-9 | direct matrix solve |
+| 1D advection at CFL 1 | machine precision | exact translation |
+
+A regression suite of eighteen tests covers both packages, checking advection,
+diffusion, Burgers, Laplace, Poisson, cavity and channel flow against these
+references. Run it with `pytest` from the repository root.
+
 ## Roadmap
 
-* Benchmark lid-driven cavity profiles against reference data.
-* Validate pressure-driven channel flow against analytical Poiseuille behaviour.
-* Add regression tests for boundary conditions and pressure-source terms.
 * Add convergence studies for grid spacing and time-step sensitivity.
 * Add limiters or artificial viscosity for oscillation control near shocks.
-* Add regression tests for 1D convection scheme updates.
-* Validate inviscid Burgers shock speeds against Rankine-Hugoniot predictions.
 * Study damping sensitivity for implicit Beam-Warming schemes.
 
 ## Run
@@ -207,7 +273,13 @@ Install the package once, from the repository root:
 pip install -e .
 ```
 
-Then run any example:
+Run the test suite:
+
+```bash
+pytest
+```
+
+Run any example:
 
 ```bash
 python runs/fdm/run_advection_1d.py
@@ -235,17 +307,32 @@ python runs/fvm/run_laplace_2d.py
 python runs/fvm/run_poisson_2d.py
 python runs/fvm/run_cavity_flow.py
 python runs/fvm/run_channel_flow.py
+```
 
+Run a scheme study or a validation:
+
+```bash
 python runs/comparisons/fdm/run_advection_1d_scheme_comparison.py
 python runs/comparisons/fdm/run_convection_1d_scheme_comparison.py
 python runs/comparisons/fdm/run_inviscid_burgers_scheme_comparison.py
 python runs/comparisons/fdm/run_diffusion_1d_vs_heat.py
 python runs/comparisons/fdm/run_burgers_equation_1d_vs_cole_hopf.py
 python runs/comparisons/fdm/run_cavity_flow_vs_ghia.py
+python runs/comparisons/fdm/run_cavity_flow_vs_openfoam.py
+python runs/comparisons/fdm/run_cavity_flow_vs_ghia_vs_openfoam.py
 python runs/comparisons/fdm/run_channel_flow_vs_analytical.py
+python runs/comparisons/fdm/run_channel_flow_vs_openfoam.py
+python runs/comparisons/fdm/run_channel_flow_vs_analytical_vs_openfoam.py
 
 python runs/comparisons/fvm/run_diffusion_1d_vs_heat.py
 python runs/comparisons/fvm/run_burgers_equation_1d_vs_cole_hopf.py
 python runs/comparisons/fvm/run_cavity_flow_vs_ghia.py
+python runs/comparisons/fvm/run_cavity_flow_vs_openfoam.py
+python runs/comparisons/fvm/run_cavity_flow_vs_ghia_vs_openfoam.py
 python runs/comparisons/fvm/run_channel_flow_vs_analytical.py
+python runs/comparisons/fvm/run_channel_flow_vs_openfoam.py
+python runs/comparisons/fvm/run_channel_flow_vs_analytical_vs_openfoam.py
+
+python runs/comparisons/fdm_vs_fvm/run_cavity_flow.py
+python runs/comparisons/fdm_vs_fvm/run_channel_flow.py
 ```
